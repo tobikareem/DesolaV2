@@ -1,9 +1,13 @@
+import { Btn } from "../../components/button"
+
 
 
 const HomeScreen = () => {
   return (
     <main className="font-grotesk text-4xl text-success">
-      Testing
+      <Btn>
+        Click
+      </Btn>
     </main>
   )
 }
