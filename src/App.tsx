@@ -5,7 +5,6 @@ import HomeScreen from './pages/home/home'
 
 function App() {
  
-
   return (
     <HomeScreen/>
   )
