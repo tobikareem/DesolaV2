@@ -23,10 +23,19 @@ export default {
         'work': ["Work Sans", "serif"],
       },
       colors: {
-        'primary': '#FF6363',
+        'primary': {
+          100: '#D%E5FB',
+          300: '#5C88DA',
+          500: '#004AAD',
+          600: '#003885',
+          700: '#002F6C',
+        },
         'secondary': {
-          100: '#E2E2D5',
-          200: '#888883',
+          100: '#FFE6CC',
+          200: '#FFA366',
+          500: '#FF6B00',
+          600: '#CC5500',
+          700: '#993F00',
         },
         'neutral':'#FAFAFA',
         'neutral-text':{
