@@ -30,6 +30,10 @@
     "vite": "^6.1.0"
   },
   "dependencies": {
+<<<<<<< Updated upstream
     "clsx": "^2.1.1"
+=======
+    "react-router-dom": "^7.1.5"
+>>>>>>> Stashed changes
   }
 }
