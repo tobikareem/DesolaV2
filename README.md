@@ -1,3 +1,7 @@
+# Desola Flight Chat - UI
+
+This repository contains the frontend code for the **Desola Flight Chat** application, built using **React** and **TypeScript**.
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
@@ -48,9 +52,6 @@ export default tseslint.config({
   },
 })
 ```
-# Desola Flight Chat - UI
-
-This repository contains the frontend code for the **Desola Flight Chat** application, built using **React** and **TypeScript**.
 
 ## 🚀 Getting Started
 
@@ -66,22 +67,22 @@ cd DesolaV2
 ```
 
 ### 📦 Install Dependencies
-Using Yarn:
-```sh
-yarn install
-```
-Or using npm:
+Using npm:
 ```sh
 npm install
+```
+Or using Yarn:
+```sh
+yarn install
 ```
 
 ### 🔥 Run the Development Server
 ```sh
-yarn dev
+npm run dev
 ```
 Or:
 ```sh
-npm run dev
+yarn dev
 ```
 The app should now be running at **http://localhost:3000/**.
 
@@ -104,16 +105,16 @@ The app should now be running at **http://localhost:3000/**.
 ## 🛠 Scripts
 ```sh
 # Start the development server
-yarn dev
+npm run dev
 
 # Build the project
-yarn build
+npm run build
 
 # Run tests
-yarn test
+npm run test
 
 # Lint and format code
-yarn lint && yarn format
+npm run lint && npm run format
 ```
 
 ## 🔗 API Configuration
@@ -125,14 +126,14 @@ VITE_API_BASE_URL=http://localhost:7094/api/
 ## ✅ Code Quality & Formatting
 This project uses **ESLint** and **Prettier** for linting and formatting.
 ```sh
-yarn lint
-yarn format
+npm run lint
+npm run format
 ```
 
 ## 🚀 Deployment
 Build and deploy using:
 ```sh
-yarn build
+npm run build
 ```
 This generates a `dist/` folder containing the production-ready application.
 
