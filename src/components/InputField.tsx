@@ -18,7 +18,8 @@ export const Input = ({
   id,
   ...rest
 }: InputProps) => {
-  const inputId = id ?? `input-${useId}`;
+  const generatedId = useId();
+  const inputId = id ?? `input-${generatedId}`;
 
   return (
     <div className="flex flex-col gap-1">
