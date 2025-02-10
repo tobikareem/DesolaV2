@@ -1,5 +1,4 @@
 
-
 import './App.css'
 import HomeScreen from './pages/home/home'
 import { APP_NAME } from './utils/constants'
