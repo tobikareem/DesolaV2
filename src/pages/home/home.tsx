@@ -6,6 +6,7 @@ import { APP_NAME } from "../../utils/constants"
 const HomeScreen = () => {
   return (
     <main className="font-grotesk text-4xl text-success flex flex-col items-center justify-center min-h-screen">
+      
       <h2 className="mb-4">Welcome to {APP_NAME}</h2>
 
       <form className="space-y-4 mb-3">
