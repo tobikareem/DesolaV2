@@ -1,6 +1,6 @@
 
 import './App.css'
-import { Navbar } from './components/navbar'
+import { Navbar } from './components/Navbar'
 import HomeScreen from './pages/home/home'
 
 function App() {
