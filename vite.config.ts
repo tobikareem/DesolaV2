@@ -1,5 +1,8 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+
+
+// https://vite.dev/config/
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
 import tailwindcss from 'tailwindcss';
 import autoprefixer from 'autoprefixer';
 
@@ -18,4 +21,4 @@ export default defineConfig({
   optimizeDeps: {
     include: ['react', 'react-dom'], // Pre-bundle dependencies for faster builds
   },
-})
+});
