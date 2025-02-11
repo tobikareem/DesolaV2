@@ -38,8 +38,8 @@ export const Navbar = () => {
 
 
     return (
-        <div className={`fixed ${['/signin','/signup'].includes(router) ? 'hidden' : 'flex'}  items-center w-screen z-40 bg-transparent lg:top-[46px] h-14 left-0 `}>
-            <div className="flex w-full justify-between items-center px-4 md:px-8 lg:px-28 h-full bg-white">
+        <div className={`fixed ${['/signin','/signup'].includes(router) ? 'hidden' : 'flex'}  items-center w-screen z-40 bg-transparent top-6 lg:top-[46px] h-14 left-0 `}>
+            <div className="flex w-full justify-between items-center px-4 md:px-8 lg:px-28 h-full bg-transparent">
                 {/* Logo */}
                 <div onClick={()=> setSlider(prevState => !prevState)}
                     className="block lg:hidden text-neutral-900 text-2xl">
@@ -79,7 +79,7 @@ export const Navbar = () => {
                         <div id="drawer"
                             className={`flex flex-col justify-between items-center px-10 pb-10  w-full h-full `}>
                             <Logo/>
-                            <nav className="flex flex-col w-full items-center px-1 py-1">
+                            <nav className="flex flex-col w-full items-center px-1 py-1 text-center">
                                     {
                                         Navigation?.map((item, index) => {
                                             return(
