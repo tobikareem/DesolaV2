@@ -1,7 +1,7 @@
 
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import './App.css'
-import Footer from './Components/Footer'
+
 import HomeScreen from './pages/home/home'
 import SignIn from './pages/auth/signin'
 import SignUp from './pages/auth/signup'
@@ -26,7 +26,6 @@ function App() {
   ];
   
   return (
-<<<<<<< HEAD
     <div className="app-container">
       <header className="app-header">
         <h1>{ APP_NAME }</h1>
@@ -35,19 +34,6 @@ function App() {
       <HomeScreen />
       <Footer />
     </div>
-=======
-    <BrowserRouter>
-      <Navbar/>
-      <Routes>
-        {
-          routes?.map((route) => (
-            <Route key={route?.name} path={route?.path} element={route?.element} />
-          ))
-        }
-      </Routes>
-      <Footer/>
-    </BrowserRouter>
->>>>>>> dd08bedcfd0b91b8e4c506715d0b758691f871e7
   )
 }
 
