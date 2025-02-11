@@ -1,5 +1,6 @@
 
 import './App.css'
+import Footer from './Components/Footer'
 import HomeScreen from './pages/home/home'
 import { APP_NAME } from './utils/constants'
 
@@ -12,7 +13,7 @@ function App() {
       </header>
 
       <HomeScreen />
-
+      <Footer />
     </div>
   )
 }
