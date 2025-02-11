@@ -1,5 +1,6 @@
-import { clsx } from "clsx";
+
 import { InputHTMLAttributes, useId } from "react";
+import clsx from "clsx";
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
@@ -22,9 +23,9 @@ export const Input = ({
   const inputId = id ?? `input-${generatedId}`;
 
   return (
-    <div className="flex flex-col gap-1">
+    <div className="flex flex-col gap-1 font-work ">
       {label && (
-        <label htmlFor={inputId} className={clsx("text-sm font-medium text-gray-700", labelClassName)}>
+        <label htmlFor={inputId} className={clsx("text-sm font-medium text-neutral-700", labelClassName)}>
           {label}
         </label>
       )}
@@ -32,10 +33,10 @@ export const Input = ({
       <input
         id={inputId}
         className={clsx(
-          "px-4 py-2 border rounded-sm outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300 ease-in-out",
+          "px-4 py-2 border rounded-[10px] outline-none focus:border-2 hover:border-2 transition-all duration-100 ease-in-out box-border ",
           {
-            "border-red-500": error,
-            "border-gray-300": !error,
+            "border-error": error,
+            "border-neutral-300": !error,
           },
           className
         )}
@@ -47,7 +48,7 @@ export const Input = ({
       {error && (
         <p
           id={`${inputId}-error`}
-          className={clsx("text-red-500 text-xs", errorClassName)}
+          className={clsx("text-error text-xs", errorClassName)}
         >
           {error}
         </p>
