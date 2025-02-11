@@ -22,6 +22,10 @@ export default {
         'grotesk':["Space Grotesk", "serif"],
         'work': ["Work Sans", "serif"],
       },
+      spacing:{
+        '15': '60px',
+        '28': '112px'
+      },
       colors: {
         'primary': {
           100: '#D%E5FB',
@@ -38,7 +42,7 @@ export default {
           700: '#993F00',
         },
         'neutral':'#FAFAFA',
-        'neutral-text':{
+        'neutral':{
           100: '#FFFFFF',
           300: '#E3E3E3',
           500: '#666666',
@@ -50,6 +54,9 @@ export default {
         'notification': '#17A2B8',
         'warning': '#FFC107',
       },
+      gradientColorStops: {
+        'linear': ['#FF9040','#FF6B00'],
+      }
     },
   },
   plugins: [],

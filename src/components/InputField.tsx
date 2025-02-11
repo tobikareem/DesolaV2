@@ -1,27 +1,58 @@
-import { InputHTMLAttributes } from "react";
+
+import { InputHTMLAttributes, useId } from "react";
+import clsx from "clsx";
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   className?: string;
+  labelClassName?: string;
   error?: string;
+  errorClassName?: string;
 }
 
-export const Input = ({ label, className, error, ...rest }: InputProps) => {
+export const Input = ({
+  label,
+  className = "",
+  labelClassName = "",
+  error,
+  errorClassName = "",
+  id,
+  ...rest
+}: InputProps) => {
+  const generatedId = useId();
+  const inputId = id ?? `input-${generatedId}`;
+
   return (
-    <div className="flex flex-col gap-1">
+    <div className="flex flex-col gap-1 font-work ">
       {label && (
-        <label className="text-sm font-medium text-gray-700">{label}</label>
+        <label htmlFor={inputId} className={clsx("text-sm font-medium text-neutral-700", labelClassName)}>
+          {label}
+        </label>
       )}
 
       <input
-        className={`px-4 py-2 border rounded-sm outline-none focus:ring-2 focus:ring-blue-500
-          transition-all duration-300 ease-in-out ${className} 
-          ${error ? 'border-red-500' : 'border-gray-300'}
-        `}
+        id={inputId}
+        className={clsx(
+          "px-4 py-2 border rounded-[10px] outline-none focus:border-2 hover:border-2 transition-all duration-100 ease-in-out box-border ",
+          {
+            "border-error": error,
+            "border-neutral-300": !error,
+          },
+          className
+        )}
+        aria-invalid={!!error}
+        aria-describedby={error ? `${inputId}-error` : undefined}
         {...rest}
       />
 
-      {error && <p className="text-red-500 text-xs">{error}</p>}
+      {error && (
+        <p
+          id={`${inputId}-error`}
+          className={clsx("text-error text-xs", errorClassName)}
+        >
+          {error}
+        </p>
+      )}
     </div>
   );
 };
