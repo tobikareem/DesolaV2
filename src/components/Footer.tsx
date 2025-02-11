@@ -5,7 +5,7 @@ const Footer: React.FC = () => {
   return (
     <footer className="bg-green-900  text-white py-8">
       <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-left md:text-center">
   
           <div>
             <Text as="h3"  size="lg" weight="semibold" className="mb-3 text-white">
@@ -13,22 +13,22 @@ const Footer: React.FC = () => {
             </Text>
             <ul className="space-y-2">
               <li>
-                <Text as="p" size="sm" className="text-white hover:text-white transition">
+                <Text as="p" size="sm" className="text-white hover:text-white ">
                   Home
                 </Text>
               </li>
               <li>
-                <Text as="p" size="sm" className="text-white hover:text-white transition">
+                <Text as="p" size="sm" className="text-white hover:text-white ">
                   Services
                 </Text>
               </li>
               <li>
-                <Text  as="p" size="sm" className="text-white hover:text-white transition">
+                <Text  as="p" size="sm" className="text-white hover:text-white ">
                   Contact
                 </Text>
               </li>
               <li>
-                <Text as="p" size="sm" className="text-white hover:text-white transition">
+                <Text as="p" size="sm" className="text-white hover:text-white ">
                   404
                 </Text>
               </li>

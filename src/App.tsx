@@ -1,13 +1,13 @@
 
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+// import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import './App.css'
 
 import HomeScreen from './pages/home/home'
 import SignIn from './pages/auth/signin'
 import SignUp from './pages/auth/signup'
 import { JSX } from 'react'
-import { Navbar } from './components/Navbar'
-import { Footer } from './components/Footer'
+// import { Navbar } from './components/Navbar'
+import Footer from './Components/Footer'
 
 type RouteType = {
   path?: string;
@@ -28,7 +28,7 @@ function App() {
   return (
     <div className="app-container">
       <header className="app-header">
-        <h1>{ APP_NAME }</h1>
+        {/* <h1>{ APP_NAME }</h1> */}
       </header>
 
       <HomeScreen />
