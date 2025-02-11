@@ -1,6 +1,9 @@
-export const Signup = () => {
+
+const SignUp =()=> {
   return (
     <>
     </>
   );
 }
+
+export default SignUp;
