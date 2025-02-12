@@ -6,3 +6,16 @@
 
 
 
+input{
+padding: 7px 8px!important;
+
+}
+
+input::placeholder{
+    font-size: 11px;
+}
+
+label{
+    font-size: 12px!important;
+ 
+}

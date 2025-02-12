@@ -3,9 +3,10 @@ import { Text } from './TextComp';
 import { FaInstagram, FaTwitter, FaLinkedin } from 'react-icons/fa';
 
 
+
 const Footer: React.FC = () => {
   return (
-    <footer className="bg-green-900  text-white py-8">
+    <footer className="bg-green-900  text-white py-8 mt-8">
       <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-left md:text-left">
           <div>
@@ -75,7 +76,7 @@ const Footer: React.FC = () => {
           </div>
         </div>
 
-        <div className="text-center text-sm">
+        <div className="text-center text-sm mt-5">
           <Text as="p" size="sm" className="text-white">
             © {new Date().getFullYear()} Desola. All rights reserved.
           </Text>
