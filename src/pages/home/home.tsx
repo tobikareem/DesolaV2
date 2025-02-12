@@ -1,4 +1,4 @@
-import { Btn } from "../../components/button"
+import { Btn } from "../../components/Button"
 import { Input } from "../../components/InputField"
 import { APP_NAME } from "../../utils/constants"
 
