@@ -23,7 +23,8 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
+          cache: 'npm'
   
       - name: Install Dependencies
         run: npm install
@@ -57,3 +58,4 @@ jobs:
         with:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_WITTY_BUSH_0DF9FA610 }}
           action: "close"
+          app_location: "/" # App source code path
