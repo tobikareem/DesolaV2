@@ -1,4 +1,4 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Btn } from "../../components/Button";
 import {Text} from "../../components/TextComp";
 import { Img as ReactImage } from 'react-image';
@@ -7,26 +7,6 @@ const HomeScreen = () => {
   return (
     <main className="w-full bg-white">
       <Hero/>
-      {/* <h2 className="mb-4">Welcome to {APP_NAME}</h2>
-
-      <form className="space-y-4 mb-3">
-        <Input
-          label="Username"
-          placeholder="Enter your username"
-          className="w-64 text-base"
-        />
-
-        <Input
-          label="Password"
-          type="password"
-          placeholder="Enter your password"
-          className="w-64 text-base"
-        />
-      </form>
-
-      <Btn onClick={() => alert("Button Clicked!")} key={"clickMe"}>Click Me</Btn>
-      ................ */}
-
     </main>
   );
 }
