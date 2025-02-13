@@ -1,27 +1,26 @@
 import React, { useState } from 'react';
-import { Text } from '../../Components/TextComp';
-import { Input } from '../../components/InputField';
-import { Btn } from '../../components/Button';
-import { FaGoogle, FaFacebook, FaApple, FaWindows } from 'react-icons/fa';
-import frame from '../../assets/Frame 2147207438.png'
-import plane from '../../assets/Leonardo_Kino_XL_give_me_an_image_of_an_airplane_flying_2 1.png'
-import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import BackgroundImageSection from '../../Components/SideHeroComp';
+import { FaApple, FaEye, FaEyeSlash, FaFacebook, FaGoogle, FaWindows } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
+import frame from '../../assets/Frame 2147207438.png';
+import plane from '../../assets/Leonardo_Kino_XL_give_me_an_image_of_an_airplane_flying_2 1.png';
+import { Btn } from '../../components/Button';
+import { Input } from '../../components/InputField';
+import BackgroundImageSection from '../../components/SideHeroComp';
+import { Text } from '../../components/TextComp';
 
 const Signup: React.FC = () => {
-   const [revealPassword, setRevealPassword] = useState<boolean>(false);
-   const [revealPassword2, setRevealPassword2] = useState<boolean>(false);
+  const [revealPassword, setRevealPassword] = useState<boolean>(false);
+  const [revealPassword2, setRevealPassword2] = useState<boolean>(false);
   return (
     <div className="flex h-screen lg:flex-row flex-col md:flex-row w-full">
- 
+
       <div className="w-full lg:w-1/2  flex-grow p-4 flex justify-center items-center  md:p-10">
         <div className="w-full max-w-md">
           <Text as="h1" size="4xl" weight="bold" className="mb-4 text-center">
             Create An Account
           </Text>
 
-        
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm mb-2">
             <Input
               label="First Name"
@@ -35,7 +34,7 @@ const Signup: React.FC = () => {
             />
           </div>
 
-         
+
           <Input
             label="Email"
             placeholder="Please Enter your email"
@@ -84,7 +83,7 @@ const Signup: React.FC = () => {
           </div>
 
           <div className="flex items-center mt-4">
-            <input type="checkbox" className="mr-2" />
+            <Input type="checkbox" className="mr-2" />
             <Text size="sm">I agree to the terms & policy</Text>
           </div>
 

@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { Text } from '../../Components/TextComp';
+import { Text } from '../../components/TextComp';
 import { Input } from '../../components/InputField';
 import { Btn } from '../../components/Button';
 import frame from '../../assets/Frame 2147207438.png';
 import plane from '../../assets/Leonardo_Kino_XL_give_me_an_image_of_an_airplane_flying_2 1.png';
 import { FaEye, FaEyeSlash,FaGoogle,FaFacebook,FaApple,FaWindows,} from 'react-icons/fa';
-import BackgroundImageSection from '../../Components/SideHeroComp';
+import BackgroundImageSection from '../../components/SideHeroComp';
 import { Link } from 'react-router-dom';
 
 const SignIn: React.FC = () => {
