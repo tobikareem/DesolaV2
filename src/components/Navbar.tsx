@@ -82,7 +82,7 @@ export const Navbar = () => {
                                     <NavLink to={item?.href}
                                         key={index}
                                         onClick={(e) => {e.preventDefault(); smoothScroll(item?.href);} }
-                                        className={() => `font-work h-full p-7 text-base text-neutral-900 font-medium rounded-xl text-nowrap hover:bg-secondary-100 hover:scale-105 transition-transform duration-300 ease-in-out  ${activeSection === item?.href ? 'bg-secondary-100' : 'bg-transparent'}`}
+                                        className={() => `font-work h-full p-3 text-base text-neutral-900 font-medium rounded-xl text-nowrap hover:bg-secondary-100 hover:scale-105 transition-transform duration-300 ease-in-out ${activeSection === item?.href ? 'bg-secondary-100' : 'bg-transparent'}`}
                                     >
                                         {item?.path}
                                     </NavLink>
@@ -114,7 +114,7 @@ export const Navbar = () => {
                                                         onClick={handleDrawer}
                                                         key={index}
                                                         to={item?.href}
-                                                        className={({ isActive }) => `font-work w-full h-full p-7 text-2xl  text-neutral-900 font-medium rounded-xl hover:bg-secondary-100/20 hover:scale-105 transition-transform duration-300 ease-in-out  ${isActive ? 'bg-secondary-100' : 'bg-transparent'}`}
+                                                        className={({ isActive }) => `font-work w-full h-full p-3 text-2xl  text-neutral-900 font-medium rounded-xl hover:bg-secondary-100/20 hover:scale-105 transition-transform duration-300 ease-in-out  ${isActive ? 'bg-secondary-100' : 'bg-transparent'}`}
                                                     >
                                                         {item?.path}
                                                     </NavLink>
