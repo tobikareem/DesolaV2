@@ -10,7 +10,7 @@ type RouteType = {
   path?: string;
   element?: JSX.Element;
   name?: string;
-};
+}
 
 function App() {
   const routes: RouteType[] = [
@@ -24,7 +24,6 @@ function App() {
     <div className="app-container h-screen">
       <Navbar />
       <main className="">
-        <header className="app-header">{/* <h1>{ APP_NAME }</h1> */}</header>;
         <Routes>
           {routes.map((route) => (
             <Route key={route.name} path={route.path} element={route.element} />
