@@ -1,21 +1,20 @@
 /** @type {import('tailwindcss').Config} */
 export default {
   content: [
-    './index.html',
-    './src/**/*.{js,jsx,ts,tsx,mdx}',
-    './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/components/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/app/**/*.{js,ts,jsx,tsx,mdx}',
+    "./index.html",
+    "./src/**/*.{js,jsx,ts,tsx,mdx}",
+    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
-    screens:{
-      'xs': '375px',
-      'sm': '640px',
-      'md': '768px',
-      'lg': '1024px',
-      'xl': '1280px',
-      '2xl':'1536px',
-      
+    screens: {
+      xs: "375px",
+      sm: "640px",
+      md: "768px",
+      lg: "1024px",
+      xl: "1280px",
+      "2xl": "1536px",
     },
     extend: {
       fontFamily:{
@@ -56,12 +55,12 @@ export default {
           600: '#003B85',
           700: '#002F6C',
         },
-        'secondary': {
-          100: '#FFE6CC',
-          200: '#FFA366',
-          500: '#FF6B00',
-          600: '#CC5500',
-          700: '#993F00',
+        secondary: {
+          100: "#FFE6CC",
+          200: "#FFA366",
+          500: "#FF6B00",
+          600: "#CC5500",
+          700: "#993F00",
         },
         'neutral':'#FAFAFA',
         'neutral':{
@@ -72,16 +71,15 @@ export default {
           800: '#181818',
           900: '#121212',
         },
-        'success': '#28A745',
-        'error': '#DC3545',
-        'notification': '#17A2B8',
-        'warning': '#FFC107',
+        success: "#28A745",
+        error: "#DC3545",
+        notification: "#17A2B8",
+        warning: "#FFC107",
       },
       gradientColorStops: {
-        'linear': ['#FF9040','#FF6B00'],
-      }
+        linear: ["#FF9040", "#FF6B00"],
+      },
     },
   },
   plugins: [],
-}
-
+};
