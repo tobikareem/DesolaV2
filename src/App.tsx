@@ -12,8 +12,6 @@ type RouteType = {
   path?: string;
   element?: JSX.Element;
   name?: string;
-
-
 }
 
 function App() {
