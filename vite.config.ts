@@ -6,6 +6,10 @@ import react from '@vitejs/plugin-react';
 import tailwindcss from 'tailwindcss';
 import autoprefixer from 'autoprefixer';
 
+// Debugging: Log the environment variables
+console.log('VITE_APP_NAME:', process.env.VITE_APP_NAME);
+console.log('VITE_API_BASE_URL:', process.env.VITE_API_BASE_URL);
+
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
