@@ -30,6 +30,11 @@
     "vite": "^6.1.0"
   },
   "dependencies": {
-    "clsx": "^2.1.1"
+    "clsx": "^2.1.1",
+    "horizon": "file:",
+    "react-icons": "^5.4.0",
+    "react-image": "^4.1.0",
+    "react-router": "^6.29.0",
+    "react-router-dom": "^6.29.0"
   }
 }
