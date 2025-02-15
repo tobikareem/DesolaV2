@@ -21,4 +21,7 @@ export default defineConfig({
   optimizeDeps: {
     include: ['react', 'react-dom'], // Pre-bundle dependencies for faster builds
   },
+  define: {
+    'process.env': process.env,
+  },
 });
