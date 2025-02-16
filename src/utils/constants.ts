@@ -1,6 +1,19 @@
 // Environment Variables
 export const APP_NAME = import.meta.env.VITE_APP_NAME;
 export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+export const API_TOKEN = import.meta.env.VITE_API_TOKEN;
+
+
+// Session Variable
+export const SESSION_VALUES = {
+  api_function_key: "API_TOKEN",
+  chat: "desola_flight_chat_session"
+}
+
+// WebPages
+export const WEB_PAGES = {
+  home: "Home"
+}
 
 // Error and Success Messages
 export const ERROR_MESSAGES = {
