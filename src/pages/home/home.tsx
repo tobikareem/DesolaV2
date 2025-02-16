@@ -8,9 +8,8 @@ import { IoCallOutline, IoCheckmarkCircleSharp } from "react-icons/io5";
 import { SubscriptionCard } from "../../components/SubscriptionCard";
 import { Input, TextArea } from "../../components/InputField";
 import { MdOutlineEmail } from "react-icons/md";
-import { useState } from "react";
-import { RxCaretRight } from "react-icons/rx";
 import { APP_NAME } from "../../utils/constants";
+import FaqSupport from "./sections/FaqSupport";
 
 const HomeScreen = () => {
   return (
@@ -30,7 +29,7 @@ const HomeScreen = () => {
       </section>
       <SubscriptionPlan/>
       <Contact/>
-      <Support/>
+      <FaqSupport/>
     </main>
   );
 }
@@ -304,79 +303,6 @@ const Contact =()=> {
         </div>
       </div>
       
-    </section>
-  )
-}
-
-const Support =()=> {
-
-     const FAQ = [
-      {
-        question:'How does this website work?',
-        answer:'Check the How it works section of the landing page'
-      },
-      {
-        question:'Can I book flights directly on your website?',
-        answer:'Check the How it works section of the landing page'
-      },
-      {
-        question:'Are the prices on your site always accurate?',
-        answer:'Check the How it works section of the landing page'
-      },
-      {
-        question:'Do you charge any fees for using this services?',
-        answer:'Check the How it works section of the landing page'
-      },
-      {
-        question:'Which airlines do you compare?',
-        answer:'Check the How it works section of the landing page'
-      },
-
-    ]
-
-    const [open, setOpen] = useState<boolean[]>(Array(FAQ.length).fill(false));
-
-    const ToggleState =(index: number)=> {
-      setOpen((prevState) => {
-        const newState = [...prevState];
-        newState[index] = !newState[index];
-        return newState;
-      });
-    }
-
-  return(
-    <section id="support"
-      className="bg-white flex w-full flex-col items-center py-18 lg:py-30 px-4 md:px-8 lg:px-28 gap-10">
-        <div className="text-center">
-          <Text as="h1"weight="bold" size="4xl" className="font-grotesk font-bold text-4xl text-lg:text-[56px]">
-            FAQ/Supports
-          </Text>
-        </div>
-
-        <div className="flex flex-col w-full lg:w-[800px] gap-4">
-          { 
-            FAQ?.map((_item, index)=> (
-              <div key={index}
-                onClick={() => ToggleState(index)}
-                className={`bg-primary-100/40 flex flex-col p-4 md:p-6 w-full gap-4 rounded-[24px] ${ open[index] ? 'h-fit' : 'h-16 items-center'} hover:scale-105 transition-all duration-300 ease-in-out cursor-pointer`}>
-                <div className="flex w-full justify-between items-center text-nowrap">
-                  <Text weight="normal" size='base' color="text-[#1A1A1A]" className="font-work tracking-tight">
-                    {_item?.question}
-                  </Text>
-                  <div className={`${open[index] ? 'rotate-90':'rotate-0'} text-2xl text-[#1A1A1A] transition-transform duration-1000 ease-in-out`}>
-                    <RxCaretRight />
-                  </div>
-                </div>
-                <div className={`${open[index] ? 'h-fit':'h-0' } transition-all duration-500 delay-300 ease-linear  pl-2 overflow-hidden`}>
-                  <Text weight="normal" size='base' color="text-neutral-500" className="tracking-tight">
-                    {_item?.answer}
-                  </Text>
-                </div>
-              </div>
-            ))
-          }
-        </div>
-
     </section>
   )
 }
