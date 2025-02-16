@@ -6,7 +6,7 @@ export const API_TOKEN = import.meta.env.VITE_API_TOKEN;
 
 // Session Variable
 export const SESSION_VALUES = {
-  api_token: "API_TOKEN",
+  api_function_key: "API_TOKEN",
   chat: "desola_flight_chat_session"
 }
 

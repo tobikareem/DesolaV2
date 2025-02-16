@@ -9,16 +9,22 @@ const apiClient = axios.create({
 })
 
 apiClient.interceptors.request.use(
-    config => {
-        const token = sessionStorage.getItem(SESSION_VALUES.api_token)
-
-        if(token){
-            config.headers.Authorization = `${API_TOKEN}`
-        }
-
+    (config) => {
+        config.headers['x-functions-key'] = getFunctionKey();
         return config;
     },
-    error => Promise.reject(error)
-)
+    (error) => Promise.reject(error)
+);
+
+const getFunctionKey = () => {
+    const storedKey = sessionStorage.getItem(SESSION_VALUES.api_function_key);
+
+    if (!storedKey) {
+        sessionStorage.setItem(SESSION_VALUES.api_function_key, API_TOKEN);
+        return API_TOKEN;
+    }
+
+    return storedKey;
+};
 
 export default apiClient;
