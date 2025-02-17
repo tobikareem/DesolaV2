@@ -1,25 +1,24 @@
+import { BiWorld } from "react-icons/bi";
+import { IoCheckmarkCircleSharp } from "react-icons/io5";
+import { PiBookBookmark, PiHandshake } from "react-icons/pi";
+import { Img as ReactImage } from 'react-image';
 import { useNavigate } from "react-router-dom";
 import { Btn } from "../../components/Button";
-import {Text} from "../../components/TextComp";
-import { Img as ReactImage } from 'react-image';
-import { BiWorld } from "react-icons/bi";
-import { PiBookBookmark, PiHandshake } from "react-icons/pi";
-import { IoCallOutline, IoCheckmarkCircleSharp } from "react-icons/io5";
-import { SubscriptionCard } from "../../components/SubscriptionCard";
-import { Input, TextArea } from "../../components/InputField";
-import { MdOutlineEmail } from "react-icons/md";
+import { Text } from "../../components/TextComp";
 import { APP_NAME } from "../../utils/constants";
+import Contact from "./sections/Contact";
 import FaqSupport from "./sections/FaqSupport";
+import SubscriptionPlan from "./sections/SubscriptionPlan";
 
 const HomeScreen = () => {
   return (
     <main className="w-full bg-white">
-      <Hero/>
-      <HowItWorks/>
-      <WhyChooseUs/>
+      <Hero />
+      <HowItWorks />
+      <WhyChooseUs />
       <section className="w-full bg-[url('/flying-sunset.svg')] bg-cover bg-center bg-no-repeat">
         <div className="flex flex-col bg-primary-700/85 w-full jusitfy-center items-center px-4 py-18 gap-4 isolate">
-          <Text as="h1"weight="bold" size="4xl" color="text-white" className="font-grotesk font-bold text-4xl lg:text-[40px]">
+          <Text as="h1" weight="bold" size="4xl" color="text-white" className="font-grotesk font-bold text-4xl lg:text-[40px]">
             Join {APP_NAME.toUpperCase()} today
           </Text>
           <Text size="base" color="text-white" className="font-work lg:max-w-[780px] text-sm text-center">
@@ -27,25 +26,23 @@ const HomeScreen = () => {
           </Text>
         </div>
       </section>
-      <SubscriptionPlan/>
-      <Contact/>
-      <FaqSupport/>
+      <SubscriptionPlan />
+      <Contact />
+      <FaqSupport />
     </main>
   );
 }
 
 export default HomeScreen;
 
-
-
 export const Hero = () => {
 
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-  return(
+  return (
     <section id="home" className="relative flex flex-col items-center px-4 md:px-8 lg:px-28 w-full bg-[url('/Hero-bg.svg')] bg-cover bg-center bg-no-repeat min-h-[75svh]  lg:min-h-[100vh] ">
       <div className="flex flex-col items-center mt-20 md:mt-30 lg:mt-48 text-center">
-        <Text as="h1"weight="bold" className="font-grotesk font-bold text-4xl text lg:text-[56px]">
+        <Text as="h1" weight="bold" className="font-grotesk font-bold text-4xl text lg:text-[56px]">
           Find the <span className="text-[#4E50C7]">Best</span> <span className="text-primary-500">Flight</span> Deals
         </Text>
         <Text weight="medium" size="base" color="text-neutral-500" className="mt-8 font-work lg:max-w-[520px] text-base lg:text-lg text-center">
@@ -62,7 +59,7 @@ export const Hero = () => {
         </div>
       </div>
       <div className="absolute bottom-5 w-full">
-        <ReactImage src="/Aero.png" alt="Desola-logo" 
+        <ReactImage src="/Aero.png" alt="Desola-logo"
           width={500}
           height={500}
           className="w-full"
@@ -73,18 +70,18 @@ export const Hero = () => {
 }
 
 
-const HowItWorks =()=> {
+const HowItWorks = () => {
 
   const Options = [
-    {icon:<BiWorld/>, color:'bg-primary-100/30', title:'We search the Web',description:'We continuously scan multiple sources to find the most affordable flights available.'},
-    {icon:<PiHandshake />, color:'bg-[#FFDBC030]',title:'We Present the Best Deals', description: 'Our platform compiles and displays detailed information about these flights, including pricing, schedules, and key details.'},
-    {icon:<PiBookBookmark />, color:'bg-[#66666620]', title:'View Details & the Book Airline`s Site', description:'You simply click on the flight that interest you, and we provide you with all the details along with a link'}
+    { icon: <BiWorld />, color: 'bg-primary-100/30', title: 'We search the Web', description: 'We continuously scan multiple sources to find the most affordable flights available.' },
+    { icon: <PiHandshake />, color: 'bg-[#FFDBC030]', title: 'We Present the Best Deals', description: 'Our platform compiles and displays detailed information about these flights, including pricing, schedules, and key details.' },
+    { icon: <PiBookBookmark />, color: 'bg-[#66666620]', title: 'View Details & the Book Airline`s Site', description: 'You simply click on the flight that interest you, and we provide you with all the details along with a link' }
   ]
 
-  return(
+  return (
     <section id="how-it-works"
       className="flex w-full flex-col items-center py-18 lg:py-30 bg-[#F5F5F5] gap-10 px-4 md:px-8 ">
-      <Text as="h1"weight="bold" size="4xl" className="font-grotesk font-bold text-4xl lg:text-[56px]">
+      <Text as="h1" weight="bold" size="4xl" className="font-grotesk font-bold text-4xl lg:text-[56px]">
         How it works
       </Text>
       <div className="flex flex-col lg:flex-row gap-5 lg:gap-8">
@@ -102,7 +99,7 @@ const HowItWorks =()=> {
                   {option?.description}
                 </Text>
               </div>
-            </div> 
+            </div>
           ))
         }
       </div>
@@ -110,14 +107,14 @@ const HowItWorks =()=> {
   )
 }
 
-const WhyChooseUs =()=> {
+const WhyChooseUs = () => {
   const navigate = useNavigate();
-  return(
+  return (
     <section id="why-choose-us"
       className="flex flex-col lg:flex-row w-full py-18 lg:py-30 px-4 md:px-8 lg:px-28 gap-8"
     >
       <div className="block w-full hover:scale-105 transition-all duration-300 ease-in-out">
-        <ReactImage 
+        <ReactImage
           src={'/Flight.png'}
           alt="Flight"
           className="w-full"
@@ -125,7 +122,7 @@ const WhyChooseUs =()=> {
       </div>
       <div className="block w-full">
         <div className="flex flex-col w-full gap-4">
-          <Text as="h1"weight="bold" size="4xl" className="font-grotesk font-bold text-4xl lg:text-[56px]">
+          <Text as="h1" weight="bold" size="4xl" className="font-grotesk font-bold text-4xl lg:text-[56px]">
             Why Choose Us?
           </Text>
           <Text weight="medium" size="base" color="text-neutral-500" className="font-work text-base mt-2">
@@ -133,12 +130,12 @@ const WhyChooseUs =()=> {
           </Text>
           <div className="flex flex-col gap-2">
             {
-              ['Affordable Flights', 'Transparent Pricing', 'Time-Saving']?.map((item)=>(
-                  <div key={item}
-                    className="flex w-full flex-nowrap items-center gap-3"
-                  >
-                  <IoCheckmarkCircleSharp className="text-lg text-success"/> {item}
-                  </div>
+              ['Affordable Flights', 'Transparent Pricing', 'Time-Saving']?.map((item) => (
+                <div key={item}
+                  className="flex w-full flex-nowrap items-center gap-3"
+                >
+                  <IoCheckmarkCircleSharp className="text-lg text-success" /> {item}
+                </div>
               ))
             }
           </div>
@@ -153,156 +150,7 @@ const WhyChooseUs =()=> {
           </Btn>
         </div>
       </div>
-      
-    </section>
-  )
-}
 
-const SubscriptionPlan =()=> {
-
-  const BenefitList = ['Unlimited flight searches',
-    'Access to the best flight deals',
-    'Direct links to book on airline sites',
-    'Price updates in real-time',
-    'Email Support',
-    'Flexible Date Search',
-  ]
-  return(
-    <section id="subscription"
-      className="bg-[#F5F5F5] flex w-full flex-col items-center py-18 lg:py-30 px-4 md:px-8 gap-10">
-        <div className="text-center">
-          <Text as="h1"weight="bold" size="4xl" className="font-grotesk font-bold text-4xl text-lg:text-[56px]">
-            Your Perfect Plan
-          </Text>
-          <Text weight="medium" size="base" color="text-neutral-500" className="mt-8 font-work lg:max-w-[520px] text-base lg:text-lg text-center">
-            Affordable and Scalable options for everyone.
-          </Text>
-        </div>
-        <div className="flex flex-col lg:flex-row gap-8">
-          <SubscriptionCard
-            Tag="Monthly"
-            TagColor="bg-primary-500"
-            color="bg-white"
-            price={2.99}
-            priceColor="text-secondary-500"
-            benefit={BenefitList} 
-            benefitColor="text-primary-500"   
-          />
-          <SubscriptionCard 
-            Tag="Yearly"
-            TagColor="bg-secondary-500"
-            color="bg-primary-500"
-            priceColor="text-white"
-            extra="text-white/50"
-            price={30.50} period="yr"
-            benefitColor="text-white"
-            benefit={BenefitList}
-          />
-        </div>
-
-    </section>
-  )
-}
-
-const Contact =()=> {
-
-  const ContactInfo = [
-    {
-      icon:<MdOutlineEmail />,
-      contact:'info@desola.com'
-    },
-    {
-      icon:<IoCallOutline />,
-      contact:'+1 (808) 323 4455 '
-    },
-  ]
-
-  return(
-    <section id="contact"
-      className="bg-[#F5F5F5] w-full py-18 lg:py-30 gap-10 px-4 md:px-8 lg:px-28 ">
-      <div className="flex flex-col lg:flex-row w-full gap-8">
-        {/* Contact Form */}
-        <div className="flex flex-col flex-1 bg-white rounded-3xl p-8">
-          <div className={`cursor-pointer bg-gradient-to-r from-white from-[05%] to-[98%]  to-[#CECECE20] border border-[#E4E4E7] py-3 px-3.5 w-fit rounded-[60px] font-poppins text-neutral-800 uppercase`}>
-            Get in Touch
-          </div>
-          <div className="mt-3 flex flex-col gap-2 w-full">
-            <Text as="h1"weight="bold" size="4xl" color="text-neutral-800"
-              className="font-grotesk font-bold text-4xl text-lg:text-[56px]">
-              Let's chat, Reach Out to Us
-            </Text>
-            <Text weight="normal" size="base" color="text-neutral-500" className=" font-work lg:max-w-[520px] text-base ">
-              Have a question or feedback? We are here to help. Send us a message, and we'll respond in 24 hours. 
-            </Text>
-          </div>
-
-          <form 
-            className="mt-6 flex flex-col flex-grow w-full h-full gap-4">
-            <div className="flex w-full gap-4 lg:gap-6">
-              <div className="w-full">
-                <Input 
-                  label="First Name"
-                  type="text"
-                  placeholder="First Name"
-                  className="bg-[#F3F3F3] w-full h-13 rounded-sm placeholder:text-[#B7B7B7] placeholder:"
-                />
-              </div>
-              <div className="w-full">
-                <Input 
-                  label="Last Name"
-                  type="text"
-                  placeholder="Last Name"
-                  className="bg-[#F3F3F3] w-full h-13 rounded-sm placeholder:text-[#B7B7B7] placeholder:"
-                />
-              </div>
-            </div>
-            <Input 
-              label="Email Address"
-              type="email"
-              placeholder="email"
-              className="bg-[#F3F3F3] w-full h-13 rounded-sm placeholder:text-[#B7B7B7] placeholder:"
-            />
-            <div className="flex flex-col flex-grow h-full">
-              <TextArea
-                label="Message"
-                placeholder="Leave us a message..."
-                className=" bg-[#F3F3F3]  flex h-[300px]  rounded-sm placeholder:text-[#B7B7B7] placeholder:"
-              />
-            </div>
-            
-            <Btn type="submit"
-              className="mt-3 bg-gradient-to-b text-nowrap from-[#FF9040] to-[#FF6B00] w-full text-base lg:h-12 text-white">
-              Send Message
-            </Btn>
-          </form>
-        </div>
-
-        <div className="flex flex-col flex-1 gap-8">
-          <div className="bg-white w-full rounded-3xl overflow-hidden hover:scale-105 transition-all duration-300 ease-in-out ">
-            <ReactImage src={'/contact.svg'}
-              alt="contact"
-              className="w-full"
-            />
-          </div>
-          <div className=" bg-white w-full h-fit rounded-3xl px-4 py-6 lg:px-8 lg:py-8 ">
-            <div className="flex flex-col w-full gap-4">
-              {
-                ContactInfo?.map((item, index)=>(
-                  <div key={index}
-                    className="flex w-full h-20 px-5 items-center bg-[#F3F3F3] rounded-2xl gap-2 text-nowrap font-inter font-normal text-[#15141F] text-base sm:text-xl hover:scale-105 transition-all duration-300 ease-in-out"
-                  >
-                    <div className="bg-[#0D3180] flex items-center justify-center w-10 h-10 border-4 border-[#0D3180/30] rounded-full text-white text-base box-border">
-                      {item?.icon}
-                    </div>
-                    {item?.contact}
-                  </div>
-                ))
-              }
-            </div>
-          </div>
-        </div>
-      </div>
-      
     </section>
   )
 }
