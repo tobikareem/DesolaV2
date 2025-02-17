@@ -1,22 +1,28 @@
 import React, { useState } from 'react';
-import { Text } from '../../Components/TextComp';
-import { Input } from '../../components/InputField';
+import { Text } from '../../components/TextComp';
+import { Input } from '../../Components/InputField';
 import { Btn } from '../../components/Button';
 import frame from '../../assets/Frame 2147207438.png';
 import plane from '../../assets/Leonardo_Kino_XL_give_me_an_image_of_an_airplane_flying_2 1.png';
 import { FaEye, FaEyeSlash,FaGoogle,FaFacebook,FaApple,FaWindows,} from 'react-icons/fa';
 import BackgroundImageSection from '../../Components/SideHeroComp';
 import { Link } from 'react-router-dom';
+import { Logo } from '../../Components/Logo';
+
 
 const SignIn: React.FC = () => {
   const [revealPassword, setRevealPassword] = useState<boolean>(false);
 
   return (
     <div className="flex h-screen lg:flex-row flex-col md:flex-row w-full">
-
       <div className="w-full md:w-1/2 p-6 h-auto flex-grow flex justify-center items-center md:p-10">
         <div className="w-full max-w-md">
-          <Text as="h1" size="4xl" weight="bold" className="mb-6 text-center">
+           <Link to={'/'} className="flex justify-center items-center mb-3 cursor-pointer">
+                      <Logo />
+                       
+            </Link>
+
+          <Text as="h1" size="2xl" weight="bold" className="mb-6 text-center">
             Get Started Now
           </Text>
 
@@ -26,7 +32,6 @@ const SignIn: React.FC = () => {
             className="text-sm mb-2 w-full"
           />
 
-        
           <div className="relative w-full">
             <Input
               type={revealPassword ? 'text' : 'password'}
@@ -51,7 +56,6 @@ const SignIn: React.FC = () => {
             Sign In
           </Btn>
 
-     
           <div className="flex items-center my-4">
             <div className="flex-grow border-t border-gray-300"></div>
             <Text size="sm" className="mx-3 text-gray-500">
@@ -60,7 +64,6 @@ const SignIn: React.FC = () => {
             <div className="flex-grow border-t border-gray-300"></div>
           </div>
 
-       
           <div className="flex justify-center gap-4">
             <FaGoogle className="text-xl text-red-500 cursor-pointer" />
             <FaFacebook className="text-xl text-blue-600 cursor-pointer" />
@@ -79,7 +82,7 @@ const SignIn: React.FC = () => {
         </div>
       </div>
 
-      <div className="flex min-h-[300px] lg:min-h-full  w-full lg:w-1/2">
+      <div className="flex  lg:min-h-full  w-full lg:w-1/2">
         <BackgroundImageSection
           backgroundImage={frame}
           imageSrc={plane}

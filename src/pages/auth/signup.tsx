@@ -1,27 +1,31 @@
 import React, { useState } from 'react';
-import { Text } from '../../Components/TextComp';
-import { Input } from '../../components/InputField';
+import { Text } from '../../components/TextComp';
+import { Input } from '../../Components/InputField';
 import { Btn } from '../../components/Button';
 import { FaGoogle, FaFacebook, FaApple, FaWindows } from 'react-icons/fa';
 import frame from '../../assets/Frame 2147207438.png'
 import plane from '../../assets/Leonardo_Kino_XL_give_me_an_image_of_an_airplane_flying_2 1.png'
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import BackgroundImageSection from '../../Components/SideHeroComp';
-import { Link } from 'react-router-dom';
+import { Link} from 'react-router-dom';
+import { Logo } from '../../Components/Logo';
 
 const Signup: React.FC = () => {
    const [revealPassword, setRevealPassword] = useState<boolean>(false);
    const [revealPassword2, setRevealPassword2] = useState<boolean>(false);
   return (
-    <div className="flex h-screen lg:flex-row flex-col md:flex-row w-full">
- 
+    <div className="flex h-auto lg:flex-row flex-col md:flex-row w-full">
       <div className="w-full lg:w-1/2  flex-grow p-4 flex justify-center items-center  md:p-10">
         <div className="w-full max-w-md">
-          <Text as="h1" size="4xl" weight="bold" className="mb-4 text-center">
+        <Link to={'/'} 
+         className="flex justify-center items-center mb-3 cursor-pointer">
+            <Logo />
+             
+            </Link>
+          <Text as="h1" size="2xl" weight="bold" className="mb-4 text-center">
             Create An Account
           </Text>
 
-        
           <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm mb-2">
             <Input
               label="First Name"
@@ -35,7 +39,6 @@ const Signup: React.FC = () => {
             />
           </div>
 
-         
           <Input
             label="Email"
             placeholder="Please Enter your email"
@@ -118,7 +121,7 @@ const Signup: React.FC = () => {
         </div>
       </div>
 
-      <div className="flex min-h-[300px] lg:min-h-full  w-full lg:w-1/2">
+      <div className="flex  lg:min-h-full  w-full lg:w-1/2">
         <BackgroundImageSection
           backgroundImage={frame}
           imageSrc={plane}
