@@ -1,4 +1,4 @@
-export interface FaqItemResponse{
+export interface PageResponse{
     AdditionalNotes: string;
     Etag: string;
     RowValue: string;

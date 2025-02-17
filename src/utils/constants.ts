@@ -12,7 +12,8 @@ export const SESSION_VALUES = {
 
 // WebPages
 export const WEB_PAGES = {
-  home: "Home"
+  home: "Home",
+  contact: "Contact"
 }
 
 // Error and Success Messages
