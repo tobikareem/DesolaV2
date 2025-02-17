@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { PageResponse } from "../pages/home/response/FaqItemResponse";
+import { PageResponse } from "../models/FaqItemResponse";
 import { getPageSection } from "../services/pageContentService";
 
 const usePageContent = (path:string, partitionKey: string, rowKey: string) => {
