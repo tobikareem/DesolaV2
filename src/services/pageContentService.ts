@@ -1,11 +1,11 @@
 import { PageContent } from "../models/pageContent";
-import { FaqItemResponse } from "../pages/home/response/FaqItemResponse";
+import { PageResponse } from "../pages/home/response/FaqItemResponse";
 import { ENDPOINTS_API_PATH } from "../utils/endpoints";
 import apiClient from "./apiClient";
 
-export const getPageSection = async (partitionKey: string, rowKey: string) => {
+export const getPageSection = async (path: string, partitionKey: string, rowKey: string) => {
     try {
-        const response = await apiClient.get<FaqItemResponse>(`${ENDPOINTS_API_PATH.page}/${partitionKey}/${rowKey}`);
+        const response = await apiClient.get<PageResponse>(`${path}/${partitionKey}/${rowKey}`);
         return response.data;
     } catch (error) {
         console.error("Error fetching page content", error);
