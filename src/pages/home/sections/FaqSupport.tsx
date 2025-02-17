@@ -39,7 +39,7 @@ const FaqSupport = () => {
                             <div
                                 key={index}
                                 onClick={() => toggleState(index)}
-                                className={`flex flex-col p-4 md:p-6 w-full gap-4 rounded-[24px] ${open[index] ? 'h-fit' : 'h-16 items-center'} hover:scale-105 transition-all duration-300 ease-in-out cursor-pointer`}>
+                                className={`bg-primary-100/40 flex flex-col p-4 md:p-6 w-full gap-4 rounded-[24px] ${open[index] ? 'h-fit' : 'h-16 items-center'} hover:scale-105 transition-all duration-300 ease-in-out cursor-pointer`}>
                                 <div className="flex w-full justify-between items-center text-nowrap">
                                     <Text weight="normal" size='base' color="text-[#1A1A1A]" className="font-work tracking-tight">
                                         {question}
