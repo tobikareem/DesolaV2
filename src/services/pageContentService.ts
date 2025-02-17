@@ -1,5 +1,5 @@
 import { PageContent } from "../models/pageContent";
-import { PageResponse } from "../pages/home/response/FaqItemResponse";
+import { PageResponse } from "../models/FaqItemResponse";
 import { ENDPOINTS_API_PATH } from "../utils/endpoints";
 import apiClient from "./apiClient";
 
