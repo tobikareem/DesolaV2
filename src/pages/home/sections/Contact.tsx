@@ -4,9 +4,9 @@ import { Img as ReactImage } from 'react-image';
 import { Btn } from "../../../components/Button";
 import { Input, TextArea } from "../../../components/InputField";
 import { Text } from '../../../components/TextComp';
-import usePageContent from "../../../hooks/usePageContent";
 import { WEB_PAGES } from "../../../utils/constants";
 import { ENDPOINTS_API_PATH } from "../../../utils/endpoints";
+import usePageContent from "../../../hooks/usePageContent";
 
 const Contact = () => {
     const { content: faqData, loading, error } = usePageContent(`${ENDPOINTS_API_PATH.page}`, `${WEB_PAGES.contact}`, "PhoneAndEmail");
