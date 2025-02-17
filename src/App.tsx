@@ -1,16 +1,16 @@
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import './App.css';
 import HomeScreen from './pages/home/home';
 import SignIn from './pages/auth/signin';
 import SignUp from './pages/auth/signup';
-import { Navbar } from './Components/Navbar';
-
+import { Navbar } from './components/Navbar';
+import { JSX } from 'react';
 
 type RouteType = {
   path?: string;
   element?: JSX.Element;
   name?: string;
-};
+}
 
 function App() {
   const routes: RouteType[] = [
@@ -21,21 +21,19 @@ function App() {
 
   return (
 
-      <div className="app-container h-screen">
-        <Navbar />
-        <main className="">
-          <header className="app-header">{/* <h1>{ APP_NAME }</h1> */}</header>;
-          <Routes>
-            {routes.map((route, index) => (
-              <Route key={index} path={route.path} element={route.element} />
-            ))}
-          </Routes>
-        </main>
- 
-      </div>
-   
+    <div className="app-container h-screen">
+      <Navbar />
+      <main className="">
+        <Routes>
+          {routes.map((route) => (
+            <Route key={route.name} path={route.path} element={route.element} />
+          ))}
+        </Routes>
+      </main>
+
+    </div>
+
   );
 }
 
 export default App;
-  

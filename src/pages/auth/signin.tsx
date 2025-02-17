@@ -5,7 +5,7 @@ import { Btn } from '../../components/Button';
 import frame from '../../assets/Frame 2147207438.png';
 import plane from '../../assets/Leonardo_Kino_XL_give_me_an_image_of_an_airplane_flying_2 1.png';
 import { FaEye, FaEyeSlash,FaGoogle,FaFacebook,FaApple,FaWindows,} from 'react-icons/fa';
-import BackgroundImageSection from '../../Components/SideHeroComp';
+import  BackgroundImageSection  from '../../Components/SideHeroComp';
 import { Link } from 'react-router-dom';
 import { Logo } from '../../Components/Logo';
 
@@ -21,7 +21,7 @@ const SignIn: React.FC = () => {
                       <Logo />
                        
             </Link>
-
+         
           <Text as="h1" size="2xl" weight="bold" className="mb-6 text-center">
             Get Started Now
           </Text>

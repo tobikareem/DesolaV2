@@ -11,8 +11,8 @@ import { Link} from 'react-router-dom';
 import { Logo } from '../../Components/Logo';
 
 const Signup: React.FC = () => {
-   const [revealPassword, setRevealPassword] = useState<boolean>(false);
-   const [revealPassword2, setRevealPassword2] = useState<boolean>(false);
+  const [revealPassword, setRevealPassword] = useState<boolean>(false);
+  const [revealPassword2, setRevealPassword2] = useState<boolean>(false);
   return (
     <div className="flex h-auto lg:flex-row flex-col md:flex-row w-full">
       <div className="w-full lg:w-1/2  flex-grow p-4 flex justify-center items-center  md:p-10">
@@ -87,7 +87,7 @@ const Signup: React.FC = () => {
           </div>
 
           <div className="flex items-center mt-4">
-            <input type="checkbox" className="mr-2" />
+            <Input type="checkbox" className="mr-2" />
             <Text size="sm">I agree to the terms & policy</Text>
           </div>
 

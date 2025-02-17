@@ -1,7 +1,7 @@
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { Logo } from "./Logo";
 import { GiHamburgerMenu } from "react-icons/gi";
-import { useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { VscClose } from "react-icons/vsc";
 
 
@@ -14,19 +14,19 @@ export const Navbar = () => {
 
     const Navigation = [
         {  
-            href: '/',
+            href: '#home',
             path:'Home'
         },
         {
-            href: '/how-it-works',
+            href: '#how-it-works',
             path: 'How It Works'
         },
         {
-            href: '/why-choose-us',
+            href: '#why-choose-us',
             path: 'Why Choose Us'
         },
         {
-            href: '/support',
+            href: '#support',
             path: 'FAQ/Support'
         }
     ];
@@ -34,15 +34,38 @@ export const Navbar = () => {
     const location = useLocation();
     const router = location.pathname;
 
+    const [activeSection, setActiveSection] = useState('');
 
+    const sections = useMemo(() => ['#home', '#how-it-works','#why-choose-us','#support'], []);
+
+    console.log(sections)
+    useEffect(()=> {
+        const handleScroll =()=> {
+            sections?.forEach((section)=> {
+                const element = document.getElementById(section);
+                if(element && element.getBoundingClientRect().top <= window.innerHeight / 2){
+                    setActiveSection(section);
+                }
+            });
+        };
+        window.addEventListener('scroll', handleScroll);
+            return ()=> window.removeEventListener('scroll',handleScroll);
+    },[sections])
+    
+    const smoothScroll = (href: string) => {
+        const element = document.querySelector(href);
+        if (element) {
+            element.scrollIntoView({ behavior: 'smooth' });
+        }
+    };
 
 
     return (
-        <div className={`fixed ${['/signin','/signup'].includes(router) ? 'hidden' : 'flex'}  items-center w-screen z-40 bg-transparent top-6 lg:top-[46px] h-14 left-0 `}>
-            <div className="flex w-full justify-between items-center px-4 md:px-8 lg:px-28 h-full bg-transparent">
+        <div className={`fixed ${['/signin','/signup'].includes(router) ? 'hidden' : 'flex'}  items-center w-screen z-40 bg-transparent lg:top-[46px] h-14 left-0 backdrop-blur-[2px] `}>
+            <div className="flex w-full justify-between items-center px-4 md:px-8 lg:px-14 xl:px-28 h-full bg-transparent">
                 {/* Logo */}
                 <div onClick={()=> setSlider(prevState => !prevState)}
-                    className="block lg:hidden text-neutral-900 text-2xl">
+                    className="block lg:hidden text-neutral-900 text-2xl mt-6">
                     <GiHamburgerMenu />
                 </div>
                 <div className="hidden lg:block ">
@@ -53,10 +76,10 @@ export const Navbar = () => {
                         {
                             Navigation?.map((item, index) => {
                                 return(
-                                    <NavLink
+                                    <NavLink to={item?.href}
                                         key={index}
-                                        to={item?.href}
-                                        className={({ isActive }) => `font-work h-full p-7 text-base text-neutral-900 font-medium rounded-xl hover:bg-secondary-100/20 hover:scale-105 transition-transform duration-300 ease-in-out  ${isActive ? 'bg-secondary-100' : 'bg-transparent'}`}
+                                        onClick={(e) => {e.preventDefault(); smoothScroll(item?.href);} }
+                                        className={() => `font-work h-full p-3 text-base text-neutral-900 font-medium rounded-xl text-nowrap hover:bg-secondary-100 hover:scale-105 transition-transform duration-300 ease-in-out ${activeSection === item?.href ? 'bg-secondary-100' : 'bg-transparent'}`}
                                     >
                                         {item?.path}
                                     </NavLink>
@@ -78,23 +101,25 @@ export const Navbar = () => {
                         </div>
                         <div id="drawer"
                             className={`flex flex-col justify-between items-center px-10 pb-10  w-full h-full `}>
-                            <Logo/>
-                            <nav className="flex flex-col w-full items-center px-1 py-1 text-center">
-                                    {
-                                        Navigation?.map((item, index) => {
-                                            return(
-                                                <NavLink
-                                                    onClick={handleDrawer}
-                                                    key={index}
-                                                    to={item?.href}
-                                                    className={({ isActive }) => `font-work w-full h-full p-7 text-2xl  text-neutral-900 font-medium rounded-xl hover:bg-secondary-100/20 hover:scale-105 transition-transform duration-300 ease-in-out  ${isActive ? 'bg-secondary-100' : 'bg-transparent'}`}
-                                                >
-                                                    {item?.path}
-                                                </NavLink>
-                                            )
-                                        })
-                                    }
-                            </nav>
+                            <div className="flex flex-col w-full items-center gap-22">
+                                <Logo/>
+                                <nav className="flex flex-col w-full items-center px-1 py-1 text-center">
+                                        {
+                                            Navigation?.map((item, index) => {
+                                                return(
+                                                    <NavLink
+                                                        onClick={handleDrawer}
+                                                        key={index}
+                                                        to={item?.href}
+                                                        className={({ isActive }) => `font-work w-full h-full p-3 text-2xl  text-neutral-900 font-medium rounded-xl hover:bg-secondary-100/20 hover:scale-105 transition-transform duration-300 ease-in-out  ${isActive ? 'bg-secondary-100' : 'bg-transparent'}`}
+                                                    >
+                                                        {item?.path}
+                                                    </NavLink>
+                                                )
+                                            })
+                                        }
+                                </nav>
+                            </div>
                             <Link to="/signin" onClick={handleDrawer}
                                 className="flex lg:hidden items-center justify-center h-16 w-full bg-gradient-to-b from-[#FF9040] to-[#FF6B00] text-2xl text-white font-medium rounded-xl hover:scale-105 transition-transform duration-300 ease-in-out">
                                 Sign In
