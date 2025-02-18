@@ -8,7 +8,10 @@ import { ENDPOINTS_API_PATH } from "../../../utils/endpoints";
 const SubscriptionPlan = () => {
 
     const { content: faqData, loading, error } = usePageContent(`${ENDPOINTS_API_PATH.page}`, `${WEB_PAGES.home}`, "PriceDetails");
-    const benefitLists = faqData?.RowValue?.split(";")
+    const { content: monthlyYearly } = usePageContent(`${ENDPOINTS_API_PATH.page}`, `${WEB_PAGES.home}`, "MonthlyYearlyPrice");
+    const benefitLists = faqData?.RowValue?.split(";");
+    const monthlyPrice = monthlyYearly?.RowValue?.split(";")[0] ?? '2.59';
+    const yearlyPrice = monthlyYearly?.RowValue?.split(";")[1] ?? '30.59';
 
     return (
         <section id="subscription"
@@ -30,7 +33,7 @@ const SubscriptionPlan = () => {
                     Tag="Monthly"
                     TagColor="bg-primary-500"
                     color="bg-white"
-                    price={2.99}
+                    price={monthlyPrice}
                     priceColor="text-secondary-500"
                     benefit={benefitLists}
                     benefitColor="text-primary-500"
@@ -41,7 +44,8 @@ const SubscriptionPlan = () => {
                     color="bg-primary-500"
                     priceColor="text-white"
                     extra="text-white/50"
-                    price={30.50} period="yr"
+                    price={yearlyPrice} 
+                    period="yr"
                     benefitColor="text-white"
                     benefit={benefitLists}
                 />
