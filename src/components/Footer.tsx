@@ -1,7 +1,8 @@
 import React from 'react';
 import { Text } from './TextComp';
 import { FaInstagram, FaTwitter, FaLinkedin } from 'react-icons/fa';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
+import { Logo } from './Logo';
 
 
 
@@ -12,7 +13,8 @@ const Footer: React.FC = () => {
   return (
     <footer className={`${['/signin','/signup'].includes(router) ? 'hidden' : ''} bg-primary-700  text-white py-8 mt-8`}>
       <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-left md:text-left">
+        <div className="flex flex-col lg:flex-row justify-between items-start gap-8 text-left md:text-left">
+          <Logo/>
           <div>
             <Text
               as="h3"
@@ -22,31 +24,23 @@ const Footer: React.FC = () => {
             >
               Page
             </Text>
-            <ul className="space-y-2">
-              <li>
-                <Text as="p" size="sm" className="text-white hover:text-white ">
-                  Home
-                </Text>
-              </li>
-              <li>
-                <Text as="p" size="sm" className="text-white hover:text-white ">
-                  Services
-                </Text>
-              </li>
-              <li>
-                <Text as="p" size="sm" className="text-white hover:text-white ">
-                  Contact
-                </Text>
-              </li>
-              <li>
-                <Text as="p" size="sm" className="text-white hover:text-white ">
-                  404
-                </Text>
-              </li>
+            <ul className="space-y-2 ml-1">
+              { ['Home', 'Services', 'Contact', '404' ].map((item)=> {
+                  const route = `#${item.toLowerCase()}`
+                  return(
+                  <li key={item} >
+                    <Link to={route}>
+                      <Text as="p" size="sm" className="text-white hover:font-bold">
+                        {item}
+                      </Text>
+                    </Link>
+                  </li>
+                )})
+              }
             </ul>
           </div>
 
-          <div>
+          <div className='space-y-3'>
             <Text
               as="h3"
               size="lg"
@@ -55,12 +49,17 @@ const Footer: React.FC = () => {
             >
               Contact
             </Text>
-            <Text as="p" size="sm" className="text-white">
-              +234 908 4737 963
-            </Text>
-            <Text as="p" size="sm" className="text-white">
-              desola@gmail.com
-            </Text>
+            <Link to={'tel:'}>
+              <Text as="p" size="sm" className="text-white hover:font-bold">
+                +234 908 4737 963
+              </Text>
+            </Link>
+            <Link to={'mailto:'}>
+              <Text as="p" size="sm" className="text-white hover:font-bold">
+                desola@gmail.com
+              </Text>
+            </Link>
+            
           </div>
 
           <div>
@@ -72,10 +71,17 @@ const Footer: React.FC = () => {
             >
               Follow Us
             </Text>
-            <div className="flex  gap-3">
-              <FaInstagram className="text-xl text-white cursor-pointer" />
-              <FaTwitter className="text-xl text-white cursor-pointer" />
-              <FaLinkedin className="text-xl text-white cursor-pointer" />
+            <div className="flex gap-3">
+              <Link to="">
+                <FaInstagram className="text-xl text-white cursor-pointer" />
+              </Link>
+              <Link to="">
+                <FaTwitter className="text-xl text-white cursor-pointer" />
+              </Link>
+              <Link to="">
+                <FaLinkedin className="text-xl text-white cursor-pointer" />
+              </Link>
+              
             </div>
           </div>
         </div>

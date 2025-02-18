@@ -2,11 +2,9 @@ import React, { useState } from 'react';
 import { Text } from '../../components/TextComp';
 import { Input } from '../../components/InputField';
 import { Btn } from '../../components/Button';
-import frame from '../../assets/Frame 2147207438.png';
-import plane from '../../assets/Leonardo_Kino_XL_give_me_an_image_of_an_airplane_flying_2 1.png';
 import { FaEye, FaEyeSlash,FaGoogle,FaFacebook,FaApple,FaWindows,} from 'react-icons/fa';
-import BackgroundImageSection from '../../components/SideHeroComp';
 import { Link } from 'react-router-dom';
+import { AuthHero } from './AuthHero';
 
 const SignIn: React.FC = () => {
   const [revealPassword, setRevealPassword] = useState<boolean>(false);
@@ -14,7 +12,7 @@ const SignIn: React.FC = () => {
   return (
     <div className="flex h-screen lg:flex-row flex-col md:flex-row w-full">
 
-      <div className="w-full md:w-1/2 p-6 h-auto flex-grow flex justify-center items-center md:p-10">
+      <div className="w-full p-6 h-auto flex-grow flex justify-center items-center md:p-10">
         <div className="w-full max-w-md">
           <Text as="h1" size="4xl" weight="bold" className="mb-6 text-center">
             Get Started Now
@@ -79,13 +77,7 @@ const SignIn: React.FC = () => {
         </div>
       </div>
 
-      <div className="flex min-h-[300px] lg:min-h-full  w-full lg:w-1/2">
-        <BackgroundImageSection
-          backgroundImage={frame}
-          imageSrc={plane}
-          className="w-full min-h-full"
-        />
-      </div>
+      <AuthHero/>
     </div>
   );
 };

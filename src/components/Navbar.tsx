@@ -1,7 +1,7 @@
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { Logo } from "./Logo";
 import { GiHamburgerMenu } from "react-icons/gi";
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState} from "react";
 import { VscClose } from "react-icons/vsc";
 
 

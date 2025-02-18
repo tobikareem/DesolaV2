@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import { FaApple, FaEye, FaEyeSlash, FaFacebook, FaGoogle, FaWindows } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
-import frame from '../../assets/Frame 2147207438.png';
-import plane from '../../assets/Leonardo_Kino_XL_give_me_an_image_of_an_airplane_flying_2 1.png';
 import { Btn } from '../../components/Button';
 import { Input } from '../../components/InputField';
-import BackgroundImageSection from '../../components/SideHeroComp';
 import { Text } from '../../components/TextComp';
+import { AuthHero } from './AuthHero';
 
 const Signup: React.FC = () => {
   const [revealPassword, setRevealPassword] = useState<boolean>(false);
@@ -14,12 +12,11 @@ const Signup: React.FC = () => {
   return (
     <div className="flex h-screen lg:flex-row flex-col md:flex-row w-full">
 
-      <div className="w-full lg:w-1/2  flex-grow p-4 flex justify-center items-center  md:p-10">
+      <div className="w-full flex-grow p-4 flex justify-center items-center md:p-10">
         <div className="w-full max-w-md">
           <Text as="h1" size="4xl" weight="bold" className="mb-4 text-center">
             Create An Account
           </Text>
-
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm mb-2">
             <Input
@@ -116,14 +113,7 @@ const Signup: React.FC = () => {
           </div>
         </div>
       </div>
-
-      <div className="flex min-h-[300px] lg:min-h-full  w-full lg:w-1/2">
-        <BackgroundImageSection
-          backgroundImage={frame}
-          imageSrc={plane}
-          className="w-full min-h-full"
-        />
-      </div>
+      <AuthHero/>
     </div>
   );
 };

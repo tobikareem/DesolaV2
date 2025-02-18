@@ -9,7 +9,7 @@ type CardProps = {
   Tag?: string;
   TagColor?: string;
   priceColor?: string;
-  price?:number;
+  price?:string;
   period?:string;
   benefit?:string[];
   benefitColor?: string;
@@ -28,9 +28,6 @@ export const SubscriptionCard =({
   extra = 'text-[#68708C]',
   benefit,
   benefitColor,
-
-  
-
 }:CardProps)=> {
 
   const navigate = useNavigate();
