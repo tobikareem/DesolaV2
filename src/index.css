@@ -23,3 +23,17 @@ label{
     font-size: 12px!important;
  
 }
+
+.flight {
+    animation: flight 18s linear infinite;
+    animation-delay: 8s;
+}
+
+@keyframes flight {
+    0% {
+        transform: translateX(20vw);
+    }
+    100%{
+        transform: translateX(100vw)
+    }
+}   

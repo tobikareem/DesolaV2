@@ -2,11 +2,12 @@ import { IoCallOutline } from "react-icons/io5";
 import { MdOutlineEmail } from "react-icons/md";
 import { Img as ReactImage } from 'react-image';
 import { Btn } from "../../../components/Button";
-import { Input, TextArea } from "../../../components/InputField";
+import { Input } from "../../../components/InputField";
 import { Text } from '../../../components/TextComp';
 import { WEB_PAGES } from "../../../utils/constants";
 import { ENDPOINTS_API_PATH } from "../../../utils/endpoints";
 import usePageContent from "../../../hooks/usePageContent";
+import { TextArea } from "../../../components/TextAreaField";
 
 const Contact = () => {
     const { content: faqData, loading, error } = usePageContent(`${ENDPOINTS_API_PATH.page}`, `${WEB_PAGES.contact}`, "PhoneAndEmail");
@@ -62,12 +63,12 @@ const Contact = () => {
                             <TextArea
                                 label="Message"
                                 placeholder="Leave us a message..."
-                                className=" bg-[#F3F3F3]  flex h-[300px]  rounded-sm placeholder:text-[#B7B7B7] placeholder:"
+                                className=" bg-[#F3F3F3]  flex h-[280px]  rounded-sm placeholder:text-[#B7B7B7] placeholder:"
                             />
                         </div>
 
                         <Btn type="submit"
-                            className="mt-3 bg-gradient-to-b text-nowrap from-[#FF9040] to-[#FF6B00] w-full text-base lg:h-12 text-white">
+                            className="mt-3 bg-gradient-to-b text-nowrap h-12 from-[#FF9040] to-[#FF6B00] w-full text-base  text-white">
                             Send Message
                         </Btn>
                     </form>

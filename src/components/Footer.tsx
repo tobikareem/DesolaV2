@@ -1,12 +1,16 @@
 import React from 'react';
 import { Text } from './TextComp';
 import { FaInstagram, FaTwitter, FaLinkedin } from 'react-icons/fa';
+import { useLocation } from 'react-router-dom';
 
 
 
 const Footer: React.FC = () => {
+  const location = useLocation();
+  const router = location.pathname;
+
   return (
-    <footer className="bg-green-900  text-white py-8 mt-8">
+    <footer className={`${['/signin','/signup'].includes(router) ? 'hidden' : ''} bg-primary-700  text-white py-8 mt-8`}>
       <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-left md:text-left">
           <div>

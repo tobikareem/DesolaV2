@@ -5,6 +5,7 @@ import SignIn from './pages/auth/signin';
 import SignUp from './pages/auth/signup';
 import { Navbar } from './components/Navbar';
 import { JSX } from 'react';
+import Footer from './components/Footer';
 
 type RouteType = {
   path?: string;
@@ -30,7 +31,7 @@ function App() {
           ))}
         </Routes>
       </main>
-
+      <Footer/>
     </div>
 
   );
