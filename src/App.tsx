@@ -3,8 +3,11 @@ import './App.css';
 import HomeScreen from './pages/home/home';
 import SignIn from './pages/auth/signin';
 import SignUp from './pages/auth/signup';
-import { Navbar } from './components/Navbar';
+import ForgetPassword from './pages/auth/ForgetPassword';
+import { Navbar } from './Components/Navbar';
 import { JSX } from 'react';
+import OTPVerification from './pages/auth/OTPVerification';
+import NewPassword from './pages/auth/NewPassword';
 
 type RouteType = {
   path?: string;
@@ -17,6 +20,9 @@ function App() {
     { path: '/', element: <HomeScreen />, name: 'Home' },
     { path: '/signin', element: <SignIn />, name: 'Sign In' },
     { path: '/signup', element: <SignUp />, name: 'Sign Up' },
+    { path: '/reset', element: <ForgetPassword />, name: 'Forget Password' },
+    { path: '/verify', element: <OTPVerification />, name: 'Verify' },
+    { path: '/password-reset', element: <NewPassword />, name: 'PasswordReset' },
   ];
 
   return (

@@ -61,7 +61,7 @@ export const Navbar = () => {
 
 
     return (
-        <div className={`fixed ${['/signin','/signup'].includes(router) ? 'hidden' : 'flex'}  items-center w-screen z-40 bg-transparent lg:top-[46px] h-14 left-0 backdrop-blur-[2px] `}>
+        <div className={`fixed ${['/signin','/signup', '/reset', '/verify', '/password-reset'].includes(router) ? 'hidden' : 'flex'}  items-center w-screen z-40 bg-transparent lg:top-[46px] h-14 left-0 backdrop-blur-[2px] `}>
             <div className="flex w-full justify-between items-center px-4 md:px-8 lg:px-14 xl:px-28 h-full bg-transparent">
                 {/* Logo */}
                 <div onClick={()=> setSlider(prevState => !prevState)}

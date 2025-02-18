@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Text } from '../../components/TextComp';
-import { Input } from '../../Components/InputField';
-import { Btn } from '../../components/Button';
+import { Text } from '../../Components/TextComp';
+import { Input } from '../../components/InputField';
+import { Btn } from '../../Components/Button';
 import { FaGoogle, FaFacebook, FaApple, FaWindows } from 'react-icons/fa';
 import frame from '../../assets/Frame 2147207438.png'
 import plane from '../../assets/Leonardo_Kino_XL_give_me_an_image_of_an_airplane_flying_2 1.png'
@@ -17,11 +17,12 @@ const Signup: React.FC = () => {
     <div className="flex h-auto lg:flex-row flex-col md:flex-row w-full">
       <div className="w-full lg:w-1/2  flex-grow p-4 flex justify-center items-center  md:p-10">
         <div className="w-full max-w-md">
-        <Link to={'/'} 
-         className="flex justify-center items-center mb-3 cursor-pointer">
+          <Link
+            to={'/'}
+            className="flex justify-center items-center mb-3 cursor-pointer"
+          >
             <Logo />
-             
-            </Link>
+          </Link>
           <Text as="h1" size="2xl" weight="bold" className="mb-4 text-center">
             Create An Account
           </Text>
@@ -91,7 +92,7 @@ const Signup: React.FC = () => {
             <Text size="sm">I agree to the terms & policy</Text>
           </div>
 
-          <Btn className="w-full  bg-orange-500 text-white py-1 rounded mt-4">
+          <Btn className="w-full  bg-gradient-to-b from-[#FF9040] to-[#FF6B00] bg-orange-500 text-white py-1 rounded mt-4">
             Signup
           </Btn>
 

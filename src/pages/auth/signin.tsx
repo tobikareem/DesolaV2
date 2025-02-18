@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
-import { Text } from '../../components/TextComp';
-import { Input } from '../../Components/InputField';
-import { Btn } from '../../components/Button';
+import { Text } from '../../Components/TextComp';
+import { Input } from '../../components/InputField';
+import { Btn } from '../../Components/Button';
 import frame from '../../assets/Frame 2147207438.png';
 import plane from '../../assets/Leonardo_Kino_XL_give_me_an_image_of_an_airplane_flying_2 1.png';
 import { FaEye, FaEyeSlash,FaGoogle,FaFacebook,FaApple,FaWindows,} from 'react-icons/fa';
-import  BackgroundImageSection  from '../../Components/SideHeroComp';
+import BackgroundImageSection from '../../Components/SideHeroComp';
 import { Link } from 'react-router-dom';
 import { Logo } from '../../Components/Logo';
+
 
 
 const SignIn: React.FC = () => {
@@ -17,11 +18,13 @@ const SignIn: React.FC = () => {
     <div className="flex h-screen lg:flex-row flex-col md:flex-row w-full">
       <div className="w-full md:w-1/2 p-6 h-auto flex-grow flex justify-center items-center md:p-10">
         <div className="w-full max-w-md">
-           <Link to={'/'} className="flex justify-center items-center mb-3 cursor-pointer">
-                      <Logo />
-                       
-            </Link>
-         
+          <Link
+            to={'/'}
+            className="flex justify-center items-center mb-3 cursor-pointer"
+          >
+            <Logo />
+          </Link>
+
           <Text as="h1" size="2xl" weight="bold" className="mb-6 text-center">
             Get Started Now
           </Text>
@@ -50,9 +53,14 @@ const SignIn: React.FC = () => {
                 onClick={() => setRevealPassword(true)}
               />
             )}
+            <Link to={'/reset'}
+              className="mb-3 flex justify-end  text-sm text-neutral-500 cursor-pointer">
+              
+              Forget Password
+            </Link>
           </div>
 
-          <Btn className="w-full bg-orange-500 text-white py-1 rounded mt-4">
+          <Btn className="w-full bg-gradient-to-b from-[#FF9040] to-[#FF6B00] bg-orange-500 text-white py-1 rounded mt-4">
             Sign In
           </Btn>
 
