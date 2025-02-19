@@ -3,8 +3,6 @@ import { Logo } from "./Logo";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { useEffect, useState} from "react";
 import { VscClose } from "react-icons/vsc";
-import { SIGN_IN_OUT } from "../utils/constants";
-
 
 export const Navbar = () => {
     const [slider, setSlider] = useState<boolean>(false);
@@ -89,7 +87,7 @@ export const Navbar = () => {
                             })
                         }
                 </nav>
-                <Link to={SIGN_IN_OUT} className="hidden lg:flex items-center justify-center h-12 w-[137px] bg-gradient-to-b from-[#FF9040] to-[#FF6B00] text-base text-white font-medium rounded-xl hover:scale-105 transition-transform duration-300 ease-in-out">
+                <Link to={""} className="hidden lg:flex items-center justify-center h-12 w-[137px] bg-gradient-to-b from-[#FF9040] to-[#FF6B00] text-base text-white font-medium rounded-xl hover:scale-105 transition-transform duration-300 ease-in-out">
                     Sign In
                 </Link>
                 {/* Mobile Nav */}

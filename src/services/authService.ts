@@ -49,7 +49,7 @@ const authService = {
         try {
             const refreshToken = sessionStorage.getItem("refreshToken");
             if (!refreshToken) {
-                window.location.href = SIGN_IN_OUT;
+                await authService.signIn();
             }
             const response = await apiClient.post(`${API_BASE_URL}/auth/refresh`, { refreshToken });
             const { accessToken, newRefreshToken, expiresIn } = response.data;
@@ -70,6 +70,16 @@ const authService = {
         sessionStorage.removeItem("accessToken");
         sessionStorage.removeItem("refreshToken");
         sessionStorage.removeItem("expiresAt");
+    },
+
+    signIn: async () => {
+        const signInUrl = await SIGN_IN_OUT();
+        window.location.href = signInUrl;
+    },
+
+    signInLink: async (): Promise<string> => {
+        const signInUrl = await SIGN_IN_OUT();
+        return signInUrl;
     }
 };
 
