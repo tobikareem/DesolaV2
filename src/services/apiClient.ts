@@ -1,5 +1,5 @@
 import axios from "axios";
-import { API_BASE_URL, API_TOKEN, SESSION_VALUES, SIGN_IN_OUT } from "../utils/constants";
+import { API_BASE_URL, API_TOKEN, SESSION_VALUES } from "../utils/constants";
 import authService from "./authService";
 
 const apiClient = axios.create({
@@ -13,7 +13,7 @@ apiClient.interceptors.request.use(
     async (config) => {
         config.headers['x-functions-key'] = getFunctionKey();
 
-        let accessToken = authService.getAccessToken();
+        const accessToken = authService.getAccessToken();
 
         // if (!accessToken) {
         //     // Token might be expired, attempt to refresh it
