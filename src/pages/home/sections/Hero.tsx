@@ -2,7 +2,7 @@ import { Img as ReactImage } from 'react-image';
 import { Text } from "../../../components/TextComp";
 import { Btn } from "../../../components/Button";
 import { FlightAnimation } from '../../../components/Animation';
-import { SIGN_IN_OUT } from '../../../utils/constants';
+import authService from '../../../services/authService';
 
 export const Hero = () => {
 
@@ -18,8 +18,8 @@ export const Hero = () => {
         <Text weight="medium" size="base" color="text-neutral-500" className="mt-8 font-work lg:max-w-[520px] text-base lg:text-lg text-center z-[5]">
           Your guide to finding efficient and cost-effect flight options. We search the best deals so you don't have to.
         </Text>
-        <div className="flex flex-col lg:flex-row w-full items-center justify-center mt-8 gap-4 z-20">
-          <Btn onClick={() => window.location.href = SIGN_IN_OUT}
+        <div className="flex flex-col lg:flex-row w-full items-center justify-center mt-8 gap-4 z-30">
+          <Btn onClick={async () => await authService.signIn()}
             className="bg-white w-full md:max-w-[250px] text-nowrap lg:text-lg lg:px-7 lg:h-14 text-primary-500">
             Sign Up
           </Btn>
