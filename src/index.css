@@ -33,6 +33,13 @@ label{
     animation-delay: 8s;
 }
 
+/* @media (min-width:1024px) {
+    .flight{
+        animation: flight 18s linear infinite;
+        animation-delay: 8s;
+    }
+} */
+
 @keyframes takeoff {
     0%{
         transform: translate(0, 0);
@@ -51,12 +58,7 @@ label{
     }
 }   
 
-@media (min-width:1024px) {
-    .flight{
-        animation: flight 18s linear infinite;
-        animation-delay: 8s;
-    }
-}
+
 
 
 
