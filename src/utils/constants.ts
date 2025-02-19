@@ -1,8 +1,12 @@
+import { generatePKCE } from "../auth/Utility";
+
 // Environment Variables
 export const APP_NAME = import.meta.env.VITE_APP_NAME;
 export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 export const API_TOKEN = import.meta.env.VITE_API_TOKEN;
-
+export const SIGN_IN_OUT = `${import.meta.env.VITE_B2C_1_SIGNUPSIGNIN}&code_challenge_method=S256&code_challenge=${await generatePKCE()}`;
+export const EDIT_PROFILE = import.meta.env.VITE_B2C_1_EDITUSERPROFILE;
+export const PASSWORD_RESET = import.meta.env.VITE_B2C_1_PASSWORDRESET;
 
 // Session Variable
 export const SESSION_VALUES = {

@@ -1,5 +1,6 @@
 import axios from "axios";
-import { API_BASE_URL, API_TOKEN, SESSION_VALUES } from "../utils/constants";
+import { API_BASE_URL, API_TOKEN, SESSION_VALUES, SIGN_IN_OUT } from "../utils/constants";
+import authService from "./authService";
 
 const apiClient = axios.create({
     baseURL: API_BASE_URL,
@@ -9,8 +10,25 @@ const apiClient = axios.create({
 })
 
 apiClient.interceptors.request.use(
-    (config) => {
+    async (config) => {
         config.headers['x-functions-key'] = getFunctionKey();
+
+        let accessToken = authService.getAccessToken();
+
+        // if (!accessToken) {
+        //     // Token might be expired, attempt to refresh it
+        //     try {
+        //         const newTokenData = await authService.refreshToken();
+        //         accessToken = newTokenData.accessToken;
+        //     } catch (error) {
+        //         console.error("Token refresh failed. Redirecting to login.", error);
+        //         window.location.href = SIGN_IN_OUT;
+        //     }
+        // }
+
+        if (accessToken) {
+            config.headers["Authorization"] = `Bearer ${accessToken}`;
+        }
         return config;
     },
     (error) => Promise.reject(error)
