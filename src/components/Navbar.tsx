@@ -3,19 +3,19 @@ import { Logo } from "./Logo";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { useEffect, useState} from "react";
 import { VscClose } from "react-icons/vsc";
+import { SIGN_IN_OUT } from "../utils/constants";
 
 
 export const Navbar = () => {
     const [slider, setSlider] = useState<boolean>(false);
-    
     const handleDrawer = (e: React.MouseEvent<HTMLDivElement | HTMLButtonElement | HTMLAnchorElement | SVGElement>) => {
-        if((e.target as HTMLElement).id !== 'drawer') {setSlider(prevState => !prevState)} 
-      };
+        if ((e.target as HTMLElement).id !== 'drawer') { setSlider(prevState => !prevState) }
+    };
 
     const Navigation = [
-        {  
+        {
             href: '#home',
-            path:'Home'
+            path: 'Home'
         },
         {
             href: '#how-it-works',
@@ -71,7 +71,7 @@ export const Navbar = () => {
                     <GiHamburgerMenu />
                 </div>
                 <div className="hidden lg:block ">
-                    <Logo/>
+                    <Logo />
                 </div>
                 {/* Desktop Nav */}
                 <nav className="hidden lg:flex items-center px-1 py-1 bg-white rounded-2xl border border-neutral-300">
@@ -89,22 +89,22 @@ export const Navbar = () => {
                             })
                         }
                 </nav>
-                <Link to="/signin" className="hidden lg:flex items-center justify-center h-12 w-[137px] bg-gradient-to-b from-[#FF9040] to-[#FF6B00] text-base text-white font-medium rounded-xl hover:scale-105 transition-transform duration-300 ease-in-out">
+                <Link to={SIGN_IN_OUT} className="hidden lg:flex items-center justify-center h-12 w-[137px] bg-gradient-to-b from-[#FF9040] to-[#FF6B00] text-base text-white font-medium rounded-xl hover:scale-105 transition-transform duration-300 ease-in-out">
                     Sign In
                 </Link>
                 {/* Mobile Nav */}
-                <div 
-                    className={`block lg:hidden w-screen h-screen ${slider ? 'translate-x-0  bg-black/60':'translate-x-[-100%] bg-transparent'} transition-all duration-200 ease-in fixed top-0 left-0 z-50`} >
+                <div
+                    className={`block lg:hidden w-screen h-screen ${slider ? 'translate-x-0  bg-black/60' : 'translate-x-[-100%] bg-transparent'} transition-all duration-200 ease-in fixed top-0 left-0 z-50`} >
                     <div className="w-[90%] h-full py-6 bg-white border border-neutral-300">
                         <div className="w-fit flex justify-self-end px-4">
-                            <VscClose onClick={handleDrawer} 
-                                className="text-2xl cursor-pointer" 
+                            <VscClose onClick={handleDrawer}
+                                className="text-2xl cursor-pointer"
                             />
                         </div>
                         <div id="drawer"
                             className={`flex flex-col justify-between items-center px-10 pb-10  w-full h-full `}>
                             <div className="flex flex-col w-full items-center gap-22">
-                                <Logo/>
+                                <Logo />
                                 <nav className="flex flex-col w-full items-center px-1 py-1 text-center">
                                         {
                                             Navigation?.map((item, index) => {
