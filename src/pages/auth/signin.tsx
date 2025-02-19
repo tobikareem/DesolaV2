@@ -22,7 +22,7 @@ const SignIn: React.FC = () => {
             <Logo />
           </Link>
 
-          <Text as="h1" size="2xl" weight="bold" className="mb-6 text-center">
+          <Text as="h1" size="2xl" weight="medium" className="mb-6 text-center">
             Get Started Now
           </Text>
 

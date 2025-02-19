@@ -19,7 +19,7 @@ const ForgetPassword: React.FC = () => {
     <div className="flex h-screen lg:flex-row flex-col md:flex-row w-full">
       <div className="w-full md:w-1/2 p-6 h-auto flex-grow flex justify-center items-center md:p-10">
         <div className="w-full max-w-md">
-          <Text as="h1" size="2xl" weight="bold" className="mb-2 text-center">
+          <Text as="h1" size="2xl" weight="medium" className="mb-2 text-center">
             Forget Password?
           </Text>
           <Text

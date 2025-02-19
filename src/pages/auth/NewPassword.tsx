@@ -27,6 +27,7 @@ const NewPassword: React.FC = () => {
     if (strength >= index + 1) {
       if (strength === 1) return 'bg-red-500';
       if (strength === 2) return 'bg-orange-500';
+      if (strength === 3) return 'bg-orange-500';
       return 'bg-green-500';
     }
     return 'bg-gray-300';

@@ -21,7 +21,7 @@ const Signup: React.FC = () => {
           >
             <Logo />
           </Link>
-          <Text as="h1" size="2xl" weight="bold" className="mb-4 text-center">
+          <Text as="h1" size="2xl" weight="medium" className="mb-4 text-center">
             Create An Account
           </Text>
 
