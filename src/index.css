@@ -23,3 +23,44 @@ label{
     font-size: 12px!important;
  
 }
+
+.takeoff {
+    animation: takeoff 16s linear infinite;
+}
+
+.flight {
+    animation: flight 10s linear infinite;
+    animation-delay: 8s;
+}
+
+/* @media (min-width:1024px) {
+    .flight{
+        animation: flight 18s linear infinite;
+        animation-delay: 8s;
+    }
+} */
+
+@keyframes takeoff {
+    0%{
+        transform: translate(0, 0);
+    }
+    100%{
+        transform: translate(80vw, -80vh);
+    }
+}
+
+@keyframes flight {
+    0% {
+        transform: translateX(20vw);
+    }
+    100%{
+        transform: translateX(100vw)
+    }
+}   
+
+
+
+
+
+
+

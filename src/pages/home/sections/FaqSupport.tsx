@@ -41,7 +41,7 @@ const FaqSupport = () => {
                                 onClick={() => toggleState(index)}
                                 className={`bg-primary-100/40 flex flex-col p-4 md:p-6 w-full gap-4 rounded-[24px] ${open[index] ? 'h-fit' : 'h-16 items-center'} hover:scale-105 transition-all duration-300 ease-in-out cursor-pointer`}>
                                 <div className="flex w-full justify-between items-center text-nowrap">
-                                    <Text weight="normal" size='base' color="text-[#1A1A1A]" className="font-work tracking-tight">
+                                    <Text weight="normal" color="text-[#1A1A1A]" className="font-work tracking-tight !text-sm xs:!text-base">
                                         {question}
                                     </Text>
                                     <div className={`${open[index] ? 'rotate-90' : 'rotate-0'} text-2xl text-[#1A1A1A] transition-transform duration-1000 ease-in-out`}>
@@ -49,7 +49,7 @@ const FaqSupport = () => {
                                     </div>
                                 </div>
                                 <div className={`${open[index] ? 'h-fit' : 'h-0'} transition-all duration-500 delay-300 ease-linear  pl-2 overflow-hidden`}>
-                                    <Text weight="normal" size='base' color="text-neutral-500" className="tracking-tight">
+                                    <Text weight="normal"  color="text-neutral-500" className="font-work tracking-tight !text-sm xs:!text-base">
                                         {answer}
                                     </Text>
                                 </div>

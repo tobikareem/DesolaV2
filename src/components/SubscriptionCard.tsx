@@ -37,7 +37,7 @@ export const SubscriptionCard =({
         <div className={`${TagColor} py-1.5 px-3 w-fit rounded-[100px] font-inter text-white uppercase cursor-pointer`}>
           {Tag}
         </div>  
-        <div className={`${priceColor} flex items-center font-vietnam-pro font-semibold text-[55px]`}>
+        <div className={`${priceColor} flex items-center font-grotesk font-semibold text-[55px]`}>
           ${price}/<span className="mt-4 text-4xl font-poppins">{period}</span>
         </div>
         <div className={`${extra} text-base font-vietnam-pro font-medium `}>
@@ -56,7 +56,7 @@ export const SubscriptionCard =({
         </div>
       </div>
       <Btn onClick={()=> navigate('/signup')} 
-        fontStyle="vietnam-pro"
+        fontStyle="work"
         radius="lg"
         className={`mt-10 bg-white border border-primary-500 text-primary-500 gap-2.5 text-base py-4.5 w-full `}>
         Get Started <MdOutlineArrowOutward />

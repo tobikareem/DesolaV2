@@ -1,21 +1,19 @@
 import React, { useState } from 'react';
-import { Text } from '../../Components/TextComp';
+import { FaApple, FaEye, FaEyeSlash, FaFacebook, FaGoogle, FaWindows } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
+import { Btn } from '../../components/Button';
 import { Input } from '../../components/InputField';
-import { Btn } from '../../Components/Button';
-import { FaGoogle, FaFacebook, FaApple, FaWindows } from 'react-icons/fa';
-import frame from '../../assets/Frame 2147207438.png'
-import plane from '../../assets/Leonardo_Kino_XL_give_me_an_image_of_an_airplane_flying_2 1.png'
-import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import BackgroundImageSection from '../../Components/SideHeroComp';
-import { Link} from 'react-router-dom';
+import { Text } from '../../components/TextComp';
+import { AuthHero } from './AuthHero';
 import { Logo } from '../../Components/Logo';
 
 const Signup: React.FC = () => {
   const [revealPassword, setRevealPassword] = useState<boolean>(false);
   const [revealPassword2, setRevealPassword2] = useState<boolean>(false);
   return (
-    <div className="flex h-auto lg:flex-row flex-col md:flex-row w-full">
-      <div className="w-full lg:w-1/2  flex-grow p-4 flex justify-center items-center  md:p-10">
+    <div className="flex h-screen lg:flex-row flex-col md:flex-row w-full">
+
+      <div className="w-full flex-grow p-4 flex justify-center items-center md:p-10">
         <div className="w-full max-w-md">
           <Link
             to={'/'}
@@ -121,14 +119,7 @@ const Signup: React.FC = () => {
           </div>
         </div>
       </div>
-
-      <div className="flex  lg:min-h-full  w-full lg:w-1/2">
-        <BackgroundImageSection
-          backgroundImage={frame}
-          imageSrc={plane}
-          className="w-full min-h-full"
-        />
-      </div>
+      <AuthHero/>
     </div>
   );
 };

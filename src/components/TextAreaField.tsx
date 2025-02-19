@@ -1,8 +1,8 @@
-
-import { InputHTMLAttributes, useId } from "react";
+import { TextareaHTMLAttributes, useId } from "react";
 import clsx from "clsx";
 
-interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+
+interface TextAreaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   label?: string;
   className?: string;
   labelClassName?: string;
@@ -11,7 +11,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 }
 
 
-export const Input = ({
+export const TextArea = ({
   label,
   className = "",
   labelClassName = "",
@@ -19,7 +19,7 @@ export const Input = ({
   errorClassName = "",
   id,
   ...rest
-}: InputProps) => {
+}: TextAreaProps) => {
   const generatedId = useId();
   const inputId = id ?? `input-${generatedId}`;
 
@@ -31,7 +31,7 @@ export const Input = ({
         </label>
       )}
 
-      <input
+      <textarea
         id={inputId}
         className={clsx(
           "px-4 py-2 border outline-none focus:border-2 hover:border-2 transition-all duration-200 ease-in-out box-border ",
@@ -57,8 +57,3 @@ export const Input = ({
     </div>
   );
 };
-
-
-
-
-
