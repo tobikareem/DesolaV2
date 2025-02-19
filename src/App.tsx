@@ -5,6 +5,8 @@ import SignIn from './pages/auth/signin';
 import SignUp from './pages/auth/signup';
 import { Navbar } from './components/Navbar';
 import { JSX } from 'react';
+import Footer from './components/Footer';
+import AuthCallback from './auth/AuthCallback';
 
 type RouteType = {
   path?: string;
@@ -17,6 +19,7 @@ function App() {
     { path: '/', element: <HomeScreen />, name: 'Home' },
     { path: '/signin', element: <SignIn />, name: 'Sign In' },
     { path: '/signup', element: <SignUp />, name: 'Sign Up' },
+    { path: '/callback', element: <AuthCallback />, name: 'Callback' }
   ];
 
   return (
@@ -30,7 +33,7 @@ function App() {
           ))}
         </Routes>
       </main>
-
+      <Footer/>
     </div>
 
   );
