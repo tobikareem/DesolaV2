@@ -30,7 +30,7 @@ const Signup: React.FC = () => {
           >
             <Logo />
           </Link>
-          <Text as="h1" size="2xl" weight="bold" className="mb-4 text-center">
+          <Text as="h1" size="2xl" weight="bold" className="mb-13 text-center">
             Create An Account
           </Text>
 
@@ -38,7 +38,7 @@ const Signup: React.FC = () => {
             <Input
               label="First Name"
               placeholder="First Name"
-              className="w-full"
+              className="w-full rounded-xl"
             />
             <Input
               label="Last Name"
@@ -50,7 +50,7 @@ const Signup: React.FC = () => {
           <Input
             label="Email"
             placeholder="Please Enter your email"
-            className="text-sm mb-2 w-full"
+            className="text-sm mb-2 w-full rounded-xl"
           />
 
           <div className="relative w-full">
