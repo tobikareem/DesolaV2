@@ -33,10 +33,15 @@ const OTPVerification: React.FC = () => {
     <div className="flex h-screen lg:flex-row flex-col md:flex-row w-full">
       <div className="w-full md:w-1/2 p-6 h-auto flex-grow flex justify-center items-center md:p-10">
         <div className="w-full max-w-md">
-          <Text as="h1" size="4xl" weight="medium" className=" mb-2 text-center">
+          <Text
+            as="h1"
+            size="4xl"
+            weight="medium"
+            className=" mb-2 text-center font-grotesk"
+          >
             Enter your code
           </Text>
-          <Text as='p' size='sm' className="text-gray-500 text-center mb-6">
+          <Text as="p" size="sm" className="text-gray-500 text-center mb-6">
             We sent a code to your email
           </Text>
           <div className="flex gap-4 mb-4 w-full  align-center justify-center">

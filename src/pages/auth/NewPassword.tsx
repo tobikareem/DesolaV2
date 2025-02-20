@@ -46,7 +46,7 @@ const NewPassword: React.FC = () => {
             as="h1"
             size="4xl"
             weight="medium"
-            className=" mb-2 text-center"
+            className=" mb-2 text-center font-grotesk"
           >
             Set password
           </Text>

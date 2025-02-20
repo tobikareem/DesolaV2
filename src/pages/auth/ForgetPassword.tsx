@@ -19,14 +19,15 @@ const ForgetPassword: React.FC = () => {
     <div className="flex h-screen lg:flex-row flex-col md:flex-row w-full">
       <div className="w-full md:w-1/2 p-6 h-auto flex-grow flex justify-center items-center md:p-10">
         <div className="w-full max-w-md">
-          <Text as="h1" size="2xl" weight="medium" className="mb-2 text-center">
+          <Text
+            as="h1"
+            size="2xl"
+            weight="medium"
+            className="mb-13 text-center font-grotesk"
+          >
             Forget Password?
           </Text>
-          <Text
-            as="p"
-            size="sm"
-            className="mb-6 text-center text-neutral-500"
-          >
+          <Text as="p" size="sm" className="mb-6 text-center text-neutral-500">
             No worries, We will send you reset instructions
           </Text>
 
@@ -42,10 +43,12 @@ const ForgetPassword: React.FC = () => {
 
           <div className="text-center flex justify-center align-center mt-4">
             <FaArrowLeft className="mt-1 text-neutral-500" />
-              <Link to={'/signin'} className="text-blue-600 text-sm cursor-pointer ml-1">
-                back to Sign in
-              </Link>
-         
+            <Link
+              to={'/signin'}
+              className="text-blue-600 text-sm cursor-pointer ml-1"
+            >
+              back to Sign in
+            </Link>
           </div>
         </div>
       </div>
