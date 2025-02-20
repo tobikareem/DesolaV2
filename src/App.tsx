@@ -1,12 +1,15 @@
+import { JSX } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import './App.css';
-import HomeScreen from './pages/home/home';
+import AuthCallback from './auth/AuthCallback';
+import Footer from './components/Footer';
+import { Navbar } from './components/Navbar';
+import ForgetPassword from './pages/auth/ForgetPassword';
+import NewPassword from './pages/auth/NewPassword';
+import OTPVerification from './pages/auth/OTPVerification';
 import SignIn from './pages/auth/signin';
 import SignUp from './pages/auth/signup';
-import { Navbar } from './components/Navbar';
-import { JSX } from 'react';
-import Footer from './components/Footer';
-import AuthCallback from './auth/AuthCallback';
+import HomeScreen from './pages/home/home';
 
 type RouteType = {
   path?: string;
@@ -19,6 +22,9 @@ function App() {
     { path: '/', element: <HomeScreen />, name: 'Home' },
     { path: '/signin', element: <SignIn />, name: 'Sign In' },
     { path: '/signup', element: <SignUp />, name: 'Sign Up' },
+    { path: '/reset', element: <ForgetPassword />, name: 'Forget Password' },
+    { path: '/verify', element: <OTPVerification />, name: 'Verify' },
+    { path: '/password-reset', element: <NewPassword />, name: 'PasswordReset' },
     { path: '/callback', element: <AuthCallback />, name: 'Callback' }
   ];
 
@@ -33,7 +39,7 @@ function App() {
           ))}
         </Routes>
       </main>
-      <Footer/>
+      <Footer />
     </div>
 
   );
