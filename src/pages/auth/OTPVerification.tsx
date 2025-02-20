@@ -6,6 +6,7 @@ import { Btn } from '../../components/Button';
 import BackgroundImageSection from '../../components/SideHeroComp';
 import frame from '../../assets/Frame 2147207438.png';
 import plane from '../../assets/Leonardo_Kino_XL_give_me_an_image_of_an_airplane_flying_2 1.png';
+import { AuthHero } from './AuthHero';
 
 const OTPVerification: React.FC = () => {
   const [otp, setOtp] = useState<string[]>(['', '', '', '']);
@@ -37,11 +38,11 @@ const OTPVerification: React.FC = () => {
             as="h1"
             size="4xl"
             weight="medium"
-            className=" mb-2 text-center"
+            className=" mb-2 text-center font-grotesk"
           >
             Enter your code
           </Text>
-          <Text as="p" size="sm" className="text-gray-500 text-center mb-6">
+          <Text as="p" size="sm" className="text-gray-500 text-center mb-10">
             We sent a code to your email
           </Text>
           <div className="flex gap-4 mb-4 w-full  align-center justify-center">
@@ -64,19 +65,13 @@ const OTPVerification: React.FC = () => {
               Click to resend
             </span>
           </p>
-          <Btn className="bg-gradient-to-b mt-20 from-orange-400 to-orange-600 text-white px-6 py-2 rounded-md text-sm w-full">
+          <Btn className="bg-gradient-to-b mt-10 from-orange-400 to-orange-600 text-white px-6 py-2 rounded-md text-sm w-full">
             Continue
           </Btn>
         </div>
       </div>
 
-      <div className="flex  lg:min-h-full  w-full lg:w-1/2">
-        <BackgroundImageSection
-          backgroundImage={frame}
-          imageSrc={plane}
-          className="w-full min-h-full"
-        />
-      </div>
+    <AuthHero />
     </div>
   );
 };
