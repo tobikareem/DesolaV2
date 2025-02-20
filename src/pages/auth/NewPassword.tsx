@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 
-import { Text } from '../../Components/TextComp';
+import { Text } from '../../components/TextComp';
 import { Input } from '../../components/InputField';
-import { Btn } from '../../Components/Button';
-import BackgroundImageSection from '../../Components/SideHeroComp';
+import { Btn } from '../../components/Button';
+import BackgroundImageSection from '../../components/SideHeroComp';
 import frame from '../../assets/Frame 2147207438.png';
 import plane from '../../assets/Leonardo_Kino_XL_give_me_an_image_of_an_airplane_flying_2 1.png';
 import { FaKey, FaEye, FaEyeSlash } from 'react-icons/fa';
@@ -27,7 +27,6 @@ const NewPassword: React.FC = () => {
     if (strength >= index + 1) {
       if (strength === 1) return 'bg-red-500';
       if (strength === 2) return 'bg-orange-500';
-      if (strength === 3) return 'bg-orange-500';
       return 'bg-green-500';
     }
     return 'bg-gray-300';
@@ -46,7 +45,7 @@ const NewPassword: React.FC = () => {
             as="h1"
             size="4xl"
             weight="medium"
-            className=" mb-2 text-center font-grotesk"
+            className=" mb-2 text-center"
           >
             Set password
           </Text>

@@ -1,9 +1,9 @@
-import React, { useState, useRef} from 'react';
+import React, { useState, useRef } from 'react';
 
-import { Text } from '../../Components/TextComp';
+import { Text } from '../../components/TextComp';
 import { Input } from '../../components/InputField';
-import { Btn } from '../../Components/Button';
-import BackgroundImageSection from '../../Components/SideHeroComp';
+import { Btn } from '../../components/Button';
+import BackgroundImageSection from '../../components/SideHeroComp';
 import frame from '../../assets/Frame 2147207438.png';
 import plane from '../../assets/Leonardo_Kino_XL_give_me_an_image_of_an_airplane_flying_2 1.png';
 
@@ -37,7 +37,7 @@ const OTPVerification: React.FC = () => {
             as="h1"
             size="4xl"
             weight="medium"
-            className=" mb-2 text-center font-grotesk"
+            className=" mb-2 text-center"
           >
             Enter your code
           </Text>

@@ -8,12 +8,7 @@
 @tailwind utilities;
 
 
-*{
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
-   
-}
+
 
 input{
 padding: 7px 8px!important;
@@ -22,15 +17,12 @@ padding: 7px 8px!important;
 
 input::placeholder{
     font-size: 11px;
-   
 }
 
 label{
     font-size: 12px!important;
-
+ 
 }
-
-
 
 .takeoff {
     animation: takeoff 16s linear infinite;
@@ -40,13 +32,6 @@ label{
     animation: flight 10s linear infinite;
     animation-delay: 8s;
 }
-
-/* @media (min-width:1024px) {
-    .flight{
-        animation: flight 18s linear infinite;
-        animation-delay: 8s;
-    }
-} */
 
 @keyframes takeoff {
     0%{
@@ -66,7 +51,12 @@ label{
     }
 }   
 
-
+@media (min-width:1024px) {
+    .flight{
+        animation: flight 18s linear infinite;
+        animation-delay: 8s;
+    }
+}
 
 
 
