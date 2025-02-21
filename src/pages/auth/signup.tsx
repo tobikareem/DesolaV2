@@ -10,7 +10,7 @@ const Signup: React.FC = () => {
   const [revealPassword, setRevealPassword] = useState<boolean>(false);
   const [revealPassword2, setRevealPassword2] = useState<boolean>(false);
   return (
-    <div className="flex h-screen lg:flex-row flex-col md:flex-row w-full">
+    <div className="font-work flex h-screen lg:flex-row flex-col md:flex-row w-full">
 
       <div className="w-full flex-grow p-4 flex justify-center items-center md:p-10">
         <div className="w-full max-w-md">

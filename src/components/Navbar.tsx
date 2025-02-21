@@ -87,7 +87,7 @@ export const Navbar = () => {
                             })
                         }
                 </nav>
-                <Link to={""} className="hidden lg:flex items-center justify-center h-12 w-[137px] bg-gradient-to-b from-[#FF9040] to-[#FF6B00] text-base text-white font-medium rounded-xl hover:scale-105 transition-transform duration-300 ease-in-out">
+                <Link to={"/signin"} className="hidden lg:flex items-center justify-center h-12 w-[137px] bg-gradient-to-b from-[#FF9040] to-[#FF6B00] text-base text-white font-medium rounded-xl hover:scale-105 transition-transform duration-300 ease-in-out">
                     Sign In
                 </Link>
                 {/* Mobile Nav */}
