@@ -11,7 +11,7 @@ const Footer: React.FC = () => {
   const router = location.pathname;
 
   return (
-    <footer className={`${['/signin','/signup'].includes(router) ? 'hidden' : ''} bg-primary-700  text-white py-8 mt-8`}>
+    <footer className={` ${router !== '/' ? 'hidden' : ''} bg-primary-700  text-white py-8 mt-8`}>
       <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col lg:flex-row justify-between items-start gap-8 text-left md:text-left">
           <Logo/>
