@@ -8,19 +8,19 @@ export const Hero = () => {
   return (
     <section
       id="home"
-      className="relative flex flex-col items-center px-4 md:px-8 lg:px-28 w-full bg-[url('/Hero-bg.svg')] bg-cover bg-center bg-no-repeat min-h-[75svh]  lg:min-h-[100vh] "
+      className="relative flex flex-col items-center px-4 md:px-8 lg:px-28 w-full bg-[url('/Hero-bg.svg')] bg-cover bg-center bg-no-repeat h-[100svh]  lg:min-h-[100svh] "
     >
-      <div className="flex flex-col items-center mt-20 md:mt-30 lg:mt-48 text-center">
+      <div className="relative flex flex-col items-center mt-20 md:mt-30 lg:mt-48 text-center">
         <div className="w-screen absolute top-10 ">
           <FlightAnimation props="flight" />
         </div>
         <Text
           as="h1"
           weight="bold"
-          className="font-grotesk font-bold text-4xl text lg:text-[56px]"
+          className="font-grotesk font-bold !text-4xl lg:text-[56px]"
         >
-          Find the <span className="text-[#4E50C7]">Best</span>{' '}
-          <span className="text-primary-500">Flight</span> Deals
+          Find the
+          <span className="text-primary-500"> Best Flight </span> Deals
         </Text>
         <Text
           weight="medium"

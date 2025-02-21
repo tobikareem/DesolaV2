@@ -8,6 +8,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   labelClassName?: string;
   error?: string;
   errorClassName?: string;
+  ref?: React.RefObject<HTMLInputElement> | React.LegacyRef<HTMLInputElement>;
 }
 
 
@@ -18,6 +19,7 @@ export const Input = ({
   error,
   errorClassName = "",
   id,
+  ref,
   ...rest
 }: InputProps) => {
   const generatedId = useId();
@@ -43,6 +45,7 @@ export const Input = ({
         )}
         aria-invalid={!!error}
         aria-describedby={error ? `${inputId}-error` : undefined}
+        ref={ref}
         {...rest}
       />
 

@@ -3,9 +3,6 @@ import React, { useState } from 'react';
 import { Text } from '../../components/TextComp';
 import { Input } from '../../components/InputField';
 import { Btn } from '../../components/Button';
-import BackgroundImageSection from '../../components/SideHeroComp';
-import frame from '../../assets/Frame 2147207438.png';
-import plane from '../../assets/Leonardo_Kino_XL_give_me_an_image_of_an_airplane_flying_2 1.png';
 import { FaKey, FaEye, FaEyeSlash } from 'react-icons/fa';
 import { AuthHero } from './AuthHero';
 

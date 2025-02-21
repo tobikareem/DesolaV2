@@ -61,8 +61,8 @@ export const Navbar = () => {
 
 
     return (
-        <div className={`fixed ${['/signin','/signup', '/reset', '/verify', '/password-reset'].includes(router) ? 'hidden' : 'flex'}  items-center w-screen z-40 bg-transparent lg:top-[46px] h-14 left-0 backdrop-blur-[2px] `}>
-            <div className="flex w-full justify-between items-center px-4 md:px-8 lg:px-14 xl:px-28 h-full bg-transparent">
+        <div className={`fixed ${router !== '/' ? 'hidden' : 'flex'}  items-center w-screen z-40 bg-transparent  left-0 backdrop-blur-[2px] `}>
+            <div className="flex w-full justify-between items-center px-4 md:px-8 lg:px-14 xl:px-28 py-6 bg-background">
                 {/* Logo */}
                 <div onClick={()=> setSlider(prevState => !prevState)}
                     className="block lg:hidden text-neutral-900 text-2xl">
@@ -87,11 +87,7 @@ export const Navbar = () => {
                             })
                         }
                 </nav>
-<<<<<<< HEAD
                 <Link to={"/signin"} className="hidden lg:flex items-center justify-center h-12 w-[137px] bg-gradient-to-b from-[#FF9040] to-[#FF6B00] text-base text-white font-medium rounded-xl hover:scale-105 transition-transform duration-300 ease-in-out">
-=======
-                <Link to="/signin" className="hidden lg:flex items-center justify-center h-12 w-[137px] bg-gradient-to-b from-[#FF9040] to-[#FF6B00] text-base text-white font-medium rounded-xl hover:scale-105 transition-transform duration-300 ease-in-out">
->>>>>>> 336714417bc42da53621d6ce2b61db6c47eead00
                     Sign In
                 </Link>
                 {/* Mobile Nav */}
@@ -106,7 +102,7 @@ export const Navbar = () => {
                         <div id="drawer"
                             className={`flex flex-col justify-between items-center px-10 pb-10  w-full h-full `}>
                             <div className="flex flex-col w-full items-center gap-22">
-                                <Logo />
+                                <div onClick={handleDrawer}><Logo /></div>
                                 <nav className="flex flex-col w-full items-center px-1 py-1 text-center">
                                         {
                                             Navigation?.map((item, index) => {
