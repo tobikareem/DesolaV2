@@ -1,11 +1,9 @@
 import React, { useState, useRef } from 'react';
-
+import { Link } from 'react-router-dom';
 import { Text } from '../../components/TextComp';
 import { Input } from '../../components/InputField';
 import { Btn } from '../../components/Button';
-import BackgroundImageSection from '../../components/SideHeroComp';
-import frame from '../../assets/Frame 2147207438.png';
-import plane from '../../assets/Leonardo_Kino_XL_give_me_an_image_of_an_airplane_flying_2 1.png';
+import { Logo } from '../../components/Logo';
 import { AuthHero } from './AuthHero';
 
 const OTPVerification: React.FC = () => {
@@ -31,9 +29,13 @@ const OTPVerification: React.FC = () => {
   };
 
   return (
+    <>
+          <Link to={'/'} className="cursor-pointer  fixed m-2 bg-white">
+            <Logo />
+          </Link>
     <div className="flex h-screen lg:flex-row flex-col md:flex-row w-full">
-      <div className="w-full md:w-1/2 p-6 h-auto flex-grow flex justify-center items-center md:p-10">
-        <div className="w-full max-w-md">
+      <div className="w-full md:w-1/2 p-6 h-auto flex-grow flex justify-center mt-6 md:p-10">
+        <div className="w-full max-w-sm py-10">
           <Text
             as="h1"
             size="4xl"
@@ -73,6 +75,7 @@ const OTPVerification: React.FC = () => {
 
     <AuthHero />
     </div>
+    </>
   );
 };
 
