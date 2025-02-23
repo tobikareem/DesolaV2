@@ -3,9 +3,6 @@ import React, { useState, useRef } from 'react';
 import { Text } from '../../components/TextComp';
 import { Input } from '../../components/InputField';
 import { Btn } from '../../components/Button';
-import BackgroundImageSection from '../../components/SideHeroComp';
-import frame from '../../assets/Frame 2147207438.png';
-import plane from '../../assets/Leonardo_Kino_XL_give_me_an_image_of_an_airplane_flying_2 1.png';
 import { AuthHero } from './AuthHero';
 
 const OTPVerification: React.FC = () => {
@@ -55,7 +52,7 @@ const OTPVerification: React.FC = () => {
                 className="w-15 h-15 text-center text-2xl border-2 border-orange-400 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
                 onChange={(e) => handleChange(index, e.target.value)}
                 onKeyDown={(e) => handleKeyDown(index, e)}
-                ref={(el) => (inputRefs.current[index] = el)}
+                ref={(el: HTMLInputElement | null) => { inputRefs.current[index] = el; }}
               />
             ))}
           </div>

@@ -20,14 +20,14 @@ const Signup: React.FC = () => {
   const [revealPassword2, setRevealPassword2] = useState<boolean>(false);
   return (
     <div className="flex h-screen lg:flex-row flex-col md:flex-row w-full">
-      <div className="w-full lg:w-1/2  flex-grow p-4 flex justify-center items-center  md:p-10">
-        <div className="w-full max-w-md p-10">
-          <Link
-            to={'/'}
-            className="flex justify-center items-center cursor-pointer mb-2"
+      <div className="w-full lg:w-1/2 p-6 flex justify-center">
+        <div className="w-full max-w-md">
+          <div
+            className="flex justify-center items-center cursor-pointer mb-14"
           >
             <Logo />
-          </Link>
+          </div>
+
           <Text as="h1" size="2xl" weight="bold" className="mb-6 text-center font-grotesk">
             Create An Account
           </Text>
@@ -110,16 +110,16 @@ const Signup: React.FC = () => {
           </div>
 
           <div className="flex justify-center gap-8 mb-2">
-            <FaGoogle className="text-xl text-red-500 cursor-pointer" />
-            <FaFacebook className="text-xl text-blue-600 cursor-pointer" />
-            <FaApple className="text-xl text-black cursor-pointer" />
-            <FaWindows className="text-xl text-blue-500 cursor-pointer" />
+            <FaGoogle className="text-xl text-red-500 cursor-pointer hover:scale-125 transition-all duration-300 ease-in-out" />
+            <FaFacebook className="text-xl text-blue-600 cursor-pointer hover:scale-125 transition-all duration-300 ease-in-out" />
+            <FaApple className="text-xl text-black cursor-pointer hover:scale-125 transition-all duration-300 ease-in-out" />
+            <FaWindows className="text-xl text-blue-500 cursor-pointer hover:scale-125 transition-all duration-300 ease-in-out" />
           </div>
 
           <div className="text-center">
             <Text size="sm">
               Have an account?{' '}
-              <Link to={'/signin'} className="text-blue-600">
+              <Link to={'/signin'} className="text-blue-600 hover:font-semibold">
                 Sign In
               </Link>
             </Text>
