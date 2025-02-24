@@ -10,7 +10,7 @@ import usePageContent from "../../../hooks/usePageContent";
 import { TextArea } from "../../../components/TextAreaField";
 
 const Contact = () => {
-    const { content: faqData, loading, error } = usePageContent(`${ENDPOINTS_API_PATH.page}`, `${WEB_PAGES.contact}`, "PhoneAndEmail");
+    const { content: faqData, loading, error } = usePageContent(`/${ENDPOINTS_API_PATH.page}`, `${WEB_PAGES.contact}`, "PhoneAndEmail");
 
     const ContactInfo = [{ icon: <MdOutlineEmail /> }, { icon: <IoCallOutline /> },]
 

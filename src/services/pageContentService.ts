@@ -16,7 +16,7 @@ export const getPageSection = async (path: string, partitionKey: string, rowKey:
 export const addPageSection = async (data: PageContent) => {
     try {
 
-        const response = await apiClient.post(`${ENDPOINTS_API_PATH.page}/addSection`, data);
+        const response = await apiClient.post(`/${ENDPOINTS_API_PATH.page}/addSection`, data);
         return response.data;
     } catch (error) {
         console.error("Error adding page section", error);
