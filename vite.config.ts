@@ -9,6 +9,7 @@ import autoprefixer from 'autoprefixer';
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
+  publicDir: 'public',
   css: {
     postcss: {
       plugins: [tailwindcss, autoprefixer],
