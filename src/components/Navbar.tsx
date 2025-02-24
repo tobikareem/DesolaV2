@@ -2,27 +2,14 @@ import { useEffect, useState } from "react";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { VscClose } from "react-icons/vsc";
 import { Link, NavLink, useLocation } from "react-router-dom";
-import authService from "../services/authService";
+import { useAuthInfo } from "../hooks/useAuthInfo";
 import { AZURE_B2C } from "../utils/constants";
 import { Logo } from "./Logo";
 
 export const Navbar = () => {
     const [slider, setSlider] = useState<boolean>(false);
-    const [userName, setUserName] = useState<string | null>(null);
 
-    const loadUser = () => setUserName(authService.getUserFromToken());
-
-    useEffect(() => {
-        loadUser();
-
-        const handleUserSignedIn = () => loadUser();
-
-        window.addEventListener("userSignedIn", handleUserSignedIn);
-
-        return () => {
-            window.removeEventListener("userSignedIn", handleUserSignedIn);
-        };
-    }, []);
+    const { userName, isAuthenticated, logout } = useAuthInfo();
 
     const handleDrawer = (e: React.MouseEvent<HTMLDivElement | HTMLButtonElement | HTMLAnchorElement | SVGElement>) => {
         if ((e.target as HTMLElement).id !== 'drawer') { setSlider(prevState => !prevState) }
@@ -83,11 +70,11 @@ export const Navbar = () => {
                     }
                 </nav>
 
-                {userName ? (
+                {isAuthenticated ? (
                     <div className="hidden lg:flex items-center space-x-4">
                         <span className="text-base text-neutral-700">Hello, {userName}</span>
                         <button
-                            onClick={authService.logout}
+                            onClick={logout}
                             className="h-12 w-[100px] bg-red-500 text-white font-medium rounded-xl hover:scale-105 transition-transform duration-300 ease-in-out"
                         >
                             Logout
@@ -131,10 +118,25 @@ export const Navbar = () => {
                                     }
                                 </nav>
                             </div>
-                            <Link to="/signin" onClick={handleDrawer}
-                                className="flex lg:hidden items-center justify-center h-16 w-full bg-gradient-to-b from-[#FF9040] to-[#FF6B00] text-2xl text-white font-medium rounded-xl hover:scale-105 transition-transform duration-300 ease-in-out">
-                                Sign In
-                            </Link>
+
+                            {isAuthenticated ? (
+                                <div className="hidden lg:flex items-center space-x-4">
+                                    <span className="text-base text-neutral-700">Hello, {userName}</span>
+                                    <button
+                                        onClick={logout}
+                                        className="flex lg:hidden items-center justify-center h-16 w-full bg-gradient-to-b from-[#FF9040] to-[#FF6B00] text-2xl text-white font-medium rounded-xl hover:scale-105 transition-transform duration-300 ease-in-out"
+                                    >
+                                        Logout
+                                    </button>
+                                </div>
+                            ) : (
+                                <Link to={AZURE_B2C.SIGN_IN_OUT} onClick={handleDrawer}
+                                    className="flex lg:hidden items-center justify-center h-16 w-full bg-gradient-to-b from-[#FF9040] to-[#FF6B00] text-2xl text-white font-medium rounded-xl hover:scale-105 transition-transform duration-300 ease-in-out">
+                                    Sign In
+                                </Link>
+                            )}
+
+
                         </div>
                     </div>
                 </div>
