@@ -3,6 +3,7 @@ import { Logo } from "./Logo";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { useEffect, useState} from "react";
 import { VscClose } from "react-icons/vsc";
+import { AZURE_B2C } from "../utils/constants";
 
 export const Navbar = () => {
     const [slider, setSlider] = useState<boolean>(false);
@@ -39,17 +40,6 @@ export const Navbar = () => {
         const path = location.pathname;
         const sectionId = path.replace('/', '');
         setActiveSection(`#${sectionId}`)
-        // const handleScroll =()=> {
-        //     const fromTop:number = window.scrollY;
-        //     Navigation?.forEach((section)=> {
-        //         const element = document.getElementById(section?.href);
-        //         if(element && element.offsetTop <= fromTop + window.innerHeight / 2 && element.offsetTop + element.offsetHeight > fromTop){
-        //             setActiveSection(section?.href);
-        //         }
-        //     });
-        // };
-        // window.addEventListener('scroll', handleScroll);
-        //     return ()=> window.removeEventListener('scroll',handleScroll);
     },[location])
     
     const smoothScroll = (href: string) => {
@@ -87,7 +77,7 @@ export const Navbar = () => {
                             })
                         }
                 </nav>
-                <Link to={"/signin"} className="hidden lg:flex items-center justify-center h-12 w-[137px] bg-gradient-to-b from-[#FF9040] to-[#FF6B00] text-base text-white font-medium rounded-xl hover:scale-105 transition-transform duration-300 ease-in-out">
+                <Link to={AZURE_B2C.SIGN_IN_OUT} className="hidden lg:flex items-center justify-center h-12 w-[137px] bg-gradient-to-b from-[#FF9040] to-[#FF6B00] text-base text-white font-medium rounded-xl hover:scale-105 transition-transform duration-300 ease-in-out">
                     Sign In
                 </Link>
                 {/* Mobile Nav */}

@@ -1,26 +1,30 @@
-import { API_BASE_URL, SIGN_IN_OUT } from "../utils/constants";
+import { VITE_API_BASE_URL, AZURE_B2C, SESSION_VALUES } from "../utils/constants";
+import { ENDPOINTS_API_PATH } from "../utils/endpoints";
 import apiClient from "./apiClient";
 
 const authService = {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     exchangeCodeForToken: async (code: string): Promise<any> => {
         try {
-            const response = await apiClient.post(`${API_BASE_URL}/auth/token`, { code });
+            const response = await apiClient.post(`${VITE_API_BASE_URL}/${ENDPOINTS_API_PATH.authToken}`, { code });
 
-            const { accessToken, refreshToken, expiresIn } = response.data;
+            const { access_token, refresh_token, expiresIn: expires_in, refresh_token_expires_in } = response.data;
 
-            sessionStorage.setItem("accessToken", accessToken);
-            sessionStorage.setItem("refreshToken", refreshToken);
-            sessionStorage.setItem("expiresAt", (Date.now() + expiresIn * 1000).toString());
+            sessionStorage.setItem(SESSION_VALUES.azure_b2c_accessToken, access_token);
+            sessionStorage.setItem(SESSION_VALUES.azure_b2c_refreshToken, refresh_token);
+            sessionStorage.setItem(SESSION_VALUES.azure_b2c_expiresAt, (Date.now() + expires_in * 1000).toString());
+            sessionStorage.setItem(SESSION_VALUES.azure_b2c_refreshTokenExpiresAt, (Date.now() + refresh_token_expires_in * 1000).toString());
 
         } catch (error) {
             console.error("Error exchanging code for token:", error);
             throw error;
+        } finally {
+            sessionStorage.removeItem(SESSION_VALUES.azure_b2c_authorizationCode)
         }
     },
 
     getAccessToken: (): string | null => {
-        const token = sessionStorage.getItem("accessToken");
+        const token = sessionStorage.getItem(SESSION_VALUES.azure_b2c_accessToken);
         if (!token) return null;
 
         if (authService.isTokenExpired()) {
@@ -32,14 +36,21 @@ const authService = {
     },
 
     isTokenExpired: (): boolean => {
-        const expiresAtStr = sessionStorage.getItem("expiresAt");
+        const expiresAtStr = sessionStorage.getItem(SESSION_VALUES.azure_b2c_expiresAt);
         if (!expiresAtStr) return true;
         const expiresAt = parseInt(expiresAtStr, 10);
         return Date.now() >= expiresAt;
     },
 
+    isRefreshTokenExpired: (): boolean => {
+        const expiresAtStr = sessionStorage.getItem(SESSION_VALUES.azure_b2c_refreshTokenExpiresAt);
+        if (!expiresAtStr) return true;
+        const expiresAt = parseInt(expiresAtStr, 10);
+        return Date.now() >= expiresAt;    
+    },
+
     isUserLoggedIn: (): boolean => {
-        const token = sessionStorage.getItem("accessToken");
+        const token = sessionStorage.getItem(SESSION_VALUES.azure_b2c_accessToken);
         if (!token) return false;
         return !authService.isTokenExpired();
     },
@@ -47,16 +58,16 @@ const authService = {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     refreshToken: async (): Promise<any> => {
         try {
-            const refreshToken = sessionStorage.getItem("refreshToken");
-            if (!refreshToken) {
-                await authService.signIn();
+            const refreshToken = sessionStorage.getItem(SESSION_VALUES.azure_b2c_refreshToken);
+            if (!refreshToken || authService.isRefreshTokenExpired()) {
+                window.location.href = AZURE_B2C.SIGN_IN_OUT;
             }
-            const response = await apiClient.post(`${API_BASE_URL}/auth/refresh`, { refreshToken });
-            const { accessToken, newRefreshToken, expiresIn } = response.data;
+            const response = await apiClient.post(`${VITE_API_BASE_URL}/${ENDPOINTS_API_PATH.authRefresh}`, { refreshToken });
+            const { access_token, refresh_token, expiresIn } = response.data;
 
-            sessionStorage.setItem("accessToken", accessToken);
-            sessionStorage.setItem("refreshToken", newRefreshToken);
-            sessionStorage.setItem("expiresAt", (Date.now() + expiresIn * 1000).toString());
+            sessionStorage.setItem(SESSION_VALUES.azure_b2c_accessToken, access_token);
+            sessionStorage.setItem(SESSION_VALUES.azure_b2c_refreshToken, refresh_token);
+            sessionStorage.setItem(SESSION_VALUES.azure_b2c_expiresAt, (Date.now() + expiresIn * 1000).toString());
 
             return response.data;
         } catch (error) {
@@ -66,20 +77,13 @@ const authService = {
         }
     },
 
+    signIn: () => {
+        window.location.href = AZURE_B2C.SIGN_IN_OUT;
+    },
+
     logout: () => {
-        sessionStorage.removeItem("accessToken");
-        sessionStorage.removeItem("refreshToken");
-        sessionStorage.removeItem("expiresAt");
-    },
-
-    signIn: async () => {
-        const signInUrl = await SIGN_IN_OUT();
-        window.location.href = signInUrl;
-    },
-
-    signInLink: async (): Promise<string> => {
-        const signInUrl = await SIGN_IN_OUT();
-        return signInUrl;
+        sessionStorage.clear();
+        window.location.href = AZURE_B2C.SIGN_IN_OUT;
     }
 };
 

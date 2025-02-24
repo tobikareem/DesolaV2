@@ -8,7 +8,7 @@ import { WEB_PAGES } from '../utils/constants';
 import usePageContent from '../hooks/usePageContent';
 
 const Footer: React.FC = () => {
-  const { content: faqData } = usePageContent(`${ENDPOINTS_API_PATH.page}`, `${WEB_PAGES.contact}`, "PhoneAndEmail");
+  const { content: faqData } = usePageContent(`/${ENDPOINTS_API_PATH.page}`, `${WEB_PAGES.contact}`, "PhoneAndEmail");
 
   const phoneNumber = faqData?.RowValue?.split(";")[0];
   const emailAddr = faqData?.RowValue?.split(";")[1];
