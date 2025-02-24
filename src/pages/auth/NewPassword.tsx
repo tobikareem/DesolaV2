@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { Text } from '../../components/TextComp';
 import { Input } from '../../components/InputField';
 import { Btn } from '../../components/Button';
-import { Logo } from '../../components/Logo';
 import { FaKey, FaEye, FaEyeSlash } from 'react-icons/fa';
 import { AuthHero } from './AuthHero';
 

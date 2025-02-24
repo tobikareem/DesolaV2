@@ -1,7 +1,7 @@
 import { JSX } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import './App.css';
-import AuthCallback from './auth/AuthCallback';
+import AuthCallback from './auth/Callback';
 import Footer from './components/Footer';
 import { Navbar } from './components/Navbar';
 import ForgetPassword from './pages/auth/ForgetPassword';

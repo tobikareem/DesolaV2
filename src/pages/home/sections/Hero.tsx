@@ -2,25 +2,27 @@ import { Img as ReactImage } from 'react-image';
 import { FlightAnimation } from '../../../components/Animation';
 import { Btn } from '../../../components/Button';
 import { Text } from '../../../components/TextComp';
+import { useAuthInfo } from '../../../hooks/useAuthInfo';
 import authService from '../../../services/authService';
 
 export const Hero = () => {
+  const { isAuthenticated } = useAuthInfo();
+
   return (
     <section
       id="home"
-      className="relative flex flex-col items-center px-4 md:px-8 lg:px-28 w-full bg-[url('/Hero-bg.svg')] bg-cover bg-center bg-no-repeat min-h-[75svh]  lg:min-h-[100vh] "
+      className="relative flex flex-col items-center px-4 md:px-8 lg:px-28 w-full bg-[url('/Hero-bg.svg')] bg-cover bg-center bg-no-repeat h-[100svh]  lg:min-h-[100svh] "
     >
-      <div className="flex flex-col items-center mt-20 md:mt-30 lg:mt-48 text-center">
+      <div className="relative flex flex-col items-center mt-20 md:mt-30 lg:mt-48 text-center">
         <div className="w-screen absolute top-10 ">
           <FlightAnimation props="flight" />
         </div>
         <Text
           as="h1"
           weight="bold"
-          className="font-grotesk font-bold text-4xl text lg:text-[56px]"
+          className="font-grotesk font-bold !text-4xl lg:text-[56px]"
         >
-          Find the <span className="text-[#4E50C7]">Best</span>{' '}
-          <span className="text-primary-500">Flight</span> Deals
+          Find the <span className="text-primary-500">Best Flight</span>Deals
         </Text>
         <Text
           weight="medium"
@@ -31,17 +33,23 @@ export const Hero = () => {
           Your guide to finding efficient and cost-effect flight options. We
           search the best deals so you don't have to.
         </Text>
-        <div className="flex flex-col lg:flex-row w-full items-center justify-center mt-8 gap-4 z-30">
-          <Btn
-            onClick={async () => await authService.signIn()}
-            className="bg-white w-full md:max-w-[250px] text-nowrap lg:text-lg lg:px-7 lg:h-14 text-primary-500"
-          >
-            Sign Up
-          </Btn>
-          <Btn className="bg-gradient-to-b text-nowrap from-[#FF9040] to-[#FF6B00] w-full md:max-w-[250px] lg:text-lg lg:px-7 lg:h-14 text-white">
+        {isAuthenticated ?
+          (<Btn className="bg-gradient-to-b text-nowrap from-[#FF9040] to-[#FF6B00] w-full md:max-w-[250px] lg:text-lg lg:px-7 lg:h-14 text-white">
             See the Best Deals
-          </Btn>
-        </div>
+          </Btn>)
+          :
+          (<div className="flex flex-col lg:flex-row w-full items-center justify-center mt-8 gap-4 z-30">
+            <Btn
+              onClick={() => authService.signIn()}
+              className="bg-white w-full md:max-w-[250px] text-nowrap lg:text-lg lg:px-7 lg:h-14 text-primary-500"
+            >
+              Sign Up
+            </Btn>
+            <Btn className="bg-gradient-to-b text-nowrap from-[#FF9040] to-[#FF6B00] w-full md:max-w-[250px] lg:text-lg lg:px-7 lg:h-14 text-white">
+              See the Best Deals
+            </Btn>
+
+          </div>)}
       </div>
       <div className="absolute bottom-5 w-full">
         <ReactImage

@@ -9,9 +9,6 @@ import {
 } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import { Btn } from '../../components/Button';
-import BackgroundImageSection from '../../components/SideHeroComp';
-import frame from '../../assets/Frame 2147207438.png';
-import plane from '../../assets/Leonardo_Kino_XL_give_me_an_image_of_an_airplane_flying_2 1.png';
 import { Input } from '../../components/InputField';
 import { Logo } from '../../components/Logo';
 import { Text } from '../../components/TextComp';
@@ -26,8 +23,14 @@ const SignIn: React.FC = () => {
         <Logo />
       </Link>
     <div className="flex h-screen lg:flex-row flex-col md:flex-row w-full">
-      <div className="w-full md:w-1/2 p-6 h-auto flex-grow flex justify-center mt-6 md:p-10">
-        <div className="w-full max-w-sm py-10">
+      <div className="w-full md:w-1/2 p-6 flex-grow flex justify-center md:p-10">
+        <div className="w-full md:max-w-md">
+          <div
+            className="flex justify-center items-center mb-14 cursor-pointer"
+          >
+            <Logo />
+          </div>
+
           <Text as="h1" size="2xl" weight="bold" className="mb-8 text-center font-grotesk">
             Get Started Now
           </Text>
@@ -58,9 +61,9 @@ const SignIn: React.FC = () => {
             )}
             <Link
               to={'/reset'}
-              className="mb-3 flex justify-end  text-sm text-neutral-500 cursor-pointer"
+              className="mb-3 flex justify-end  text-sm text-neutral-500 cursor-pointer hover:font-semibold"
             >
-              Forget Password
+              Forget Password?
             </Link>
           </div>
 
@@ -77,24 +80,22 @@ const SignIn: React.FC = () => {
           </div>
 
           <div className="flex justify-center gap-8 mb-6">
-            <FaGoogle className="text-xl text-red-500 cursor-pointer" />
-            <FaFacebook className="text-xl text-blue-600 cursor-pointer" />
-            <FaApple className="text-xl text-black cursor-pointer" />
-            <FaWindows className="text-xl text-blue-500 cursor-pointer" />
+            <FaGoogle className="text-xl text-red-500 cursor-pointer hover:scale-125 transition-all duration-300 ease-in-out" />
+            <FaFacebook className="text-xl text-blue-600 cursor-pointer hover:scale-125 transition-all duration-300 ease-in-out" />
+            <FaApple className="text-xl text-black cursor-pointer hover:scale-125 transition-all duration-300 ease-in-out" />
+            <FaWindows className="text-xl text-blue-500 cursor-pointer hover:scale-125 transition-all duration-300 ease-in-out" />
           </div>
 
           <div className="text-center">
             <Text size="sm">
               Don't Have an account?{' '}
-              <Link to={'/signup'} className="text-blue-600">
+              <Link to={'/signup'} className="text-blue-600 hover:font-semibold">
                 Sign Up
               </Link>
             </Text>
           </div>
         </div>
       </div>
-
-  
       <AuthHero />
     </div>
     </>

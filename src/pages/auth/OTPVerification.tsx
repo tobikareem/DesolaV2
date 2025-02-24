@@ -3,7 +3,10 @@ import { Link } from 'react-router-dom';
 import { Text } from '../../components/TextComp';
 import { Input } from '../../components/InputField';
 import { Btn } from '../../components/Button';
+<<<<<<< HEAD
 import { Logo } from '../../components/Logo';
+=======
+>>>>>>> 2eaac3ad58e4180cd1d37907e80efc218a3684d3
 import { AuthHero } from './AuthHero';
 
 const OTPVerification: React.FC = () => {
@@ -57,7 +60,7 @@ const OTPVerification: React.FC = () => {
                 className="w-15 h-15 text-center text-2xl border-2 border-orange-400 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
                 onChange={(e) => handleChange(index, e.target.value)}
                 onKeyDown={(e) => handleKeyDown(index, e)}
-                ref={(el) => (inputRefs.current[index] = el)}
+                ref={(el: HTMLInputElement | null) => { inputRefs.current[index] = el; }}
               />
             ))}
           </div>
