@@ -1,9 +1,9 @@
 import axios from "axios";
-import { API_BASE_URL, API_TOKEN, SESSION_VALUES } from "../utils/constants";
+import { VITE_API_BASE_URL, VITE_API_TOKEN, AZURE_B2C, SESSION_VALUES } from "../utils/constants";
 import authService from "./authService";
 
 const apiClient = axios.create({
-    baseURL: API_BASE_URL,
+    baseURL: VITE_API_BASE_URL,
     headers: {
         "Content-Type": "application/json"
     }
@@ -13,22 +13,32 @@ apiClient.interceptors.request.use(
     async (config) => {
         config.headers['x-functions-key'] = getFunctionKey();
 
-        const accessToken = authService.getAccessToken();
+        let accessToken = await authService.getAccessToken();
 
-        // if (!accessToken) {
-        //     // Token might be expired, attempt to refresh it
-        //     try {
-        //         const newTokenData = await authService.refreshToken();
-        //         accessToken = newTokenData.accessToken;
-        //     } catch (error) {
-        //         console.error("Token refresh failed. Redirecting to login.", error);
-        //         window.location.href = SIGN_IN_OUT;
-        //     }
-        // }
+        if (!accessToken) {
+            const refreshToken = sessionStorage.getItem(SESSION_VALUES.azure_b2c_refreshToken);
+
+            if (!refreshToken) {
+                console.warn("No refresh token available. User likely not logged in.");
+                return config;
+            }
+
+            try {
+                console.log("Access token expired. Attempting to refresh...");
+                const newTokenData = await authService.refreshToken();
+                accessToken = newTokenData?.access_token;
+            } catch (error) {
+                console.error("Token refresh failed. Redirecting to login.", error);
+                authService.logout();
+                window.location.href = AZURE_B2C.SIGN_IN_OUT;
+                return Promise.reject(error);
+            }
+        }
 
         if (accessToken) {
             config.headers["Authorization"] = `Bearer ${accessToken}`;
         }
+
         return config;
     },
     (error) => Promise.reject(error)
@@ -38,8 +48,8 @@ const getFunctionKey = () => {
     const storedKey = sessionStorage.getItem(SESSION_VALUES.api_function_key);
 
     if (!storedKey) {
-        sessionStorage.setItem(SESSION_VALUES.api_function_key, API_TOKEN);
-        return API_TOKEN;
+        sessionStorage.setItem(SESSION_VALUES.api_function_key, VITE_API_TOKEN);
+        return VITE_API_TOKEN;
     }
 
     return storedKey;

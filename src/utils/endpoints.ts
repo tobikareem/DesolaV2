@@ -1,4 +1,6 @@
 
 export const ENDPOINTS_API_PATH ={
-    page: "/page"
+    page: "page",
+    authToken: "auth/token",
+    authRefresh:"auth/refresh"
 }
