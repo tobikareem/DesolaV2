@@ -24,6 +24,7 @@ export const SESSION_VALUES = {
   azure_b2c_user: "azure_b2c_user",
   azure_b2c_userId: "azure_b2c_userId",
   azure_b2c_userEmail: "azure_b2c_userEmail",
+  azure_userName: "azure_user_name"
 }
 
 // WebPages

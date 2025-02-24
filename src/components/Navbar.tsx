@@ -1,33 +1,38 @@
-import { Link, NavLink, useLocation } from "react-router-dom";
-import { Logo } from "./Logo";
+import { useEffect, useState } from "react";
 import { GiHamburgerMenu } from "react-icons/gi";
-import { useEffect, useState} from "react";
 import { VscClose } from "react-icons/vsc";
+import { Link, NavLink, useLocation } from "react-router-dom";
+import authService from "../services/authService";
 import { AZURE_B2C } from "../utils/constants";
+import { Logo } from "./Logo";
 
 export const Navbar = () => {
     const [slider, setSlider] = useState<boolean>(false);
+    const [userName, setUserName] = useState<string | null>(null);
+
+    const loadUser = () => setUserName(authService.getUserFromToken());
+
+    useEffect(() => {
+        loadUser();
+
+        const handleUserSignedIn = () => loadUser();
+
+        window.addEventListener("userSignedIn", handleUserSignedIn);
+
+        return () => {
+            window.removeEventListener("userSignedIn", handleUserSignedIn);
+        };
+    }, []);
+
     const handleDrawer = (e: React.MouseEvent<HTMLDivElement | HTMLButtonElement | HTMLAnchorElement | SVGElement>) => {
         if ((e.target as HTMLElement).id !== 'drawer') { setSlider(prevState => !prevState) }
     };
 
     const Navigation = [
-        {
-            href: '#home',
-            path: 'Home'
-        },
-        {
-            href: '#how-it-works',
-            path: 'How It Works'
-        },
-        {
-            href: '#why-choose-us',
-            path: 'Why Choose Us'
-        },
-        {
-            href: '#support',
-            path: 'FAQ/Support'
-        }
+        { href: '#home', path: 'Home' },
+        { href: '#how-it-works', path: 'How It Works' },
+        { href: '#why-choose-us', path: 'Why Choose Us' },
+        { href: '#support', path: 'FAQ/Support' }
     ];
 
     const location = useLocation();
@@ -35,13 +40,13 @@ export const Navbar = () => {
 
     const [activeSection, setActiveSection] = useState<string>('');
 
-    useEffect(()=> {
+    useEffect(() => {
 
         const path = location.pathname;
         const sectionId = path.replace('/', '');
         setActiveSection(`#${sectionId}`)
-    },[location])
-    
+    }, [location])
+
     const smoothScroll = (href: string) => {
         const element = document.querySelector(href);
         if (element) {
@@ -54,7 +59,7 @@ export const Navbar = () => {
         <div className={`fixed ${router !== '/' ? 'hidden' : 'flex'}  items-center w-screen z-40 bg-transparent  left-0 backdrop-blur-[2px] `}>
             <div className="flex w-full justify-between items-center px-4 md:px-8 lg:px-14 xl:px-28 py-6 bg-background">
                 {/* Logo */}
-                <div onClick={()=> setSlider(prevState => !prevState)}
+                <div onClick={() => setSlider(prevState => !prevState)}
                     className="block lg:hidden text-neutral-900 text-2xl">
                     <GiHamburgerMenu />
                 </div>
@@ -63,23 +68,40 @@ export const Navbar = () => {
                 </div>
                 {/* Desktop Nav */}
                 <nav className="hidden lg:flex items-center px-1 py-1 bg-white rounded-2xl border border-neutral-300">
-                        {
-                            Navigation?.map((item, index) => {
-                                return(
-                                    <NavLink to={item?.href}
-                                        key={index}
-                                        onClick={(e) => {e.preventDefault(); smoothScroll(item?.href);} }
-                                        className={() => `font-work h-full p-3 text-base text-neutral-900 font-medium rounded-xl text-nowrap hover:bg-secondary-100 hover:scale-105 transition-transform duration-300 ease-in-out ${location.pathname === item?.href ? 'bg-secondary-100' : 'bg-transparent'}`}
-                                    >
-                                        {item?.path}
-                                    </NavLink>
-                                )
-                            })
-                        }
+                    {
+                        Navigation?.map((item, index) => {
+                            return (
+                                <NavLink to={item?.href}
+                                    key={index}
+                                    onClick={(e) => { e.preventDefault(); smoothScroll(item?.href); }}
+                                    className={() => `font-work h-full p-3 text-base text-neutral-900 font-medium rounded-xl text-nowrap hover:bg-secondary-100 hover:scale-105 transition-transform duration-300 ease-in-out ${location.pathname === item?.href ? 'bg-secondary-100' : 'bg-transparent'}`}
+                                >
+                                    {item?.path}
+                                </NavLink>
+                            )
+                        })
+                    }
                 </nav>
-                <Link to={AZURE_B2C.SIGN_IN_OUT} className="hidden lg:flex items-center justify-center h-12 w-[137px] bg-gradient-to-b from-[#FF9040] to-[#FF6B00] text-base text-white font-medium rounded-xl hover:scale-105 transition-transform duration-300 ease-in-out">
-                    Sign In
-                </Link>
+
+                {userName ? (
+                    <div className="hidden lg:flex items-center space-x-4">
+                        <span className="text-base text-neutral-700">Hello, {userName}</span>
+                        <button
+                            onClick={authService.logout}
+                            className="h-12 w-[100px] bg-red-500 text-white font-medium rounded-xl hover:scale-105 transition-transform duration-300 ease-in-out"
+                        >
+                            Logout
+                        </button>
+                    </div>
+                ) : (
+                    <Link
+                        to={AZURE_B2C.SIGN_IN_OUT}
+                        className="hidden lg:flex items-center justify-center h-12 w-[137px] bg-gradient-to-b from-[#FF9040] to-[#FF6B00] text-base text-white font-medium rounded-xl hover:scale-105 transition-transform duration-300 ease-in-out"
+                    >
+                        Sign In
+                    </Link>
+                )}
+
                 {/* Mobile Nav */}
                 <div
                     className={`block lg:hidden w-screen h-screen ${slider ? 'translate-x-0  bg-black/60' : 'translate-x-[-100%] bg-transparent'} transition-all duration-200 ease-in fixed top-0 left-0 z-50`} >
@@ -94,19 +116,19 @@ export const Navbar = () => {
                             <div className="flex flex-col w-full items-center gap-22">
                                 <div onClick={handleDrawer}><Logo /></div>
                                 <nav className="flex flex-col w-full items-center px-1 py-1 text-center">
-                                        {
-                                            Navigation?.map((item, index) => {
-                                                return(
-                                                    <NavLink to={item?.href}
-                                                        key={index}
-                                                        onClick={(e) => {e.preventDefault(); smoothScroll(item?.href); handleDrawer(e)} }
-                                                        className={() => `font-work size-full p-3 text-base text-neutral-900 font-medium rounded-xl text-nowrap hover:bg-secondary-100 hover:scale-105 transition-transform duration-300 ease-in-out ${activeSection === item?.href ? 'bg-secondary-100' : 'bg-transparent'}`}
-                                                    >
-                                                        {item?.path}
-                                                    </NavLink>
-                                                )
-                                            })
-                                        }
+                                    {
+                                        Navigation?.map((item, index) => {
+                                            return (
+                                                <NavLink to={item?.href}
+                                                    key={index}
+                                                    onClick={(e) => { e.preventDefault(); smoothScroll(item?.href); handleDrawer(e) }}
+                                                    className={() => `font-work size-full p-3 text-base text-neutral-900 font-medium rounded-xl text-nowrap hover:bg-secondary-100 hover:scale-105 transition-transform duration-300 ease-in-out ${activeSection === item?.href ? 'bg-secondary-100' : 'bg-transparent'}`}
+                                                >
+                                                    {item?.path}
+                                                </NavLink>
+                                            )
+                                        })
+                                    }
                                 </nav>
                             </div>
                             <Link to="/signin" onClick={handleDrawer}

@@ -1,4 +1,6 @@
-import { VITE_API_BASE_URL, AZURE_B2C, SESSION_VALUES } from "../utils/constants";
+import { jwtDecode } from "jwt-decode";
+import { IdToken } from "../models/IdToken";
+import { AZURE_B2C, SESSION_VALUES, VITE_API_BASE_URL } from "../utils/constants";
 import { ENDPOINTS_API_PATH } from "../utils/endpoints";
 import apiClient from "./apiClient";
 
@@ -8,12 +10,16 @@ const authService = {
         try {
             const response = await apiClient.post(`${VITE_API_BASE_URL}/${ENDPOINTS_API_PATH.authToken}`, { code });
 
-            const { access_token, refresh_token, expiresIn: expires_in, refresh_token_expires_in } = response.data;
+            const { access_token, refresh_token, id_token, expires_in, refresh_token_expires_in } = response.data;
 
             sessionStorage.setItem(SESSION_VALUES.azure_b2c_accessToken, access_token);
             sessionStorage.setItem(SESSION_VALUES.azure_b2c_refreshToken, refresh_token);
+            sessionStorage.setItem(SESSION_VALUES.azure_b2c_idToken, id_token);
             sessionStorage.setItem(SESSION_VALUES.azure_b2c_expiresAt, (Date.now() + expires_in * 1000).toString());
             sessionStorage.setItem(SESSION_VALUES.azure_b2c_refreshTokenExpiresAt, (Date.now() + refresh_token_expires_in * 1000).toString());
+
+            authService.getUserFromToken();
+            window.dispatchEvent(new Event("userSignedIn"));
 
         } catch (error) {
             console.error("Error exchanging code for token:", error);
@@ -46,7 +52,7 @@ const authService = {
         const expiresAtStr = sessionStorage.getItem(SESSION_VALUES.azure_b2c_refreshTokenExpiresAt);
         if (!expiresAtStr) return true;
         const expiresAt = parseInt(expiresAtStr, 10);
-        return Date.now() >= expiresAt;    
+        return Date.now() >= expiresAt;
     },
 
     isUserLoggedIn: (): boolean => {
@@ -77,13 +83,30 @@ const authService = {
         }
     },
 
+    getUserFromToken: (): string | null => {
+        const idToken = sessionStorage.getItem(SESSION_VALUES.azure_b2c_idToken);
+        if (!idToken) return null;
+
+        try {
+            const decoded: IdToken = jwtDecode(idToken);
+            const userName = decoded.given_name ?? decoded.name ?? "User";
+
+            sessionStorage.setItem(SESSION_VALUES.azure_userName, userName);
+
+            return userName;
+        } catch (error) {
+            console.error("Failed to decode ID token:", error);
+            return null;
+        }
+    },
+
     signIn: () => {
         window.location.href = AZURE_B2C.SIGN_IN_OUT;
     },
 
     logout: () => {
         sessionStorage.clear();
-        window.location.href = AZURE_B2C.SIGN_IN_OUT;
+        window.location.href = "/";
     }
 };
 

@@ -16,9 +16,17 @@ apiClient.interceptors.request.use(
         let accessToken = await authService.getAccessToken();
 
         if (!accessToken) {
+            const refreshToken = sessionStorage.getItem(SESSION_VALUES.azure_b2c_refreshToken);
+
+            if (!refreshToken) {
+                console.warn("No refresh token available. User likely not logged in.");
+                return config;
+            }
+
             try {
+                console.log("Access token expired. Attempting to refresh...");
                 const newTokenData = await authService.refreshToken();
-                accessToken = newTokenData.accessToken;
+                accessToken = newTokenData?.access_token;
             } catch (error) {
                 console.error("Token refresh failed. Redirecting to login.", error);
                 authService.logout();
@@ -30,6 +38,7 @@ apiClient.interceptors.request.use(
         if (accessToken) {
             config.headers["Authorization"] = `Bearer ${accessToken}`;
         }
+
         return config;
     },
     (error) => Promise.reject(error)
