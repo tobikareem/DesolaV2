@@ -6,7 +6,7 @@ import SuccessScreen from "../components/SuccessScreen";
 import authService from "../services/authService";
 import { SESSION_VALUES } from "../utils/constants";
 
-const AuthCallback: React.FC = () => {
+const Callback: React.FC = () => {
   const navigate = useNavigate();
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -57,4 +57,4 @@ const AuthCallback: React.FC = () => {
 
 
 
-export default AuthCallback;
+export default Callback;
