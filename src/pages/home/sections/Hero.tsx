@@ -34,7 +34,7 @@ export const Hero = () => {
           search the best deals so you don't have to.
         </Text>
         {isAuthenticated ?
-          (<Btn className="bg-gradient-to-b text-nowrap from-[#FF9040] to-[#FF6B00] w-full md:max-w-[250px] lg:text-lg lg:px-7 lg:h-14 text-white">
+          (<Btn className="bg-gradient-to-b text-nowrap from-[#FF9040] to-[#FF6B00] w-full md:max-w-[250px] lg:text-lg lg:px-7 lg:h-16 text-white">
             See the Best Deals
           </Btn>)
           :
