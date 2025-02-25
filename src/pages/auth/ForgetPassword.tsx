@@ -3,14 +3,16 @@ import { Input } from '../../components/InputField';
 import { Btn } from '../../components/Button';
 import { FaArrowLeft } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
-import { AuthHero } from './AuthHero';
 import { Logo } from '../../components/Logo';
 const ForgetPassword: React.FC = () => {
   return (
     <>
+    <Link to={'/'} className="cursor-pointer  fixed m-2 bg-white">
+            <Logo />
+          </Link>
       <div className="font-work flex h-screen lg:flex-row flex-col md:flex-row w-full">
-        <div className="w-full md:w-1/2 p-6 flex justify-center items-center md:p-10">
-          <div className="w-full max-w-md">
+        <div className="w-full md:w-1/2 h-auto flex-grow p-6 flex justify-center  md:p-10">
+          <div className="w-full max-w-md mt-20">
             <Text as="h1" size='3xl' weight="bold" className="!font-grotesk text-center leading-normal lg:!text-[40px]">
               Forget Password?
             </Text>
@@ -40,7 +42,7 @@ const ForgetPassword: React.FC = () => {
           </div>
         </div>
 
-      <AuthHero />
+
       </div>
     </>
   );

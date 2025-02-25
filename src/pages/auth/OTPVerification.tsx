@@ -3,10 +3,7 @@ import { Link } from 'react-router-dom';
 import { Text } from '../../components/TextComp';
 import { Input } from '../../components/InputField';
 import { Btn } from '../../components/Button';
-<<<<<<< HEAD
 import { Logo } from '../../components/Logo';
-=======
->>>>>>> 2eaac3ad58e4180cd1d37907e80efc218a3684d3
 import { AuthHero } from './AuthHero';
 
 const OTPVerification: React.FC = () => {
@@ -38,7 +35,7 @@ const OTPVerification: React.FC = () => {
           </Link>
     <div className="flex h-screen lg:flex-row flex-col md:flex-row w-full">
       <div className="w-full md:w-1/2 p-6 h-auto flex-grow flex justify-center mt-6 md:p-10">
-        <div className="w-full max-w-sm py-10">
+        <div className="w-full max-w-sm py-10 mt-10">
           <Text
             as="h1"
             size="4xl"
@@ -76,7 +73,7 @@ const OTPVerification: React.FC = () => {
         </div>
       </div>
 
-    <AuthHero />
+
     </div>
     </>
   );

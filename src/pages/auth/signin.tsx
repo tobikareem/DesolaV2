@@ -24,13 +24,8 @@ const SignIn: React.FC = () => {
       </Link>
     <div className="flex h-screen lg:flex-row flex-col md:flex-row w-full">
       <div className="w-full md:w-1/2 p-6 flex-grow flex justify-center md:p-10">
-        <div className="w-full md:max-w-md">
-          <div
-            className="flex justify-center items-center mb-14 cursor-pointer"
-          >
-            <Logo />
-          </div>
-
+        <div className="w-full md:max-w-md mt-10">
+      
           <Text as="h1" size="2xl" weight="bold" className="mb-8 text-center font-grotesk">
             Get Started Now
           </Text>

@@ -1,10 +1,22 @@
 import React from 'react';
 import {
-  FaPlaneDeparture,
-  FaPlaneArrival,
-  FaCalendarAlt,
-  FaCalendarCheck,
-} from 'react-icons/fa';
+  Route,
+  PlaneTakeoff,
+  CalendarCheck,
+  Plane,
+  PlaneLanding,
+  Trash2,
+  User,
+  Headset,
+  LogOut,
+} from 'lucide-react';
+
+import { FaHome} from 'react-icons/fa';
+import { PiRoadHorizonBold } from 'react-icons/pi';
+
+
+import { Text } from './TextComp';
+
 
 interface LeftPaneProps {
   departure: string;
@@ -15,7 +27,7 @@ interface LeftPaneProps {
   flightClass: string;
 }
 
-const LeftPane: React.FC<LeftPaneProps> = ({
+export const LeftPane: React.FC<LeftPaneProps> = ({
   departure,
   destination,
   departureDate,
@@ -24,61 +36,135 @@ const LeftPane: React.FC<LeftPaneProps> = ({
   flightClass,
 }) => {
   return (
-    <div className="bg-gray-100 p-6 rounded-lg shadow-md">
-      <h2 className="text-xl font-bold mb-4">DASOLA.com</h2>
-      <h3 className="text-lg font-semibold mb-2">Great Deals for Your Trip!</h3>
-      <div className="space-y-4">
-        <div className="flex items-center space-x-2">
-          <FaPlaneDeparture className="text-gray-600" />
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Departure:
-            </label>
-            <p className="mt-1 text-sm text-gray-900">{departure}</p>
+    <div className="flex w-[40%] h-screen">
+      <div className="w-[10%] items-center px-10 py-8 border gap-6 flex  flex-col">
+        <FaHome
+          className="text-primary-600 cursor-pointer hover:scale-110 transition duration-300"
+          size={24}
+        />
+        <PiRoadHorizonBold
+          className="text-primary-600 font-bold cursor-pointer hover:scale-110 transition duration-300"
+          size={24}
+        />
+        <Trash2
+          className="text-primary-600 cursor-pointer hover:scale-110 transition duration-300"
+          size={24}
+        />
+        <User
+          className="text-primary-600 cursor-pointer hover:scale-110 transition duration-300"
+          size={24}
+        />
+        <Headset
+          className="text-primary-600 cursor-pointer hover:scale-110 transition duration-300"
+          size={24}
+        />
+        <LogOut
+          className="text-primary-600 cursor-pointer hover:scale-110 transition duration-300"
+          size={24}
+        />
+      </div>
+      <div className="bg-white w-full flex-1 p-6 rounded-lg shadow-md">
+        <Text
+          as="h1"
+          size="2xl"
+          weight="bold"
+          className="font-grotesk text-primary-500 f mb-6"
+        >
+          Great Deals for Your Trip!
+        </Text>
+        <div className="">
+          <div className="mb-4">
+            <div className="flex items-center space-x-2 mb-2">
+              <PlaneTakeoff
+                className="text-secondary-700 hover:scale-110 transition duration-300"
+                size={20}
+              />
+              <label className="block text-sm font-medium text-neutral">
+                Departure
+              </label>
+            </div>
+            <Text as="p" className="mt-1 text-sm text-neutral-500">
+              {departure}
+            </Text>
           </div>
-        </div>
-        <div className="flex items-center space-x-2">
-          <FaPlaneArrival className="text-gray-600" />
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Destination:
-            </label>
-            <p className="mt-1 text-sm text-gray-900">{destination}</p>
+
+          <div className="mb-4">
+            <div className="flex items-center space-x-2 mb-2">
+              <Route
+                size={20}
+                className="text-primary-700 hover:scale-110 transition duration-300"
+              />
+              <label className="block text-sm font-medium text-neutral">
+                Destination
+              </label>
+            </div>
+            <Text as="p" className="mt-1 text-sm text-neutral-500">
+              {destination}
+            </Text>
           </div>
-        </div>
-        <div className="flex items-center space-x-2">
-          <FaCalendarAlt className="text-gray-600" />
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Departure Date:
-            </label>
-            <p className="mt-1 text-sm text-gray-900">{departureDate}</p>
+
+          <div className="mb-4">
+            <div className="flex items-center space-x-2 mb-2">
+              <CalendarCheck
+                className="text-success hover:scale-110 transition duration-300"
+                size={20}
+              />
+              <label className="block text-sm font-medium text-neutral">
+                Departure Date
+              </label>
+            </div>
+            <Text as="p" className="mt-1 text-sm text-neutral-500">
+              {departureDate}
+            </Text>
           </div>
-        </div>
-        <div className="flex items-center space-x-2">
-          <FaCalendarCheck className="text-gray-600" />
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Returning Date:
-            </label>
-            <p className="mt-1 text-sm text-gray-900">{returnDate}</p>
+
+          <div className="mb-4">
+            <div className="flex items-center space-x-2 mb-2">
+              <CalendarCheck
+                className="text-primary-300 hover:scale-110 transition duration-300"
+                size={20}
+              />
+              <label className="block text-sm font-medium text-neutral">
+                Returning Date
+              </label>
+            </div>
+            <Text as="p" className="mt-1 text-sm text-neutral-500">
+              {returnDate}
+            </Text>
           </div>
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Travel Route:
-          </label>
-          <p className="mt-1 text-sm text-gray-900">{travelRoute}</p>
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Flight:
-          </label>
-          <p className="mt-1 text-sm text-gray-900">{flightClass}</p>
+
+          <div className="mb-4">
+            <div className="flex items-center space-x-2 mb-2">
+              <PlaneLanding
+                className="text-primary-600 hover:scale-110 transition duration-300"
+                size={20}
+              />
+              <label className="block text-sm font-medium text-neutral">
+                Travel Route
+              </label>
+            </div>
+            <Text as="p" className="mt-1 text-sm text-neutral-500">
+              {travelRoute}
+            </Text>
+          </div>
+
+          <div>
+            <div className="flex items-center space-x-2 mb-2">
+              <Plane
+                className="text-secondary-700 hover:scale-110 transition duration-300"
+                size={20}
+              />
+              <label className="block text-sm font-medium text-neutral">
+                Flight
+              </label>
+            </div>
+            <Text as="p" className="mt-1 text-sm text-neutral-500">
+              {flightClass}
+            </Text>
+          </div>
+
         </div>
       </div>
     </div>
   );
 };
-
-export default LeftPane;
