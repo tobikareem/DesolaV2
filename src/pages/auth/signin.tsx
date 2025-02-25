@@ -18,15 +18,14 @@ const SignIn: React.FC = () => {
   const [revealPassword, setRevealPassword] = useState<boolean>(false);
 
   return (
+    <>
+      <Link to={'/'} className="cursor-pointer  fixed m-2 bg-white">
+        <Logo />
+      </Link>
     <div className="flex h-screen lg:flex-row flex-col md:flex-row w-full">
       <div className="w-full md:w-1/2 p-6 flex-grow flex justify-center md:p-10">
-        <div className="w-full md:max-w-md">
-          <div
-            className="flex justify-center items-center mb-14 cursor-pointer"
-          >
-            <Logo />
-          </div>
-
+        <div className="w-full md:max-w-md mt-10">
+      
           <Text as="h1" size="2xl" weight="bold" className="mb-8 text-center font-grotesk">
             Get Started Now
           </Text>
@@ -34,7 +33,7 @@ const SignIn: React.FC = () => {
           <Input
             label="Email"
             placeholder="Please Enter your email"
-            className="text-sm mb-4 w-full rounded-lg"
+            className="text-sm mb-2 w-full rounded-lg"
           />
 
           <div className="relative w-full mb-4">
@@ -94,6 +93,7 @@ const SignIn: React.FC = () => {
       </div>
       <AuthHero />
     </div>
+    </>
   );
 };
 

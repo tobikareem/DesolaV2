@@ -35,6 +35,7 @@
   "dependencies": {
     "clsx": "^2.1.1",
     "horizon": "file:",
+    "lucide-react": "^0.475.0",
     "react-icons": "^5.4.0",
     "react-image": "^4.1.0",
     "react-router": "^6.29.0",
