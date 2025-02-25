@@ -10,6 +10,7 @@ import OTPVerification from './pages/auth/OTPVerification';
 import SignIn from './pages/auth/signin';
 import SignUp from './pages/auth/signup';
 import HomeScreen from './pages/home/home';
+import ChatTest from './pages/ChatTestScreenPage/ChatTest';
 
 type RouteType = {
   path?: string;
@@ -25,6 +26,7 @@ function App() {
     { path: '/reset', element: <ForgetPassword />, name: 'Forget Password' },
     { path: '/verify', element: <OTPVerification />, name: 'Verify' },
     { path: '/password-reset', element: <NewPassword />, name: 'PasswordReset' },
+    { path: '/chat', element: <ChatTest />, name: 'Chat' },
     { path: '/callback', element: <Callback />, name: 'Callback' }
   ];
 
