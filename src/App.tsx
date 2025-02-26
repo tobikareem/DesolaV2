@@ -1,7 +1,7 @@
 import { JSX } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import './App.css';
-import AuthCallback from './auth/Callback';
+import Callback from './auth/Callback';
 import Footer from './components/Footer';
 import { Navbar } from './components/Navbar';
 import ForgetPassword from './pages/auth/ForgetPassword';
@@ -9,6 +9,7 @@ import SignIn from './pages/auth/signin';
 import SignUp from './pages/auth/signup';
 import HomeScreen from './pages/home/home';
 import Verify from './pages/auth/verify';
+import Dashboard from './pages/dashboard/dashboard';
 
 type RouteType = {
   path?: string;
@@ -23,7 +24,8 @@ function App() {
     { path: '/signup', element: <SignUp />, name: 'Sign Up' },
     { path: '/reset', element: <ForgetPassword />, name: 'Forget Password' },
     { path: '/verify', element: <Verify />, name: 'Verify' },
-    { path: '/callback', element: <AuthCallback />, name: 'Callback' }
+    { path: '/callback', element: <Callback />, name: 'Callback' },
+    { path: '/dashboard', element: <Dashboard />, name: 'Dashboard' }
   ];
 
   return (

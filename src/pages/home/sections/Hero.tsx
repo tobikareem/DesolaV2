@@ -13,6 +13,9 @@ export const Hero = () => {
       id="home"
       className="relative flex flex-col items-center px-4 md:px-8 lg:px-28 w-full bg-[url('/Hero-bg.svg')] bg-cover bg-center bg-no-repeat h-[100svh]  lg:min-h-[100svh] "
     >
+      <div className="md:hidden w-screen absolute top-20">
+        <FlightAnimation props="flight !w-[60px]" />
+      </div>
       <div className="relative flex flex-col items-center mt-24 xs:mt-30 md:mt-34 lg:mt-48 text-center">
         <div className='w-full flex flex-col lg:flex-row gap-4 lg:gap-10 lg:justify-between z-[5]'>
           <div className="lg:w-1/2">
@@ -56,8 +59,8 @@ export const Hero = () => {
           </div>
         </div>
       </div>
-      <div className='w-screen relative'>
-        <div className="w-screen absolute top-5 ">
+      <div className='w-screen relative hidden md:flex'>
+        <div className="w-screen absolute top-24 lg:top-5 ">
           <FlightAnimation props="flight" />
         </div>
       </div>

@@ -18,13 +18,12 @@ const SignIn: React.FC = () => {
   const [revealPassword, setRevealPassword] = useState<boolean>(false);
 
   return (
-    <div className="flex h-screen lg:flex-row flex-col  w-full">
-      <div className="w-full lg:w-1/2 p-6 flex-grow flex flex-col items-center md:p-10">
-        <div className="w-full md:max-w-md">
-          <div className="w-full flex justify-center items-center  mb-14 cursor-pointer">
+    <div className="flex h-screen lg:flex-row flex-col w-full">
+      <div className="w-full lg:w-1/2 p-6 md:p-10 flex-grow flex flex-col items-center">
+          <div className="w-full flex justify-center lg:justify-normal items-center mb-16 cursor-pointer">
             <Logo />
           </div>
-
+        <div className="w-full md:max-w-md">
           <Text as="h1" size="3xl" weight="bold" className="mb-6 text-3xl xs:!text-4xl text-center font-grotesk">
             Welcome Back!
           </Text>

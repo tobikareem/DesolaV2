@@ -20,16 +20,14 @@ const Signup: React.FC = () => {
   const [revealPassword2, setRevealPassword2] = useState<boolean>(false);
   return (
     <div className="flex h-screen lg:flex-row flex-col w-full">
-      <div className="w-full lg:w-1/2 p-6 flex flex-col items-center">
+      <div className="w-full lg:w-1/2 p-6 md:p-10 flex flex-col items-center">
+        <div className="w-full flex justify-center lg:justify-normal items-center mb-16 cursor-pointer">
+          <Logo />
+        </div>
         <div className="w-full max-w-md">
-          <div className="flex justify-center items-center cursor-pointer mb-4 md:mb-16">
-            <Logo />
-          </div>
-
           <Text as="h1" size="3xl" weight="bold" className="mb-6 text-3xl xs:!text-4xl text-center font-grotesk">
             Create An Account
           </Text>
-
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm mb-3 sm:mb-4">
             <Input
               label="First Name"
@@ -129,9 +127,7 @@ const Signup: React.FC = () => {
           </div>
         </div>
       </div>
-
-   
-      <AuthHero />
+      <AuthHero/>
     </div>
   );
 };

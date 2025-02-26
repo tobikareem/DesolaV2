@@ -1,17 +1,18 @@
-import React, { useState } from 'react';
-
+import { useState } from 'react';
 import { Text } from '../../components/TextComp';
 import { Input } from '../../components/InputField';
 import { Btn } from '../../components/Button';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { GoKey } from 'react-icons/go';
 
+
+
 const NewPassword =({click}:{click:()=>void})=> {
+
   const [password, setPassword] = useState<string>('');
   const [confirmPassword, setConfirmPassword] = useState<string>('');
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [showConfirmPassword, setShowConfirmPassword] =
-    useState<boolean>(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
 
   const getPasswordStrength = (): number => {
     if (password.length < 4) return 1;
