@@ -6,6 +6,7 @@ import { Logo } from './Logo';
 import { ENDPOINTS_API_PATH } from '../utils/endpoints';
 import { WEB_PAGES } from '../utils/constants';
 import usePageContent from '../hooks/usePageContent';
+import { Img as ReactImage } from 'react-image';
 
 const Footer: React.FC = () => {
   const { content: faqData } = usePageContent(`/${ENDPOINTS_API_PATH.page}`, `${WEB_PAGES.contact}`, "PhoneAndEmail");
@@ -19,6 +20,11 @@ const Footer: React.FC = () => {
   return (
     <footer className={` ${router !== '/' ? 'hidden' : ''} bg-primary-700  text-white py-8 mt-8`}>
       <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
+        <ReactImage
+          src={'/DESOLA.svg'}
+          alt='Desola'
+          className='w-full mb-20'
+        />
         <div className="flex flex-col lg:flex-row justify-between items-start gap-8 text-left md:text-left">
           <Logo />
           <div>
@@ -56,7 +62,7 @@ const Footer: React.FC = () => {
             >
               Contact
             </Text>
-            <Link to={'tel:'}>
+            <Link to={`tel:${phoneNumber}`}>
               <Text as="p" size="sm" className="text-white hover:font-bold">
                 {phoneNumber}
               </Text>

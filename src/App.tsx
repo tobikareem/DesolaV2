@@ -5,12 +5,11 @@ import Callback from './auth/Callback';
 import Footer from './components/Footer';
 import { Navbar } from './components/Navbar';
 import ForgetPassword from './pages/auth/ForgetPassword';
-import NewPassword from './pages/auth/NewPassword';
-import OTPVerification from './pages/auth/OTPVerification';
 import SignIn from './pages/auth/signin';
 import SignUp from './pages/auth/signup';
 import HomeScreen from './pages/home/home';
-import ChatTest from './pages/ChatTestScreenPage/ChatTest';
+import Verify from './pages/auth/verify';
+import Dashboard from './pages/dashboard/dashboard';
 
 type RouteType = {
   path?: string;
@@ -24,10 +23,9 @@ function App() {
     { path: '/signin', element: <SignIn />, name: 'Sign In' },
     { path: '/signup', element: <SignUp />, name: 'Sign Up' },
     { path: '/reset', element: <ForgetPassword />, name: 'Forget Password' },
-    { path: '/verify', element: <OTPVerification />, name: 'Verify' },
-    { path: '/password-reset', element: <NewPassword />, name: 'PasswordReset' },
-    { path: '/chat', element: <ChatTest />, name: 'Chat' },
-    { path: '/callback', element: <Callback />, name: 'Callback' }
+    { path: '/verify', element: <Verify />, name: 'Verify' },
+    { path: '/callback', element: <Callback />, name: 'Callback' },
+    { path: '/dashboard', element: <Dashboard />, name: 'Dashboard' }
   ];
 
   return (
