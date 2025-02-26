@@ -10,6 +10,7 @@ import SignUp from './pages/auth/signup';
 import HomeScreen from './pages/home/home';
 import Verify from './pages/auth/verify';
 import Dashboard from './pages/dashboard/dashboard';
+import Error404Page from './pages/error/404';
 
 type RouteType = {
   path?: string;
@@ -25,7 +26,8 @@ function App() {
     { path: '/reset', element: <ForgetPassword />, name: 'Forget Password' },
     { path: '/verify', element: <Verify />, name: 'Verify' },
     { path: '/callback', element: <Callback />, name: 'Callback' },
-    { path: '/dashboard', element: <Dashboard />, name: 'Dashboard' }
+    { path: '/dashboard', element: <Dashboard />, name: 'Dashboard' },
+    {path:'*', element:<Error404Page/>}
   ];
 
   return (
