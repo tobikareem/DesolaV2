@@ -83,10 +83,10 @@ label{
 
 @keyframes flight {
     0% {
-        transform: translateX(20vw);
+        transform: translateX(0vw);
     }
     100%{
-        transform: translateX(100vw)
+        transform: translateX(100vw);
     }
 }   
 
