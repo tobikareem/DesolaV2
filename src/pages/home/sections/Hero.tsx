@@ -46,7 +46,7 @@ export const Hero = () => {
                   onClick={() => authService.signIn()}
                   className="bg-white w-full md:w-[250px] text-nowrap lg:text-lg lg:px-7 lg:h-14 text-primary-500 !rounded-[48px]"
                 >
-                  Sign Up
+                  Get Started
                 </Btn>
                 <Btn className="bg-gradient-to-b text-nowrap from-[#FF9040] to-[#FF6B00] w-full md:w-[250px] lg:text-lg lg:px-7 lg:h-14 text-white !rounded-[48px]">
                   See the Best Deals

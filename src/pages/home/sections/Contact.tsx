@@ -68,7 +68,7 @@ const Contact = () => {
                         </div>
 
                         <Btn type="submit"
-                            className="mt-3 bg-gradient-to-b text-nowrap h-12 from-[#FF9040] to-[#FF6B00] w-full text-base  text-white">
+                            className="bg-gradient-to-b text-nowrap py-3 from-[#FF9040] to-[#FF6B00] w-full text-base text-white">
                             Send Message
                         </Btn>
                     </form>

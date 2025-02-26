@@ -63,6 +63,7 @@ export default {
           700: "#993F00",
         },
         'background':'#FAFAFA',
+        'Neutral':'#121212',
         'neutral':{
           100: '#FFFFFF',
           300: '#E3E3E3',

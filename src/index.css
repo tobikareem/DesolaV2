@@ -44,7 +44,7 @@ label{
 
 @keyframes flight {
     0% {
-        transform: translateX(5vw);
+        transform: translateX(0vw);
     }
     100%{
         transform: translateX(100vw);

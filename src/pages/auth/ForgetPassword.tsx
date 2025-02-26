@@ -8,10 +8,11 @@ import { AuthHero } from './AuthHero';
 const ForgetPassword: React.FC = () => {
   return (
     <>
-      <div className="font-work flex h-screen lg:flex-row flex-col md:flex-row w-full">
-        <div className="w-full md:w-1/2 p-6 flex justify-center items-center md:p-10">
-          <div className="w-full max-w-md">
-            <Text as="h1" size='3xl' weight="bold" className="!font-grotesk text-center leading-normal lg:!text-[40px]">
+      <div className="font-work flex h-screen lg:flex-row flex-col w-full">
+        <div className="size-full lg:w-1/2 p-6 flex justify-center items-center md:p-10">
+          
+          <div className="w-full max-w-md -mt-40">
+            <Text as="h1" size="3xl" weight="bold" className="mb-2.5 text-3xl xs:!text-4xl text-center font-grotesk">
               Forget Password?
             </Text>
             <Text as="p" size="sm" className="mb-[52px] text-center text-neutral-500">
@@ -19,22 +20,23 @@ const ForgetPassword: React.FC = () => {
             </Text>
 
             <Input
-              label="Email"
+              label="Email" 
+              labelClassName='!text-neutral !text-base !font-medium'  
               placeholder="Please Enter your email"
               className="text-sm mb-4 w-full rounded-lg"
             />
 
-            <Btn className="w-full bg-gradient-to-b from-[#FF9040] to-[#FF6B00] bg-orange-500 text-white py-1 rounded mt-4">
+            <Btn className="w-full bg-gradient-to-b from-[#FF9040] to-[#FF6B00] text-white py-1 rounded mt-8">
               Send 4-digit code
             </Btn>
 
-            <div className="text-center flex justify-center align-center mt-4">
-              <FaArrowLeft className="mt-1 text-neutral-500" />
+            <div className="text-center flex justify-center gap-2 items-center mt-7">
+              <FaArrowLeft className=" text-black" />
               <Link
                 to={'/signin'}
-                className="text-blue-600 hover:font-semibold text-sm cursor-pointer ml-1"
+                className="text-black  hover:font-semibold text-sm cursor-pointer"
               >
-                back to Sign in
+                Back to Login
               </Link>
             </div>
           </div>
