@@ -6,13 +6,13 @@ import { AiOutlineRollback } from 'react-icons/ai';
 const Error404Page =()=> {
   return(
     <div className="w-screen h-screen bg-secondary-100 p-6">
-      <div className="w-full h-full flex flex-col gap-[60px] items-center justify-center">
+      <div className="w-full h-full flex flex-col gap-[40px] sm:gap-[60px] items-center justify-center">
         <Text
           as="h1"
           color="!text-black"
-          className="font-poppins !text-[64px] font-black"
+          className="font-poppins !text-3xl md:!text-[40px] text-center !font-black leading-normal"
         >
-          404
+          Oops! Nothing to see here.
         </Text>
         <ReactImage
           src="/404.svg"
@@ -20,7 +20,6 @@ const Error404Page =()=> {
         />
         <Link to='/' className="font-poppins flex items-center gap-2 hover:font-semibold text-2xl text-black border-b-[2px] border-black">
           <AiOutlineRollback /> Go Home
-          
         </Link>
       </div>
     </div>

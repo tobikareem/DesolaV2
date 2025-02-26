@@ -10,7 +10,7 @@ import SignUp from './pages/auth/signup';
 import HomeScreen from './pages/home/home';
 import Verify from './pages/auth/verify';
 import Dashboard from './pages/dashboard/dashboard';
-import Error404Page from './pages/error/404';
+import Error404Page from './pages/error/Error404';
 
 type RouteType = {
   path?: string;
