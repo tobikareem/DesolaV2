@@ -2,7 +2,6 @@ import React from 'react';
 import { Text } from './TextComp';
 import { FaInstagram, FaTwitter, FaLinkedin } from 'react-icons/fa';
 import { Link, useLocation } from 'react-router-dom';
-import { Logo } from './Logo';
 import { ENDPOINTS_API_PATH } from '../utils/endpoints';
 import { WEB_PAGES } from '../utils/constants';
 import usePageContent from '../hooks/usePageContent';
@@ -18,91 +17,102 @@ const Footer: React.FC = () => {
   const router = location.pathname;
 
   return (
-    <footer className={` ${router !== '/' ? 'hidden' : ''} bg-primary-700  text-white py-8 mt-8`}>
-      <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
-        <ReactImage
-          src={'/DESOLA.svg'}
-          alt='Desola'
-          className='w-full mb-20'
-        />
-        <div className="flex flex-col lg:flex-row justify-between items-start gap-8 text-left md:text-left">
-          <Logo />
-          <div>
-            <Text
-              as="h3"
-              size="lg"
-              weight="semibold"
-              className="mb-3 text-white"
-            >
-              Page
-            </Text>
-            <ul className="space-y-2 ml-1">
-              {['Home', 'Services', 'Contact', '404'].map((item) => {
-                const route = `#${item.toLowerCase()}`
-                return (
-                  <li key={item} >
-                    <Link to={route}>
-                      <Text as="p" size="sm" className="text-white hover:font-bold">
-                        {item}
-                      </Text>
-                    </Link>
-                  </li>
-                )
-              })
-              }
-            </ul>
-          </div>
-
-          <div className='space-y-3'>
-            <Text
-              as="h3"
-              size="lg"
-              weight="semibold"
-              className="mb-3 text-white"
-            >
-              Contact
-            </Text>
-            <Link to={`tel:${phoneNumber}`}>
-              <Text as="p" size="sm" className="text-white hover:font-bold">
-                {phoneNumber}
+    <footer className={` ${router !== '/' ? 'hidden' : ''} bg-[url('/Landscape.svg')] bg-center bg-cover`}>
+      <div className="w-full h-full py-8 mt-8 bg-black/30 text-white">
+        <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
+          <ReactImage
+            src={'/DESOLA.svg'}
+            alt='Desola'
+            className='w-full mb-20'
+          />
+          <div className="flex flex-col lg:flex-row justify-between items-start gap-8 text-left md:text-left">
+            <div className="flex flex-col gap-3 max-w-[300px]">
+              <ReactImage
+                src={'/Alt-Logo.svg'}
+                alt='Desola'
+                className='w-[120px] lg:w-[200px]'
+              />
+              <Text as="p" size="sm" className="text-white ">
+                Your guide to finding efficient and cost-effective flight options. We search the best deals so you don't have to.
               </Text>
-            </Link>
-            <a href={`mailto:${emailAddr}`} className="text-white hover:font-bold">
-              <Text as="p" size="sm" className='text-white'>
-                {emailAddr}
+            </div>
+            <div>
+              <Text
+                as="h3"
+                size="lg"
+                weight="semibold"
+                className="mb-3 text-white"
+              >
+                Page
               </Text>
-            </a>
+              <ul className="space-y-2 ml-1">
+                {['Home', 'Services', 'Contact'].map((item) => {
+                  const route = `#${item.toLowerCase()}`
+                  return (
+                    <li key={item} >
+                      <Link to={route}>
+                        <Text as="p" size="sm" className="text-white hover:font-bold">
+                          {item}
+                        </Text>
+                      </Link>
+                    </li>
+                  )
+                })
+                }
+              </ul>
+            </div>
 
-          </div>
-
-          <div>
-            <Text
-              as="h3"
-              size="lg"
-              weight="semibold"
-              className="mb-3 text-white"
-            >
-              Follow Us
-            </Text>
-            <div className="flex gap-3">
-              <Link to="">
-                <FaInstagram className="text-xl text-white cursor-pointer" />
+            <div className='space-y-4'>
+              <Text
+                as="h3"
+                size="lg"
+                weight="semibold"
+                className="mb-3 text-white"
+              >
+                Contact
+              </Text>
+              <Link to={`tel:${phoneNumber}`} target='_blank'>
+                <Text as="p" size="sm" className="text-white hover:underline mb-2">
+                  {phoneNumber}
+                </Text>
               </Link>
-              <Link to="">
-                <FaTwitter className="text-xl text-white cursor-pointer" />
-              </Link>
-              <Link to="">
-                <FaLinkedin className="text-xl text-white cursor-pointer" />
+              <Link to={`mailto:${emailAddr}`} target='_blank'>
+                <Text as="p" size="sm" className='text-white hover:underline'>
+                  {emailAddr}
+                </Text>
               </Link>
 
             </div>
-          </div>
-        </div>
 
-        <div className="text-center text-sm mt-5">
-          <Text as="p" size="sm" className="text-white">
-            © {new Date().getFullYear()} Desola. All rights reserved.
-          </Text>
+            <div>
+              <Text
+                as="h3"
+                size="lg"
+                weight="semibold"
+                className="mb-3 text-white"
+              >
+                Follow Us
+              </Text>
+              <div className="flex gap-4">
+                <Link to="">
+                  <FaInstagram className="text-xl text-white cursor-pointer hover:scale-110 transition-transform duration-300 ease-in-out" />
+                </Link>
+                <Link to="">
+                  <FaTwitter className="text-xl text-white cursor-pointer hover:scale-110 transition-transform duration-300 ease-in-out" />
+                </Link>
+                <Link to="">
+                  <FaLinkedin className="text-xl text-white cursor-pointer hover:scale-110 transition-transform duration-300 ease-in-out" />
+                </Link>
+
+              </div>
+            </div>
+          </div>
+
+          <div className="text-center text-sm mt-5">
+            <Text as="p" size="sm" className="text-white">
+              © {new Date().getFullYear()} Desola. All rights reserved.
+            </Text>
+          </div>
         </div>
       </div>
     </footer>
