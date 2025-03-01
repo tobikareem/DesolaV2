@@ -8,6 +8,8 @@ import { AiOutlineCloseCircle } from "react-icons/ai";
 
 export const Navbar = () => {
     const [slider, setSlider] = useState<boolean>(false);
+    const [isDesktop, setIsDesktop] = useState<boolean>(false);
+
 
     const { userName, isAuthenticated, logout } = useAuthInfo();
 
@@ -34,6 +36,24 @@ export const Navbar = () => {
         setActiveSection(`#${sectionId}`)
     }, [location])
 
+    useEffect(()=> {
+        const handleResize = () => {
+            if (window.innerWidth >= 1024) {
+              setIsDesktop(true);
+            } else {
+              setIsDesktop(false);
+            }
+          };
+      
+          window.addEventListener('resize', handleResize);
+          handleResize();
+      
+          return () => {
+            window.removeEventListener('resize', handleResize);
+          };
+      
+    },[])
+
     const smoothScroll = (href: string) => {
         const element = document.querySelector(href);
         if (element) {
@@ -43,7 +63,7 @@ export const Navbar = () => {
 
 
     return (
-        <div className={`fixed ${router !== '/' ? 'hidden' : 'flex'}  items-center w-screen z-40 bg-transparent  left-0 backdrop-blur-[2px] `}>
+        <div className={`fixed ${ router !== '/' && router !== '/dashboard' || isDesktop ? 'hidden' : 'flex'}  items-center w-screen z-40 bg-transparent  left-0 backdrop-blur-[2px] `}>
             <div className="flex w-full justify-between items-center px-4 md:px-8 lg:px-14 xl:px-28 py-4 bg-background">
                 {/* Logo */}
                 
@@ -51,7 +71,7 @@ export const Navbar = () => {
                     <Logo />
                 </div>
                 <div onClick={() => setSlider(prevState => !prevState)}
-                    className="block lg:hidden text-neutral-900 text-2xl">
+                    className={`block lg:hidden ${ router === '/dashboard' ? 'text-primary-600':'text-neutral-900'} text-2xl`}>
                     <GiHamburgerMenu />
                 </div>
                 {/* Desktop Nav */}
