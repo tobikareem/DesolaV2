@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { VscClose } from "react-icons/vsc";
-import { Link, NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { useAuthInfo } from "../hooks/useAuthInfo";
-import { AZURE_B2C } from "../utils/constants";
+import authService from "../services/authService";
 import { Logo } from "./Logo";
 
 export const Navbar = () => {
@@ -81,14 +81,16 @@ export const Navbar = () => {
                         </button>
                     </div>
                 ) : (
-                    <Link
-                        to={AZURE_B2C.SIGN_IN_OUT}
+                    <button
+                        onClick={(e) => {
+                            handleDrawer(e);
+                            authService.signIn();
+                        }}
                         className="hidden lg:flex items-center justify-center h-12 w-[137px] bg-gradient-to-b from-[#FF9040] to-[#FF6B00] text-base text-white font-medium rounded-xl hover:scale-105 transition-transform duration-300 ease-in-out"
                     >
                         Sign In
-                    </Link>
+                    </button>
                 )}
-
                 {/* Mobile Nav */}
                 <div
                     className={`block lg:hidden w-screen h-screen ${slider ? 'translate-x-0  bg-black/60' : 'translate-x-[-100%] bg-transparent'} transition-all duration-200 ease-in fixed top-0 left-0 z-50`} >
@@ -130,10 +132,15 @@ export const Navbar = () => {
                                     </button>
                                 </div>
                             ) : (
-                                <Link to={AZURE_B2C.SIGN_IN_OUT} onClick={handleDrawer}
-                                    className="flex lg:hidden items-center justify-center h-16 w-full bg-gradient-to-b from-[#FF9040] to-[#FF6B00] text-2xl text-white font-medium rounded-xl hover:scale-105 transition-transform duration-300 ease-in-out">
+                                <button
+                                    onClick={(e) => {
+                                        handleDrawer(e);
+                                        authService.signIn();
+                                    }}
+                                    className="flex lg:hidden items-center justify-center h-16 w-full bg-gradient-to-b from-[#FF9040] to-[#FF6B00] text-2xl text-white font-medium rounded-xl hover:scale-105 transition-transform duration-300 ease-in-out"
+                                >
                                     Sign In
-                                </Link>
+                                </button>
                             )}
 
 

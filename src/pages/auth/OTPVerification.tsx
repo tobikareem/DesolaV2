@@ -4,7 +4,6 @@ import { Text } from '../../components/TextComp';
 import { Input } from '../../components/InputField';
 import { Btn } from '../../components/Button';
 import { Logo } from '../../components/Logo';
-import { AuthHero } from './AuthHero';
 
 const OTPVerification: React.FC = () => {
   const [otp, setOtp] = useState<string[]>(['', '', '', '']);

@@ -7,9 +7,9 @@ import { Logo } from '../../components/Logo';
 const ForgetPassword: React.FC = () => {
   return (
     <>
-    <Link to={'/'} className="cursor-pointer  fixed m-2 bg-white">
-            <Logo />
-          </Link>
+      <Link to={'/'} className="cursor-pointer  fixed m-2 bg-white">
+        <Logo />
+      </Link>
       <div className="font-work flex h-screen lg:flex-row flex-col md:flex-row w-full">
         <div className="w-full md:w-1/2 h-auto flex-grow p-6 flex justify-center  md:p-10">
           <div className="w-full max-w-md mt-20">

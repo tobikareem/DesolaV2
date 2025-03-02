@@ -28,7 +28,13 @@ jobs:
           echo "VITE_B2C_1_EDITUSERPROFILE=${{ secrets.VITE_B2C_1_EDITUSERPROFILE }}" >> $GITHUB_ENV
           echo "VITE_B2C_1_PASSWORDRESET=${{ secrets.VITE_B2C_1_PASSWORDRESET }}" >> $GITHUB_ENV
           echo "VITE_B2C_1_SIGNUPSIGNIN=${{ secrets.VITE_B2C_1_SIGNUPSIGNIN }}" >> $GITHUB_ENV
-      
+          echo "VITE_B2C_TENANT=${{ secrets.VITE_B2C_TENANT }}" >> $GITHUB_ENV
+          echo "VITE_B2C_CLIENT_ID=${{ secrets.VITE_B2C_CLIENT_ID }}" >> $GITHUB_ENV
+          echo "VITE_B2C_AUTHORITY=${{ secrets.VITE_B2C_AUTHORITY }}" >> $GITHUB_ENV
+          echo "VITE_B2C_SIGNUP_SIGNIN_POLICY=${{ secrets.VITE_B2C_SIGNUP_SIGNIN_POLICY }}" >> $GITHUB_ENV
+          echo "VITE_B2C_PASSWORD_RESET_POLICY=${{ secrets.VITE_B2C_PASSWORD_RESET_POLICY }}" >> $GITHUB_ENV
+          echo "VITE_B2C_REDIRECT_URI=${{ secrets.VITE_B2C_REDIRECT_URI }}" >> $GITHUB_ENV 
+          echo "VITE_B2C_APPLICATION_SCOPE=${{ secrets.VITE_B2C_APPLICATION_SCOPE }}" >> $GITHUB_ENV 
       - name: Install Dependencies
         run: npm install
         

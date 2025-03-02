@@ -4,7 +4,6 @@ import { Text } from '../../components/TextComp';
 import { Input } from '../../components/InputField';
 import { Btn } from '../../components/Button';
 import { FaKey, FaEye, FaEyeSlash } from 'react-icons/fa';
-import { AuthHero } from './AuthHero';
 import { Logo } from '../../components/Logo';
 const NewPassword: React.FC = () => {
   const [password, setPassword] = useState<string>('');

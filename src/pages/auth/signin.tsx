@@ -1,99 +1,89 @@
 import React, { useState } from 'react';
-import {
-  FaApple,
-  FaEye,
-  FaEyeSlash,
-  FaFacebook,
-  FaGoogle,
-  FaWindows,
-} from 'react-icons/fa';
-import { Link } from 'react-router-dom';
-import { Btn } from '../../components/Button';
+import { Link, useNavigate } from 'react-router-dom';
+import { AuthForm, PasswordField } from '../../components/AuthForm';
 import { Input } from '../../components/InputField';
-import { Logo } from '../../components/Logo';
-import { Text } from '../../components/TextComp';
-import { AuthHero } from './AuthHero';
+import { useAuth } from '../../hooks/useAuthInfo';
+import { WEB_PAGES } from '../../utils/constants';
 
 const SignIn: React.FC = () => {
   const [revealPassword, setRevealPassword] = useState<boolean>(false);
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const { signIn } = useAuth();
+  const navigate = useNavigate();
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleSignIn = async () => {
+
+    if (!email) {
+      setErrorMessage("Please enter your email.");
+      return;
+    }
+
+    setIsSubmitting(true);
+    setErrorMessage(null);
+
+    try {
+      await signIn(email, password);
+      navigate(WEB_PAGES.chat);
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      if (error.errorCode === 'AADB2C90118') {
+        setErrorMessage('Your password has expired. Please reset it.');
+      } else {
+        setErrorMessage(error.message || 'Failed to sign in. Please check your credentials.');
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
-    <>
-      <Link to={'/'} className="cursor-pointer  fixed m-2 bg-white">
-        <Logo />
-      </Link>
-    <div className="flex h-screen lg:flex-row flex-col md:flex-row w-full">
-      <div className="w-full md:w-1/2 p-6 flex-grow flex justify-center md:p-10">
-        <div className="w-full md:max-w-md mt-10">
-      
-          <Text as="h1" size="2xl" weight="bold" className="mb-8 text-center font-grotesk">
-            Get Started Now
-          </Text>
+    <AuthForm
+      title="Get Started Now"
+      buttonText={isSubmitting ? "Signing In..." : "Sign In"}
+      footerText="Don't Have an account?"
+      footerLinkText="Sign Up"
+      footerLinkTo="/signup"
+      onSubmit={handleSignIn}
+      isSubmitting={isSubmitting}
+      errorMessage={errorMessage}
+    >
+      <>
+        <Input
+          label="Email"
+          placeholder="Please Enter your email"
+          className="text-sm mb-2 w-full rounded-lg"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          disabled={isSubmitting}
+          name='email'
+        />
 
-          <Input
-            label="Email"
-            placeholder="Please Enter your email"
-            className="text-sm mb-2 w-full rounded-lg"
+        <div className="mb-4">
+          <PasswordField
+            label="Password"
+            placeholder="Enter Password"
+            revealed={revealPassword}
+            setRevealed={setRevealPassword}
+            className="mb-1"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            disabled={isSubmitting}
           />
-
-          <div className="relative w-full mb-4">
-            <Input
-              type={revealPassword ? 'text' : 'password'}
-              label="Password"
-              placeholder="Enter Password"
-              className="text-sm mb-1 w-full rounded-lg"
-            />
-            {revealPassword ? (
-              <FaEyeSlash
-                className="text-gray-400 cursor-pointer absolute right-3 top-11 transform -translate-y-1/2"
-                onClick={() => setRevealPassword(false)}
-              />
-            ) : (
-              <FaEye
-                className="text-gray-400 cursor-pointer absolute right-3 top-10 transform -translate-y-1/2"
-                onClick={() => setRevealPassword(true)}
-              />
-            )}
-            <Link
-              to={'/reset'}
-              className="mb-3 flex justify-end  text-sm text-neutral-500 cursor-pointer hover:font-semibold"
-            >
-              Forget Password?
-            </Link>
-          </div>
-
-          <Btn className="w-full bg-gradient-to-b from-[#FF9040] to-[#FF6B00] bg-orange-500 text-white py-1 rounded mb-8">
-            Sign In
-          </Btn>
-
-          <div className="flex items-center mb-6">
-            <div className="flex-grow border-t border-gray-300"></div>
-            <Text size="sm" className="mx-3 text-gray-500">
-              Or
-            </Text>
-            <div className="flex-grow border-t border-gray-300"></div>
-          </div>
-
-          <div className="flex justify-center gap-8 mb-6">
-            <FaGoogle className="text-xl text-red-500 cursor-pointer hover:scale-125 transition-all duration-300 ease-in-out" />
-            <FaFacebook className="text-xl text-blue-600 cursor-pointer hover:scale-125 transition-all duration-300 ease-in-out" />
-            <FaApple className="text-xl text-black cursor-pointer hover:scale-125 transition-all duration-300 ease-in-out" />
-            <FaWindows className="text-xl text-blue-500 cursor-pointer hover:scale-125 transition-all duration-300 ease-in-out" />
-          </div>
-
-          <div className="text-center">
-            <Text size="sm">
-              Don't Have an account?{' '}
-              <Link to={'/signup'} className="text-blue-600 hover:font-semibold">
-                Sign Up
-              </Link>
-            </Text>
-          </div>
+          <Link
+            to={'/reset'}
+            className="mb-3 flex justify-end text-sm text-neutral-500 cursor-pointer hover:font-semibold"
+          >
+            Forget Password?
+          </Link>
         </div>
-      </div>
-      <AuthHero />
-    </div>
-    </>
+      </>
+    </AuthForm>
   );
 };
 

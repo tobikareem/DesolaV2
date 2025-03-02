@@ -1,5 +1,5 @@
 import axios from "axios";
-import { VITE_API_BASE_URL, VITE_API_TOKEN, AZURE_B2C, SESSION_VALUES } from "../utils/constants";
+import { SESSION_VALUES, VITE_API_BASE_URL, VITE_API_TOKEN } from "../utils/constants";
 import authService from "./authService";
 
 const apiClient = axios.create({
@@ -7,51 +7,54 @@ const apiClient = axios.create({
     headers: {
         "Content-Type": "application/json"
     }
-})
+});
 
 apiClient.interceptors.request.use(
     async (config) => {
         config.headers['x-functions-key'] = getFunctionKey();
 
-        let accessToken = await authService.getAccessToken();
+        let accessToken = sessionStorage.getItem(SESSION_VALUES.azure_b2c_accessToken);
 
-        if (!accessToken) {
-            const refreshToken = sessionStorage.getItem(SESSION_VALUES.azure_b2c_refreshToken);
+        if (accessToken && !authService.isTokenExpired(accessToken)) {
+            config.headers["Authorization"] = `Bearer ${accessToken}`;
+            return config;
+        }
 
-            if (!refreshToken) {
-                console.warn("No refresh token available. User likely not logged in.");
+        // Token is missing or expired, try to get a new one silently
+        try {
+            accessToken = await authService.getToken();
+
+            if (accessToken) {
+                config.headers["Authorization"] = `Bearer ${accessToken}`;
                 return config;
             }
 
-            try {
-                console.log("Access token expired. Attempting to refresh...");
-                const newTokenData = await authService.refreshToken();
-                accessToken = newTokenData?.access_token;
-            } catch (error) {
-                console.error("Token refresh failed. Redirecting to login.", error);
-                authService.logout();
-                window.location.href = AZURE_B2C.SIGN_IN_OUT;
-                return Promise.reject(error);
+            const isAuthenticated = sessionStorage.getItem(SESSION_VALUES.azure_isAuthenticated) === 'true';
+
+            if (isAuthenticated) {
+                console.warn("Failed to acquire token silently for authenticated user");
+                // Don't redirect here, just return the config without token
+                // The API call may fail, but the UI can handle that appropriately
             }
-        }
 
-        if (accessToken) {
-            config.headers["Authorization"] = `Bearer ${accessToken}`;
+            return config;
+        } catch (error) {
+            console.error("Error acquiring token:", error);
+            // Don't automatically redirect on failed requests
+            // Let the API call fail and let the UI handle the error
+            return config;
         }
-
-        return config;
     },
     (error) => Promise.reject(error)
 );
 
-const getFunctionKey = () => {
+const getFunctionKey = (): string => {
     const storedKey = sessionStorage.getItem(SESSION_VALUES.api_function_key);
-
     if (!storedKey) {
-        sessionStorage.setItem(SESSION_VALUES.api_function_key, VITE_API_TOKEN);
-        return VITE_API_TOKEN;
+        const key = VITE_API_TOKEN || '';
+        sessionStorage.setItem(SESSION_VALUES.api_function_key, key);
+        return key;
     }
-
     return storedKey;
 };
 

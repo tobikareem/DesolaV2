@@ -1,112 +1,193 @@
+import { AccountInfo, AuthenticationResult, InteractionRequiredAuthError } from "@azure/msal-browser";
 import { jwtDecode } from "jwt-decode";
+import { msalInstance } from "../auth/msalConfig";
 import { IdToken } from "../models/IdToken";
-import { AZURE_B2C, SESSION_VALUES, VITE_API_BASE_URL } from "../utils/constants";
-import { ENDPOINTS_API_PATH } from "../utils/endpoints";
-import apiClient from "./apiClient";
+import { AZURE_B2C, ERROR_MESSAGES, SESSION_VALUES } from "../utils/constants";
+import { MsalTokenKeys } from "../models/MsalTokenKeys";
 
 const authService = {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    exchangeCodeForToken: async (code: string): Promise<any> => {
-        try {
-            const response = await apiClient.post(`${VITE_API_BASE_URL}/${ENDPOINTS_API_PATH.authToken}`, { code });
-
-            const { access_token, refresh_token, id_token, expires_in, refresh_token_expires_in } = response.data;
-
-            sessionStorage.setItem(SESSION_VALUES.azure_b2c_accessToken, access_token);
-            sessionStorage.setItem(SESSION_VALUES.azure_b2c_refreshToken, refresh_token);
-            sessionStorage.setItem(SESSION_VALUES.azure_b2c_idToken, id_token);
-            sessionStorage.setItem(SESSION_VALUES.azure_b2c_expiresAt, (Date.now() + expires_in * 1000).toString());
-            sessionStorage.setItem(SESSION_VALUES.azure_b2c_refreshTokenExpiresAt, (Date.now() + refresh_token_expires_in * 1000).toString());
-
-            authService.getUserFromToken();
-            window.dispatchEvent(new Event("userSignedIn"));
-
-        } catch (error) {
-            console.error("Error exchanging code for token:", error);
-            throw error;
-        } finally {
-            sessionStorage.removeItem(SESSION_VALUES.azure_b2c_authorizationCode)
-        }
-    },
-
+    /** Retrieve access token */
     getAccessToken: (): string | null => {
         const token = sessionStorage.getItem(SESSION_VALUES.azure_b2c_accessToken);
-        if (!token) return null;
-
-        if (authService.isTokenExpired()) {
-            console.warn("Access token expired.");
+        if (!token || authService.isTokenExpired(token)) {
+            console.warn("Access token expired or not found.");
             return null;
         }
-
         return token;
     },
 
-    isTokenExpired: (): boolean => {
-        const expiresAtStr = sessionStorage.getItem(SESSION_VALUES.azure_b2c_expiresAt);
-        if (!expiresAtStr) return true;
-        const expiresAt = parseInt(expiresAtStr, 10);
-        return Date.now() >= expiresAt;
-    },
-
-    isRefreshTokenExpired: (): boolean => {
-        const expiresAtStr = sessionStorage.getItem(SESSION_VALUES.azure_b2c_refreshTokenExpiresAt);
-        if (!expiresAtStr) return true;
-        const expiresAt = parseInt(expiresAtStr, 10);
-        return Date.now() >= expiresAt;
-    },
-
-    isUserLoggedIn: (): boolean => {
-        const token = sessionStorage.getItem(SESSION_VALUES.azure_b2c_accessToken);
-        if (!token) return false;
-        return !authService.isTokenExpired();
-    },
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    refreshToken: async (): Promise<any> => {
+    /** Check if token is expired */
+    isTokenExpired: (token: string): boolean => {
         try {
-            const refreshToken = sessionStorage.getItem(SESSION_VALUES.azure_b2c_refreshToken);
-            if (!refreshToken || authService.isRefreshTokenExpired()) {
-                window.location.href = AZURE_B2C.SIGN_IN_OUT;
-            }
-            const response = await apiClient.post(`${VITE_API_BASE_URL}/${ENDPOINTS_API_PATH.authRefresh}`, { refreshToken });
-            const { access_token, refresh_token, expiresIn } = response.data;
-
-            sessionStorage.setItem(SESSION_VALUES.azure_b2c_accessToken, access_token);
-            sessionStorage.setItem(SESSION_VALUES.azure_b2c_refreshToken, refresh_token);
-            sessionStorage.setItem(SESSION_VALUES.azure_b2c_expiresAt, (Date.now() + expiresIn * 1000).toString());
-
-            return response.data;
+            const decoded: { exp: number } = jwtDecode(token);
+            return Date.now() >= decoded.exp * 1000;
         } catch (error) {
-            console.error("Error refreshing token:", error);
-            authService.logout();
-            throw error;
+            console.error("Failed to decode access token:", error);
+            return true;
         }
     },
 
-    getUserFromToken: (): string | null => {
-        const idToken = sessionStorage.getItem(SESSION_VALUES.azure_b2c_idToken);
-        if (!idToken) return null;
+    /** Check if user is logged in */
+    isUserLoggedIn: (): boolean => {
+        const token = authService.getAccessToken();
+        return token !== null;
+    },
+
+    /** Refresh access token */
+    refreshToken: async (): Promise<string | null> => {
+        const account = msalInstance.getActiveAccount();
+        if (!account) {
+            console.warn("No active account for token refresh");
+            return null;
+        }
 
         try {
-            const decoded: IdToken = jwtDecode(idToken);
-            const userName = decoded.given_name ?? decoded.name ?? "User";
+            const response = await msalInstance.acquireTokenSilent({
+                scopes: authService.loginRequest.scopes,
+                account
+            });
+            return response.accessToken;
+        } catch (error) {
+            console.error("Failed to refresh token:", error);
+            return null;
+        }
+    },
 
-            sessionStorage.setItem(SESSION_VALUES.azure_userName, userName);
+    /** Get user details from ID token */
+    getUserFromIdToken: (): string | null => {
+        let idToken = sessionStorage.getItem(SESSION_VALUES.azure_b2c_idToken);
+        // if (!idToken) {
+        //     sessionStorage.removeItem(SESSION_VALUES.azure_isAuthenticated);
+        //     return null;
+        // }
 
-            return userName;
+        const msalTokenKeysJson = sessionStorage.getItem(SESSION_VALUES.azure_msal_token_keys);
+
+        try {
+            if (msalTokenKeysJson) {
+                const msalTokenKeys: MsalTokenKeys = JSON.parse(msalTokenKeysJson);
+                idToken = msalTokenKeys.idToken[0];
+                // const accessTokenKey = msalTokenKeys.accessToken[0];
+                // const refreshTokenKey = msalTokenKeys.refreshToken[0];
+
+
+                const decoded: IdToken = jwtDecode(idToken);
+
+                // Validate token expiration
+                const currentTime = Date.now() / 1000;
+                if (decoded.exp && decoded.exp < currentTime) {
+                    console.warn("ID token has expired");
+                    sessionStorage.removeItem(SESSION_VALUES.azure_isAuthenticated);
+                    return null;
+                }
+
+                const userName = decoded.given_name ?? decoded.name ?? "User";
+                sessionStorage.setItem(SESSION_VALUES.azure_userName, userName);
+                sessionStorage.setItem(SESSION_VALUES.azure_isAuthenticated, "true");
+
+                const userId = decoded.oid || decoded.sub;
+                if (userId !== undefined) {
+                    sessionStorage.setItem(SESSION_VALUES.azure_b2c_userId, userId);
+                }
+
+                const userEmail = decoded.emails?.[0] || decoded.email;
+                if (userEmail !== undefined) {
+                    sessionStorage.setItem(SESSION_VALUES.azure_b2c_userEmail, userEmail);
+                }
+
+                return userName;
+            }
+            return null;
         } catch (error) {
             console.error("Failed to decode ID token:", error);
             return null;
         }
     },
 
-    signIn: () => {
-        window.location.href = AZURE_B2C.SIGN_IN_OUT;
+    /** Sign in user using MSAL */
+    signIn: async (): Promise<void> => {
+        try {
+            await msalInstance.loginRedirect(authService.loginRequest);
+        } catch (error) {
+            console.error(ERROR_MESSAGES.loginFailed, error);
+            throw error;
+        }
     },
 
-    logout: () => {
-        sessionStorage.clear();
-        window.location.href = "/";
+    /** Sign up new user using MSAL */
+    signUp: async (): Promise<AuthenticationResult | null> => {
+        try {
+            const signUpRequest = { ...authService.loginRequest, authority: AZURE_B2C.AUTHORITY };
+            const response = await msalInstance.loginPopup(signUpRequest);
+
+            if (response.account) {
+                msalInstance.setActiveAccount(response.account);
+                sessionStorage.setItem(SESSION_VALUES.azure_b2c_idToken, response.idToken ?? "");
+                return response;
+            }
+
+            return null;
+        } catch (error) {
+            console.error("Sign-up error:", error);
+            throw error;
+        }
+    },
+
+    /** Sign out user */
+    signOut: async (): Promise<void> => {
+        try {
+            const account = msalInstance.getActiveAccount();
+            if (account) {
+                Object.values(SESSION_VALUES).forEach(key => {
+                    sessionStorage.removeItem(key);
+                });
+                await msalInstance.logoutPopup();
+            }
+            window.location.href = "/";
+        } catch (error) {
+            console.error("Logout error:", error);
+            sessionStorage.clear();
+            window.location.href = "/";
+        }
+    },
+
+    /** Get current MSAL account */
+    getCurrentAccount: (): AccountInfo | null => {
+        const accounts = msalInstance.getAllAccounts();
+        return accounts.length > 0 ? accounts[0] : null;
+    },
+
+    /** Acquire token silently or via popup */
+    getToken: async (): Promise<string | null> => {
+        const account = msalInstance.getActiveAccount();
+        if (!account) {
+            console.warn("No active account. Redirecting to sign-in.");
+            authService.signIn();
+            return null;
+        }
+
+        try {
+            const response = await msalInstance.acquireTokenSilent({
+                scopes: authService.loginRequest.scopes,
+                account
+            });
+
+            return response.accessToken;
+        } catch (error) {
+            if (error instanceof InteractionRequiredAuthError) {
+                console.warn("Silent token acquisition failed, falling back to popup.");
+                const response = await msalInstance.acquireTokenPopup(authService.loginRequest);
+                return response.accessToken;
+            }
+
+            console.error("Token acquisition failed:", error);
+            return null;
+        }
+    },
+
+    /** MSAL Login Request Scopes */
+    loginRequest: {
+        scopes: ["openid", "profile", "email", "offline_access", AZURE_B2C.APPLICATION_SCOPE]
     }
 };
 

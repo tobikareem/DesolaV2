@@ -6,7 +6,7 @@ import { WEB_PAGES } from "../../../utils/constants";
 import { ENDPOINTS_API_PATH } from "../../../utils/endpoints";
 
 const FaqSupport = () => {
-    const { content: faqData, loading, error } = usePageContent(`/${ENDPOINTS_API_PATH.page}`,`${WEB_PAGES.home}`, "FAQ");
+    const { content: faqData, loading, error } = usePageContent(`${ENDPOINTS_API_PATH.page}`,`${WEB_PAGES.home}`, "FAQ");
     const [open, setOpen] = useState<boolean[]>([]);
 
     const toggleState = (index: number) => {
