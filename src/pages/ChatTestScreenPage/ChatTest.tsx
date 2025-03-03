@@ -19,7 +19,7 @@ const ChatTest: React.FC = () => {
 
   return (
     <>
-      <div className="flex">
+      <div className="flex overflow-hidden">
         <div className="flex flex-col border w-[60%] h-screen bg-gray-50">
           <div
             ref={scrollContainerRef}
