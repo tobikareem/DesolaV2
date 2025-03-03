@@ -16,10 +16,10 @@ const Contact = () => {
 
     return (
         <section id="contact"
-            className="bg-[#F5F5F5] w-full py-18 lg:py-30 gap-10 px-4 md:px-8 lg:px-28 ">
-            <div className="flex flex-col lg:flex-row w-full gap-8">
+            className="bg-[#FFF8F2] w-full py-18 lg:py-30 gap-10 px-4 md:px-8 lg:px-28 ">
+            <div className="flex flex-col lg:flex-row w-full gap-8 lg:!h-[860px]  max-w-7xl mx-auto">
 
-                <div className="flex flex-col flex-1 bg-white rounded-3xl p-8">
+                <div className="flex flex-col lg:w-1/2 h-full bg-white rounded-2xl p-8">
                     <div className={`cursor-pointer bg-gradient-to-r from-white from-[05%] to-[98%]  to-[#CECECE20] border border-[#E4E4E7] py-3 px-3.5 w-fit rounded-[60px] font-poppins text-neutral-800 uppercase`}>
                         Get in Touch
                     </div>
@@ -68,29 +68,29 @@ const Contact = () => {
                         </div>
 
                         <Btn type="submit"
-                            className="mt-3 bg-gradient-to-b text-nowrap h-12 from-[#FF9040] to-[#FF6B00] w-full text-base  text-white">
+                            className="bg-gradient-to-b text-nowrap py-3 from-[#FF9040] to-[#FF6B00] w-full text-base text-white">
                             Send Message
                         </Btn>
                     </form>
                 </div>
 
-                <div className="flex flex-col flex-1 gap-8">
-                    <div className="bg-white w-full rounded-3xl overflow-hidden hover:scale-105 transition-all duration-300 ease-in-out ">
+                <div className="flex flex-col lg:w-1/2 h-full gap-8">
+                    <div className="bg-white w-full h-[72%] rounded-2xl overflow-hidden hover:scale-105 transition-all duration-300 ease-in-out ">
                         <ReactImage src={'/contact.svg'}
                             alt="contact"
-                            className="w-full"
+                            className="w-full h-full block object-cover object-center"
                         />
                     </div>
 
                     {loading && <p>Loading Contact...</p>}
                     {error && <p>Error fetching Contact: {error}</p>}
 
-                    <div className=" bg-white w-full h-fit rounded-3xl px-4 py-6 lg:px-8 lg:py-8 ">
+                    <div className=" bg-white w-full h-[28%] rounded-2xl px-4 py-6 lg:px-8 lg:py-8 ">
                         <div className="flex flex-col w-full gap-4">
                             {
                                 faqData?.RowValue?.split(";").map((item: string, index: number) => (
                                     <div key={item}
-                                        className="flex w-full h-20 px-5 items-center bg-[#F3F3F3] rounded-2xl gap-2 text-nowrap font-inter font-normal text-[#15141F] text-base sm:text-xl hover:scale-105 transition-all duration-300 ease-in-out"
+                                        className="flex w-full h-20 px-5 items-center bg-[#F3F3F3] rounded-2xl gap-2 text-nowrap font-work font-normal text-[#15141F] text-base sm:text-xl hover:scale-105 transition-all duration-300 ease-in-out"
                                     >
                                         <div className="bg-[#0D3180] flex items-center justify-center w-10 h-10 border-4 border-[#0D3180/30] rounded-full text-white text-base box-border">
                                             {ContactInfo[index]?.icon}

@@ -10,7 +10,7 @@ import { WhyChooseUs } from "./sections/WhyChooseUs";
 
 const HomeScreen = () => {
   return (
-    <main className="w-full bg-white">
+    <main className="w-screen bg-background">
       <Hero />
       <HowItWorks />
       <WhyChooseUs />

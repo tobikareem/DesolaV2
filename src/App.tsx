@@ -1,16 +1,18 @@
-import { JSX } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { JSX, useEffect, useState } from 'react';
+import { Route, Routes, useLocation } from 'react-router-dom';
 import './App.css';
 import Callback from './auth/Callback';
 import Footer from './components/Footer';
 import { Navbar } from './components/Navbar';
 import ForgetPassword from './pages/auth/ForgetPassword';
-import NewPassword from './pages/auth/NewPassword';
-import OTPVerification from './pages/auth/OTPVerification';
 import SignIn from './pages/auth/signin';
 import SignUp from './pages/auth/signup';
 import HomeScreen from './pages/home/home';
-import ChatTest from './pages/ChatTestScreenPage/ChatTest';
+import Verify from './pages/auth/verify';
+import Dashboard from './pages/dashboard/dashboard';
+import Error404Page from './pages/error/Error404';
+import { Preloader } from './components/Preloader';
+import { GlobalProvider } from './hooks/contextProvider';
 
 type RouteType = {
   path?: string;
@@ -19,31 +21,67 @@ type RouteType = {
 }
 
 function App() {
+  const router = useLocation();
+  
+  
   const routes: RouteType[] = [
     { path: '/', element: <HomeScreen />, name: 'Home' },
     { path: '/signin', element: <SignIn />, name: 'Sign In' },
     { path: '/signup', element: <SignUp />, name: 'Sign Up' },
     { path: '/reset', element: <ForgetPassword />, name: 'Forget Password' },
-    { path: '/verify', element: <OTPVerification />, name: 'Verify' },
-    { path: '/password-reset', element: <NewPassword />, name: 'PasswordReset' },
-    { path: '/chat', element: <ChatTest />, name: 'Chat' },
-    { path: '/callback', element: <Callback />, name: 'Callback' }
+    { path: '/verify', element: <Verify />, name: 'Verify' },
+    { path: '/callback', element: <Callback />, name: 'Callback' },
+    { path: '/dashboard', element: <Dashboard />, name: 'Dashboard' },
+    {path:'*', element:<Error404Page/>},
   ];
 
+  const [showPreloader, setShowPreloader] = useState<string>('');
+
+  
+  useEffect((): (() => void) => {
+
+    const handlePreloaderFn =()=> {
+      setShowPreloader('hidden')
+    }
+
+    if (router.pathname !== '/' ) {
+      handlePreloaderFn()
+    }
+
+    const time: number = 3200;
+
+    const firstTimeLoad = sessionStorage.getItem('Load') === 'true'; 
+
+    if(firstTimeLoad){
+      handlePreloaderFn()
+    } 
+      const timer: NodeJS.Timeout = setTimeout((): void => {
+        sessionStorage.setItem('Load','true')
+        handlePreloaderFn()
+      },time )
+    
+
+    return (): void => {
+      clearTimeout(timer)
+    }
+  },[router.pathname])
+
+
   return (
-
-    <div className="app-container h-screen">
-      <Navbar />
-      <main className="">
-        <Routes>
-          {routes.map((route) => (
-            <Route key={route.name} path={route.path} element={route.element} />
-          ))}
-        </Routes>
-      </main>
-      <Footer />
-    </div>
-
+    <>
+      <GlobalProvider>
+        <Preloader visibility={showPreloader}/>
+        <Navbar />
+        <main className="">
+          <Routes>
+            {routes.map((route) => (
+              <Route key={route.name} path={route.path} element={route.element} />
+            ))}
+          </Routes>
+        </main>
+        <Footer />
+      </GlobalProvider>
+    </>
   );
 }
 

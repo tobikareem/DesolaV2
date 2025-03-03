@@ -38,8 +38,8 @@ export const LeftPane: React.FC<LeftPaneProps> = ({
   flightClass,
 }) => {
   return (
-    <div className="flex w-[40%] h-screen">
-      <div className="w-20 min-w-[80px] items-center px-10 py-8 border-r gap-6 flex  flex-col">
+    <div className="hidden lg:flex w-[40%] h-screen">
+      <div className="w-[10%] items-center px-10 py-8 border gap-6 flex  flex-col">
         <FaHome
           className="text-primary-600 cursor-pointer hover:scale-110 transition duration-300"
           size={24}
