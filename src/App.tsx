@@ -12,7 +12,7 @@ import Verify from './pages/auth/verify';
 import Dashboard from './pages/dashboard/dashboard';
 import Error404Page from './pages/error/Error404';
 import { Preloader } from './components/Preloader';
-import { GlobalProvider } from './hooks/ContextProvider';
+import { GlobalProvider } from './hooks/contextProvider';
 
 type RouteType = {
   path?: string;

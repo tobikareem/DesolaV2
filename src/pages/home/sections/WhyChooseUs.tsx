@@ -8,7 +8,7 @@ export const WhyChooseUs = () => {
     const navigate = useNavigate();
     return (
         <section id="why-choose-us"
-            className="flex flex-col lg:flex-row w-full py-18 lg:py-30 px-4 md:px-8 lg:px-28 gap-8"
+            className="flex flex-col lg:flex-row lg:items-center  w-full py-18 lg:py-30 px-4 md:px-8 lg:px-28 gap-8"
         >
             <div className="block w-full hover:scale-105 transition-all duration-300 ease-in-out">
                 <ReactImage

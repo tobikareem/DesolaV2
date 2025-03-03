@@ -1,5 +1,5 @@
 import { ReactNode, useState } from "react"
-import { GlobalContext } from "./GlobalContext";
+import { GlobalContext } from "./globalContext";
 
 
 interface ContextProps {

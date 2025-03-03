@@ -11,7 +11,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   loading?: boolean;
   fontStyle?: "grotesk" | "work" | "inter" | 'vietnam-pro' | "poppins" ;
   weight?: 'light' | 'normal' | 'medium' | 'semibold' | 'bold' | 'extrabold';
-  radius?: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl'| 'full' ;
+  radius?: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl'| 'full' | '48px' ;
 }
 
 
@@ -24,7 +24,7 @@ export const Btn = ({
   size = 'base',
   fontStyle = 'work',
   weight = 'semibold',
-  radius = 'xl'
+  radius = '48px'
 
 }: ButtonProps) => {
 
@@ -58,6 +58,7 @@ export const Btn = ({
     'xl':'rounded-xl',
     '2xl': 'rounded-2xl',
     '3xl': 'rounded-3xl',
+    '48px': 'rounded-[48px]',
     'full': 'rounded-full',
   }
 

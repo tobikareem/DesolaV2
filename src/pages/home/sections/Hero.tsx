@@ -11,19 +11,19 @@ export const Hero = () => {
   return (
     <section
       id="home"
-      className="relative flex flex-col items-center px-4 md:px-8 lg:px-28 w-full bg-[url('/Hero-bg.svg')] bg-cover bg-center bg-no-repeat h-[100svh]  lg:min-h-[100svh] "
+      className="relative flex flex-col justify-between items-center px-4 md:px-8 lg:px-28 w-full bg-[url('/Hero-bg.svg')] bg-cover bg-center bg-no-repeat min-h-[80svh]  lg:min-h-[100svh] "
     >
-      <div className="md:hidden w-screen absolute top-20">
+      {/* <div className="md:hidden w-screen absolute top-20">
         <FlightAnimation props="flight !w-[60px]" />
-      </div>
+      </div> */}
       <div className="relative flex flex-col items-center mt-24 xs:mt-30 md:mt-34 lg:mt-48 text-center">
-        <div className='w-full flex flex-col lg:flex-row gap-4 lg:gap-10 lg:justify-between z-[5]'>
+        <div className='w-full flex flex-col lg:flex-row lg:items-start gap-4 lg:gap-10 lg:justify-between z-[5]'>
           <div className="lg:w-1/2">
             <Text
               as="h1"
               weight="bold"
               color='text-white'
-              className="!font-grotesk !text-4xl md:!text-[56px] xl:!text-[96px] !leading-tight backdrop-blur-[2px] lg:text-left"
+              className="!font-grotesk !text-4xl md:!text-[62px] xl:!text-[96px] !leading-tight lg:!leading-tighter xl:!leading-tight lg:text-left"
             >
               Find the Best Flight Deals
             </Text>
@@ -34,7 +34,7 @@ export const Hero = () => {
               weight="medium"
               size="base"
               color="text-white"
-              className="mt-8 font-work text-base lg:text-lg text-center lg:text-left z-[5]"
+              className="lg:!mt-3 max-w-[450px] mx-auto lg:mx-0 font-work text-base lg:text-lg text-center lg:text-left z-[5]"
             >
               Your guide to finding efficient and cost-effect flight options. We
               search the best deals so you don't have to.
@@ -44,7 +44,7 @@ export const Hero = () => {
                 See the Best Deals
               </Btn>)
               :
-              (<div className="flex flex-col md:flex-row w-full justify-center lg:justify-normal mt-8 gap-4 z-30">
+              (<div className="flex flex-col md:flex-row w-full lg:max-w-[440px] justify-center lg:justify-normal mt-8 gap-4 z-30 ">
                 <Btn
                   onClick={() => authService.signIn()}
                   className="bg-white w-full md:w-[250px] text-nowrap lg:text-lg lg:px-7 lg:h-14 text-primary-500 !rounded-[48px]"
@@ -59,12 +59,12 @@ export const Hero = () => {
           </div>
         </div>
       </div>
-      <div className='w-screen relative hidden md:flex'>
-        <div className="w-screen absolute top-24 lg:top-5 ">
-          <FlightAnimation props="flight" />
+      <div className='w-screen relative flex'>
+        <div className="w-screen absolute md:top-24 lg:top-5 ">
+          <FlightAnimation props="flight w-[50px] sm:w-20" />
         </div>
       </div>
-      <div className="absolute bottom-5 w-full flex justify-center">
+      <div className="w-full flex justify-center">
         <ReactImage
           src="/Aero.png"
           alt="Desola-logo"
@@ -75,9 +75,9 @@ export const Hero = () => {
          <ReactImage
           src="/Aero.png"
           alt="Desola-logo"
-          width={800}
-          height={1000}
-          className="xl:hidden"
+          width={600}
+          height={600}
+          className="w-full object-fill object-center xl:hidden"
         />
       </div>
     </section>
