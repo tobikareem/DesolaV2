@@ -73,7 +73,7 @@ const Dashboard: React.FC = () => {
           <div
             ref={scrollContainerRef}
             onWheel={handleScroll}
-            className="hidden lg:flex h-24 w-full overflow-y-hidden overflow-x-auto whitespace-nowrap no-scrollbar items-center gap-2 p-10 border-b bg-neutral-100"
+            className="hidden lg:flex h-24  w-full overflow-y-hidden overflow-x-auto whitespace-nowrap no-scrollbar items-center gap-2 p-10  border-b bg-neutral-100"
           >
             {
               Airports?.map((item:string,idx:number)=>(
@@ -114,17 +114,17 @@ const Dashboard: React.FC = () => {
             </div> */}
           </div>
 
-          <div className="flex flex-col flex-1 bg-background space-y-4 mt-14 lg:mt-0 p-5  overflow-y-auto">
+          <div className="flex flex-col flex-1 bg-background space-y-4 mt-16 lg:mt-0 p-5 lg:pl-20  overflow-y-auto">
             {
               ChatSystem?.map((item: { id: number; send?: string ; receive?: undefined; } | {id:number; send?: undefined ; receive?: string  }) => {
                 const position = item?.send === undefined;
               return(
                 <div key={item?.id}
-                  className={`font-work flex items-center ${position ? 'items-end justify-end' : 'items-start'} space-x-2 `}>
+                  className={`font-work flex  ${position ? 'justify-end' : 'items-start'} space-x-2 `}>
                   { item?.send === undefined ? 
-                      <FaUser className="bg-white border border-primary-100 text-primary-500 h-10 w-10 rounded-full p-2 text-4xl" />
+                      <FaUser className="bg-white border border-primary-100 text-primary-500 size-7 p-1.5 rounded-full text-lg " />
                       :
-                      <BsStars className="bg-primary-500 text-white h-10 w-10 rounded-full p-2 text-4xl" />
+                      <BsStars className="bg-primary-500 text-white  size-7 p-1.5 rounded-full text-lg " />
                   }
                   <span className={`${position ? 'bg-secondary-100' : 'bg-primary-100'} text-neutral p-3 rounded-lg`}>
                     {item?.send ?? item?.receive}
