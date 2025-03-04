@@ -1,6 +1,5 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import authService from "../services/authService";
-import { AuthContext, AuthContextType } from "../auth/AuthContext";
 import { SESSION_VALUES } from "../utils/constants";
 
 export const useAuthInfo = () => {
@@ -10,10 +9,10 @@ export const useAuthInfo = () => {
     const loadUser = () => {
         // Try to get user from ID token
         const user = authService.getUserFromIdToken();
-        
+
         // Check authentication status
         const authStatus = sessionStorage.getItem(SESSION_VALUES.azure_isAuthenticated) === "true";
-        
+
         setUserName(user);
         setIsAuthenticated(!!user && authStatus);
     };
@@ -24,7 +23,7 @@ export const useAuthInfo = () => {
         // Set up event listeners for auth changes
         const handleUserSignedIn = () => loadUser();
         window.addEventListener("userSignedIn", handleUserSignedIn);
-        
+
         // Check authentication status periodically
         const intervalId = setInterval(() => {
             loadUser();
@@ -43,12 +42,4 @@ export const useAuthInfo = () => {
     }
 
     return { userName, isAuthenticated, logout: signOut };
-};
-
-export const useAuth = (): AuthContextType => {
-    const context = useContext(AuthContext);
-    if (context === undefined) {
-        throw new Error('useAuth must be used within an AuthProvider');
-    }
-    return context;
 };

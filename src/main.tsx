@@ -6,14 +6,21 @@ import App from './App.tsx'
 import { msalInstance } from './auth/msalConfig.ts'
 import './index.css'
 
+async function initializeMsal() {
+  await msalInstance.initialize();
+  console.log("MSAL Initialized Successfully");
+}
 
-
-createRoot(document.getElementById('root')!).render(
-  <MsalProvider instance={msalInstance}>
-    <StrictMode>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </StrictMode>
-  </MsalProvider>
-);
+initializeMsal().then(() => {
+  createRoot(document.getElementById('root')!).render(
+    <MsalProvider instance={msalInstance}>
+      <StrictMode>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </StrictMode>
+    </MsalProvider>
+  );
+}).catch((error) => {
+  console.error("MSAL initialization failed:", error);
+});

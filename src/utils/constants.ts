@@ -30,6 +30,7 @@ export const SESSION_VALUES = {
     azure_userName: "azure_user_name",
     azure_isAuthenticated: "azure_is_authenticated",
     azure_msal_token_keys: `msal.token.keys.${AZURE_B2C.CLIENT_ID}`,
+    postLoginRedirectUrl: "post_login_redirect_url"
 };
 
 // **Web Page Routes**

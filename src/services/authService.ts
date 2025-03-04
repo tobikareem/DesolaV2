@@ -2,17 +2,47 @@ import { AccountInfo, AuthenticationResult, InteractionRequiredAuthError } from 
 import { jwtDecode } from "jwt-decode";
 import { msalInstance } from "../auth/msalConfig";
 import { IdToken } from "../models/IdToken";
-import { AZURE_B2C, ERROR_MESSAGES, SESSION_VALUES } from "../utils/constants";
 import { MsalTokenKeys } from "../models/MsalTokenKeys";
+import { AZURE_B2C, ERROR_MESSAGES, SESSION_VALUES } from "../utils/constants";
 
 const authService = {
-    /** Retrieve access token */
-    getAccessToken: (): string | null => {
-        const token = sessionStorage.getItem(SESSION_VALUES.azure_b2c_accessToken);
-        if (!token || authService.isTokenExpired(token)) {
-            console.warn("Access token expired or not found.");
-            return null;
+    initialize: async () => {
+        try {
+            await msalInstance.initialize();
+            console.log("MSAL instance initialized successfully.");
+
+            // Handle redirect response
+            const response = await msalInstance.handleRedirectPromise();
+            if (response?.account) {
+                msalInstance.setActiveAccount(response.account);
+                console.log("Redirect login successful:", response.account);
+
+                const redirectUrl = sessionStorage.getItem("postLoginRedirect");
+                sessionStorage.removeItem("postLoginRedirect"); 
+                if (redirectUrl) {
+                    window.location.href = redirectUrl; 
+                }
+            }
+        } catch (error) {
+            console.error("Failed to initialize MSAL or handle redirect response:", error);
+            throw error;
         }
+    },
+
+    /** Retrieve access token */
+    getAccessToken: async (): Promise<string | null> => {
+        let token = sessionStorage.getItem(SESSION_VALUES.azure_b2c_accessToken);
+
+        if (!token || authService.isTokenExpired(token)) {
+            console.warn("Access token expired or not found, refreshing...");
+            token = await authService.refreshToken();
+            if (!token) {
+                console.error("Failed to acquire new access token.");
+                return null;
+            }
+            sessionStorage.setItem(SESSION_VALUES.azure_b2c_accessToken, token);
+        }
+
         return token;
     },
 
@@ -29,8 +59,7 @@ const authService = {
 
     /** Check if user is logged in */
     isUserLoggedIn: (): boolean => {
-        const token = authService.getAccessToken();
-        return token !== null;
+        return msalInstance.getActiveAccount() !== null;
     },
 
     /** Refresh access token */
@@ -44,6 +73,7 @@ const authService = {
         try {
             const response = await msalInstance.acquireTokenSilent({
                 scopes: authService.loginRequest.scopes,
+                authority: AZURE_B2C.AUTHORITY,
                 account
             });
             return response.accessToken;
@@ -56,10 +86,10 @@ const authService = {
     /** Get user details from ID token */
     getUserFromIdToken: (): string | null => {
         let idToken = sessionStorage.getItem(SESSION_VALUES.azure_b2c_idToken);
-        // if (!idToken) {
-        //     sessionStorage.removeItem(SESSION_VALUES.azure_isAuthenticated);
-        //     return null;
-        // }
+        if (!idToken) {
+            sessionStorage.removeItem(SESSION_VALUES.azure_isAuthenticated);
+            return null;
+        }
 
         const msalTokenKeysJson = sessionStorage.getItem(SESSION_VALUES.azure_msal_token_keys);
 
@@ -67,9 +97,6 @@ const authService = {
             if (msalTokenKeysJson) {
                 const msalTokenKeys: MsalTokenKeys = JSON.parse(msalTokenKeysJson);
                 idToken = msalTokenKeys.idToken[0];
-                // const accessTokenKey = msalTokenKeys.accessToken[0];
-                // const refreshTokenKey = msalTokenKeys.refreshToken[0];
-
 
                 const decoded: IdToken = jwtDecode(idToken);
 
@@ -107,6 +134,17 @@ const authService = {
     /** Sign in user using MSAL */
     signIn: async (): Promise<void> => {
         try {
+            const accounts = msalInstance.getAllAccounts();
+            if (accounts.length > 0) {
+                console.log("User already signed in:", accounts[0]);
+                msalInstance.setActiveAccount(accounts[0]);
+                return; // Prevent redundant sign-ins
+            }
+
+            const currentUrl = window.location.pathname + window.location.search;
+            sessionStorage.setItem(SESSION_VALUES.postLoginRedirectUrl, currentUrl);
+
+            console.log("Redirecting user to sign in...");
             await msalInstance.loginRedirect(authService.loginRequest);
         } catch (error) {
             console.error(ERROR_MESSAGES.loginFailed, error);
@@ -141,7 +179,7 @@ const authService = {
                 Object.values(SESSION_VALUES).forEach(key => {
                     sessionStorage.removeItem(key);
                 });
-                await msalInstance.logoutPopup();
+                await msalInstance.logoutRedirect();
             }
             window.location.href = "/";
         } catch (error) {
@@ -162,22 +200,23 @@ const authService = {
         const account = msalInstance.getActiveAccount();
         if (!account) {
             console.warn("No active account. Redirecting to sign-in.");
-            authService.signIn();
+            // await authService.signIn();
             return null;
         }
 
         try {
             const response = await msalInstance.acquireTokenSilent({
                 scopes: authService.loginRequest.scopes,
+                authority: AZURE_B2C.AUTHORITY,
                 account
             });
 
             return response.accessToken;
         } catch (error) {
             if (error instanceof InteractionRequiredAuthError) {
-                console.warn("Silent token acquisition failed, falling back to popup.");
-                const response = await msalInstance.acquireTokenPopup(authService.loginRequest);
-                return response.accessToken;
+                console.warn("Silent token acquisition failed. Redirecting to sign-in.");
+                await authService.signIn();
+                return null;
             }
 
             console.error("Token acquisition failed:", error);
