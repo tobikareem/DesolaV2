@@ -90,6 +90,58 @@ label{
     }
 }   
 
+.fly {
+    animation: fly 1s ease-in;
+    animation-fill-mode: forwards;
+
+}
+
+@keyframes fly {
+
+    0%{
+        transform: translate(0vw);
+    }
+
+    100%{
+        transform: translate(100vw);
+    }
+}
+
+.openUp {
+    animation: openUp 1.5s linear 1.8s;
+    animation-fill-mode: forwards;
+
+}
+
+.openDown {
+    animation: openDown 1.5s linear 1.8s;
+    animation-fill-mode: forwards;
+
+}
+
+@keyframes openUp {
+    0%{
+        transform: rotate(0deg) translateY(0%);
+        opacity: 1;
+    }
+    100%{
+        transform: rotate(15deg) translateY(-140%) scaleX(5) rotateY(45deg);
+        opacity: 0.5;
+    }
+}
+
+@keyframes openDown {
+    0%{
+        transform: rotate(0deg) translateY(0%);
+        opacity: 1;
+    }
+    100%{
+        transform: rotate(-15deg) translateY(140%) scaleX(5) rotateY(-45deg);
+        opacity: 0.5;
+    }
+}
+
+
 @media (min-width:1024px) {
     .flight{
         animation: flight 18s linear infinite;

@@ -40,8 +40,8 @@ const FaqSupport = () => {
                                 key={index}
                                 onClick={() => toggleState(index)}
                                 className={`bg-primary-100/40 flex flex-col p-4 md:p-6 w-full gap-4 rounded-[24px] ${open[index] ? 'h-fit' : 'h-16 items-center'} hover:scale-105 transition-all duration-300 ease-in-out cursor-pointer`}>
-                                <div className="flex w-full justify-between items-center text-nowrap">
-                                    <Text weight="normal" size='base' color="text-[#1A1A1A]" className="font-work tracking-tight">
+                                <div className="flex w-full justify-between items-center text-nowrap -mt-1">
+                                    <Text weight="normal" size='base' color="text-[#1A1A1A]" className="font-work !text-xs xs:!text-sm lg:!text-base tracking-tight">
                                         {question}
                                     </Text>
                                     <div className={`${open[index] ? 'rotate-90' : 'rotate-0'} text-2xl text-[#1A1A1A] transition-transform duration-1000 ease-in-out`}>

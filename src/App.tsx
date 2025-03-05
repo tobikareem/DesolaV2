@@ -1,14 +1,16 @@
 import { AuthenticatedTemplate } from '@azure/msal-react';
-import { JSX } from 'react';
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { JSX, useEffect, useState } from 'react';
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import './App.css';
 import { msalInstance } from './auth/msalConfig';
 import Footer from './components/Footer';
 import { Navbar } from './components/Navbar';
+import { Preloader } from './components/Preloader';
+import { GlobalProvider } from './hooks/contextProvider';
 import ForgetPassword from './pages/auth/ForgetPassword';
 import Verify from './pages/auth/verify';
 import Dashboard from './pages/dashboard/dashboard';
-import Error404Page from './pages/error/404';
+import Error404Page from './pages/error/Error404';
 import HomeScreen from './pages/home/home';
 
 type RouteType = {
@@ -18,6 +20,8 @@ type RouteType = {
 }
 
 function App() {
+  const router = useLocation();
+
   const publicRoutes: RouteType[] = [
     { path: '/', element: <HomeScreen />, name: 'Home' },
     { path: '/reset', element: <ForgetPassword />, name: 'Forget Password' },
@@ -29,8 +33,34 @@ function App() {
     { path: '/dashboard', element: <Dashboard />, name: 'Dashboard' },
   ];
 
+  const [showPreloader, setShowPreloader] = useState<string>('');
+
+
+  useEffect(() => {
+    const handlePreloaderFn = () => setShowPreloader('hidden');
+
+    if (router.pathname !== '/') {
+      handlePreloaderFn();
+    }
+
+    const time = 3200;
+    const firstTimeLoad = sessionStorage.getItem('Load') === 'true';
+
+    if (firstTimeLoad) {
+      handlePreloaderFn();
+    }
+
+    const timer = setTimeout(() => {
+      sessionStorage.setItem('Load', 'true');
+      handlePreloaderFn();
+    }, time);
+
+    return () => clearTimeout(timer);
+  }, [router.pathname]);
+
   return (
-    <div className="app-container h-screen">
+    <GlobalProvider>
+      <Preloader visibility={showPreloader} />
       <Navbar />
       <main>
         <Routes>
@@ -44,9 +74,7 @@ function App() {
               path={route.path}
               element={
                 msalInstance.getActiveAccount() ? (
-                  <AuthenticatedTemplate>
-                    {route.element}
-                  </AuthenticatedTemplate>
+                  <AuthenticatedTemplate>{route.element}</AuthenticatedTemplate>
                 ) : (
                   // <RedirectToLogin />
 
@@ -55,11 +83,10 @@ function App() {
               }
             />
           ))}
-
         </Routes>
       </main>
       <Footer />
-    </div>
+    </GlobalProvider>
   );
 }
 
