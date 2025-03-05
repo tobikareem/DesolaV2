@@ -1,8 +1,13 @@
 import { useEffect, useState } from "react";
 import { GiHamburgerMenu } from "react-icons/gi";
+<<<<<<< HEAD
 import { Link, NavLink, useLocation } from "react-router-dom";
+=======
+import { VscClose } from "react-icons/vsc";
+import { NavLink, useLocation } from "react-router-dom";
+>>>>>>> 7ed6f2a495abb8c89efa12d37d8a345d6fa754a9
 import { useAuthInfo } from "../hooks/useAuthInfo";
-import { AZURE_B2C } from "../utils/constants";
+import authService from "../services/authService";
 import { Logo } from "./Logo";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 
@@ -102,14 +107,16 @@ export const Navbar = () => {
                         </button>
                     </div>
                 ) : (
-                    <Link
-                        to={AZURE_B2C.SIGN_IN_OUT}
+                    <button
+                        onClick={(e) => {
+                            handleDrawer(e);
+                            authService.signIn();
+                        }}
                         className="hidden lg:flex items-center justify-center h-12 w-[137px] bg-gradient-to-b from-[#FF9040] to-[#FF6B00] text-base text-white font-medium rounded-[48px] hover:scale-105 transition-transform duration-300 ease-in-out"
                     >
                         Sign In
-                    </Link>
+                    </button>
                 )}
-
                 {/* Mobile Nav */}
                 {
                     <div
@@ -139,6 +146,7 @@ export const Navbar = () => {
                                         }
                                     </nav>
 
+<<<<<<< HEAD
                                 {isAuthenticated ? (
                                     <div className="flex lg:hidden items-center space-x-4">
                                         <span className="text-base text-neutral-700">Hello, {userName}</span>
@@ -155,6 +163,28 @@ export const Navbar = () => {
                                         Sign In
                                     </Link>
                                 )}
+=======
+                            {isAuthenticated ? (
+                                <div className="hidden lg:flex items-center space-x-4">
+                                    <span className="text-base text-neutral-700">Hello, {userName}</span>
+                                    <button
+                                        onClick={logout}
+                                        className="flex lg:hidden items-center justify-center h-16 w-full bg-gradient-to-b from-[#FF9040] to-[#FF6B00] text-2xl text-white font-medium rounded-[48px] hover:scale-105 transition-transform duration-300 ease-in-out"
+                                    >
+                                        Logout
+                                    </button>
+                                </div>
+                            ) : (
+                                <button
+                                    onClick={(e) => {
+                                        handleDrawer(e);
+                                        authService.signIn();
+                                    }}
+                                    className="flex lg:hidden items-center justify-center h-16 w-full bg-gradient-to-b from-[#FF9040] to-[#FF6B00] text-2xl text-white font-medium rounded-[48px] hover:scale-105 transition-transform duration-300 ease-in-out">
+                                    Sign In
+                                </button>
+                            )}
+>>>>>>> 7ed6f2a495abb8c89efa12d37d8a345d6fa754a9
 
 
                             </div>
