@@ -16,7 +16,7 @@ const Contact = () => {
 
     return (
         <section id="contact"
-            className="bg-[#F5F5F5] w-full py-18 lg:py-30 gap-10 px-4 md:px-8 lg:px-28 ">
+            className="bg-[#FFF8F2] w-full py-18 lg:py-30 gap-10 px-4 md:px-8 lg:px-28 ">
             <div className="flex flex-col lg:flex-row w-full gap-8">
 
                 <div className="flex flex-col flex-1 bg-white rounded-3xl p-8">
@@ -68,7 +68,7 @@ const Contact = () => {
                         </div>
 
                         <Btn type="submit"
-                            className="mt-3 bg-gradient-to-b text-nowrap h-12 from-[#FF9040] to-[#FF6B00] w-full text-base  text-white">
+                            className="bg-gradient-to-b text-nowrap py-3 from-[#FF9040] to-[#FF6B00] w-full text-base text-white">
                             Send Message
                         </Btn>
                     </form>

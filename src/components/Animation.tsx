@@ -5,7 +5,7 @@ export const FlightAnimation =({props}: {props: string})=> {
     <ReactImage 
       src='/Aero.png'
       alt="flight"
-      className={`${props} w-[80px]`}
+      className={`${props} w-[100px]`}
     />
   )
 }

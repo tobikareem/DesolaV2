@@ -7,8 +7,8 @@ import { BsStars } from 'react-icons/bs';
 import { FaUser } from 'react-icons/fa';
 
 
-const ChatTest: React.FC = () => {
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
+const Dashboard: React.FC = () => {
+   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   const handleScroll = (event: WheelEvent<HTMLDivElement>) => {
     event.preventDefault();
@@ -115,4 +115,4 @@ const ChatTest: React.FC = () => {
   );
 };
 
-export default ChatTest
+export default Dashboard

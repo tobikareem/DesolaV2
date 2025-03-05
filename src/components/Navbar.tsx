@@ -44,24 +44,25 @@ export const Navbar = () => {
 
     return (
         <div className={`fixed ${router !== '/' ? 'hidden' : 'flex'}  items-center w-screen z-40 bg-transparent  left-0 backdrop-blur-[2px] `}>
-            <div className="flex w-full justify-between items-center px-4 md:px-8 lg:px-14 xl:px-28 py-6 bg-background">
+            <div className="flex w-full justify-between items-center px-4 md:px-8 lg:px-14 xl:px-28 py-4 bg-background">
                 {/* Logo */}
+                
+                <div className="block ">
+                    <Logo />
+                </div>
                 <div onClick={() => setSlider(prevState => !prevState)}
                     className="block lg:hidden text-neutral-900 text-2xl">
                     <GiHamburgerMenu />
                 </div>
-                <div className="hidden lg:block ">
-                    <Logo />
-                </div>
                 {/* Desktop Nav */}
-                <nav className="hidden lg:flex items-center px-1 py-1 bg-white rounded-2xl border border-neutral-300">
+                <nav className="hidden lg:flex items-center px-1 py-1 bg-white rounded-[48px] border border-border">
                     {
                         Navigation?.map((item, index) => {
                             return (
                                 <NavLink to={item?.href}
                                     key={index}
                                     onClick={(e) => { e.preventDefault(); smoothScroll(item?.href); }}
-                                    className={() => `font-work h-full p-3 text-base text-neutral-900 font-medium rounded-xl text-nowrap hover:bg-secondary-100 hover:scale-105 transition-transform duration-300 ease-in-out ${location.pathname === item?.href ? 'bg-secondary-100' : 'bg-transparent'}`}
+                                    className={() => `font-work h-full p-3 text-base text-neutral-900 font-medium rounded-[48px] text-nowrap hover:bg-secondary-100 hover:scale-105 transition-transform duration-300 ease-in-out ${location.pathname === item?.href ? 'bg-secondary-100' : 'bg-transparent'}`}
                                 >
                                     {item?.path}
                                 </NavLink>
@@ -75,7 +76,7 @@ export const Navbar = () => {
                         <span className="text-base text-neutral-700">Hello, {userName}</span>
                         <button
                             onClick={logout}
-                            className="h-12 w-[100px] bg-red-500 text-white font-medium rounded-xl hover:scale-105 transition-transform duration-300 ease-in-out"
+                            className="h-12 w-[100px] bg-red-500 text-white font-medium rounded-[48px] hover:scale-105 transition-transform duration-300 ease-in-out"
                         >
                             Logout
                         </button>
@@ -86,7 +87,7 @@ export const Navbar = () => {
                             handleDrawer(e);
                             authService.signIn();
                         }}
-                        className="hidden lg:flex items-center justify-center h-12 w-[137px] bg-gradient-to-b from-[#FF9040] to-[#FF6B00] text-base text-white font-medium rounded-xl hover:scale-105 transition-transform duration-300 ease-in-out"
+                        className="hidden lg:flex items-center justify-center h-12 w-[137px] bg-gradient-to-b from-[#FF9040] to-[#FF6B00] text-base text-white font-medium rounded-[48px] hover:scale-105 transition-transform duration-300 ease-in-out"
                     >
                         Sign In
                     </button>
@@ -111,7 +112,7 @@ export const Navbar = () => {
                                                 <NavLink to={item?.href}
                                                     key={index}
                                                     onClick={(e) => { e.preventDefault(); smoothScroll(item?.href); handleDrawer(e) }}
-                                                    className={() => `font-work size-full p-3 text-base text-neutral-900 font-medium rounded-xl text-nowrap hover:bg-secondary-100 hover:scale-105 transition-transform duration-300 ease-in-out ${activeSection === item?.href ? 'bg-secondary-100' : 'bg-transparent'}`}
+                                                    className={() => `font-work size-full p-3 text-base text-neutral-900 font-medium rounded-[48px] text-nowrap hover:bg-secondary-100 hover:scale-105 transition-transform duration-300 ease-in-out ${activeSection === item?.href ? 'bg-secondary-100' : 'bg-transparent'}`}
                                                 >
                                                     {item?.path}
                                                 </NavLink>
@@ -126,7 +127,7 @@ export const Navbar = () => {
                                     <span className="text-base text-neutral-700">Hello, {userName}</span>
                                     <button
                                         onClick={logout}
-                                        className="flex lg:hidden items-center justify-center h-16 w-full bg-gradient-to-b from-[#FF9040] to-[#FF6B00] text-2xl text-white font-medium rounded-xl hover:scale-105 transition-transform duration-300 ease-in-out"
+                                        className="flex lg:hidden items-center justify-center h-16 w-full bg-gradient-to-b from-[#FF9040] to-[#FF6B00] text-2xl text-white font-medium rounded-[48px] hover:scale-105 transition-transform duration-300 ease-in-out"
                                     >
                                         Logout
                                     </button>
@@ -137,8 +138,7 @@ export const Navbar = () => {
                                         handleDrawer(e);
                                         authService.signIn();
                                     }}
-                                    className="flex lg:hidden items-center justify-center h-16 w-full bg-gradient-to-b from-[#FF9040] to-[#FF6B00] text-2xl text-white font-medium rounded-xl hover:scale-105 transition-transform duration-300 ease-in-out"
-                                >
+                                    className="flex lg:hidden items-center justify-center h-16 w-full bg-gradient-to-b from-[#FF9040] to-[#FF6B00] text-2xl text-white font-medium rounded-[48px] hover:scale-105 transition-transform duration-300 ease-in-out">
                                     Sign In
                                 </button>
                             )}

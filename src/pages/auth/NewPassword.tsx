@@ -1,16 +1,18 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useState } from 'react';
 import { Text } from '../../components/TextComp';
 import { Input } from '../../components/InputField';
 import { Btn } from '../../components/Button';
-import { FaKey, FaEye, FaEyeSlash } from 'react-icons/fa';
-import { Logo } from '../../components/Logo';
-const NewPassword: React.FC = () => {
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import { GoKey } from 'react-icons/go';
+
+
+
+const NewPassword =({click}:{click:()=>void})=> {
+
   const [password, setPassword] = useState<string>('');
   const [confirmPassword, setConfirmPassword] = useState<string>('');
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [showConfirmPassword, setShowConfirmPassword] =
-    useState<boolean>(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
 
   const getPasswordStrength = (): number => {
     if (password.length < 4) return 1;
@@ -23,23 +25,19 @@ const NewPassword: React.FC = () => {
   const getStrengthColor = (index: number) => {
     if (strength >= index + 1) {
       if (strength === 1) return 'bg-red-500';
-      if (strength === 2) return 'bg-orange-500';
+      if (strength === 2) return 'bg-secondary-500';
       return 'bg-green-500';
     }
-    return 'bg-gray-300';
+    return 'bg-neutral-300';
   };
 
   return (
-    <>
-          <Link to={'/'} className="cursor-pointer  fixed m-2 bg-white">
-            <Logo />
-          </Link>
-    <div className="flex h-screen lg:flex-row flex-col md:flex-row w-full">
-      <div className="w-full md:w-1/2 p-6 h-auto flex-grow flex justify-center mt-6 md:p-10">
-        <div className="w-full max-w-sm py-10 mt-4">
+    <div className="font-work flex h-screen lg:flex-row flex-col w-full">
+      <div className="w-full p-6 h-auto flex-grow flex justify-center items-center md:p-10">
+        <div className="w-full max-w-md md:p-10">
           <div className="flex justify-center mb-4">
-            <div className="bg-orange-500 p-3 rounded">
-              <FaKey className="text-white w-15 h-6" />
+            <div className="bg-secondary-500 p-3 rounded">
+              <GoKey className="text-white w-15 h-6" />
             </div>
           </div>
           <Text
@@ -50,13 +48,14 @@ const NewPassword: React.FC = () => {
           >
             Set password
           </Text>
-          <Text as="p" size="sm" className="text-gray-500 text-center mb-10">
+          <Text as="p" size="sm" className="text-neutral-500 text-center mb-10">
             Must be at least 8 characters
           </Text>
           <div className="relative w-full">
             <Input
               type={showPassword ? 'text' : 'password'}
               label="Password"
+              labelClassName='!text-neutral !text-base !font-medium'  
               placeholder="Enter Password"
               className="text-sm  w-full rounded-lg"
               value={password}
@@ -88,6 +87,7 @@ const NewPassword: React.FC = () => {
             <Input
               type={showConfirmPassword ? 'text' : 'password'}
               label="Confirm Password"
+              labelClassName='!text-neutral !text-base !font-medium'  
               placeholder="Confirm Password"
               className="text-sm w-full rounded-lg"
               value={confirmPassword}
@@ -106,15 +106,13 @@ const NewPassword: React.FC = () => {
               />
             )}
           </div>
-          <Btn className="bg-gradient-to-b mt-10 from-orange-400 to-orange-600 text-white px-6 py-2 rounded-md text-sm w-full">
+          <Btn onClick={click}
+            className="bg-gradient-to-b mt-24 from-orange-400 to-orange-600 text-white px-6 py-2 rounded-md text-sm w-full">
             Set new password
           </Btn>
         </div>
       </div>
-
-
     </div>
-    </>
   );
 };
 

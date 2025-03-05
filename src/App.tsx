@@ -6,12 +6,11 @@ import Callback from './auth/Callback';
 import { msalInstance } from './auth/msalConfig';
 import Footer from './components/Footer';
 import { Navbar } from './components/Navbar';
-import ChatTest from './pages/ChatTestScreenPage/ChatTest';
 import ForgetPassword from './pages/auth/ForgetPassword';
-import NewPassword from './pages/auth/NewPassword';
-import OTPVerification from './pages/auth/OTPVerification';
+import Verify from './pages/auth/verify';
+import Dashboard from './pages/dashboard/dashboard';
+import Error404Page from './pages/error/404';
 import HomeScreen from './pages/home/home';
-
 type RouteType = {
   path?: string;
   element?: JSX.Element;
@@ -22,13 +21,15 @@ function App() {
   const publicRoutes: RouteType[] = [
     { path: '/', element: <HomeScreen />, name: 'Home' },
     { path: '/reset', element: <ForgetPassword />, name: 'Forget Password' },
-    { path: '/verify', element: <OTPVerification />, name: 'Verify' },
-    { path: '/password-reset', element: <NewPassword />, name: 'PasswordReset' },
-    { path: '/callback', element: <Callback />, name: 'Callback' }
+    { path: '/callback', element: <Callback />, name: 'Callback' },
+    { path: '/verify', element: <Verify />, name: 'Verify' },
+    { path: '/callback', element: <Callback />, name: 'Callback' },
+    { path: '/dashboard', element: <Dashboard />, name: 'Dashboard' },
+    { path: '*', element: <Error404Page /> }
   ];
 
   const privateRoutes: RouteType[] = [
-    { path: '/chat', element: <ChatTest />, name: 'Chat' },
+    { path: '/chat', element: <Dashboard />, name: 'Chat' },
   ];
 
   return (
