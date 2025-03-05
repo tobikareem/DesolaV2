@@ -1,6 +1,6 @@
 import { LogLevel, PublicClientApplication } from "@azure/msal-browser";
 import { TokenCacheContext } from "@azure/msal-common";
-import { AZURE_B2C } from "../utils/constants";
+import { AZURE_B2C, SESSION_VALUES } from "../utils/constants";
 import { CustomStorage } from "../utils/customStorage";
 
 const customStorage = new CustomStorage();
@@ -15,12 +15,11 @@ const msalConfig = {
     },
     system: {
         cachePlugin: {
-
             beforeCacheAccess: (context: TokenCacheContext) => {
                 console.log("beforeCacheAccess called");
 
                 try {
-                    const cachedData = customStorage.getItem(`msal.token.keys.${AZURE_B2C.CLIENT_ID}`) ?? "";
+                    const cachedData = customStorage.getItem(SESSION_VALUES.azure_msal_token_keys) ?? "";
                     context.tokenCache.deserialize(cachedData);
                 } catch (error) {
                     console.error("Failed to read from custom storage:", error);
