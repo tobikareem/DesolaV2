@@ -20,7 +20,7 @@ const msalConfig = {
                 console.log("beforeCacheAccess called");
 
                 try {
-                    const cachedData = customStorage.getItem("msal.token.keys.74fcd046-95a8-43a7-947d-1efcdb553a07") ?? "";
+                    const cachedData = customStorage.getItem(`msal.token.keys.${AZURE_B2C.CLIENT_ID}`) ?? "";
                     context.tokenCache.deserialize(cachedData);
                 } catch (error) {
                     console.error("Failed to read from custom storage:", error);
