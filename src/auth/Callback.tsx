@@ -3,39 +3,27 @@ import { useNavigate } from "react-router-dom";
 import ErrorScreen from "../components/ErrorScreen";
 import LoadingScreen from "../components/LoadingScreen";
 import SuccessScreen from "../components/SuccessScreen";
-import authService from "../services/authService";
-import { SESSION_VALUES } from "../utils/constants";
+import { msalInstance } from "./msalConfig";
 
 const Callback: React.FC = () => {
   const navigate = useNavigate();
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<{ message: string, details?: string } | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const processCallback = async () => {
       try {
-        const queryParams = new URLSearchParams(window.location.search);
-        const code = queryParams.get("code");
-        const errorParam = queryParams.get("error");
-
-        if (errorParam) {
-          throw new Error(`Authentication error: ${decodeURIComponent(errorParam)}`);
-        }
-        if (!code) {
-          throw new Error("Authorization code not found in the URL.");
+        if (msalInstance.getActiveAccount()) {
+          return; // Already signed in
         }
 
-        const authorizationCode = sessionStorage.getItem(SESSION_VALUES.azure_b2c_authorizationCode);
-
-        if (!authorizationCode) {
-
-          await authService.exchangeCodeForToken(code);
-          navigate("/");
-        }
+        
 
       } catch (err) {
         console.error("Authentication failure:", err);
-        setError(err instanceof Error ? err.message : "Authentication failed.");
+        const errorMessage = err instanceof Error ? err.message : "Authentication failed";
+        const errorDetails = err instanceof Error && err.stack ? err.stack : undefined;
+        setError({ message: errorMessage, details: errorDetails });
       } finally {
         setLoading(false);
       }
@@ -49,12 +37,10 @@ const Callback: React.FC = () => {
   }
 
   if (error) {
-    return <ErrorScreen message={error} />;
+    return <ErrorScreen message={error.message} />;
   }
 
   return <SuccessScreen message="Redirecting..." />;
 };
-
-
 
 export default Callback;

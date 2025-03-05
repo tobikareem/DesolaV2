@@ -5,6 +5,7 @@ import apiClient from "./apiClient";
 
 export const getPageSection = async (path: string, partitionKey: string, rowKey: string) => {
     try {
+
         const response = await apiClient.get<PageResponse>(`${path}/${partitionKey}/${rowKey}`);
         return response.data;
     } catch (error) {
