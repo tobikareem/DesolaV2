@@ -1,5 +1,6 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { LeftPane } from '../../components/LeftSidePane';
+import EditModal from '../../components/EditModal'
 import { IoSend } from 'react-icons/io5';
 import { PenLine } from 'lucide-react';
 import { useRef, WheelEvent } from 'react';
@@ -28,7 +29,7 @@ const ChatTest: React.FC = () => {
           >
             <div className="flex items-center space-x-2 bg-primary-100 py-2 px-5 rounded-full">
               <span className="text-sm text-neutral rounded-lg max-w-[200px] truncate">
-                Ikeja, Murtala Muhammed International Airport (MMIA)
+                Murtala Muhammed International Airport (MMIA)
               </span>
               <PenLine className="cursor-pointer" size={16} />
             </div>
