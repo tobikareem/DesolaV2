@@ -3,73 +3,44 @@ import { TokenCacheContext } from "@azure/msal-common";
 import { AZURE_B2C } from "../utils/constants";
 import { CustomStorage } from "../utils/customStorage";
 
-const customStorageInstance = new CustomStorage();
-
-const customCachePlugin = {
-    beforeCacheAccess: async (cacheContext: TokenCacheContext) => {
-        cacheContext.tokenCache.deserialize(customStorageInstance.getItem("msal-cache") ?? "");
-    },
-    afterCacheAccess: async (cacheContext: TokenCacheContext) => {
-        if (cacheContext.cacheHasChanged) {
-            customStorageInstance.setItem("msal-cache", cacheContext.tokenCache.serialize());
-        }
-    }
-};
+const customStorage = new CustomStorage();
 
 const msalConfig = {
     auth: {
         clientId: AZURE_B2C.CLIENT_ID,
-        authority: AZURE_B2C.AUTHORITY,
+        authority: `${AZURE_B2C.AUTHORITY}/${AZURE_B2C.SIGNUP_SIGNIN_POLICY}`,
         knownAuthorities: [`${AZURE_B2C.TENANT}.b2clogin.com`],
         redirectUri: AZURE_B2C.REDIRECT_URI,
         postLogoutRedirectUri: "/"
     },
     system: {
-        cachePlugin: customCachePlugin,
-        loggerOptions: {
-            loggerCallback: (level: LogLevel, message: string, containsPii: boolean) => {
-                if (containsPii) return;
-                // switch (level) {
-                //     case LogLevel.Error:
-                //         console.error(message);
-                //         break;
-                //     case LogLevel.Warning:
-                //         console.warn(message);
-                //         break;
-                //     case LogLevel.Info:
-                //         console.info(message);
-                //         break;
-                //     case LogLevel.Verbose:
-                //         console.debug(message);
-                //         break;
-                // }
+        cachePlugin: {
+
+            beforeCacheAccess: (context: TokenCacheContext) => {
+                console.log("beforeCacheAccess called");
+
+                try {
+                    const cachedData = customStorage.getItem("msal.token.keys.74fcd046-95a8-43a7-947d-1efcdb553a07") ?? "";
+                    context.tokenCache.deserialize(cachedData);
+                } catch (error) {
+                    console.error("Failed to read from custom storage:", error);
+                }
             },
-            logLevel: LogLevel.Info,
-        }
+            afterCacheAccess: (context: TokenCacheContext) => {
+                console.log("afterCacheAccess called, cacheHasChanged:", context.cacheHasChanged);
+
+                try {
+                    if (context.cacheHasChanged) {
+                        const serializedCache = context.tokenCache.serialize();
+                        customStorage.setItem("msal.token.keys.74fcd046-95a8-43a7-947d-1efcdb553a07", serializedCache);
+                    }
+                } catch (error) {
+                    console.error("Failed to write to custom storage:", error);
+                }
+            }
+        },
+        loggerOptions: { logLevel: LogLevel.Info }
     }
 };
 
 export const msalInstance = new PublicClientApplication(msalConfig);
-
-// class MyCachePlugin implements ICachePlugin {
-//     private client: ICacheClient;
-
-//     constructor(client: ICacheClient) {
-//         this.client = client; // client object to access the persistent cache
-//     }
-
-//     public async beforeCacheAccess(
-//         cacheContext: TokenCacheContext
-//     ): Promise<void> {
-//         const cacheData = await this.client.get(); // get the cache from persistence
-//         cacheContext.tokenCache.deserialize(cacheData); // deserialize it to in-memory cache
-//     }
-
-//     public async afterCacheAccess(
-//         cacheContext: TokenCacheContext
-//     ): Promise<void> {
-//         if (cacheContext.cacheHasChanged) {
-//             await this.client.set(cacheContext.tokenCache.serialize()); // deserialize in-memory cache to persistence
-//         }
-//     }
-// }

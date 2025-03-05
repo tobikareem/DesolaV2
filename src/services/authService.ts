@@ -2,36 +2,16 @@ import { AccountInfo, AuthenticationResult, InteractionRequiredAuthError } from 
 import { jwtDecode } from "jwt-decode";
 import { msalInstance } from "../auth/msalConfig";
 import { IdToken } from "../models/IdToken";
-import { MsalTokenKeys } from "../models/MsalTokenKeys";
 import { AZURE_B2C, ERROR_MESSAGES, SESSION_VALUES } from "../utils/constants";
+import { CustomStorage } from "../utils/customStorage";
+
+const customStorage = new CustomStorage();
 
 const authService = {
-    initialize: async () => {
-        try {
-            await msalInstance.initialize();
-            console.log("MSAL instance initialized successfully.");
-
-            // Handle redirect response
-            const response = await msalInstance.handleRedirectPromise();
-            if (response?.account) {
-                msalInstance.setActiveAccount(response.account);
-                console.log("Redirect login successful:", response.account);
-
-                const redirectUrl = sessionStorage.getItem("postLoginRedirect");
-                sessionStorage.removeItem("postLoginRedirect"); 
-                if (redirectUrl) {
-                    window.location.href = redirectUrl; 
-                }
-            }
-        } catch (error) {
-            console.error("Failed to initialize MSAL or handle redirect response:", error);
-            throw error;
-        }
-    },
 
     /** Retrieve access token */
     getAccessToken: async (): Promise<string | null> => {
-        let token = sessionStorage.getItem(SESSION_VALUES.azure_b2c_accessToken);
+        let token = customStorage.getItem(SESSION_VALUES.azure_b2c_accessToken);
 
         if (!token || authService.isTokenExpired(token)) {
             console.warn("Access token expired or not found, refreshing...");
@@ -40,7 +20,7 @@ const authService = {
                 console.error("Failed to acquire new access token.");
                 return null;
             }
-            sessionStorage.setItem(SESSION_VALUES.azure_b2c_accessToken, token);
+            customStorage.setItem(SESSION_VALUES.azure_b2c_accessToken, token);
         }
 
         return token;
@@ -85,46 +65,34 @@ const authService = {
 
     /** Get user details from ID token */
     getUserFromIdToken: (): string | null => {
-        let idToken = sessionStorage.getItem(SESSION_VALUES.azure_b2c_idToken);
+        const idToken = customStorage.getItem(SESSION_VALUES.azure_b2c_idToken);
         if (!idToken) {
-            sessionStorage.removeItem(SESSION_VALUES.azure_isAuthenticated);
+            customStorage.removeItem(SESSION_VALUES.azure_isAuthenticated);
             return null;
         }
 
-        const msalTokenKeysJson = sessionStorage.getItem(SESSION_VALUES.azure_msal_token_keys);
-
         try {
-            if (msalTokenKeysJson) {
-                const msalTokenKeys: MsalTokenKeys = JSON.parse(msalTokenKeysJson);
-                idToken = msalTokenKeys.idToken[0];
 
-                const decoded: IdToken = jwtDecode(idToken);
+            let userName = customStorage.getItem(SESSION_VALUES.azure_name);
 
-                // Validate token expiration
-                const currentTime = Date.now() / 1000;
-                if (decoded.exp && decoded.exp < currentTime) {
-                    console.warn("ID token has expired");
-                    sessionStorage.removeItem(SESSION_VALUES.azure_isAuthenticated);
-                    return null;
-                }
-
-                const userName = decoded.given_name ?? decoded.name ?? "User";
-                sessionStorage.setItem(SESSION_VALUES.azure_userName, userName);
-                sessionStorage.setItem(SESSION_VALUES.azure_isAuthenticated, "true");
-
-                const userId = decoded.oid || decoded.sub;
-                if (userId !== undefined) {
-                    sessionStorage.setItem(SESSION_VALUES.azure_b2c_userId, userId);
-                }
-
-                const userEmail = decoded.emails?.[0] || decoded.email;
-                if (userEmail !== undefined) {
-                    sessionStorage.setItem(SESSION_VALUES.azure_b2c_userEmail, userEmail);
-                }
-
+            if (userName) {
                 return userName;
             }
-            return null;
+
+            const decoded: IdToken = jwtDecode(idToken);
+
+            // Validate token expiration
+            const currentTime = Date.now() / 1000;
+            if (decoded.exp && decoded.exp < currentTime) {
+                console.warn("ID token has expired");
+                customStorage.removeItem(SESSION_VALUES.azure_isAuthenticated);
+                return null;
+            }
+            userName = decoded.given_name ?? decoded.name ?? "User";
+            customStorage.setItem(SESSION_VALUES.azure_name, userName);
+
+
+            return userName;
         } catch (error) {
             console.error("Failed to decode ID token:", error);
             return null;
@@ -142,11 +110,21 @@ const authService = {
             }
 
             const currentUrl = window.location.pathname + window.location.search;
-            sessionStorage.setItem(SESSION_VALUES.postLoginRedirectUrl, currentUrl);
+            customStorage.setItem(SESSION_VALUES.postLoginRedirectUrl, currentUrl);
 
             console.log("Redirecting user to sign in...");
             await msalInstance.loginRedirect(authService.loginRequest);
         } catch (error) {
+            if (error instanceof InteractionRequiredAuthError && error.errorMessage.includes("AADB2C90118")) {
+                console.warn("Redirecting user to Forgot Password flow...");
+                await msalInstance.loginRedirect({
+                    authority: AZURE_B2C.PASSWORD_RESET_POLICY,
+                    scopes: authService.loginRequest.scopes
+                });
+            } else {
+                console.error("Login failed:", error);
+            }
+
             console.error(ERROR_MESSAGES.loginFailed, error);
             throw error;
         }
@@ -160,7 +138,7 @@ const authService = {
 
             if (response.account) {
                 msalInstance.setActiveAccount(response.account);
-                sessionStorage.setItem(SESSION_VALUES.azure_b2c_idToken, response.idToken ?? "");
+                customStorage.setItem(SESSION_VALUES.azure_b2c_idToken, response.idToken ?? "");
                 return response;
             }
 
@@ -177,14 +155,13 @@ const authService = {
             const account = msalInstance.getActiveAccount();
             if (account) {
                 Object.values(SESSION_VALUES).forEach(key => {
-                    sessionStorage.removeItem(key);
+                    customStorage.removeItem(key);
                 });
                 await msalInstance.logoutRedirect();
             }
-            window.location.href = "/";
         } catch (error) {
             console.error("Logout error:", error);
-            sessionStorage.clear();
+            customStorage.clear();
             window.location.href = "/";
         }
     },

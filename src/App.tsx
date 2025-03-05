@@ -2,7 +2,6 @@ import { AuthenticatedTemplate } from '@azure/msal-react';
 import { JSX } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import './App.css';
-import Callback from './auth/Callback';
 import { msalInstance } from './auth/msalConfig';
 import Footer from './components/Footer';
 import { Navbar } from './components/Navbar';
@@ -11,6 +10,7 @@ import Verify from './pages/auth/verify';
 import Dashboard from './pages/dashboard/dashboard';
 import Error404Page from './pages/error/404';
 import HomeScreen from './pages/home/home';
+
 type RouteType = {
   path?: string;
   element?: JSX.Element;
@@ -21,15 +21,12 @@ function App() {
   const publicRoutes: RouteType[] = [
     { path: '/', element: <HomeScreen />, name: 'Home' },
     { path: '/reset', element: <ForgetPassword />, name: 'Forget Password' },
-    { path: '/callback', element: <Callback />, name: 'Callback' },
     { path: '/verify', element: <Verify />, name: 'Verify' },
-    { path: '/callback', element: <Callback />, name: 'Callback' },
-    { path: '/dashboard', element: <Dashboard />, name: 'Dashboard' },
-    { path: '*', element: <Error404Page /> }
+    { path: '*', element: <Error404Page />, name: 'Error404' },
   ];
 
   const privateRoutes: RouteType[] = [
-    { path: '/chat', element: <Dashboard />, name: 'Chat' },
+    { path: '/dashboard', element: <Dashboard />, name: 'Dashboard' },
   ];
 
   return (
@@ -51,6 +48,8 @@ function App() {
                     {route.element}
                   </AuthenticatedTemplate>
                 ) : (
+                  // <RedirectToLogin />
+
                   <Navigate to="/" />
                 )
               }

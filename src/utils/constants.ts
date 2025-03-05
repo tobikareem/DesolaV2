@@ -7,7 +7,7 @@ export const VITE_API_TOKEN = import.meta.env.VITE_API_TOKEN;
 export const AZURE_B2C = {
     TENANT: import.meta.env.VITE_B2C_TENANT,
     CLIENT_ID: import.meta.env.VITE_B2C_CLIENT_ID,
-    AUTHORITY: `${import.meta.env.VITE_B2C_AUTHORITY}/${import.meta.env.VITE_B2C_SIGNUP_SIGNIN_POLICY}`, 
+    AUTHORITY: import.meta.env.VITE_B2C_AUTHORITY, 
     SIGNUP_SIGNIN_POLICY: import.meta.env.VITE_B2C_SIGNUP_SIGNIN_POLICY,
     PASSWORD_RESET_POLICY: import.meta.env.VITE_B2C_PASSWORD_RESET_POLICY,
     REDIRECT_URI: import.meta.env.VITE_B2C_REDIRECT_URI,
@@ -26,8 +26,9 @@ export const SESSION_VALUES = {
     azure_b2c_expiresAt: "azure_b2c_expiresAt",
     azure_b2c_user: "azure_b2c_user",
     azure_b2c_userId: "azure_b2c_userId",
-    azure_b2c_userEmail: "azure_b2c_userEmail",
-    azure_userName: "azure_user_name",
+    azure_b2c_family_name: "azure_b2c_family_name",
+    azure_b2c_given_name: "azure_b2c_given_name",
+    azure_name: "azure_name",
     azure_isAuthenticated: "azure_is_authenticated",
     azure_msal_token_keys: `msal.token.keys.${AZURE_B2C.CLIENT_ID}`,
     postLoginRedirectUrl: "post_login_redirect_url"
