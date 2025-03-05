@@ -1,23 +1,18 @@
-import React from 'react';
+import React, {useState} from 'react';
+import CaseContents from './CaseContents';
+
 import {
-  Route,
-  PlaneTakeoff,
-  CalendarCheck,
-  Plane,
-  PlaneLanding,
+
+  House,
   Trash2,
   User,
   Headset,
   LogOut,
 } from 'lucide-react';
 
-import { FaHome} from 'react-icons/fa';
+
 import { PiRoadHorizonBold } from 'react-icons/pi';
-
-
-import { Text } from './TextComp';
-
-
+import { Btn } from './Button';
 interface LeftPaneProps {
   departure: string;
   destination: string;
@@ -35,134 +30,90 @@ export const LeftPane: React.FC<LeftPaneProps> = ({
   travelRoute,
   flightClass,
 }) => {
+  const [selectedTab, setSelectedTab] = useState<string>('home');
+
+
+  const sidebarOptions = [
+    { id: 'home', icon: <House size={24} />, label: 'Home' },
+    { id: 'road', icon: <PiRoadHorizonBold size={24} />, label: 'Road' },
+    { id: 'trash', icon: <Trash2 size={24} />, label: 'Trash' },
+    { id: 'user', icon: <User size={24} />, label: 'User Profile' },
+    { id: 'support', icon: <Headset size={24} />, label: 'Support' },
+    { id: 'logout', icon: <LogOut size={24} />, label: 'Logout' },
+  ];
+
+  const renderContentsHere = () => {
+    switch (selectedTab) {
+      case 'home':
+        return (
+          <CaseContents
+            caseType="home"
+            departure={departure}
+            destination={destination}
+            departureDate={departureDate}
+            returnDate={returnDate}
+            travelRoute={travelRoute}
+            flightClass={flightClass}
+          />
+        );
+
+      case 'road':
+        return (
+          <CaseContents
+            caseType="road"
+            departure={departure}
+            destination={destination}
+            departureDate={departureDate}
+            returnDate={returnDate}
+            travelRoute={travelRoute}
+            flightClass={flightClass}
+          />
+        );
+
+      case 'trash':
+        return <CaseContents caseType="trash" />;
+
+      case 'user':
+        return <CaseContents caseType="user" />;
+
+      case 'support':
+        return <CaseContents caseType="support" />;
+
+      case 'logout':
+        return (
+          <CaseContents
+            caseType={selectedTab}
+            setSelectedTab={setSelectedTab}
+          />
+        );
+    }
+  };
+
   return (
     <div className="hidden lg:flex w-[40%] h-screen">
       <div className="w-[10%] items-center px-10 py-8 border gap-6 flex  flex-col">
-        <FaHome
-          className="text-primary-600 cursor-pointer hover:scale-110 transition duration-300"
-          size={24}
-        />
-        <PiRoadHorizonBold
-          className="text-primary-600 font-bold cursor-pointer hover:scale-110 transition duration-300"
-          size={24}
-        />
-        <Trash2
-          className="text-primary-600 cursor-pointer hover:scale-110 transition duration-300"
-          size={24}
-        />
-        <User
-          className="text-primary-600 cursor-pointer hover:scale-110 transition duration-300"
-          size={24}
-        />
-        <Headset
-          className="text-primary-600 cursor-pointer hover:scale-110 transition duration-300"
-          size={24}
-        />
-        <LogOut
-          className="text-primary-600 cursor-pointer hover:scale-110 transition duration-300"
-          size={24}
-        />
+        {sidebarOptions.map((option) => (
+          <button
+            key={option.id}
+            onClick={() => setSelectedTab(option.id)}
+            className={`text-primary-600 cursor-pointer hover:scale-110 transition duration-300 ${
+              selectedTab === option.id
+                ? 'bg-primary-100 rounded  font-bold p-3'
+                : ''
+            }`}
+          >
+            {option.icon}
+          </button>
+        ))}
       </div>
-      <div className="bg-white w-full flex-1 p-6 rounded-lg shadow-md">
-        <Text
-          as="h1"
-          size="2xl"
-          weight="bold"
-          className="font-grotesk text-primary-500 f mb-6"
-        >
-          Great Deals for Your Trip!
-        </Text>
-        <div className="">
-          <div className="mb-4">
-            <div className="flex items-center space-x-2 mb-2">
-              <PlaneTakeoff
-                className="text-secondary-700 hover:scale-110 transition duration-300"
-                size={20}
-              />
-              <label className="block text-sm font-medium text-neutral">
-                Departure
-              </label>
-            </div>
-            <Text as="p" className="mt-1 text-sm text-neutral-500">
-              {departure}
-            </Text>
+      <div className="bg-white w-full shadow-md">
+        <div className="flex flex-col h-full justify-between">
+          {renderContentsHere()}
+          <div className=" h-30 border-t items-center flex p-7">
+            <Btn className="bg-neutral-300 text-neutral-500 p-1 w-full max-w-[385px] rounded-xl">
+              Search
+            </Btn>
           </div>
-
-          <div className="mb-4">
-            <div className="flex items-center space-x-2 mb-2">
-              <Route
-                size={20}
-                className="text-primary-700 hover:scale-110 transition duration-300"
-              />
-              <label className="block text-sm font-medium text-neutral">
-                Destination
-              </label>
-            </div>
-            <Text as="p" className="mt-1 text-sm text-neutral-500">
-              {destination}
-            </Text>
-          </div>
-
-          <div className="mb-4">
-            <div className="flex items-center space-x-2 mb-2">
-              <CalendarCheck
-                className="text-success hover:scale-110 transition duration-300"
-                size={20}
-              />
-              <label className="block text-sm font-medium text-neutral">
-                Departure Date
-              </label>
-            </div>
-            <Text as="p" className="mt-1 text-sm text-neutral-500">
-              {departureDate}
-            </Text>
-          </div>
-
-          <div className="mb-4">
-            <div className="flex items-center space-x-2 mb-2">
-              <CalendarCheck
-                className="text-primary-300 hover:scale-110 transition duration-300"
-                size={20}
-              />
-              <label className="block text-sm font-medium text-neutral">
-                Returning Date
-              </label>
-            </div>
-            <Text as="p" className="mt-1 text-sm text-neutral-500">
-              {returnDate}
-            </Text>
-          </div>
-
-          <div className="mb-4">
-            <div className="flex items-center space-x-2 mb-2">
-              <PlaneLanding
-                className="text-primary-600 hover:scale-110 transition duration-300"
-                size={20}
-              />
-              <label className="block text-sm font-medium text-neutral">
-                Travel Route
-              </label>
-            </div>
-            <Text as="p" className="mt-1 text-sm text-neutral-500">
-              {travelRoute}
-            </Text>
-          </div>
-
-          <div>
-            <div className="flex items-center space-x-2 mb-2">
-              <Plane
-                className="text-secondary-700 hover:scale-110 transition duration-300"
-                size={20}
-              />
-              <label className="block text-sm font-medium text-neutral">
-                Flight
-              </label>
-            </div>
-            <Text as="p" className="mt-1 text-sm text-neutral-500">
-              {flightClass}
-            </Text>
-          </div>
-
         </div>
       </div>
     </div>
