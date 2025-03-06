@@ -83,14 +83,14 @@ const Dashboard: React.FC = () => {
 
   ]
 
-   const {getData} = useApi();
+  // const {getData} = useApi();
 
-  const [AirportSearch, setAirportSearch] = useState<string>('');
+  // const [AirportSearch, setAirportSearch] = useState<string>('');
   
   // const getAirportFn = async () => {
   //   setLoading(true);
   //   try {
-  //     const response = await getData(`/airports`);
+  //     const response = await getData(`/airport`);
   //     setAirport(response);
   //     console.log('data:',response)
   //   } catch (err) {
@@ -101,8 +101,8 @@ const Dashboard: React.FC = () => {
   // };
 
   // useEffect(()=>{
-    // const debouncedGetAirportSearchFn = debounce(getAirportSearchFn, 800)
-    // debouncedGetAirportSearchFn()
+  //   const debouncedGetAirportSearchFn = debounce(getAirportFn, 500)
+  //   debouncedGetAirportSearchFn()
   // },[])
 
 
@@ -123,11 +123,10 @@ const Dashboard: React.FC = () => {
     //   getAirportSearchFn();
     // }, [AirportSearch, getData]);
 
-    console.log(AirportSearch)
 
-    const HandleAirportSearchFn = (e: React.ChangeEvent<HTMLInputElement>) => {
-      setAirportSearch(e.target.value);
-    };
+    // const HandleAirportSearchFn = (e: React.ChangeEvent<HTMLInputElement>) => {
+    //   setAirportSearch(e.target.value);
+    // };
     
 
 

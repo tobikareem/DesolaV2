@@ -35,21 +35,29 @@ function App() {
 
   const [showPreloader, setShowPreloader] = useState<string>('');
 
+  const MockAccount = {
+    name:'',
+    userId:'',
+    email:'',
+  }
+  const ActiveAccount = import.meta.env.MODE ? MockAccount :  msalInstance.getActiveAccount()
+
 
   useEffect(() => {
     const handlePreloaderFn = () => setShowPreloader('hidden');
 
-    if (router.pathname !== '/') {
-      handlePreloaderFn();
+    if (!['/','/dashboard'].includes(router.pathname)) {
+      handlePreloaderFn(); 
     }
-
+  
     const time = 3200;
     const firstTimeLoad = sessionStorage.getItem('Load') === 'true';
 
-    if (firstTimeLoad) {
-      handlePreloaderFn();
+    if (firstTimeLoad && router.pathname == '/test') {
+      setTimeout(handlePreloaderFn,500)
+    } else if (firstTimeLoad) {
+      handlePreloaderFn()
     }
-
     const timer = setTimeout(() => {
       sessionStorage.setItem('Load', 'true');
       handlePreloaderFn();
@@ -73,7 +81,7 @@ function App() {
               key={route.name}
               path={route.path}
               element={
-                msalInstance.getActiveAccount() ? (
+                ActiveAccount ? (
                   <AuthenticatedTemplate>{route.element}</AuthenticatedTemplate>
                 ) : (
                   // <RedirectToLogin />
