@@ -26,6 +26,7 @@ function App() {
     { path: '/', element: <HomeScreen />, name: 'Home' },
     { path: '/reset', element: <ForgetPassword />, name: 'Forget Password' },
     { path: '/verify', element: <Verify />, name: 'Verify' },
+    {path: '/test', element: <Dashboard />, name: 'Test'},
     { path: '*', element: <Error404Page />, name: 'Error404' },
   ];
 
@@ -36,9 +37,9 @@ function App() {
   const [showPreloader, setShowPreloader] = useState<string>('');
 
   const MockAccount = {
-    name:'',
-    userId:'',
-    email:'',
+    username:'mocktest ',
+    homeaccountId:'Desola@example.com',
+    localaccountId:'Desola',
   }
   const ActiveAccount = import.meta.env.MODE ? MockAccount :  msalInstance.getActiveAccount()
 

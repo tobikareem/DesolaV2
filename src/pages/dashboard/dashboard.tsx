@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { LeftPane } from '../../components/LeftSidePane';
+import { RightPane } from './RightPanel';
 import { IoSend } from 'react-icons/io5';
 import { PenLine } from 'lucide-react';
 import { useRef, WheelEvent } from 'react';
@@ -34,7 +34,9 @@ const Dashboard: React.FC = () => {
     }
   };
 
-  const Airports:string[] = [
+ 
+
+  const RecentPrompts:string[] = [
   'Ikeja, Murtala Muhammed International Airport (MMIA)',
   'Seattle-Tacoma International Airport',
   '04/25/2025',
@@ -141,15 +143,30 @@ const Dashboard: React.FC = () => {
             className="hidden lg:flex h-24  w-full overflow-y-hidden overflow-x-auto whitespace-nowrap no-scrollbar items-center gap-2 p-10  border-b bg-neutral-100"
           >
             {
-              Airports?.map((item:string,idx:number)=>(
-                <div key={idx}
-                  className="flex items-center space-x-2 bg-primary-100 py-2 px-5 rounded-full">
-                    <span className="text-sm text-neutral rounded-lg max-w-[200px] truncate">
-                      {item}
-                    </span>
-                  <PenLine className="cursor-pointer" size={16} />
-                </div>
-              ))
+              RecentPrompts?.map((item:string,idx:number)=>{
+
+                const promptColor =():string => { 
+                  switch (idx) {
+                    case 0: return 'bg-primary-100';
+                    case 1: return 'bg-secondary-100';
+                    case 2: return 'bg-neutral-300';
+                    case 3: return 'bg-[#5C88DA40]';
+                    case 4: return 'bg-[#CAFFD640]';
+                    case 5: return 'bg-[#96962240]';
+                    default: return 'bg-primary-100';
+                  }
+                }
+
+                return(
+                  <div key={idx}
+                    className={`flex items-center space-x-2 ${promptColor()} py-2 px-5 rounded-full`}>
+                      <span className="text-sm text-neutral rounded-lg max-w-[200px] truncate">
+                        {item}
+                      </span>
+                    <PenLine className="cursor-pointer" size={16} />
+                  </div>
+                )
+              })
             }
 
           </div>
@@ -201,7 +218,7 @@ const Dashboard: React.FC = () => {
           </PopData> */}
         </div>
 
-        <LeftPane
+        <RightPane
           departure="Ikeja, Murtala Muhammed International Airport (MMIA)"
           destination="Seattle-Tacoma International Airport (SEA)"
           departureDate="04/25/2025"
