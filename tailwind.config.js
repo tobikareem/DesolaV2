@@ -72,6 +72,7 @@ export default {
           800: '#181818',
           900: '#121212',
         },
+        modal: '#D9D9D9',
         success: "#28A745",
         error: "#DC3545",
         notification: "#17A2B8",
