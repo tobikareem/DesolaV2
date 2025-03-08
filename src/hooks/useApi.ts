@@ -7,8 +7,9 @@ import authService from '../services/authService';
 
 const useApi =()=> {
 
-  // const token = authService.getAccessToken();
-  // const token = 'djfdjhfejfoifhdkf'
+  const token = import.meta.env.MODE === 'development' ? 'mymocktokenstring' : authService.getAccessToken();
+  console.log('token',token)
+
   
   const getData = useCallback(
     async(link: string)=> {
