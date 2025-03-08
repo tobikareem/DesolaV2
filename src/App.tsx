@@ -27,10 +27,11 @@ function App() {
     { path: '/reset', element: <ForgetPassword />, name: 'Forget Password' },
     { path: '/verify', element: <Verify />, name: 'Verify' },
     { path: '*', element: <Error404Page />, name: 'Error404' },
+    { path: '/dashboard', element: <Dashboard />, name: 'Dashboard' },
   ];
 
   const privateRoutes: RouteType[] = [
-    { path: '/dashboard', element: <Dashboard />, name: 'Dashboard' },
+    // { path: '/dashboard', element: <Dashboard />, name: 'Dashboard' },
   ];
 
   const [showPreloader, setShowPreloader] = useState<string>('');

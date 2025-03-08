@@ -5,6 +5,8 @@ import { PenLine } from 'lucide-react';
 import { useRef, WheelEvent } from 'react';
 import { BsStars } from 'react-icons/bs';
 import { FaUser } from 'react-icons/fa';
+import EditModal from '../../components/EditModal';
+
 import { Text } from '../../components/TextComp';
 import { PopData } from '../../components/ui/PopData';
 import useApi from '../../hooks/useApi';
@@ -24,6 +26,7 @@ const Dashboard: React.FC = () => {
   //  const [airport, setAirport] = React.useState<AirportType[]>([]);
   //  const [Loading, setLoading] = useState<boolean>(true);
   //  const [error , setError] = useState<null>();
+const [isModalOpen, setIsModalOpen] = React.useState(false);
 
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
@@ -83,6 +86,9 @@ const Dashboard: React.FC = () => {
 
   ]
 
+
+
+
   // const {getData} = useApi();
 
   // const [AirportSearch, setAirportSearch] = useState<string>('');
@@ -140,39 +146,58 @@ const Dashboard: React.FC = () => {
             onWheel={handleScroll}
             className="hidden lg:flex h-24  w-full overflow-y-hidden overflow-x-auto whitespace-nowrap no-scrollbar items-center gap-2 p-10  border-b bg-neutral-100"
           >
-            {
-              Airports?.map((item:string,idx:number)=>(
-                <div key={idx}
-                  className="flex items-center space-x-2 bg-primary-100 py-2 px-5 rounded-full">
-                    <span className="text-sm text-neutral rounded-lg max-w-[200px] truncate">
-                      {item}
-                    </span>
-                  <PenLine className="cursor-pointer" size={16} />
-                </div>
-              ))
-            }
-
+            {Airports?.map((item: string, idx: number) => (
+              <div
+                key={idx}
+                className="flex items-center space-x-2 bg-primary-100 py-2 px-5 rounded-full"
+              >
+                <span className="text-sm text-neutral rounded-lg max-w-[200px] truncate">
+                  {item}
+                </span>
+                <PenLine
+                  onClick={() => setIsModalOpen(true)}
+                  className="cursor-pointer"
+                  size={16}
+                />
+              </div>
+            ))}
+            <EditModal
+              isOpen={isModalOpen}
+              onClose={() => setIsModalOpen(false)}
+            />
           </div>
 
           <div className="flex flex-col flex-1 bg-background space-y-4 mt-16 lg:mt-0 p-5 lg:pl-20  overflow-y-auto">
-            {
-              ChatSystem?.map((item: { id: number; send?: string ; receive?: undefined; } | {id:number; send?: undefined ; receive?: string  }) => {
+            {ChatSystem?.map(
+              (
+                item:
+                  | { id: number; send?: string; receive?: undefined }
+                  | { id: number; send?: undefined; receive?: string }
+              ) => {
                 const position = item?.send === undefined;
-              return(
-                <div key={item?.id}
-                  className={`font-work flex  ${position ? 'justify-end' : 'items-start'} space-x-2 `}>
-                  { item?.send === undefined ? 
+                return (
+                  <div
+                    key={item?.id}
+                    className={`font-work flex  ${
+                      position ? 'justify-end' : 'items-start'
+                    } space-x-2 `}
+                  >
+                    {item?.send === undefined ? (
                       <FaUser className="bg-white border border-primary-100 text-primary-500 size-7 p-1.5 rounded-full text-lg " />
-                      :
+                    ) : (
                       <BsStars className="bg-primary-500 text-white  size-7 p-1.5 rounded-full text-lg " />
-                  }
-                  <span className={`${position ? 'bg-secondary-100' : 'bg-primary-100'} text-neutral p-3 rounded-lg`}>
-                    {item?.send ?? item?.receive}
-                  </span>
-                </div>
-              )})
-            }
-            
+                    )}
+                    <span
+                      className={`${
+                        position ? 'bg-secondary-100' : 'bg-primary-100'
+                      } text-neutral p-3 rounded-lg`}
+                    >
+                      {item?.send ?? item?.receive}
+                    </span>
+                  </div>
+                );
+              }
+            )}
           </div>
           <div className="w-full p-2 flex items-center justify-center  bg-white border-t h-30">
             <div className="items-center max-w-[678px] w-full rounded-2xl py-4 px-8 flex message bg-gray-100">
