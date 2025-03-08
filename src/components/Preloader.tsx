@@ -8,7 +8,7 @@ export const Preloader =({visibility}:{visibility:string | undefined})=> {
 
 
   return(
-    <div className={`${visibility} h-screen w-screen fixed z-[60]`}>
+    <div className={`${visibility} h-screen w-screen fixed z-[70]`}>
       { router.pathname === '/dashboard' ? 
         <div className='bg-background w-full h-full flex flex-col items-center justify-center p-8'>
           <ReactImage
