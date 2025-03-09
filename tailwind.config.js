@@ -62,6 +62,7 @@ export default {
           600: "#CC5500",
           700: "#993F00",
         },
+        'tint': '#F7F9FB',
         'background':'#FAFAFA',
         'Neutral':'#121212',
         'neutral':{
