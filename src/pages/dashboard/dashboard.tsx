@@ -5,7 +5,7 @@ import { PenLine } from 'lucide-react';
 import { useRef, WheelEvent } from 'react';
 import { BsStars } from 'react-icons/bs';
 import { FaUser } from 'react-icons/fa';
-import EditModal from '../../components/EditModal';
+import EditModal from '../../components/modals/EditModal';
 
 import { Text } from '../../components/TextComp';
 import { PopData } from '../../components/ui/PopData';
@@ -148,33 +148,42 @@ const [isModalOpen, setIsModalOpen] = React.useState(false);
             onWheel={handleScroll}
             className="hidden lg:flex h-24  w-full overflow-y-hidden overflow-x-auto whitespace-nowrap no-scrollbar items-center gap-2 p-10  border-b bg-neutral-100"
           >
-            {
-              RecentPrompts?.map((item:string,idx:number)=>{
-
-                const promptColor =():string => { 
-                  switch (idx) {
-                    case 0: return 'bg-primary-100';
-                    case 1: return 'bg-secondary-100';
-                    case 2: return 'bg-neutral-300';
-                    case 3: return 'bg-[#5C88DA40]';
-                    case 4: return 'bg-[#CAFFD640]';
-                    case 5: return 'bg-[#96962240]';
-                    default: return 'bg-primary-100';
-                  }
+            {RecentPrompts?.map((item: string, idx: number) => {
+              const promptColor = (): string => {
+                switch (idx) {
+                  case 0:
+                    return 'bg-primary-100';
+                  case 1:
+                    return 'bg-secondary-100';
+                  case 2:
+                    return 'bg-neutral-300';
+                  case 3:
+                    return 'bg-[#5C88DA40]';
+                  case 4:
+                    return 'bg-[#CAFFD640]';
+                  case 5:
+                    return 'bg-[#96962240]';
+                  default:
+                    return 'bg-primary-100';
                 }
+              };
 
-                return(
-                  <div key={idx}
-                    className={`flex items-center space-x-2 ${promptColor()} py-2 px-5 rounded-full`}>
-                      <span className="text-sm text-neutral rounded-lg max-w-[200px] truncate">
-                        {item}
-                      </span>
-                    <PenLine className="cursor-pointer" size={16} />
-                  </div>
-                )
-              })
-            }
-
+              return (
+                <div
+                  key={idx}
+                  className={`flex items-center space-x-2 ${promptColor()} py-2 px-5 rounded-full`}
+                >
+                  <span className="text-sm text-neutral rounded-lg max-w-[200px] truncate">
+                    {item}
+                  </span>
+                  <PenLine
+                    className="cursor-pointer"
+                    onClick={() => setIsModalOpen(true)}
+                    size={16}
+                  />
+                </div>
+              );
+            })}
           </div>
 
           <div className="flex flex-col flex-1 bg-background space-y-4 mt-16 lg:mt-0 p-5 lg:pl-20  overflow-y-auto">
@@ -245,6 +254,7 @@ const [isModalOpen, setIsModalOpen] = React.useState(false);
           flightClass="Economy"
         />
       </div>
+      <EditModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </>
   );
 };

@@ -1,10 +1,10 @@
 import React from 'react';
 import { X } from 'lucide-react';
-
 import { Btn } from '../../components/Button';
+import { Modal } from '../../components/modals/Modal';
 
 type FlightOffer = {
-    airlineLogo: string;
+  airlineLogo: string;
   departureTime: string;
   date: string;
   duration: string;
@@ -24,24 +24,24 @@ type Props = {
 
 const FlightOffersModal: React.FC<Props> = ({ offers, isOpen, onClose }) => {
   return (
-    <div
-      className={`fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center transition-opacity duration-300 ${
-        isOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
-      }`}
+    <Modal
+      display={isOpen}
+      close={onClose}
+      className="flex  justify-center w-4/5  max-w-5xl"
     >
-      <div
-        className={`bg-white rounded-xl w-4/5 max-w-4xl shadow-lg transform transition-all duration-300 ease-out ${
-          isOpen ? 'scale-100' : 'scale-0'
-        }`}
-      >
+      <div className="rounded-xl w-full   shadow-lg">
         <div className="flex bg-primary-100 rounded-tl rounded-tr justify-between items-center border-b pb-2">
           <h2 className="text-xl font-semibold text-center font-grotesk py-10 text-primary-500 w-full">
             Best Offer
           </h2>
-          <Btn onClick={onClose} className="text-gray-500 hover:text-gray-700">
+          <Btn
+            onClick={onClose}
+            className="text-gray-500 hover:text-gray-700"
+          >
             <X size={24} />
           </Btn>
         </div>
+
         <div className="p-4">
           <p className="text-sm px-4 text-gray-500 my-2">
             Ranked based on price and convenience
@@ -71,7 +71,7 @@ const FlightOffersModal: React.FC<Props> = ({ offers, isOpen, onClose }) => {
                 <a
                   href={offer.websiteLink}
                   target="_blank"
-                  rel="noopener noreferrer"
+                  rel=""
                   className="bg-blue-100 text-blue-700 px-3 py-1 rounded-lg text-sm font-medium"
                 >
                   Website link
@@ -84,7 +84,7 @@ const FlightOffersModal: React.FC<Props> = ({ offers, isOpen, onClose }) => {
           </div>
         </div>
       </div>
-    </div>
+    </Modal>
   );
 };
 
