@@ -30,6 +30,25 @@ export const RightPane: React.FC = () =>{
     { id: 'support', icon: <Headset size={24} />, icon2:<PiHeadsetFill />, label: 'Support' },
   ];
 
+
+  //We can later tweak this to get data from the Api request
+
+    // const offers = [
+    //   {
+    //     airlineLogo: airFlightLogo, 
+    //     departureTime: '10:30 AM',
+    //     date: '04/25/2025',
+    //     duration: '6h 30m',
+    //     classType: 'Economy',
+    //     stops: '1',
+    //     route: 'Lagos (LOS) → New York (JFK)',
+    //     aircraft: 'Boeing 787',
+    //     price: '$450',
+    //     websiteLink: 'https://www.example.com',
+    //   },
+    // ];
+
+
    
   const toggleLogoutModal =()=> {
     setShowLogoutModal(prevState => !prevState) 
@@ -46,7 +65,8 @@ export const RightPane: React.FC = () =>{
     };
 
     const handleConfirmDelete =()=>  {
-
+      sessionStorage.removeItem('RecentPrompts');
+      setShowDeleteModal(false);
     }
 
 
@@ -104,7 +124,13 @@ export const RightPane: React.FC = () =>{
           <div className="max-w-[480px] flex flex-col h-full justify-between pt-12 px-8 ">
             {renderContentsHere()}
             <div className=" h-30 border-t items-center flex p-7">
-              <Btn className={`${selectedTab === 'road' ? 'bg-gradient-to-b from-[#FF9040] to-[#FF6B00] text-white ':'bg-neutral-300 text-neutral-500'} p-1 w-full max-w-[385px]`}>
+              <Btn
+                className={`${
+                  selectedTab === 'road'
+                    ? 'bg-gradient-to-b from-[#FF9040] to-[#FF6B00] text-white '
+                    : 'bg-neutral-300 text-neutral-500'
+                } p-1 w-full max-w-[385px]`}
+              >
                 Search
               </Btn>
             </div>
@@ -118,6 +144,7 @@ export const RightPane: React.FC = () =>{
       <Modal display={showLogoutModal} close={toggleLogoutModal}>
         <ReturnContent Action={toggleLogoutModal} ConfirmAction={handleConfirmLogout}/>
       </Modal>
+     
     </>
   );
 };
