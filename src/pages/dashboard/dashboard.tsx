@@ -1,5 +1,5 @@
 import { PenLine } from 'lucide-react';
-import React, { useRef, useState, WheelEvent } from 'react';
+import React, { useEffect, useRef, useState, WheelEvent } from 'react';
 import { BsStars } from 'react-icons/bs';
 import { FaUser } from 'react-icons/fa';
 import { IoSend } from 'react-icons/io5';
@@ -8,7 +8,8 @@ import EditModal from '../../components/modals/EditModal';
 import { Modal } from '../../components/modals/Modal';
 import { RightPane } from './sections/RightPanel';
 import { useAuthInfo } from '../../hooks/useAuthInfo';
-import { useAsyncError } from 'react-router';
+import { PopData } from '../../components/ui/PopData';
+import { Text } from '../../components/TextComp';
 
 // interface AirportType {
 //   name?: string;
@@ -22,9 +23,6 @@ const Dashboard: React.FC = () => {
   const [showModal, setShowModal] = useState<boolean>(false);
   const [showCalendar, setShowCalendar] = useState<boolean>(false);
   const [showPopData, setShowPopData] = useState<boolean>(false);
-  const [showModal, setShowModal] = useState<boolean>(false);
-  const [showCalendar, setShowCalendar] = useState<boolean>(false);
-  const [showPopData, setShowPopData] = useState<boolean>(true);
   const [RecentPrompts, setRecentPrompts] = useState<string[]>([]);
   const [inputValue, setInputValue] = useState<string>('');
   //  const [airport, setAirport] = React.useState<AirportType[]>([]);
@@ -102,6 +100,10 @@ const Dashboard: React.FC = () => {
       });
     }
   }, []);
+
+  const handlePopData =()=> {
+    setShowPopData(prevState => !prevState)
+  }
 
   const ChatSystem = [
     {
@@ -249,25 +251,17 @@ const Dashboard: React.FC = () => {
           </div>
 
           <div className="flex flex-col flex-1 bg-background space-y-4 mt-16 lg:mt-0 p-5 lg:pl-20  overflow-y-auto">
-            {ChatSystem?.map(
-              (
-                item:
-                  | { id: number; send?: string; receive?: undefined }
-                  | { id: number; send?: undefined; receive?: string }
-              ) => {
+            {ChatSystem?.map((item:{ id: number; send?: string; receive?: undefined } | { id: number; send?: undefined; receive?: string }) => {
                 const position = item?.send === undefined;
                 return (
                   <div
                     key={item?.id}
-                    className={`font-work flex  ${
-                      position ? 'justify-end' : 'items-start'
-                    } space-x-2 `}
+                    className={`font-work flex  ${position ? 'justify-end' : 'items-start'} space-x-2 `}
                   >
-                    {item?.send === undefined ? (
-                        <FaUser className="bg-white border border-primary-100 text-primary-500 size-7 p-1.5 rounded-full text-lg " />
-                      ) : (
-                        <BsStars className="bg-primary-500 text-white  size-7 p-1.5 rounded-full text-lg " />
-                      )
+                    {item?.send === undefined ? 
+                      (<FaUser className="bg-white border border-primary-100 text-primary-500 size-7 p-1.5 rounded-full text-lg " />) 
+                      : 
+                      (<BsStars className="bg-primary-500 text-white  size-7 p-1.5 rounded-full text-lg " />)
                     }
                     <span
                       className={`${
@@ -286,6 +280,7 @@ const Dashboard: React.FC = () => {
                 value={inputValue}
                 onChange={handleInputChange}
                 onKeyDown={handleKeyPress}
+                onFocus={handlePopData}
                 type="text"
                 placeholder="Please Enter Your Message"
                 className="text-xl flex-grow bg-transparent border-0  rounded-lg outline-0"
@@ -297,13 +292,14 @@ const Dashboard: React.FC = () => {
               />
             </div>
             <PopData visibility={showPopData} position={'bottom-30 left-30'}>
-              {airport?.map((item, index) => (
+              {airport?.map((item, index:number) => (
                 <button
                   key={index}
                   type="submit"
                   className="flex items-center p-3 border-b border-neutral-300"
                   onClick={() => {
                     setInputValue(item?.name);
+                    handlePopData()
                   }}
                 >
                   <Text
