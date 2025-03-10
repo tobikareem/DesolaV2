@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {House,Trash2,User,Headset, LogOut,} from 'lucide-react';
 import { PiHeadsetFill, PiRoadHorizonBold, PiRoadHorizonFill, PiTrashFill } from 'react-icons/pi';
 import { Btn } from '../../../components/Button';
@@ -49,6 +49,7 @@ export const RightPane: React.FC = () =>{
     // ];
 
 
+
    
   const toggleLogoutModal =()=> {
     setShowLogoutModal(prevState => !prevState) 
@@ -68,6 +69,8 @@ export const RightPane: React.FC = () =>{
       sessionStorage.removeItem('RecentPrompts');
       setShowDeleteModal(false);
     }
+
+
 
 
   const renderContentsHere = () => {
@@ -108,7 +111,12 @@ export const RightPane: React.FC = () =>{
           {sidebarOptions.map((option) => (
             <div
               key={option.id}
-              onClick={() => {setSelectedTab(option.id)}}
+              onClick={() => { 
+                setSelectedTab(option.id);
+                if (option.id === 'trash') {
+                  toggleDeleteModal();
+                }
+              }}
               className={`text-primary-600 text-3xl cursor-pointer hover:scale-110 transition duration-300 `}
             >
               {selectedTab === option.id ? option.icon2 : option.icon}
@@ -122,7 +130,9 @@ export const RightPane: React.FC = () =>{
         </div>
         <div className="bg-white w-full shadow-md ">
           <div className="max-w-[480px] flex flex-col h-full justify-between pt-12 px-8 ">
-            {renderContentsHere()}
+            <div className='overflow-y-auto'>
+              {renderContentsHere()}
+            </div>
             <div className=" h-30 border-t items-center flex p-7">
               <Btn
                 className={`${
@@ -144,7 +154,6 @@ export const RightPane: React.FC = () =>{
       <Modal display={showLogoutModal} close={toggleLogoutModal}>
         <ReturnContent Action={toggleLogoutModal} ConfirmAction={handleConfirmLogout}/>
       </Modal>
-     
     </>
   );
 };

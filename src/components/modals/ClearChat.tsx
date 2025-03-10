@@ -12,13 +12,13 @@ export const ClearChat
         </Text>
         <div className="flex flex-col md:flex-row justify-center mt-6 gap-6">
           <Btn
-            className="px-4 py-2 bg-neutral-300 text-Neutral"
+            className="px-4 py-2 bg-neutral-300 text-Neutral min-w-30"
             onClick={Action}
           >
             No
           </Btn>
           <Btn
-            className="px-4 py-2 bg-primary-600 text-white"
+            className="px-4 py-2 bg-primary-600 text-white min-w-30"
             onClick={ConfirmAction}
           >
             Yes

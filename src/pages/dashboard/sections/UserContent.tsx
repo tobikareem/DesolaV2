@@ -5,6 +5,7 @@ import { Text } from "../../../components/TextComp";
 import { useAuthInfo } from "../../../hooks/useAuthInfo";
 import { useAirports } from "../../../hooks/useAirports";
 import authService from "../../../services/authService";
+import { Btn } from "../../../components/Button";
 
 // Airport suggestion item type
 type Airport = {
@@ -77,15 +78,15 @@ const ProfileSection = ({
     </Text>
     <div className="flex flex-col items-center">
       <img src={profileImg} className="w-24 h-24 rounded-full mb-4" alt="User Profile" />
-      <Input label="First Name" value={firstName} className="w-full" readOnly />
-      <Input label="Last Name" value={lastName} className="w-full" readOnly />
-      <Input label="Email" value={email} className="w-full" readOnly />
-      <button
+      <Input label="First Name" value={firstName} className="w-full mb-2" readOnly />
+      <Input label="Last Name" value={lastName} className="w-full mb-2" readOnly />
+      <Input label="Email" value={email} className="w-full mb-2" readOnly />
+      <Btn
         onClick={onEditProfile}
-        className="mt-4 bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition"
+        className="mt-4 bg-primary-500 text-white px-6 py-2"
       >
         Edit Profile in Azure B2C
-      </button>
+      </Btn>
     </div>
   </div>
 );
@@ -120,7 +121,7 @@ const PreferencesSection = ({
           Preferred Origin Airport
         </label>
         <div className="relative">
-          <input
+          <Input
             id="originAirportInput"
             type="text"
             name="originAirport"
@@ -149,7 +150,7 @@ const PreferencesSection = ({
           Preferred Destination Airport
         </label>
         <div className="relative">
-          <input
+          <Input
             id="destinationAirportInput"
             type="text"
             name="destinationAirport"
@@ -208,12 +209,12 @@ const PreferencesSection = ({
         </select>
       </div>
 
-      <button
+      <Btn
         onClick={onSave}
-        className="w-full bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 transition"
+        className="w-full bg-success text-white px-6 py-2"
       >
         Save Preferences
-      </button>
+      </Btn>
     </div>
   );
 };
