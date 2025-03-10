@@ -46,7 +46,8 @@ export const RightPane: React.FC = () =>{
     };
 
     const handleConfirmDelete =()=>  {
-
+      sessionStorage.removeItem('RecentPrompts');
+      setShowDeleteModal(false);
     }
 
 
