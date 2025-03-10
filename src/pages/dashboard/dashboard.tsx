@@ -13,7 +13,8 @@ import useApi from '../../hooks/useApi';
 import debounce from 'lodash.debounce';
 import { Modal } from '../../components/modals/Modal';
 import { Input } from '../../components/InputField';
-
+import EditModal from '../../components/modals/EditModal';
+import { useAsyncError } from 'react-router';
 
 
 // interface AirportType {
@@ -29,7 +30,9 @@ const Dashboard: React.FC = () => {
 
   const [showModal , setShowModal] = useState<boolean>(false);
   const [showCalendar , setShowCalendar] = useState<boolean>(false);
-  const [showPopData , setShowPopData] = useState<boolean>(false);
+  const [showPopData , setShowPopData] = useState<boolean>(true);
+  const [RecentPrompts , setRecentPrompts] = useState<string[]>([])
+  const [inputValue, setInputValue] = useState<string>('')
 
   //  const [airport, setAirport] = React.useState<AirportType[]>([]);
   //  const [Loading, setLoading] = useState<boolean>(true);
@@ -57,13 +60,64 @@ const [isModalOpen, setIsModalOpen] = React.useState(false);
 
  
 
-  const RecentPrompts:string[] = [
-  'Ikeja, Murtala Muhammed International Airport (MMIA)',
-  'Seattle-Tacoma International Airport',
-  '04/25/2025',
-  '06/02/2025',
-  'One way',
-  ]
+  // const RecentPrompts:string[] = [
+  // 'Ikeja, Murtala Muhammed International Airport (MMIA)',
+  // 'Seattle-Tacoma International Airport',
+  // '04/25/2025',
+  // '06/02/2025',
+  // 'One way',
+  // ]
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value);
+  };
+
+  const saveTosessionStorage = (key: string, value: string[]) => {
+    sessionStorage.setItem(key, JSON.stringify(value));
+  };
+  
+  const handlePromptUpdate = () => {
+    const newPrompt = inputValue?.trim();
+    if (
+      newPrompt &&
+      !(RecentPrompts ?? []).includes(newPrompt)
+    ) {
+      setRecentPrompts((prevRecentPrompts) => {
+        const updatedPrompts = [...prevRecentPrompts, newPrompt];
+        saveTosessionStorage('RecentPrompts', updatedPrompts);
+        console.log('updatedPrompts:',updatedPrompts)
+        return updatedPrompts;
+      });
+      setInputValue('');
+    }
+  };
+
+  
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handlePromptUpdate();
+    }
+  }
+
+  useEffect(() => {
+    const storedPrompts = sessionStorage.getItem('RecentPrompts');
+    if (storedPrompts) {
+      const parsedPrompts = JSON.parse(storedPrompts)
+      setRecentPrompts(parsedPrompts);
+      setRecentPrompts((prevRecentPrompts) => {
+        const updatedPrompts = [...prevRecentPrompts];
+        parsedPrompts.forEach((prompt:string) => {
+          if (!(updatedPrompts ?? []).includes(prompt)) {
+            updatedPrompts.push(prompt);
+          }
+        });
+        return updatedPrompts;
+      });
+    }
+  }, []);
+
+  
+  
 
   const ChatSystem = [
     {
@@ -106,8 +160,16 @@ const [isModalOpen, setIsModalOpen] = React.useState(false);
 
   ]
 
+<<<<<<< HEAD
 
 
+=======
+  const airport = [
+    {id:1, 'name':'Murtala Muhammed International Airport', code:'MMIA'},
+    {id:2, 'name':'Seattle-Tacoma International Airport', code:'SEA'},
+    {id:3, 'name':'Los Angeles International Airport', code:'LAX'},
+  ]
+>>>>>>> b251825d5f9f1f1f996c4b51353baef1d592c327
 
   // const {getData} = useApi();
 
@@ -166,6 +228,7 @@ const [isModalOpen, setIsModalOpen] = React.useState(false);
             onWheel={handleScroll}
             className="hidden lg:flex h-24  w-full overflow-y-hidden overflow-x-auto whitespace-nowrap no-scrollbar items-center gap-2 p-10  border-b bg-neutral-100"
           >
+<<<<<<< HEAD
             {RecentPrompts?.map((item: string, idx: number) => {
               const promptColor = (): string => {
                 switch (idx) {
@@ -183,6 +246,26 @@ const [isModalOpen, setIsModalOpen] = React.useState(false);
                     return 'bg-[#96962240]';
                   default:
                     return 'bg-primary-100';
+=======
+            {
+              RecentPrompts?.map((item:string,idx:number)=>{
+
+                const promptColor =():string => { 
+                  switch (idx) {
+                    case 0: return 'bg-primary-100';
+                    case 1: return 'bg-secondary-100';
+                    case 2: return 'bg-neutral-300';
+                    case 3: return 'bg-[#5C88DA40]';
+                    case 4: return 'bg-[#CAFFD640]';
+                    case 5: return 'bg-[#96962240]';
+                    case 6: return 'bg-primary-100';
+                    case 7: return 'bg-secondary-100';
+                    case 8: return 'bg-neutral-300';
+                    case 9: return 'bg-[#5C88DA80]';
+                    
+                    default: return 'bg-primary-100';
+                  }
+>>>>>>> b251825d5f9f1f1f996c4b51353baef1d592c327
                 }
               };
 
@@ -233,19 +316,27 @@ const [isModalOpen, setIsModalOpen] = React.useState(false);
           <div className="relative w-full p-2 flex items-center justify-center  bg-white border-t h-30">
             <div className="items-center max-w-[678px] w-full rounded-2xl py-4 px-8 flex message bg-tint">
               <Input
+                value={inputValue}
+                onChange={handleInputChange}
+                onKeyDown={handleKeyPress}
                 type="text"
                 placeholder="Please Enter Your Message"
                 className="text-xl flex-grow bg-transparent border-0  rounded-lg outline-0"
               />
-              <IoSend className="cursor-pointer text-neutral-400" size={24} />
+              <IoSend onClick={handlePromptUpdate}
+                className="cursor-pointer text-neutral-400" size={24} />
             </div>
-            {/* <PopData position={'bottom-10 left-10'}>
+            <PopData visibility={showPopData} position={'bottom-30 left-30'}>
               {
                 airport?.map((item,index)=>(
                   <button key={index}
                       type='submit'
-                      className='flex items-center p-2.5 border-b border-neutral-300'>
-                    <Text size="xs" color="text-neutral-500"
+                      className='flex items-center p-3 border-b border-neutral-300'
+                      onClick={() => {
+                        setInputValue(item?.name);
+                      }}
+                  >
+                    <Text size="xs" color="text-neutral-500 text-left"
                       className="font-work"
                     >
                       {item?.name} ({item?.code})
@@ -253,7 +344,7 @@ const [isModalOpen, setIsModalOpen] = React.useState(false);
                   </button>
                 ))
               }
-            </PopData> */}
+            </PopData>
           </div>
 
           <Modal close={toggleModal} display={showModal}>
