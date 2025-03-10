@@ -1,10 +1,10 @@
-import React from "react"
+import React from 'react';
 
 interface ModalProps {
   children?: React.ReactNode;
-  close?: ()=> void ;
-  position?: 'fixed'  | 'absolute';
-  className?: string | undefined;
+  close?: () => void;
+  position?: 'fixed' | 'absolute';
+  className?: string;
   display?: boolean;
   yAxis?: string;
   xAxis?: string;
@@ -23,5 +23,5 @@ export const Modal:React.FC<ModalProps> = ({display = false, yAxis = 'top-0', xA
         {children}
       </div>
     </div>
-  )
-}
+  );
+};
