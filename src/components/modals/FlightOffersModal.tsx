@@ -1,7 +1,7 @@
 import React from 'react';
 import { X } from 'lucide-react';
-import { Btn } from '../../components/Button';
-import { Modal } from '../../components/modals/Modal';
+import { Btn } from '../Button';
+import { Modal } from './Modal';
 
 type FlightOffer = {
   airlineLogo: string;

@@ -13,7 +13,7 @@ import useApi from '../../hooks/useApi';
 import debounce from 'lodash.debounce';
 import { Modal } from '../../components/modals/Modal';
 import { Input } from '../../components/InputField';
-import EditModal from '../../components/modals/EditModal';
+
 
 
 // interface AirportType {
