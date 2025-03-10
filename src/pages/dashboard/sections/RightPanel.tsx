@@ -1,44 +1,26 @@
 import React, {useState} from 'react';
-
-import {
-  House,
-  Trash2,
-  User,
-  Headset,
-  LogOut,
-} from 'lucide-react';
-
-
+import {House,Trash2,User,Headset, LogOut,} from 'lucide-react';
 import { PiHeadsetFill, PiRoadHorizonBold, PiRoadHorizonFill, PiTrashFill } from 'react-icons/pi';
-import { Btn } from '../../components/Button';
-import { SupportContent } from './sections/SupportContent';
-import { TrashContent } from './sections/TrashContent';
-import { UserContent } from './sections/UserContent';
-import authService from '../../services/authService';
+import { Btn } from '../../../components/Button';
+import { SupportContent } from './SupportContent';
+import { TrashContent } from './TrashContent';
+import { UserContent } from './UserContent';
+import authService from '../../../services/authService';
 import { useNavigate } from 'react-router';
 import { RiHome5Fill, RiUserFill } from 'react-icons/ri';
-import { HomeContent } from './sections/HomeContent';
-import { PathContent } from './sections/PathContent';
-import { Modal } from '../../components/modals/Modal';
-import { ReturnContent } from './sections/ReturnContent';
+import { HomeContent } from './HomeContent';
+import { PathContent } from './PathContent';
+import { Modal } from '../../../components/modals/Modal';
+import { ReturnContent } from '../../../components/modals/LogoutModal';
+import { ClearChat } from '../../../components/modals/ClearChat';
 
-interface RightPaneProps {
-  departure: string;
-  destination: string;
-  departureDate: string;
-  returnDate: string;
-  travelRoute: string;
-  flightClass: string;
-}
 
-export const RightPane: React.FC<RightPaneProps> = () =>{
+export const RightPane: React.FC = () =>{
   const navigate = useNavigate();
 
   const [selectedTab, setSelectedTab] = useState<string>('home');
   const [showLogoutModal, setShowLogoutModal] = useState<boolean>(false);
-
-
-
+  const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
 
   const sidebarOptions = [
     { id: 'home', icon: <House size={24} />, icon2: <RiHome5Fill />, label: 'Home' },
@@ -49,8 +31,12 @@ export const RightPane: React.FC<RightPaneProps> = () =>{
   ];
 
    
-  const toggleModal =()=> {
+  const toggleLogoutModal =()=> {
     setShowLogoutModal(prevState => !prevState) 
+  }
+
+  const toggleDeleteModal =()=> {
+    setShowDeleteModal(prevState => !prevState)
   }
   
     const handleConfirmLogout = () => {
@@ -58,6 +44,10 @@ export const RightPane: React.FC<RightPaneProps> = () =>{
       authService.signOut();
       navigate(`/`)
     };
+
+    const handleConfirmDelete =()=>  {
+
+    }
 
 
   const renderContentsHere = () => {
@@ -91,7 +81,6 @@ export const RightPane: React.FC<RightPaneProps> = () =>{
     }
   };
 
-
   return (
     <>
       <div className="hidden lg:flex w-[40%] h-screen">
@@ -99,13 +88,13 @@ export const RightPane: React.FC<RightPaneProps> = () =>{
           {sidebarOptions.map((option) => (
             <div
               key={option.id}
-              onClick={() => setSelectedTab(option.id)}
+              onClick={() => {setSelectedTab(option.id)}}
               className={`text-primary-600 text-3xl cursor-pointer hover:scale-110 transition duration-300 `}
             >
               {selectedTab === option.id ? option.icon2 : option.icon}
             </div>
           ))}
-          <Btn onClick={toggleModal}
+          <Btn onClick={toggleLogoutModal}
             className='text-primary-600 rounded-none border-none'
           >
             <LogOut size={24} />
@@ -122,10 +111,12 @@ export const RightPane: React.FC<RightPaneProps> = () =>{
           </div>
         </div>
       </div>
+      <Modal display={showDeleteModal} close={toggleDeleteModal}>
+        <ClearChat Action={toggleLogoutModal} ConfirmAction={handleConfirmDelete}/>
+      </Modal>
 
-
-      <Modal display={showLogoutModal} close={toggleModal}>
-        <ReturnContent Action={toggleModal} ConfirmAction={handleConfirmLogout}/>
+      <Modal display={showLogoutModal} close={toggleLogoutModal}>
+        <ReturnContent Action={toggleLogoutModal} ConfirmAction={handleConfirmLogout}/>
       </Modal>
     </>
   );
