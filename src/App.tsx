@@ -26,6 +26,7 @@ function App() {
     { path: '/', element: <HomeScreen />, name: 'Home' },
     { path: '/reset', element: <ForgetPassword />, name: 'Forget Password' },
     { path: '/verify', element: <Verify />, name: 'Verify' },
+    {path: '/test', element: <Dashboard />, name: 'Test'},
     { path: '*', element: <Error404Page />, name: 'Error404' },
   ];
 
@@ -35,21 +36,29 @@ function App() {
 
   const [showPreloader, setShowPreloader] = useState<string>('');
 
+  const MockAccount = {
+    username:'mocktest ',
+    homeaccountId:'Desola@example.com',
+    localaccountId:'Desola',
+  }
+  const ActiveAccount = import.meta.env.MODE ? MockAccount :  msalInstance.getActiveAccount()
+
 
   useEffect(() => {
     const handlePreloaderFn = () => setShowPreloader('hidden');
 
-    if (router.pathname !== '/') {
-      handlePreloaderFn();
+    if (!['/','/dashboard'].includes(router.pathname)) {
+      handlePreloaderFn(); 
     }
-
+  
     const time = 3200;
     const firstTimeLoad = sessionStorage.getItem('Load') === 'true';
 
-    if (firstTimeLoad) {
-      handlePreloaderFn();
+    if (firstTimeLoad && router.pathname == '/test') {
+      setTimeout(handlePreloaderFn,500)
+    } else if (firstTimeLoad) {
+      handlePreloaderFn()
     }
-
     const timer = setTimeout(() => {
       sessionStorage.setItem('Load', 'true');
       handlePreloaderFn();
@@ -73,7 +82,7 @@ function App() {
               key={route.name}
               path={route.path}
               element={
-                msalInstance.getActiveAccount() ? (
+                ActiveAccount ? (
                   <AuthenticatedTemplate>{route.element}</AuthenticatedTemplate>
                 ) : (
                   // <RedirectToLogin />

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { LeftPane } from '../../components/LeftSidePane';
+import { RightPane } from './sections/RightPanel';
 import { IoSend } from 'react-icons/io5';
 import { PenLine } from 'lucide-react';
 import { useRef, WheelEvent } from 'react';
@@ -9,6 +9,9 @@ import { Text } from '../../components/TextComp';
 import { PopData } from '../../components/ui/PopData';
 import useApi from '../../hooks/useApi';
 import debounce from 'lodash.debounce';
+import { Modal } from '../../components/modals/Modal';
+import { Input } from '../../components/InputField';
+import EditModal from '../../components/modals/EditModal';
 
 
 // interface AirportType {
@@ -21,9 +24,24 @@ import debounce from 'lodash.debounce';
 
 const Dashboard: React.FC = () => {
 
+
+  const [showModal , setShowModal] = useState<boolean>(false);
+  const [showCalendar , setShowCalendar] = useState<boolean>(false);
+  const [showPopData , setShowPopData] = useState<boolean>(false);
+
   //  const [airport, setAirport] = React.useState<AirportType[]>([]);
   //  const [Loading, setLoading] = useState<boolean>(true);
   //  const [error , setError] = useState<null>();
+
+  
+  const toggleModal = () => {
+    setShowModal(prevState => !prevState)
+  }
+
+  const toggleCalendar = () => {
+    setShowCalendar(prevState => !prevState)
+  }
+
 
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
@@ -34,7 +52,9 @@ const Dashboard: React.FC = () => {
     }
   };
 
-  const Airports:string[] = [
+ 
+
+  const RecentPrompts:string[] = [
   'Ikeja, Murtala Muhammed International Airport (MMIA)',
   'Seattle-Tacoma International Airport',
   '04/25/2025',
@@ -83,14 +103,14 @@ const Dashboard: React.FC = () => {
 
   ]
 
-   const {getData} = useApi();
+  // const {getData} = useApi();
 
-  const [AirportSearch, setAirportSearch] = useState<string>('');
+  // const [AirportSearch, setAirportSearch] = useState<string>('');
   
   // const getAirportFn = async () => {
   //   setLoading(true);
   //   try {
-  //     const response = await getData(`/airports`);
+  //     const response = await getData(`/airport`);
   //     setAirport(response);
   //     console.log('data:',response)
   //   } catch (err) {
@@ -101,8 +121,8 @@ const Dashboard: React.FC = () => {
   // };
 
   // useEffect(()=>{
-    // const debouncedGetAirportSearchFn = debounce(getAirportSearchFn, 800)
-    // debouncedGetAirportSearchFn()
+  //   const debouncedGetAirportSearchFn = debounce(getAirportFn, 500)
+  //   debouncedGetAirportSearchFn()
   // },[])
 
 
@@ -123,11 +143,10 @@ const Dashboard: React.FC = () => {
     //   getAirportSearchFn();
     // }, [AirportSearch, getData]);
 
-    console.log(AirportSearch)
 
-    const HandleAirportSearchFn = (e: React.ChangeEvent<HTMLInputElement>) => {
-      setAirportSearch(e.target.value);
-    };
+    // const HandleAirportSearchFn = (e: React.ChangeEvent<HTMLInputElement>) => {
+    //   setAirportSearch(e.target.value);
+    // };
     
 
 
@@ -142,15 +161,31 @@ const Dashboard: React.FC = () => {
             className="hidden lg:flex h-24  w-full overflow-y-hidden overflow-x-auto whitespace-nowrap no-scrollbar items-center gap-2 p-10  border-b bg-neutral-100"
           >
             {
-              Airports?.map((item:string,idx:number)=>(
-                <div key={idx}
-                  className="flex items-center space-x-2 bg-primary-100 py-2 px-5 rounded-full">
-                    <span className="text-sm text-neutral rounded-lg max-w-[200px] truncate">
-                      {item}
-                    </span>
-                  <PenLine className="cursor-pointer" size={16} />
-                </div>
-              ))
+              RecentPrompts?.map((item:string,idx:number)=>{
+
+                const promptColor =():string => { 
+                  switch (idx) {
+                    case 0: return 'bg-primary-100';
+                    case 1: return 'bg-secondary-100';
+                    case 2: return 'bg-neutral-300';
+                    case 3: return 'bg-[#5C88DA40]';
+                    case 4: return 'bg-[#CAFFD640]';
+                    case 5: return 'bg-[#96962240]';
+                    default: return 'bg-primary-100';
+                  }
+                }
+
+                return(
+                  <div key={idx}
+                    className={`flex items-center space-x-2 ${promptColor()} py-2 px-5 rounded-full`}>
+                      <span className="text-sm text-neutral rounded-lg max-w-[200px] truncate">
+                        {item}
+                      </span>
+                    <PenLine onClick={() => {toggleModal()}}
+                      className="cursor-pointer" size={16} />
+                  </div>
+                )
+              })
             }
 
           </div>
@@ -167,7 +202,8 @@ const Dashboard: React.FC = () => {
                       :
                       <BsStars className="bg-primary-500 text-white  size-7 p-1.5 rounded-full text-lg " />
                   }
-                  <span className={`${position ? 'bg-secondary-100' : 'bg-primary-100'} text-neutral p-3 rounded-lg`}>
+                  <span
+                    className={`${position ? 'bg-secondary-100' : 'bg-primary-100'} text-neutral p-3 rounded-lg`}>
                     {item?.send ?? item?.receive}
                   </span>
                 </div>
@@ -175,41 +211,42 @@ const Dashboard: React.FC = () => {
             }
             
           </div>
-          <div className="w-full p-2 flex items-center justify-center  bg-white border-t h-30">
-            <div className="items-center max-w-[678px] w-full rounded-2xl py-4 px-8 flex message bg-gray-100">
-              <input
+          <div className="relative w-full p-2 flex items-center justify-center  bg-white border-t h-30">
+            <div className="items-center max-w-[678px] w-full rounded-2xl py-4 px-8 flex message bg-tint">
+              <Input
                 type="text"
                 placeholder="Please Enter Your Message"
                 className="text-xl flex-grow bg-transparent border-0  rounded-lg outline-0"
               />
               <IoSend className="cursor-pointer text-neutral-400" size={24} />
             </div>
+            {/* <PopData position={'bottom-10 left-10'}>
+              {
+                airport?.map((item,index)=>(
+                  <button key={index}
+                      type='submit'
+                      className='flex items-center p-2.5 border-b border-neutral-300'>
+                    <Text size="xs" color="text-neutral-500"
+                      className="font-work"
+                    >
+                      {item?.name} ({item?.code})
+                    </Text>
+                  </button>
+                ))
+              }
+            </PopData> */}
           </div>
-          {/* <PopData position={'bottom-10 left-10'}>
-            {
-              airport?.map((item,index)=>(
-                <button key={index}
-                    type='submit'
-                    className='flex items-center p-2.5 border-b border-neutral-300'>
-                  <Text size="xs" color="text-neutral-500"
-                    className="font-work"
-                  >
-                    {item?.name} ({item?.code})
-                  </Text>
-                </button>
-              ))
-            }
-          </PopData> */}
+
+          <Modal close={toggleModal} display={showModal}>
+            <EditModal prompts={RecentPrompts} chatSystem={ChatSystem} airport={[]} close={toggleModal}/>
+          </Modal>
+          
+          <Modal position='absolute' close={toggleCalendar} display={showCalendar}>
+            {}
+          </Modal>
         </div>
 
-        <LeftPane
-          departure="Ikeja, Murtala Muhammed International Airport (MMIA)"
-          destination="Seattle-Tacoma International Airport (SEA)"
-          departureDate="04/25/2025"
-          returnDate="06/25/2025"
-          travelRoute="Multi-city"
-          flightClass="Economy"
-        />
+        <RightPane/>
       </div>
     </>
   );

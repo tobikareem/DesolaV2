@@ -62,6 +62,7 @@ export default {
           600: "#CC5500",
           700: "#993F00",
         },
+        'tint': '#F7F9FB',
         'background':'#FAFAFA',
         'Neutral':'#121212',
         'neutral':{
@@ -72,6 +73,7 @@ export default {
           800: '#181818',
           900: '#121212',
         },
+        modal: '#D9D9D9',
         success: "#28A745",
         error: "#DC3545",
         notification: "#17A2B8",
