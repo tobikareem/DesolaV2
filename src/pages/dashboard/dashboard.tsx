@@ -1,17 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { RightPane } from './sections/RightPanel';
-import { IoSend } from 'react-icons/io5';
 import { PenLine } from 'lucide-react';
-import { useRef, WheelEvent } from 'react';
+import React, { useRef, useState, WheelEvent } from 'react';
 import { BsStars } from 'react-icons/bs';
 import { FaUser } from 'react-icons/fa';
-import { Text } from '../../components/TextComp';
-import { PopData } from '../../components/ui/PopData';
-import useApi from '../../hooks/useApi';
-import debounce from 'lodash.debounce';
-import { Modal } from '../../components/modals/Modal';
+import { IoSend } from 'react-icons/io5';
 import { Input } from '../../components/InputField';
 import EditModal from '../../components/modals/EditModal';
+import { Modal } from '../../components/modals/Modal';
+import { RightPane } from './sections/RightPanel';
+import { useAuthInfo } from '../../hooks/useAuthInfo';
 import { useAsyncError } from 'react-router';
 
 // interface AirportType {
@@ -22,16 +18,21 @@ import { useAsyncError } from 'react-router';
 // }
 
 const Dashboard: React.FC = () => {
+
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [showCalendar, setShowCalendar] = useState<boolean>(false);
+  const [showPopData, setShowPopData] = useState<boolean>(false);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [showCalendar, setShowCalendar] = useState<boolean>(false);
   const [showPopData, setShowPopData] = useState<boolean>(true);
   const [RecentPrompts, setRecentPrompts] = useState<string[]>([]);
   const [inputValue, setInputValue] = useState<string>('');
-
   //  const [airport, setAirport] = React.useState<AirportType[]>([]);
   //  const [Loading, setLoading] = useState<boolean>(true);
   //  const [error , setError] = useState<null>();
-
+  
+  const { userName, isAuthenticated,  } = useAuthInfo();
+  
   const toggleModal = () => {
     setShowModal((prevState) => !prevState);
   };
@@ -48,6 +49,7 @@ const Dashboard: React.FC = () => {
       scrollContainerRef.current.scrollLeft += event.deltaY;
     }
   };
+
 
   // const RecentPrompts:string[] = [
   // 'Ikeja, Murtala Muhammed International Airport (MMIA)',
@@ -104,7 +106,7 @@ const Dashboard: React.FC = () => {
   const ChatSystem = [
     {
       id: 1,
-      send: 'Hi, Oluwatobi, Where are you flying from?',
+      send: `Hi ${isAuthenticated ? userName?.split(' ')[0] : "Oluwatobi"}, Where are you flying from?`,
     },
     {
       id: 2,
@@ -262,14 +264,14 @@ const Dashboard: React.FC = () => {
                     } space-x-2 `}
                   >
                     {item?.send === undefined ? (
-                      <FaUser className="bg-white border border-primary-100 text-primary-500 size-7 p-1.5 rounded-full text-lg " />
-                    ) : (
-                      <BsStars className="bg-primary-500 text-white  size-7 p-1.5 rounded-full text-lg " />
-                    )}
+                        <FaUser className="bg-white border border-primary-100 text-primary-500 size-7 p-1.5 rounded-full text-lg " />
+                      ) : (
+                        <BsStars className="bg-primary-500 text-white  size-7 p-1.5 rounded-full text-lg " />
+                      )
+                    }
                     <span
                       className={`${
-                        position ? 'bg-secondary-100' : 'bg-primary-100'
-                      } text-neutral p-3 rounded-lg`}
+                        position ? 'bg-secondary-100' : 'bg-primary-100'} text-neutral p-3 rounded-lg`}
                     >
                       {item?.send ?? item?.receive}
                     </span>
@@ -315,25 +317,14 @@ const Dashboard: React.FC = () => {
               ))}
             </PopData>
           </div>
-
           <Modal close={toggleModal} display={showModal}>
-            <EditModal
-              prompts={RecentPrompts}
-              chatSystem={ChatSystem}
-              airport={[]}
-              close={toggleModal}
-            />
+            <EditModal prompts={RecentPrompts} chatSystem={ChatSystem} airport={[]} close={toggleModal} />
           </Modal>
-
-          <Modal
-            position="absolute"
-            close={toggleCalendar}
-            display={showCalendar}
-          >
-            {}
+          <Modal position='absolute' close={toggleCalendar} display={showCalendar}>
+            { }
           </Modal>
+          
         </div>
-
         <RightPane />
       </div>
     </>

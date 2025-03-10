@@ -166,6 +166,21 @@ const authService = {
         }
     },
 
+    profileEdit: async (): Promise<void> => {
+        try {
+            const account = msalInstance.getActiveAccount();
+            if (!account) {
+                console.warn("No active account. Redirecting to sign-in.");
+                await authService.signIn();
+                return;
+            }
+
+            await msalInstance.loginRedirect(authService.editProfileRequest);
+        } catch (error) {
+            console.error("Profile edit failed:", error);
+        }
+    },
+
     /** Get current MSAL account */
     getCurrentAccount: (): AccountInfo | null => {
         const accounts = msalInstance.getAllAccounts();
@@ -204,6 +219,11 @@ const authService = {
     /** MSAL Login Request Scopes */
     loginRequest: {
         scopes: ["openid", "profile", "email", "offline_access", AZURE_B2C.APPLICATION_SCOPE]
+    },
+
+    editProfileRequest: {
+        scopes: ["openid", "profile", "email", "offline_access", AZURE_B2C.APPLICATION_SCOPE],
+        authority: `${AZURE_B2C.AUTHORITY}/${AZURE_B2C.EDIT_USERPROFILE_POLICY}/v2.0/`
     }
 };
 
