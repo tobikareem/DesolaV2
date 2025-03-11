@@ -1,6 +1,7 @@
-import axios from "axios";
+import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
 import { SESSION_VALUES, VITE_API_BASE_URL, VITE_API_TOKEN } from "../utils/constants";
 import authService from "./authService";
+import { toast } from "react-toastify";
 
 const apiClient = axios.create({
     baseURL: VITE_API_BASE_URL,
@@ -10,42 +11,53 @@ const apiClient = axios.create({
 });
 
 apiClient.interceptors.request.use(
-    async (config) => {
-        config.headers['x-functions-key'] = getFunctionKey();
+    async (config: InternalAxiosRequestConfig): Promise<InternalAxiosRequestConfig> => {
 
-        let accessToken = sessionStorage.getItem(SESSION_VALUES.azure_b2c_accessToken);
+        config.headers.set('x-functions-key', getFunctionKey());
 
-        if (accessToken && !authService.isTokenExpired(accessToken)) {
-            config.headers["Authorization"] = `Bearer ${accessToken}`;
-            return config;
-        }
+        const accessToken = await getAuthToken();
 
-        // Token is missing or expired, try to get a new one silently
-        try {
-            accessToken = await authService.getToken();
-
-            if (accessToken) {
-                config.headers["Authorization"] = `Bearer ${accessToken}`;
-                return config;
-            }
-
+        if (accessToken) {
+            config.headers.set('Authorization', `Bearer ${accessToken}`);
+        } else {
             const isAuthenticated = sessionStorage.getItem(SESSION_VALUES.azure_isAuthenticated) === 'true';
 
             if (isAuthenticated) {
                 console.warn("Failed to acquire token silently for authenticated user");
-                // Don't redirect here, just return the config without token
-                // The API call may fail, but the UI can handle that appropriately
+                // Let the API call proceed without token - it will likely fail with 401
             }
-
-            return config;
-        } catch (error) {
-            console.error("Error acquiring token:", error);
-            // Don't automatically redirect on failed requests
-            // Let the API call fail and let the UI handle the error
-            return config;
         }
+
+        return config;
     },
-    (error) => Promise.reject(error)
+    (error: AxiosError) => Promise.reject(error)
+);
+
+apiClient.interceptors.response.use(
+    (response) => response,
+    (error: AxiosError) => {
+        if (error.response) {
+            const { status } = error.response;
+            switch (status) {
+                case 401:
+                    toast.warn("Unauthorized request - user may need to re-authenticate");
+                    break;
+                case 403:
+                    toast.warn("Forbidden request - user may need to re-authenticate");
+                    break;
+                case 404:
+                    toast.warn("Resource not found");
+                    break;
+                case 500:
+                    toast.error("Internal server error. Please contact support");
+                    break;
+                default:
+                    toast.error(`Unexpected error occurred (Code: ${status})`);
+            }
+        }
+
+        return Promise.reject(error);
+    }
 );
 
 const getFunctionKey = (): string => {
@@ -56,6 +68,22 @@ const getFunctionKey = (): string => {
         return key;
     }
     return storedKey;
+};
+
+const getAuthToken = async (): Promise<string | null> => {
+    const accessToken = sessionStorage.getItem(SESSION_VALUES.azure_b2c_accessToken);
+
+    if (accessToken && !authService.isTokenExpired(accessToken)) {
+        return accessToken;
+    }
+
+    try {
+        const newToken = await authService.getToken();
+        return newToken;
+    } catch {
+        toast.error("Failed to authenticate user");
+        return null;
+    }
 };
 
 export default apiClient;
