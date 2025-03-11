@@ -1,75 +1,82 @@
 
 import { useCallback } from 'react';
+import { toast } from 'react-toastify';
 import apiClient from '../services/apiClient';
-import authService from '../services/authService';
 
+interface ApiHookResult {
+  getData: <T = unknown>(link: string) => Promise<T | undefined>;
+  postData: <T = unknown, R = unknown>(link: string, req: T) => Promise<R | undefined>;
+  putData: <T = unknown, R = unknown>(link: string, update: T) => Promise<R | undefined>;
+  patchData: <T = unknown, R = unknown>(link: string, patch: T) => Promise<R | undefined>;
+  deleteData: <R = unknown>(link: string, id?: string | number) => Promise<R | undefined>;
+}
 
+const useApi = (): ApiHookResult => {
 
-const useApi =()=> {
-
-  const token = import.meta.env.MODE === 'development' ? 'mymocktokenstring' : authService.getAccessToken();
-  console.log('token',token)
-
-  
-  const getData = useCallback(
-    async(link: string)=> {
-      try {
-        if(token){
-          const response = await apiClient.get(`${link}`);
-          return response.data;
-        }
-      } catch (err) {
-        console.log('get api:',err)
-      }
-
-  },
-  [token]
-);
-
-  const postData = async(link:string, req: never) =>  {
-    
+  const getData = useCallback(async <T = unknown>(link: string): Promise<T | undefined> => {
     try {
-      const response  = await apiClient.post(`${link}`, req );
+      const response = await apiClient.get<T>(link);
       return response.data;
     } catch (err) {
-      console.error('post api:',err)
-    } 
-  }
-
-  const putData = async(link:string, update:never) => {
-    
-    try {
-      const response = await apiClient.put(`${link}`, update)
-      return response.data;
-    } catch (err) {
-      console.error('put api:', err) 
+      console.log('get api:', err);
+      toast.error('Failed to fetch data from the server');
+      return undefined;
     }
-  }
+  }, []);
 
-  const patchData = async(link:string, patch:never) => {
-    
-    try{
-      const response = await apiClient.patch(`${link}`, patch);
+  const postData = useCallback(async <T = unknown, R = unknown>(link: string, req: T): Promise<R | undefined> => {
+    try {
+      const response = await apiClient.post<R>(link, req);
       return response.data;
-    } catch(err) {
-      console.error('patch api:', err)
-    } 
-  }
+    } catch (err) {
+      console.log('post api:', err);
+      toast.error('Failed to send data to the server');
+      return undefined;
+    }
+  }, []);
 
-  const deleteData = async(link:string, id:string | number) => {
-    
-    try{
-      const response = await apiClient.patch(`${link}`, id);
+  const putData = useCallback(async <T = unknown, R = unknown>(link: string, update: T): Promise<R | undefined> => {
+    try {
+      const response = await apiClient.put<R>(link, update);
       return response.data;
-    } catch(err) {
-      console.error('delete api:', err)
-    } 
-  };
+    } catch (err) {
+      toast.error('Failed to update data on the server');
+      console.error('put api:', err);
+      return undefined;
+    }
+  }, []);
+
+  const patchData = useCallback(async <T = unknown, R = unknown>(link: string, patch: T): Promise<R | undefined> => {
+    try {
+      const response = await apiClient.patch<R>(link, patch);
+      return response.data;
+    } catch (err) {
+      toast.error('Failed to update data on the server');
+      console.error('patch api:', err);
+      return undefined;
+    }
+  }, []);
+
+  const deleteData = useCallback(async <R = unknown>(link: string, id?: string | number): Promise<R | undefined> => {
+    try {
+      const url = id ? `${link}/${id}` : link;
+      const response = await apiClient.delete<R>(url);
+      return response.data;
+    } catch (err) {
+      toast.error('Failed to delete data on the server');
+      console.error('delete api:', err);
+      return undefined;
+    }
+  }, []);
 
   return {
-    getData, postData, putData, patchData, deleteData
-  }
-}
+    getData,
+    postData,
+    putData,
+    patchData,
+    deleteData
+  };
+};
 
 export default useApi;
 
