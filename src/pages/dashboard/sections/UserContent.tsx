@@ -1,39 +1,52 @@
-import { Text } from "../../../components/TextComp";
-import { Input } from '../../../components/InputField';
-import profileImg from '../../../assets/Ellipse 137.png';
+import { useEffect } from "react";
+import { PreferencesSection } from "../../../components/dashboard-sections/preference";
+import { ProfileSection } from "../../../components/dashboard-sections/profile";
+import { useAuthInfo } from "../../../hooks/useAuthInfo";
+import authService from "../../../services/authService";
+import { useUserDashboard } from "../../../hooks/useDashboardInfo";
 
 export const UserContent: React.FC = () => {
-  return(
-    <div className="flex-1 overflow-y-auto">
-      <Text
-        as="h1"
-        size="2xl"
-        weight="bold"
-        className="font-grotesk text-primary-500 mb-5"
-      >
-        Profile
-      </Text>
-      <div className="mt-7 w-96">
-        <img src={profileImg} className="mt-8 mx-auto mb-8" alt="" />
-        <Input
-          label="First Name"
-          labelClassName="!text-neutral !text-base !font-medium"
-          value="Daniel"
-          className="text-sm mb-4 w-full rounded-lg"
-        />
-        <Input
-          label="Last Name"
-          labelClassName="!text-neutral !text-base !font-medium"
-          value="Olamide"
-          className="text-sm mb-4 w-full rounded-lg"
-        />
-        <Input
-          label="Email"
-          labelClassName="!text-neutral !text-base !font-medium"
-          value="danielolamide87@outlook.com"
-          className="text-sm mb-4 w-full rounded-lg"
-        />
-      </div>
+  const { accountInfo } = useAuthInfo();
+  const {
+    airportSuggestions,
+    fetchAirports,
+    preferences,
+    handlePreferenceChange,
+    handleAirportSelect,
+    savePreferences,
+    loadPreferences
+  } = useUserDashboard();
+
+  // Load preferences when component mounts
+  useEffect(() => {
+    loadPreferences();
+  }, [loadPreferences]);
+
+  const email = accountInfo?.emails?.length ? accountInfo.emails[0] : "";
+  const firstName = accountInfo?.name?.split(" ")[0] ?? "";
+  const lastName = accountInfo?.name?.split(" ")[1] ?? "";
+
+  const handleEditProfile = async () => {
+    await authService.profileEdit();
+  };
+
+  return (
+    <div className="flex flex-col max-w-2xl mx-auto p-6 bg-white rounded-lg">
+      <ProfileSection
+        firstName={firstName}
+        lastName={lastName}
+        email={email}
+        onEditProfile={handleEditProfile}
+      />
+
+      <PreferencesSection
+        preferences={preferences}
+        onChange={handlePreferenceChange}
+        onSave={savePreferences}
+        onAirportInputChange={fetchAirports}
+        airportSuggestions={airportSuggestions}
+        onAirportSelect={handleAirportSelect}
+      />
     </div>
-  )
-}
+  );
+};

@@ -1,20 +1,24 @@
 import { useEffect, useState } from "react";
+import { IdToken } from "../models/IdToken";
 import authService from "../services/authService";
 import { SESSION_VALUES } from "../utils/constants";
 
 export const useAuthInfo = () => {
     const [userName, setUserName] = useState<string | null>(null);
     const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+    const [idClaims, setIdClaims] = useState<IdToken | null>(null);
 
     const loadUser = () => {
         // Try to get user from ID token
         const user = authService.getUserFromIdToken();
+        const accountUser = authService.getCurrentAccount()?.idTokenClaims as IdToken;
 
         // Check authentication status
         const authStatus = sessionStorage.getItem(SESSION_VALUES.azure_isAuthenticated) === "true";
 
         setUserName(user);
         setIsAuthenticated(!!user && authStatus);
+        setIdClaims(accountUser);
     };
 
     useEffect(() => {
@@ -39,7 +43,8 @@ export const useAuthInfo = () => {
         authService.signOut();
         setUserName(null);
         setIsAuthenticated(false);
+        setIdClaims(null);
     }
 
-    return { userName, isAuthenticated, logout: signOut };
+    return { userName, isAuthenticated, accountInfo: idClaims, logout: signOut };
 };

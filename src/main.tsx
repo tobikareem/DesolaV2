@@ -26,7 +26,7 @@ async function initializeMsal() {
 
       const idClaim = response.idTokenClaims as IdToken;
       customStorage.setItem(SESSION_VALUES.azure_name, idClaim.name ?? "");
-      customStorage.setItem(SESSION_VALUES.azure_b2c_userId, idClaim.sub ?? "");
+      customStorage.setItem(SESSION_VALUES.azure_b2c_userId, idClaim.oid ?? idClaim.sub ?? "");
       customStorage.setItem(SESSION_VALUES.azure_b2c_family_name, idClaim.family_name ?? "");
       customStorage.setItem(SESSION_VALUES.azure_b2c_given_name, idClaim.given_name ?? "");
 
@@ -34,6 +34,10 @@ async function initializeMsal() {
       customStorage.removeItem(SESSION_VALUES.postLoginRedirectUrl);
       if (redirectUrl && redirectUrl === "/") {
         window.location.href = "/dashboard";
+      }
+
+      if (idClaim.ftp === AZURE_B2C.EDIT_USERPROFILE_POLICY) {
+        console.log("Profile was updated successfully..");
       }
     }
   }).catch((error) => {

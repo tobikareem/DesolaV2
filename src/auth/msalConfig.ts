@@ -8,7 +8,7 @@ const customStorage = new CustomStorage();
 const msalConfig = {
     auth: {
         clientId: AZURE_B2C.CLIENT_ID,
-        authority: `${AZURE_B2C.AUTHORITY}/${AZURE_B2C.SIGNUP_SIGNIN_POLICY}`,
+        authority: `${AZURE_B2C.AUTHORITY}/${AZURE_B2C.SIGNUP_SIGNIN_POLICY}/v2.0/`,
         knownAuthorities: [`${AZURE_B2C.TENANT}.b2clogin.com`],
         redirectUri: AZURE_B2C.REDIRECT_URI,
         postLogoutRedirectUri: "/"

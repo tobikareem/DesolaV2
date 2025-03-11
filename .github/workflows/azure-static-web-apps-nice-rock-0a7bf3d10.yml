@@ -32,6 +32,7 @@ jobs:
           echo "VITE_B2C_PASSWORD_RESET_POLICY=${{ secrets.VITE_B2C_PASSWORD_RESET_POLICY }}" >> $GITHUB_ENV
           echo "VITE_B2C_REDIRECT_URI=${{ secrets.VITE_B2C_REDIRECT_URI }}" >> $GITHUB_ENV 
           echo "VITE_B2C_APPLICATION_SCOPE=${{ secrets.VITE_B2C_APPLICATION_SCOPE }}" >> $GITHUB_ENV 
+          echo "VITE_B2C_EDIT_USERPROFILE_POLICY=${{ secrets.VITE_B2C_EDIT_USERPROFILE_POLICY }}" >> $GITHUB_ENV 
       - name: Install Dependencies
         run: npm install
         
