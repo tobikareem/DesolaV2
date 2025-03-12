@@ -27,9 +27,9 @@ export const SESSION_VALUES = {
     azure_b2c_expiresAt: "azure_b2c_expiresAt",
     azure_b2c_user: "azure_b2c_user",
     azure_b2c_userId: "azure_b2c_userId",
-    azure_b2c_family_name: "azure_b2c_family_name",
-    azure_b2c_given_name: "azure_b2c_given_name",
-    azure_name: "azure_name",
+    azure_b2c_last_name: "azure_b2c_family_name",
+    azure_b2c_first_name: "azure_b2c_given_name",
+    azure_user_name: "azure_name",
     azure_isAuthenticated: "azure_is_authenticated",
     azure_msal_token_keys: `msal.token.keys.${AZURE_B2C.CLIENT_ID}`,
     postLoginRedirectUrl: "post_login_redirect_url"
