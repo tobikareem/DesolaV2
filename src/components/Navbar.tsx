@@ -140,29 +140,15 @@ export const Navbar = () => {
                                         })
                                     }
                                 </nav>
-
-                                {isAuthenticated ? (
-                                    <div className="hidden lg:flex items-center space-x-4">
-                                        <span className="text-base text-neutral-700">Hello, {userName}</span>
-                                        <button
-                                            onClick={logout}
-                                            className="flex lg:hidden items-center justify-center h-16 w-full bg-gradient-to-b from-[#FF9040] to-[#FF6B00] text-2xl text-white font-medium rounded-[48px] hover:scale-105 transition-transform duration-300 ease-in-out"
-                                        >
-                                            Logout
-                                        </button>
-                                    </div>
-                                ) : (
-                                    <button
-                                        onClick={(e) => {
-                                            handleDrawer(e);
-                                            authService.signIn();
-                                        }}
-                                        className="flex lg:hidden items-center justify-center h-16 w-full bg-gradient-to-b from-[#FF9040] to-[#FF6B00] text-2xl text-white font-medium rounded-[48px] hover:scale-105 transition-transform duration-300 ease-in-out">
-                                        Sign In
-                                    </button>
-                                )}
-
-
+ 
+                                <button
+                                    onClick={(e) => {
+                                        handleDrawer(e);
+                                        authService.signIn();
+                                    }}
+                                    className={`${isAuthenticated || router != '/' ? 'hidden' : 'flex'} lg:hidden items-center justify-center h-16 w-full bg-gradient-to-b from-[#FF9040] to-[#FF6B00] text-2xl text-white font-medium rounded-[48px] hover:scale-105 transition-transform duration-300 ease-in-out`}>
+                                    Sign In
+                                </button>
                             </div>
                         </div>
                     </div>

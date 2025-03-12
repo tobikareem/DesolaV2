@@ -12,6 +12,7 @@ import Verify from './pages/auth/verify';
 import Dashboard from './pages/dashboard/dashboard';
 import Error404Page from './pages/error/Error404';
 import HomeScreen from './pages/home/home';
+import { ToastContainer } from 'react-toastify';
 
 type RouteType = {
   path?: string;
@@ -26,7 +27,7 @@ function App() {
     { path: '/', element: <HomeScreen />, name: 'Home' },
     { path: '/reset', element: <ForgetPassword />, name: 'Forget Password' },
     { path: '/verify', element: <Verify />, name: 'Verify' },
-    {path: '/test', element: <Dashboard />, name: 'Test'},
+    { path: '/test', element: <Dashboard />, name: 'Test' },
     { path: '*', element: <Error404Page />, name: 'Error404' },
     { path: '/dashboard', element: <Dashboard />, name: 'Dashboard' },
   ];
@@ -38,25 +39,25 @@ function App() {
   const [showPreloader, setShowPreloader] = useState<string>('');
 
   const MockAccount = {
-    username:'mocktest ',
-    homeaccountId:'Desola@example.com',
-    localaccountId:'Desola',
+    username: 'mocktest ',
+    homeaccountId: 'Desola@example.com',
+    localaccountId: 'Desola',
   }
-  const ActiveAccount = import.meta.env.MODE ? MockAccount :  msalInstance.getActiveAccount()
+  const ActiveAccount = import.meta.env.MODE ? MockAccount : msalInstance.getActiveAccount()
 
 
   useEffect(() => {
     const handlePreloaderFn = () => setShowPreloader('hidden');
 
-    if (!['/','/dashboard'].includes(router.pathname)) {
-      handlePreloaderFn(); 
+    if (!['/', '/dashboard'].includes(router.pathname)) {
+      handlePreloaderFn();
     }
-  
+
     const time = 3200;
     const firstTimeLoad = sessionStorage.getItem('Load') === 'true';
 
     if (firstTimeLoad && router.pathname == '/test') {
-      setTimeout(handlePreloaderFn,500)
+      setTimeout(handlePreloaderFn, 500)
     } else if (firstTimeLoad) {
       handlePreloaderFn()
     }
@@ -73,6 +74,7 @@ function App() {
       <Preloader visibility={showPreloader} />
       <Navbar />
       <main>
+        <ToastContainer position='top-right' />
         <Routes>
           {publicRoutes.map((route) => (
             <Route key={route.name} path={route.path} element={route.element} />
