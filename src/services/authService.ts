@@ -58,6 +58,7 @@ const authService = {
         const accounts = msalInstance.getAllAccounts();
         if (accounts.length > 0) {
             msalInstance.setActiveAccount(accounts[0]);
+            storage.setItem(SESSION_VALUES.azure_isAuthenticated, "true");
             return accounts[0];
         }
 

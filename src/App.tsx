@@ -16,6 +16,8 @@ import Error404Page from './pages/error/Error404';
 import HomeScreen from './pages/home/home';
 import authService from './services/authService';
 import { CustomStorage } from './utils/customStorage';
+import PrivacyPolicy from './pages/legal/PrivacyPolicy';
+import TermsAndConditions from './pages/legal/TermsAndConditions';
 
 const storage = new CustomStorage();
 
@@ -36,6 +38,8 @@ function App() {
     { path: '/reset', element: <ForgetPassword />, name: 'Forget Password' },
     { path: '/verify', element: <Verify />, name: 'Verify' },
     { path: '/test', element: <Dashboard />, name: 'Test' },
+    { path: '/privacy', element: <PrivacyPolicy />, name: 'Privacy' },
+    { path: '/terms', element: <TermsAndConditions />, name: 'Terms' },
     { path: '*', element: <Error404Page />, name: 'Error404' },
   ];
 
