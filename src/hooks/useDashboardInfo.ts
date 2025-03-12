@@ -1,7 +1,7 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { toast } from 'react-toastify';
 import { ENDPOINTS_API_PATH } from "../utils/endpoints";
 import useApi from "./useApi";
-import { toast } from 'react-toastify';
 import { useAuthInfo } from "./useAuthInfo";
 
 export interface Airport {
@@ -35,6 +35,7 @@ export const useAirports = () => {
       const data = await getData<Airport[]>(`${ENDPOINTS_API_PATH.airports_autocomplete}?name=${query}`);
       setAirportSuggestions(data ?? []);
     } catch (error) {
+      toast.error("Failed to fetch airports. Please try again later.");
       console.error("Error fetching airports:", error);
       toast.error(`Error fetching Airports: ${error instanceof Error ? error.message : 'Unknown error'}`);
     } finally {
@@ -46,7 +47,7 @@ export const useAirports = () => {
 };
 
 export const useUserPreferences = () => {
-  const { accountInfo } = useAuthInfo();
+  const { accountInfo, isAuthenticated } = useAuthInfo();
   const { postData, getData } = useApi();
   const [preferences, setPreferences] = useState<UserPreferences>({
     originAirport: "",
@@ -59,8 +60,16 @@ export const useUserPreferences = () => {
 
   // Load user preferences
   const loadPreferences = useCallback(async () => {
-    const userId = accountInfo?.oid ?? accountInfo?.sub ?? "";
-    if (!userId) return;
+    if (!isAuthenticated) {
+      console.log("Cannot load preferences: User not authenticated");
+      return;
+    }
+
+    const userId = accountInfo?.objectId ?? accountInfo?.subject ?? "";
+    if (!userId) {
+      console.warn("Cannot load preferences: No user ID available");
+      return;
+    }
 
     setLoading(true);
     try {
@@ -75,7 +84,14 @@ export const useUserPreferences = () => {
     } finally {
       setLoading(false);
     }
-  }, [accountInfo, getData]);
+  }, [accountInfo, getData, isAuthenticated]);
+
+  // Reload preferences when authentication status changes
+  useEffect(() => {
+    if (isAuthenticated) {
+      loadPreferences();
+    }
+  }, [isAuthenticated, loadPreferences]);
 
   const handlePreferenceChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setPreferences({ ...preferences, [e.target.name]: e.target.value });
@@ -93,10 +109,15 @@ export const useUserPreferences = () => {
   };
 
   const savePreferences = useCallback(async () => {
+    if (!isAuthenticated) {
+      toast.error("You must be logged in to save preferences");
+      return;
+    }
+
     try {
       const updatedPreferences = {
         ...preferences,
-        userId: accountInfo?.oid ?? accountInfo?.sub ?? ""
+        userId: accountInfo?.objectId ?? accountInfo?.subject ?? ""
       };
 
       validatePreferences(updatedPreferences);
@@ -115,7 +136,7 @@ export const useUserPreferences = () => {
     } finally {
       setLoading(false);
     }
-  }, [preferences, accountInfo, postData]);
+  }, [preferences, accountInfo, postData, isAuthenticated]);
 
   return {
     preferences,
@@ -128,7 +149,7 @@ export const useUserPreferences = () => {
 };
 
 // Main composite hook for the dashboard
-export const useUserDashboard = () => {
+export const useDashboardInfo = () => {
   const { airportSuggestions, fetchAirports } = useAirports();
   const {
     preferences,
