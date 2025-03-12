@@ -353,7 +353,35 @@ const authService = {
             console.warn("Interactive login required.");
             window.dispatchEvent(new CustomEvent('auth:interactive-required'));
         }
-    }
+    },
+
+    handlePasswordReset: async (): Promise<void> => {
+        try {
+            await msalInstance.loginRedirect({
+                authority: `${AZURE_B2C.AUTHORITY}/${AZURE_B2C.PASSWORD_RESET_POLICY}`,
+                scopes: authService.loginRequest.scopes
+            });
+        } catch (error) {
+            console.error("Failed to redirect to password reset:", error);
+            throw error;
+        }
+    },
+
+    handleRedirectResult: async (): Promise<void> => {
+        try {
+            const response = await msalInstance.handleRedirectPromise();
+
+            if (response) {
+                console.log("Authentication successful, processing token");
+                authService.handleTokenResponse(response);
+            } else {
+                console.log("No authentication response found in the URL");
+            }
+        } catch (error) {
+            console.error("Error handling redirect:", error);
+            throw error;
+        }
+    },
 };
 
 export default authService;
