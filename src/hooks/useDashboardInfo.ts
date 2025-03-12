@@ -35,9 +35,8 @@ export const useAirports = () => {
       const data = await getData<Airport[]>(`${ENDPOINTS_API_PATH.airports_autocomplete}?name=${query}`);
       setAirportSuggestions(data ?? []);
     } catch (error) {
-      toast.error("Failed to fetch airports. Please try again later.");
       console.error("Error fetching airports:", error);
-      toast.error(`Error fetching Airports: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      toast.error(`Error fetching airports: ${error instanceof Error ? error.message : 'Unknown error'}`);
     } finally {
       setLoading(false);
     }
@@ -47,7 +46,7 @@ export const useAirports = () => {
 };
 
 export const useUserPreferences = () => {
-  const { accountInfo, isAuthenticated } = useAuthInfo();
+  const { accountInfo, isAuthenticated, isLoading: authLoading, isInitialized } = useAuthInfo();
   const { postData, getData } = useApi();
   const [preferences, setPreferences] = useState<UserPreferences>({
     originAirport: "",
@@ -57,11 +56,17 @@ export const useUserPreferences = () => {
     userId: "",
   });
   const [loading, setLoading] = useState(false);
+  const [loadAttempted, setLoadAttempted] = useState(false);
 
-  // Load user preferences
   const loadPreferences = useCallback(async () => {
+    if (authLoading || loading) {
+      return;
+    }
+
     if (!isAuthenticated) {
-      console.log("Cannot load preferences: User not authenticated");
+      if (isInitialized) {
+        console.log("Cannot load preferences: User not authenticated");
+      }
       return;
     }
 
@@ -72,26 +77,36 @@ export const useUserPreferences = () => {
     }
 
     setLoading(true);
+    setLoadAttempted(true);
+    
     try {
       const data = await getData<UserPreferences>(`${ENDPOINTS_API_PATH.user_preferences}/${userId}`);
+      
       if (data) {
         setPreferences(data);
+      } else {
+        console.log("No preferences found for user");
       }
     } catch (error) {
       console.error("Error loading preferences:", error);
-      const errorMessage = error instanceof Error ? error.message : "Unknown error";
-      toast.error(`Failed to save preferences. ${errorMessage}`);
+      toast.error(`Failed to load preferences: ${error instanceof Error ? error.message : "Unknown error"}`);
     } finally {
       setLoading(false);
     }
-  }, [accountInfo, getData, isAuthenticated]);
+  }, [accountInfo, getData, isAuthenticated, authLoading, loading, isInitialized]);
 
-  // Reload preferences when authentication status changes
   useEffect(() => {
-    if (isAuthenticated) {
+    if (isInitialized && isAuthenticated && !loadAttempted && !loading) {
+      console.log("Auth state settled, attempting to load preferences");
       loadPreferences();
     }
-  }, [isAuthenticated, loadPreferences]);
+  }, [isInitialized, isAuthenticated, loadAttempted, loading, loadPreferences]);
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      setLoadAttempted(false);
+    }
+  }, [isAuthenticated]);
 
   const handlePreferenceChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setPreferences({ ...preferences, [e.target.name]: e.target.value });
@@ -140,7 +155,7 @@ export const useUserPreferences = () => {
 
   return {
     preferences,
-    loading,
+    loading: loading || authLoading,
     handlePreferenceChange,
     handleAirportSelect,
     savePreferences,
