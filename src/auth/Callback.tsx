@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import ErrorScreen from "../components/ErrorScreen";
 import LoadingScreen from "../components/LoadingScreen";
 import SuccessScreen from "../components/SuccessScreen";
-import { msalInstance } from "./msalConfig";
+import authService from "../services/authService";
 
 const Callback: React.FC = () => {
   const navigate = useNavigate();
@@ -13,11 +13,11 @@ const Callback: React.FC = () => {
   useEffect(() => {
     const processCallback = async () => {
       try {
-        if (msalInstance.getActiveAccount()) {
+        if (authService.getCurrentAccount()) {
           return; // Already signed in
         }
 
-        
+
 
       } catch (err) {
         console.error("Authentication failure:", err);

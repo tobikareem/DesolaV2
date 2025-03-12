@@ -1,50 +1,67 @@
-import { useEffect, useState } from "react";
+import { plainToInstance } from "class-transformer";
+import { useCallback, useEffect, useState } from "react";
 import { IdToken } from "../models/IdToken";
 import authService from "../services/authService";
 import { SESSION_VALUES } from "../utils/constants";
+import { CustomStorage } from "../utils/customStorage";
+
+const storage = new CustomStorage();
 
 export const useAuthInfo = () => {
     const [userName, setUserName] = useState<string | null>(null);
     const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
     const [idClaims, setIdClaims] = useState<IdToken | null>(null);
 
-    const loadUser = () => {
-        // Try to get user from ID token
+    const loadUser = useCallback(() => {
+        const account = authService.getCurrentAccount();
+
         const user = authService.getUserFromIdToken();
-        const accountUser = authService.getCurrentAccount()?.idTokenClaims as IdToken;
 
-        // Check authentication status
-        const authStatus = sessionStorage.getItem(SESSION_VALUES.azure_isAuthenticated) === "true";
+        const accountUser = account?.idTokenClaims
+            ? plainToInstance(IdToken, account.idTokenClaims)
+            : null;
 
-        setUserName(user);
-        setIsAuthenticated(!!user && authStatus);
+        const authStatus = storage.getItem(SESSION_VALUES.azure_isAuthenticated) === "true";
+
+        setUserName(accountUser?.firstName ?? accountUser?.fullName ?? user ?? "");
+        setIsAuthenticated(!!account && !!user && authStatus);
         setIdClaims(accountUser);
-    };
+    }, []);
+
+    const signOut = useCallback(async () => {
+        await authService.signOut();
+        setUserName(null);
+        setIsAuthenticated(false);
+        setIdClaims(null);
+    }, []);
 
     useEffect(() => {
         loadUser();
 
-        // Set up event listeners for auth changes
         const handleUserSignedIn = () => loadUser();
-        window.addEventListener("userSignedIn", handleUserSignedIn);
+        const handleAuthRequired = () => {
+            loadUser(); // This will update authenticated state if token is invalid
+        };
 
-        // Check authentication status periodically
+        window.addEventListener("userSignedIn", handleUserSignedIn);
+        window.addEventListener("auth:interactive-required", handleAuthRequired);
+
         const intervalId = setInterval(() => {
             loadUser();
-        }, 5 * 60 * 1000); // Check every 5 minutes
+        }, 5 * 60 * 1000);
 
         return () => {
             window.removeEventListener("userSignedIn", handleUserSignedIn);
+            window.removeEventListener("auth:interactive-required", handleAuthRequired);
             clearInterval(intervalId);
         };
-    }, []);
+    }, [loadUser]);
 
-    const signOut = () => {
-        authService.signOut();
-        setUserName(null);
-        setIsAuthenticated(false);
-        setIdClaims(null);
-    }
-
-    return { userName, isAuthenticated, accountInfo: idClaims, logout: signOut };
+    return {
+        userName,
+        isAuthenticated,
+        accountInfo: idClaims,
+        logout: signOut,
+        refreshInfo: loadUser
+    };
 };
