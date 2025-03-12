@@ -1,5 +1,5 @@
-import { Headset, House, LogOut, Trash2, User, } from 'lucide-react';
-import React, { useState } from 'react';
+import React, { useEffect, useState} from 'react';
+import {House,Trash2,User,Headset, LogOut,} from 'lucide-react';
 import { PiHeadsetFill, PiRoadHorizonBold, PiRoadHorizonFill, PiTrashFill } from 'react-icons/pi';
 import { RiHome5Fill, RiUserFill } from 'react-icons/ri';
 import { useNavigate } from 'react-router';
@@ -14,11 +14,15 @@ import { PathContent } from './PathContent';
 import { SupportContent } from './SupportContent';
 import { TrashContent } from './TrashContent';
 import { UserContent } from './UserContent';
+import { GlobalContext } from '../../../hooks/globalContext';
+
 
 const storage = new CustomStorage();
 
 export const RightPane: React.FC = () => {
   const navigate = useNavigate();
+
+  const {RecentPromptsData} = React.useContext(GlobalContext);
 
   const [selectedTab, setSelectedTab] = useState<string>('home');
   const [showLogoutModal, setShowLogoutModal] = useState<boolean>(false);
@@ -70,7 +74,10 @@ export const RightPane: React.FC = () => {
   const handleConfirmDelete = () => {
     storage.removeItem('RecentPrompts');
     setShowDeleteModal(false);
-  }
+    window.location.reload();
+  };
+
+  useEffect(() => {},[RecentPromptsData])
 
 
 
@@ -131,8 +138,8 @@ export const RightPane: React.FC = () => {
           </Btn>
         </div>
         <div className="bg-white w-full shadow-md ">
-          <div className="max-w-[480px] flex flex-col h-full justify-between pt-12 px-8 ">
-            <div className='overflow-y-auto'>
+          <div className=" flex flex-col h-full justify-between pt-12">
+            <div className='max-w-[480px] overflow-y-auto px-8 '>
               {renderContentsHere()}
             </div>
             <div className=" h-30 border-t items-center flex p-7">
