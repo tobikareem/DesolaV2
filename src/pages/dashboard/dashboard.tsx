@@ -10,6 +10,7 @@ import { RightPane } from './sections/RightPanel';
 import { useAuthInfo } from '../../hooks/useAuthInfo';
 import { PopData } from '../../components/ui/PopData';
 import { Text } from '../../components/TextComp';
+import Calendar from '../../components/Calender';
 
 // interface AirportType {
 //   name?: string;
@@ -251,21 +252,29 @@ const Dashboard: React.FC = () => {
           </div>
 
           <div className="flex flex-col flex-1 bg-background space-y-4 mt-16 lg:mt-0 p-5 lg:pl-20  overflow-y-auto">
-            {ChatSystem?.map((item:{ id: number; send?: string; receive?: undefined } | { id: number; send?: undefined; receive?: string }) => {
+            {ChatSystem?.map(
+              (
+                item:
+                  | { id: number; send?: string; receive?: undefined }
+                  | { id: number; send?: undefined; receive?: string }
+              ) => {
                 const position = item?.send === undefined;
                 return (
                   <div
                     key={item?.id}
-                    className={`font-work flex  ${position ? 'justify-end' : 'items-start'} space-x-2 `}
+                    className={`font-work flex  ${
+                      position ? 'justify-end' : 'items-start'
+                    } space-x-2 `}
                   >
-                    {item?.send === undefined ? 
-                      (<FaUser className="bg-white border border-primary-100 text-primary-500 size-7 p-1.5 rounded-full text-lg " />) 
-                      : 
-                      (<BsStars className="bg-primary-500 text-white  size-7 p-1.5 rounded-full text-lg " />)
-                    }
+                    {item?.send === undefined ? (
+                      <FaUser className="bg-white border border-primary-100 text-primary-500 size-7 p-1.5 rounded-full text-lg " />
+                    ) : (
+                      <BsStars className="bg-primary-500 text-white  size-7 p-1.5 rounded-full text-lg " />
+                    )}
                     <span
                       className={`${
-                        position ? 'bg-secondary-100' : 'bg-primary-100'} text-neutral p-3 rounded-lg`}
+                        position ? 'bg-secondary-100' : 'bg-primary-100'
+                      } text-neutral p-3 rounded-lg`}
                     >
                       {item?.send ?? item?.receive}
                     </span>
@@ -292,14 +301,14 @@ const Dashboard: React.FC = () => {
               />
             </div>
             <PopData visibility={showPopData} position={'bottom-30 left-30'}>
-              {airport?.map((item, index:number) => (
+              {airport?.map((item, index: number) => (
                 <button
                   key={index}
                   type="submit"
                   className="flex items-center p-3 border-b border-neutral-300"
                   onClick={() => {
                     setInputValue(item?.name);
-                    handlePopData()
+                    handlePopData();
                   }}
                 >
                   <Text
@@ -314,12 +323,20 @@ const Dashboard: React.FC = () => {
             </PopData>
           </div>
           <Modal close={toggleModal} display={showModal}>
-            <EditModal prompts={RecentPrompts} chatSystem={ChatSystem} airport={[]} close={toggleModal} />
+            <EditModal
+              prompts={RecentPrompts}
+              chatSystem={ChatSystem}
+              airport={[]}
+              close={toggleModal}
+            />
           </Modal>
-          <Modal position='absolute' close={toggleCalendar} display={showCalendar}>
-            { }
+          <Modal
+            position="absolute"
+            close={toggleCalendar}
+            display={showCalendar}
+          >
+            <Calendar />
           </Modal>
-          
         </div>
         <RightPane />
       </div>
