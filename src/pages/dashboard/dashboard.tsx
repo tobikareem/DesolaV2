@@ -1,5 +1,5 @@
 import { PenLine } from 'lucide-react';
-import React, { useEffect, useRef, useState, WheelEvent } from 'react';
+import React, { useEffect, useRef, useState, WheelEvent, useContext } from 'react';
 import { BsStars } from 'react-icons/bs';
 import { FaUser } from 'react-icons/fa';
 import { IoSend } from 'react-icons/io5';
@@ -10,6 +10,10 @@ import { RightPane } from './sections/RightPanel';
 import { useAuthInfo } from '../../hooks/useAuthInfo';
 import { PopData } from '../../components/ui/PopData';
 import { Text } from '../../components/TextComp';
+import { useAirports } from '../../hooks/useDashboardInfo';
+import { useDebounce } from '../../hooks/useDebounce';
+import { GlobalContext } from '../../hooks/globalContext';
+
 
 // interface AirportType {
 //   name?: string;
@@ -25,11 +29,15 @@ const Dashboard: React.FC = () => {
   const [showPopData, setShowPopData] = useState<boolean>(false);
   const [RecentPrompts, setRecentPrompts] = useState<string[]>([]);
   const [inputValue, setInputValue] = useState<string>('');
+  const { setRecentPromptsData } = useContext(GlobalContext);
   //  const [airport, setAirport] = React.useState<AirportType[]>([]);
   //  const [Loading, setLoading] = useState<boolean>(true);
   //  const [error , setError] = useState<null>();
   
+  const debounce = useDebounce();
   const { userName, isAuthenticated,  } = useAuthInfo();
+  const {fetchAirports, airportSuggestions, loading} = useAirports();
+ 
   
   const toggleModal = () => {
     setShowModal((prevState) => !prevState);
@@ -71,7 +79,7 @@ const Dashboard: React.FC = () => {
       setRecentPrompts((prevRecentPrompts) => {
         const updatedPrompts = [...prevRecentPrompts, newPrompt];
         saveTosessionStorage('RecentPrompts', updatedPrompts);
-        console.log('updatedPrompts:', updatedPrompts);
+        setRecentPromptsData(updatedPrompts); 
         return updatedPrompts;
       });
       setInputValue('');
@@ -101,8 +109,11 @@ const Dashboard: React.FC = () => {
     }
   }, []);
 
-  const handlePopData =()=> {
-    setShowPopData(prevState => !prevState)
+  const handleOpenPopData =()=> {
+    setShowPopData(true)
+  }
+  const handleClosePopData =()=> {
+    setShowPopData(false)
   }
 
   const ChatSystem = [
@@ -144,11 +155,11 @@ const Dashboard: React.FC = () => {
     },
   ];
 
-  const airport = [
-    { id: 1, name: 'Murtala Muhammed International Airport', code: 'MMIA' },
-    { id: 2, name: 'Seattle-Tacoma International Airport', code: 'SEA' },
-    { id: 3, name: 'Los Angeles International Airport', code: 'LAX' },
-  ];
+  // const airport = [
+  //   { id: 1, name: 'Murtala Muhammed International Airport', code: 'MMIA' },
+  //   { id: 2, name: 'Seattle-Tacoma International Airport', code: 'SEA' },
+  //   { id: 3, name: 'Los Angeles International Airport', code: 'LAX' },
+  // ];
 
   // const {getData} = useApi();
 
@@ -278,12 +289,15 @@ const Dashboard: React.FC = () => {
             <div className="items-center max-w-[678px] w-full rounded-2xl py-4 px-8 flex message bg-tint">
               <Input
                 value={inputValue}
-                onChange={handleInputChange}
+                onChange={(e)=>{handleInputChange(e); 
+                  debounce(() => fetchAirports(e.target.value)); 
+                  handleOpenPopData()
+                  }}
                 onKeyDown={handleKeyPress}
-                onFocus={handlePopData}
+                onFocus={handleOpenPopData}
                 type="text"
                 placeholder="Please Enter Your Message"
-                className="text-xl flex-grow bg-transparent border-0  rounded-lg outline-0"
+                className="text-xl flex-grow bg-transparent focus:bg-transparent border-0  rounded-lg outline-0"
               />
               <IoSend
                 onClick={handlePromptUpdate}
@@ -291,26 +305,28 @@ const Dashboard: React.FC = () => {
                 size={24}
               />
             </div>
-            <PopData visibility={showPopData} position={'bottom-30 left-30'}>
-              {airport?.map((item, index:number) => (
-                <button
-                  key={index}
-                  type="submit"
-                  className="flex items-center p-3 border-b border-neutral-300"
-                  onClick={() => {
-                    setInputValue(item?.name);
-                    handlePopData()
-                  }}
-                >
-                  <Text
-                    size="xs"
-                    color="text-neutral-500 text-left"
-                    className="font-work"
+            <PopData visibility={showPopData} position={'bottom-30 md:left-30'}>
+              { loading &&
+                  airportSuggestions?.map((item, index:number) => (
+                  <button
+                    key={index}
+                    type="submit"
+                    className="flex items-center p-3 border-b border-neutral-300"
+                    onClick={() => {
+                      setInputValue(item?.name);
+                      handleClosePopData()
+                    }}
                   >
-                    {item?.name} ({item?.code})
-                  </Text>
-                </button>
-              ))}
+                    <Text
+                      size="xs"
+                      color="text-neutral-500 text-left"
+                      className="font-work"
+                    >
+                      {item?.name} ({item?.code})
+                    </Text>
+                  </button>
+                ))
+              }
             </PopData>
           </div>
           <Modal close={toggleModal} display={showModal}>

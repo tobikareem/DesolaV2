@@ -33,10 +33,11 @@ export const useAirports = () => {
     setLoading(true);
     try {
       const data = await getData<Airport[]>(`${ENDPOINTS_API_PATH.airports_autocomplete}?name=${query}`);
-      setAirportSuggestions(data || []);
+      setAirportSuggestions(data ?? []);
     } catch (error) {
       toast.error("Failed to fetch airports. Please try again later.");
       console.error("Error fetching airports:", error);
+      toast.error(`Error fetching Airports: ${error instanceof Error ? error.message : 'Unknown error'}`);
     } finally {
       setLoading(false);
     }
@@ -78,6 +79,8 @@ export const useUserPreferences = () => {
       }
     } catch (error) {
       console.error("Error loading preferences:", error);
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
+      toast.error(`Failed to save preferences. ${errorMessage}`);
     } finally {
       setLoading(false);
     }
@@ -100,6 +103,7 @@ export const useUserPreferences = () => {
 
   const validatePreferences = (prefsToValidate: UserPreferences) => {
     if (!prefsToValidate.userId) {
+      toast.error("User ID is required.");
       throw new Error("User ID is required.");
     }
   };

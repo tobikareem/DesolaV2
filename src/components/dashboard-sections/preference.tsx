@@ -4,6 +4,8 @@ import { Airport, UserPreferences } from "../../hooks/useDashboardInfo";
 import { Btn } from "../Button";
 import { Input } from "../InputField";
 import { AirportSuggestions } from "./airport-suggestions";
+import { Listbox, ListboxButton, ListboxOption, ListboxOptions } from '@headlessui/react'
+import { MdKeyboardArrowDown } from "react-icons/md";
 
 // Editable preferences section
 export const PreferencesSection = ({
@@ -47,7 +49,7 @@ export const PreferencesSection = ({
                             onAirportInputChange(e.target.value);
                             setActiveField("originAirport");
                         }}
-                        className="w-full px-4 py-2 border rounded-lg"
+                        className="w-full px-4 py-2 border rounded-[10px]"
                         onBlur={() => setTimeout(() => setActiveField(null), 200)}
                         placeholder="Search airports..."
                     />
@@ -76,7 +78,7 @@ export const PreferencesSection = ({
                             onAirportInputChange(e.target.value);
                             setActiveField("destinationAirport");
                         }}
-                        className="w-full px-4 py-2 border rounded-lg"
+                        className="w-full px-4 py-2 border rounded-[10px]"
                         onBlur={() => setTimeout(() => setActiveField(null), 200)}
                         placeholder="Search airports..."
                     />
@@ -90,44 +92,78 @@ export const PreferencesSection = ({
             </div>
 
             {/* Travel Class Selection */}
-            <div className="mb-4">
+            <div className="mb-4 relative">
                 <label htmlFor="travelClass" className="block text-sm font-medium text-gray-700 mb-1">
                     Preferred Class of Travel
                 </label>
-                <select
-                    id="travelClass"
-                    name="travelClass"
-                    value={preferences.travelClass}
-                    onChange={onChange}
-                    className="w-full border px-4 py-2 rounded-lg"
-                >
-                    <option value="Economy">Economy</option>
-                    <option value="Business">Business</option>
-                    <option value="First Class">First Class</option>
-                </select>
+                <Listbox
+                        name="travelClass"
+                        value={preferences.travelClass}
+                        onChange={(value) => {
+                            onChange({ target: { name: 'travelClass', value } } as React.ChangeEvent<HTMLSelectElement>)
+                        }}
+                    >
+                    <ListboxButton className="font-work flex items-center w-full border px-4 py-2 rounded-[10px] justify-between hover:bg-neutral-300 text-Neutral font-medium">
+                        <span>
+                            {preferences.travelClass}
+                        </span>
+                        <MdKeyboardArrowDown />
+                    </ListboxButton>
+                    <ListboxOptions className={`absolute w-full border border-neutral-300 rounded-[10px] mt-1 bg-neutral-200 z-10 overflow-hidden`}>
+                        {
+                            ['Economy','Business','First Class'].map((option) => (
+
+                                <ListboxOption value={option}
+                                    key={option}
+                                    className="font-work border-b border-neutral-100 w-full px-4 py-2 data-[focus]:bg-primary-600 data-[focus]:text-white text-Neutral font-medium cursor-pointer"
+
+                                >
+                                    {option}
+                                </ListboxOption>
+                            ))
+                        }
+                    </ListboxOptions>
+                </Listbox>
             </div>
 
             {/* Stop-Overs Selection */}
-            <div className="mb-5">
+            <div className="mb-6 relative">
                 <label htmlFor="stopOvers" className="block text-sm font-medium text-gray-700 mb-1">
                     Number of Stop-Overs
                 </label>
-                <select
-                    id="stopOvers"
-                    name="stopOvers"
-                    value={preferences.stopOvers}
-                    onChange={onChange}
-                    className="w-full border px-4 py-2 rounded-lg"
-                >
-                    <option value="Non-Stop">Non-Stop</option>
-                    <option value="1 Stop">1 Stop</option>
-                    <option value="2+ Stops">2+ Stops</option>
-                </select>
+                <Listbox
+                        name="stopOvers"
+                        value={preferences.stopOvers}
+                        onChange={(value) => {
+                            onChange({ target: { name: 'travelClass', value } } as React.ChangeEvent<HTMLSelectElement>)
+                        }}
+                    >
+                    <ListboxButton className="font-work flex items-center w-full border px-4 py-2 rounded-[10px] justify-between hover:bg-neutral-300 text-Neutral font-medium">
+                        <span>
+                            {preferences.stopOvers}
+                        </span>
+                        <MdKeyboardArrowDown />
+                    </ListboxButton>
+                    <ListboxOptions className={`absolute w-full border border-neutral-300 rounded-[10px] mt-1 bg-neutral-200 z-10 overflow-hidden`}>
+                        {
+                            ['Non-Stop','1 Stop','2+ Stops'].map((option) => (
+
+                                <ListboxOption value={option}
+                                    key={option}
+                                    className="font-work border-b border-neutral-100 w-full px-4 py-2 data-[focus]:bg-primary-600 data-[focus]:text-white text-Neutral font-medium cursor-pointer"
+
+                                >
+                                    {option}
+                                </ListboxOption>
+                            ))
+                        }
+                    </ListboxOptions>
+                </Listbox>
             </div>
 
             <Btn
                 onClick={onSave}
-                className="w-full bg-success text-white px-6 py-2"
+                className="w-full bg-success text-white px-6 py-2 "
             >
                 Save Preferences
             </Btn>
