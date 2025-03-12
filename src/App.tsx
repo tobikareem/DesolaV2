@@ -107,7 +107,7 @@ function App() {
       <Preloader visibility={showPreloader} />
       <Navbar />
       <main>
-        <ToastContainer position='bottom-center' />
+        <ToastContainer position='top-right' />
         <Routes>
           {publicRoutes.map((route) => (
             <Route key={route.name} path={route.path} element={route.element} />
