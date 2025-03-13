@@ -5,7 +5,7 @@ import { FaRegBell } from "react-icons/fa6";
 export const ClearChat
  = ({Action, ConfirmAction}:{Action:()=> void; ConfirmAction:()=> void;}) => {
   return (
-    <div className="flex flex-col items-center justify-center flex-1 w-full max-w-[522px]">
+    <div className="flex p-5 bg-white rounded-lg flex-col items-center justify-center flex-1 w-full max-w-[522px]">
       <FaRegBell className="text-4xl text-warning"/>
         <Text as='h3' size='xl' weight='medium' className="!font-grotesk text-center !text-Neutral mt-4">
           Are you sure you want to clear your chat with us?

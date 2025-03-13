@@ -15,6 +15,8 @@ import { SupportContent } from './SupportContent';
 import { TrashContent } from './TrashContent';
 import { UserContent } from './UserContent';
 import { GlobalContext } from '../../../hooks/globalContext';
+import FlightOffersModal from '../../../components/modals/FlightOffersModal';
+import { offers } from '../../../components/ui/offers';
 
 
 const storage = new CustomStorage();
@@ -27,6 +29,7 @@ export const RightPane: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState<string>('home');
   const [showLogoutModal, setShowLogoutModal] = useState<boolean>(false);
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
+  const [showFlightModal, setShowFlightModal] = useState<boolean>(false);
 
   const sidebarOptions = [
     { id: 'home', icon: <House size={24} />, icon2: <RiHome5Fill />, label: 'Home' },
@@ -63,6 +66,10 @@ export const RightPane: React.FC = () => {
 
   const toggleDeleteModal = () => {
     setShowDeleteModal(prevState => !prevState)
+  }
+
+  const toggleFlightModal = () => {
+    setShowFlightModal(prevState => !prevState)
   }
 
   const handleConfirmLogout = () => {
@@ -131,23 +138,26 @@ export const RightPane: React.FC = () => {
               {selectedTab === option.id ? option.icon2 : option.icon}
             </div>
           ))}
-          <Btn onClick={toggleLogoutModal}
-            className='text-primary-600 rounded-none border-none'
+          <Btn
+            onClick={toggleLogoutModal}
+            className="text-primary-600 rounded-none border-none"
           >
             <LogOut size={24} />
           </Btn>
         </div>
         <div className="bg-white w-full shadow-md ">
           <div className=" flex flex-col h-full justify-between pt-12">
-            <div className='max-w-[480px] overflow-y-auto px-8 '>
+            <div className="max-w-[480px] overflow-y-auto px-8 ">
               {renderContentsHere()}
             </div>
             <div className=" h-30 border-t items-center flex p-7">
               <Btn
-                className={`${selectedTab === 'road'
-                  ? 'bg-gradient-to-b from-[#FF9040] to-[#FF6B00] text-white '
-                  : 'bg-neutral-300 text-neutral-500'
-                  } p-1 w-full max-w-[385px]`}
+                className={`${
+                  selectedTab === 'road'
+                    ? 'bg-gradient-to-b from-[#FF9040] to-[#FF6B00] text-white '
+                    : 'bg-neutral-300 text-neutral-500'
+                } p-1 w-full max-w-[385px]`}
+                onClick={toggleFlightModal}
               >
                 Search
               </Btn>
@@ -156,11 +166,24 @@ export const RightPane: React.FC = () => {
         </div>
       </div>
       <Modal display={showDeleteModal} close={toggleDeleteModal}>
-        <ClearChat Action={toggleLogoutModal} ConfirmAction={handleConfirmDelete} />
+        <ClearChat
+          Action={toggleLogoutModal}
+          ConfirmAction={handleConfirmDelete}
+        />
       </Modal>
 
       <Modal display={showLogoutModal} close={toggleLogoutModal}>
-        <ReturnContent Action={toggleLogoutModal} ConfirmAction={handleConfirmLogout} />
+        <ReturnContent
+          Action={toggleLogoutModal}
+          ConfirmAction={handleConfirmLogout}
+        />
+      </Modal>
+      <Modal
+        position="absolute"
+        close={toggleFlightModal}
+        display={showFlightModal}
+      >
+        <FlightOffersModal offers={offers} onClose={toggleFlightModal} />
       </Modal>
     </>
   );

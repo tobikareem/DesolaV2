@@ -10,14 +10,13 @@ import { RightPane } from './sections/RightPanel';
 import { useAuthInfo } from '../../hooks/useAuthInfo';
 import { PopData } from '../../components/ui/PopData';
 import { Text } from '../../components/TextComp';
-<<<<<<< HEAD
-import Calendar from '../../components/Calender';
-=======
 import { useAirports } from '../../hooks/useDashboardInfo';
 import { useDebounce } from '../../hooks/useDebounce';
 import { GlobalContext } from '../../hooks/globalContext';
+import FlightOffersModal from '../../components/modals/FlightOffersModal';
+import { offers } from '../../components/ui/offers';
+import Calendar from '../../components/Calender';
 
->>>>>>> 3652f6d5bd95f2d7313208122cdfc3fd83f5d4f9
 
 // interface AirportType {
 //   name?: string;
@@ -30,6 +29,7 @@ const Dashboard: React.FC = () => {
 
   const [showModal, setShowModal] = useState<boolean>(false);
   const [showCalendar, setShowCalendar] = useState<boolean>(false);
+  const [showFlightModal, setShowFlightModal] = useState<boolean>(false);
   const [showPopData, setShowPopData] = useState<boolean>(false);
   const [RecentPrompts, setRecentPrompts] = useState<string[]>([]);
   const [inputValue, setInputValue] = useState<string>('');
@@ -50,6 +50,10 @@ const Dashboard: React.FC = () => {
   const toggleCalendar = () => {
     setShowCalendar((prevState) => !prevState);
   };
+
+  const toggleFlightModal = () => {
+    setShowFlightModal((prevState) => !prevState)
+  }
 
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
@@ -356,6 +360,9 @@ const Dashboard: React.FC = () => {
           >
             <Calendar />
           </Modal>
+   
+
+
         </div>
         <RightPane />
       </div>
