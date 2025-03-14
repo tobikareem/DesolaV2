@@ -52,7 +52,7 @@ export const useAirports = () => {
     } finally {
       setLoading(false);
     }
-  }, [getData]);
+  }, [cacheExpiryTIme, getData]);
 
   return { airportSuggestions, fetchAirports, loading };
 };
