@@ -13,6 +13,8 @@ import { Text } from '../../components/TextComp';
 import { useAirports } from '../../hooks/useDashboardInfo';
 import { useDebounce } from '../../hooks/useDebounce';
 import MobileRender from '../../components/dashboard-sections/mobileRender';
+import Calendar from '../../components/Calender';
+
 
 
 
@@ -20,6 +22,7 @@ const Dashboard: React.FC = () => {
 
   const [showModal, setShowModal] = useState<boolean>(false);
   const [showCalendar, setShowCalendar] = useState<boolean>(false);
+  const [showFlightModal, setShowFlightModal] = useState<boolean>(false);
   const [showPopData, setShowPopData] = useState<boolean>(false);
   const [RecentPrompts, setRecentPrompts] = useState<string[]>([]);
   const [inputValue, setInputValue] = useState<string>('');
@@ -47,6 +50,10 @@ const Dashboard: React.FC = () => {
   const toggleCalendar = () => {
     setShowCalendar((prevState) => !prevState);
   };
+
+  const toggleFlightModal = () => {
+    setShowFlightModal((prevState) => !prevState)
+  }
 
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
@@ -178,7 +185,6 @@ const Dashboard: React.FC = () => {
                     return 'bg-neutral-300';
                   case 9:
                     return 'bg-[#5C88DA80]';
-
                   default:
                     return 'bg-primary-100';
                 }
@@ -205,18 +211,25 @@ const Dashboard: React.FC = () => {
           </div>
 
           <div className="flex flex-col flex-1 bg-background space-y-4 mt-16 lg:mt-0 p-5 lg:pl-20  overflow-y-auto">
-            {ChatSystem?.map((item:{ id: number; send?: string; receive?: undefined } | { id: number; send?: undefined; receive?: string }) => {
+            {ChatSystem?.map(
+              (
+                item:
+                  | { id: number; send?: string; receive?: undefined }
+                  | { id: number; send?: undefined; receive?: string }
+              ) => {
                 const position = item?.send === undefined;
                 return (
                   <div
                     key={item?.id}
-                    className={`font-work flex  ${position ? 'justify-end' : 'items-start'} space-x-2 `}
+                    className={`font-work flex  ${
+                      position ? 'justify-end' : 'items-start'
+                    } space-x-2 `}
                   >
-                    {item?.send === undefined ? 
-                      (<FaUser className="bg-white border border-primary-100 text-primary-500 size-7 p-1.5 rounded-full text-lg " />) 
-                      : 
-                      (<BsStars className="bg-primary-500 text-white  size-7 p-1.5 rounded-full text-lg " />)
-                    }
+                    {item?.send === undefined ? (
+                      <FaUser className="bg-white border border-primary-100 text-primary-500 size-7 p-1.5 rounded-full text-lg " />
+                    ) : (
+                      <BsStars className="bg-primary-500 text-white  size-7 p-1.5 rounded-full text-lg " />
+                    )}
                     <span
                       className={`${
                         position ? 'bg-secondary-100' : 'bg-primary-100'} text-neutral p-3 rounded-lg text-xs sm:text-sm md:text-base`}
@@ -273,10 +286,19 @@ const Dashboard: React.FC = () => {
             </PopData>
           </div>
           <Modal close={toggleModal} display={showModal}>
-            <EditModal prompts={RecentPrompts} chatSystem={ChatSystem} airport={[]} close={toggleModal} />
+            <EditModal
+              prompts={RecentPrompts}
+              chatSystem={ChatSystem}
+              airport={[]}
+              close={toggleModal}
+            />
           </Modal>
-          <Modal position='absolute' close={toggleCalendar} display={showCalendar}>
-            { }
+          <Modal
+            position="absolute"
+            close={toggleCalendar}
+            display={showCalendar}
+          >
+            <Calendar />
           </Modal>
 
           {/* mobile view */}
