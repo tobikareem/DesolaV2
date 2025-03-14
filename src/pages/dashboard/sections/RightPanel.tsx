@@ -20,20 +20,28 @@ import { GlobalContext } from '../../../hooks/globalContext';
 export const RightPane: React.FC = () => {
   const navigate = useNavigate();
 
-  const {RecentPromptsData} = React.useContext(GlobalContext);
+  const {setNavigationData} = React.useContext(GlobalContext);
 
   const [selectedTab, setSelectedTab] = useState<string>('home');
-  const [showLogoutModal, setShowLogoutModal] = useState<boolean>(false);
-  const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
+  const {showLogoutModal,
+    setShowLogoutModal, 
+    showDeleteModal, 
+    setShowDeleteModal, 
+    toggleDeleteModal,
+    toggleLogoutModal
+  } = React.useContext(GlobalContext);
 
   const sidebarOptions = [
     { id: 'home', icon: <House size={24} />, icon2: <RiHome5Fill />, label: 'Home' },
-    { id: 'road', icon: <PiRoadHorizonBold size={24} />, icon2: <PiRoadHorizonFill />, label: 'Road' },
-    { id: 'trash', icon: <Trash2 size={24} />, icon2: <PiTrashFill />, label: 'Trash' },
-    { id: 'user', icon: <User size={24} />, icon2: <RiUserFill />, label: 'User Profile' },
+    { id: 'road', icon: <PiRoadHorizonBold size={24} />, icon2: <PiRoadHorizonFill />, label: 'Trip' },
+    { id: 'trash', icon: <Trash2 size={24} />, icon2: <PiTrashFill />, label: 'Clear Chat' },
+    { id: 'user', icon: <User size={24} />, icon2: <RiUserFill />, label: 'Profile' },
     { id: 'support', icon: <Headset size={24} />, icon2: <PiHeadsetFill />, label: 'Support' },
   ];
 
+  useEffect(() => {
+    setNavigationData(sidebarOptions);
+  },[])
 
   //We can later tweak this to get data from the Api request
 
@@ -53,16 +61,6 @@ export const RightPane: React.FC = () => {
   // ];
 
 
-
-
-  const toggleLogoutModal = () => {
-    setShowLogoutModal(prevState => !prevState)
-  }
-
-  const toggleDeleteModal = () => {
-    setShowDeleteModal(prevState => !prevState)
-  }
-
   const handleConfirmLogout = () => {
     setShowLogoutModal(false);
     authService.signOut();
@@ -74,8 +72,6 @@ export const RightPane: React.FC = () => {
     setShowDeleteModal(false);
     window.location.reload();
   };
-
-  useEffect(() => {},[RecentPromptsData])
 
 
 
@@ -154,7 +150,7 @@ export const RightPane: React.FC = () => {
         </div>
       </div>
       <Modal display={showDeleteModal} close={toggleDeleteModal}>
-        <ClearChat Action={toggleLogoutModal} ConfirmAction={handleConfirmDelete} />
+        <ClearChat Action={toggleDeleteModal} ConfirmAction={handleConfirmDelete} />
       </Modal>
 
       <Modal display={showLogoutModal} close={toggleLogoutModal}>

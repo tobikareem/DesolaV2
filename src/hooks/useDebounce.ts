@@ -10,7 +10,7 @@ type SomeFunction = (func: (args?:unknown)=> unknown ) => void;
  */
 
 export function useDebounce<Func extends SomeFunction>(
-  delay = 1500
+  delay = 2000
 ) {
   const timer = useRef<Timer | undefined>(undefined);
 
