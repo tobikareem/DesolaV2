@@ -16,7 +16,7 @@ export const SupportContent: React.FC = () => {
           >
             Support
           </Text>
-          <div className="mt-7 w-96">
+          <div className="mt-7 w-full">
             <Text
               as="h5"
               size="sm"

@@ -1,5 +1,5 @@
 import { PenLine } from 'lucide-react';
-import React, { useEffect, useRef, useState, WheelEvent, useContext } from 'react';
+import React, { useEffect, useRef, useState, WheelEvent } from 'react';
 import { BsStars } from 'react-icons/bs';
 import { FaUser } from 'react-icons/fa';
 import { IoSend } from 'react-icons/io5';
@@ -12,18 +12,11 @@ import { PopData } from '../../components/ui/PopData';
 import { Text } from '../../components/TextComp';
 import { useAirports } from '../../hooks/useDashboardInfo';
 import { useDebounce } from '../../hooks/useDebounce';
-import { GlobalContext } from '../../hooks/globalContext';
-import FlightOffersModal from '../../components/modals/FlightOffersModal';
-import { offers } from '../../components/ui/offers';
+import MobileRender from '../../components/dashboard-sections/mobileRender';
 import Calendar from '../../components/Calender';
 
 
-// interface AirportType {
-//   name?: string;
-//   city?: string;
-//   code?: string;
-//   airportType?:string;
-// }
+
 
 const Dashboard: React.FC = () => {
 
@@ -33,14 +26,21 @@ const Dashboard: React.FC = () => {
   const [showPopData, setShowPopData] = useState<boolean>(false);
   const [RecentPrompts, setRecentPrompts] = useState<string[]>([]);
   const [inputValue, setInputValue] = useState<string>('');
-  const { setRecentPromptsData } = useContext(GlobalContext);
-  //  const [airport, setAirport] = React.useState<AirportType[]>([]);
-  //  const [Loading, setLoading] = useState<boolean>(true);
-  //  const [error , setError] = useState<null>();
-  
   const debounce = useDebounce();
   const { userName, isAuthenticated,  } = useAuthInfo();
-  const {fetchAirports, airportSuggestions, loading} = useAirports();
+  const {fetchAirports, airportSuggestions} = useAirports();
+
+  useEffect(()=> {
+    fetchAirports()
+  },[])
+
+  const [searchParam, setSearchParam] = useState<string>('');
+  const airportSuggestionFilter = searchParam.trim() !== '' ?  airportSuggestions?.filter((item)=>{
+      return(
+        item?.name.toLowerCase().includes(searchParam.toLowerCase()) || 
+        item?.city.toLowerCase().includes(searchParam.toLowerCase())
+    );
+  }) : [];
  
   
   const toggleModal = () => {
@@ -64,15 +64,6 @@ const Dashboard: React.FC = () => {
     }
   };
 
-
-  // const RecentPrompts:string[] = [
-  // 'Ikeja, Murtala Muhammed International Airport (MMIA)',
-  // 'Seattle-Tacoma International Airport',
-  // '04/25/2025',
-  // '06/02/2025',
-  // 'One way',
-  // ]
-
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
   };
@@ -87,7 +78,6 @@ const Dashboard: React.FC = () => {
       setRecentPrompts((prevRecentPrompts) => {
         const updatedPrompts = [...prevRecentPrompts, newPrompt];
         saveTosessionStorage('RecentPrompts', updatedPrompts);
-        setRecentPromptsData(updatedPrompts); 
         return updatedPrompts;
       });
       setInputValue('');
@@ -163,54 +153,6 @@ const Dashboard: React.FC = () => {
     },
   ];
 
-  // const airport = [
-  //   { id: 1, name: 'Murtala Muhammed International Airport', code: 'MMIA' },
-  //   { id: 2, name: 'Seattle-Tacoma International Airport', code: 'SEA' },
-  //   { id: 3, name: 'Los Angeles International Airport', code: 'LAX' },
-  // ];
-
-  // const {getData} = useApi();
-
-  // const [AirportSearch, setAirportSearch] = useState<string>('');
-
-  // const getAirportFn = async () => {
-  //   setLoading(true);
-  //   try {
-  //     const response = await getData(`/airport`);
-  //     setAirport(response);
-  //     console.log('data:',response)
-  //   } catch (err) {
-  //     console.log(err as Error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
-  // useEffect(()=>{
-  //   const debouncedGetAirportSearchFn = debounce(getAirportFn, 500)
-  //   debouncedGetAirportSearchFn()
-  // },[])
-
-  // useEffect(() => {
-  //   const getAirportSearchFn = async () => {
-  //     setLoading(true);
-  //     try {
-  //       const response = await getData(`/airports`);
-  //       setAirport(response);
-  //     } catch (err) {
-  //       console.log(err as Error);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-
-  //   getAirportSearchFn();
-  // }, [AirportSearch, getData]);
-
-  // const HandleAirportSearchFn = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   setAirportSearch(e.target.value);
-  // };
-
   return (
     <>
       <div className="flex">
@@ -243,7 +185,6 @@ const Dashboard: React.FC = () => {
                     return 'bg-neutral-300';
                   case 9:
                     return 'bg-[#5C88DA80]';
-
                   default:
                     return 'bg-primary-100';
                 }
@@ -291,8 +232,7 @@ const Dashboard: React.FC = () => {
                     )}
                     <span
                       className={`${
-                        position ? 'bg-secondary-100' : 'bg-primary-100'
-                      } text-neutral p-3 rounded-lg`}
+                        position ? 'bg-secondary-100' : 'bg-primary-100'} text-neutral p-3 rounded-lg text-xs sm:text-sm md:text-base`}
                     >
                       {item?.send ?? item?.receive}
                     </span>
@@ -306,9 +246,9 @@ const Dashboard: React.FC = () => {
               <Input
                 value={inputValue}
                 onChange={(e)=>{handleInputChange(e); 
-                  debounce(() => fetchAirports(e.target.value)); 
+                  debounce(() => setSearchParam(e.target.value)); 
                   handleOpenPopData()
-                  }}
+                }}
                 onKeyDown={handleKeyPress}
                 onFocus={handleOpenPopData}
                 type="text"
@@ -316,20 +256,20 @@ const Dashboard: React.FC = () => {
                 className="text-xl flex-grow bg-transparent focus:bg-transparent border-0  rounded-lg outline-0"
               />
               <IoSend
-                onClick={handlePromptUpdate}
+                onClick={()=>{handlePromptUpdate(); handleClosePopData()}}
                 className="cursor-pointer text-neutral-400"
                 size={24}
               />
             </div>
-            <PopData visibility={showPopData} position={'bottom-30 md:left-30'}>
-              { loading &&
-                  airportSuggestions?.map((item, index:number) => (
+            <PopData visibility={showPopData} position={'bottom-30 lg:left-[12%]'}>
+              {   
+                airportSuggestionFilter?.slice(0,6)?.map((airport, index:number) => (
                   <button
                     key={index}
                     type="submit"
                     className="flex items-center p-3 border-b border-neutral-300"
                     onClick={() => {
-                      setInputValue(item?.name);
+                      setInputValue(airport?.name);
                       handleClosePopData()
                     }}
                   >
@@ -338,7 +278,7 @@ const Dashboard: React.FC = () => {
                       color="text-neutral-500 text-left"
                       className="font-work"
                     >
-                      {item?.name} ({item?.code})
+                      {airport?.name} ({airport?.code})
                     </Text>
                   </button>
                 ))
@@ -360,9 +300,10 @@ const Dashboard: React.FC = () => {
           >
             <Calendar />
           </Modal>
-   
 
-
+          {/* mobile view */}
+          <MobileRender/>
+          
         </div>
         <RightPane />
       </div>

@@ -9,10 +9,36 @@ interface ContextProps {
 
 export const GlobalProvider = ({children}:ContextProps) => {
   const [user, setUser] = useState<object | undefined>({});
-  const [RecentPromptsData, setRecentPromptsData] = useState<string[] | undefined>([]);
+  const [NavigationData, setNavigationData] = useState<{id:string; label:string; icon:ReactNode; icon2:ReactNode; }[] | undefined>([]);
+  const [showLogoutModal, setShowLogoutModal] = useState<boolean>(false);
+  const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
+  const [MobileTab, setMobileTab] = useState<string>('');
+  
+
+  const toggleLogoutModal = () => {
+    setShowLogoutModal(prevState => !prevState)
+  }
+
+  const toggleDeleteModal = () => {
+    setShowDeleteModal(prevState => !prevState)
+  }
+
 
   return(
-    <GlobalContext.Provider value={{ user, setUser, RecentPromptsData, setRecentPromptsData }}>
+    <GlobalContext.Provider value={{ 
+      user, 
+      setUser, 
+      NavigationData, 
+      setNavigationData, 
+      showLogoutModal,
+      setShowLogoutModal, 
+      showDeleteModal, 
+      setShowDeleteModal, 
+      toggleLogoutModal, 
+      toggleDeleteModal,
+      MobileTab,
+      setMobileTab 
+    }}>
       {children}
     </GlobalContext.Provider>
   )

@@ -23,16 +23,27 @@ export const useAirports = () => {
   const [airportSuggestions, setAirportSuggestions] = useState<Airport[]>([]);
   const [loading, setLoading] = useState(false);
   const { getData } = useApi();
+  const cacheExpiryTIme = 3*24*60*60*1000; // 3 days
 
-  const fetchAirports = useCallback(async (query: string) => {
-    if (!query) {
-      setAirportSuggestions([]);
+
+  const fetchAirports = useCallback(async () => {
+    const cachedData = localStorage.getItem("cachedAirportData");
+    const cachedAirportData = cachedData ? JSON.parse(cachedData) : null;
+    if (cachedAirportData) {
+      if (Date.now() - cachedAirportData.timestamp > cacheExpiryTIme){
+        localStorage.removeItem("cachedAirportData");
+      }
+    } 
+    if (cachedAirportData && Array.isArray(cachedAirportData)) {
+      setAirportSuggestions(cachedAirportData);
       return;
     }
 
     setLoading(true);
     try {
-      const data = await getData<Airport[]>(`${ENDPOINTS_API_PATH.airports_autocomplete}?name=${query}`);
+      const data = await getData<Airport[]>(`${ENDPOINTS_API_PATH.airports}`);
+      const cachedData = {data , timestamp: Date.now()};
+      localStorage.setItem("cachedAirportData", JSON.stringify(cachedData));
       setAirportSuggestions(data ?? []);
     } catch (error) {
       console.error("Error fetching airports:", error);
@@ -40,7 +51,7 @@ export const useAirports = () => {
     } finally {
       setLoading(false);
     }
-  }, [getData]);
+  }, [cacheExpiryTIme, getData]);
 
   return { airportSuggestions, fetchAirports, loading };
 };
