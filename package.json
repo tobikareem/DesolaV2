@@ -36,6 +36,7 @@
     "@azure/msal-browser": "^4.4.0",
     "@azure/msal-react": "^3.0.5",
     "@headlessui/react": "^2.2.0",
+    "class-transformer": "^0.5.1",
     "clsx": "^2.1.1",
     "horizon": "file:",
     "lodash.debounce": "^4.0.8",
@@ -45,6 +46,7 @@
     "react-image": "^4.1.0",
     "react-router": "^6.29.0",
     "react-router-dom": "^6.29.0",
-    "react-toastify": "^11.0.5"
+    "react-toastify": "^11.0.5",
+    "reflect-metadata": "^0.2.2"
   }
 }

@@ -2,8 +2,8 @@ import { useEffect } from "react";
 import { PreferencesSection } from "../../../components/dashboard-sections/preference";
 import { ProfileSection } from "../../../components/dashboard-sections/profile";
 import { useAuthInfo } from "../../../hooks/useAuthInfo";
+import { useDashboardInfo } from "../../../hooks/useDashboardInfo";
 import authService from "../../../services/authService";
-import { useUserDashboard } from "../../../hooks/useDashboardInfo";
 
 export const UserContent: React.FC = () => {
   const { accountInfo } = useAuthInfo();
@@ -15,27 +15,23 @@ export const UserContent: React.FC = () => {
     handleAirportSelect,
     savePreferences,
     loadPreferences
-  } = useUserDashboard();
+  } = useDashboardInfo();
 
   // Load preferences when component mounts
   useEffect(() => {
     loadPreferences();
   }, [loadPreferences]);
 
-  const email = accountInfo?.emails?.length ? accountInfo.emails[0] : "";
-  const firstName = accountInfo?.name?.split(" ")[0] ?? "";
-  const lastName = accountInfo?.name?.split(" ")[1] ?? "";
-
   const handleEditProfile = async () => {
-    await authService.profileEdit();
+    await authService.editUserProfile();
   };
 
   return (
     <div className="flex flex-col max-w-2xl lg:py-6 bg-white rounded-lg">
       <ProfileSection
-        firstName={firstName}
-        lastName={lastName}
-        email={email}
+        firstName={accountInfo?.firstName ?? ""}
+        lastName={accountInfo?.lastName ?? ""}
+        email={accountInfo?.emailList?.length ? accountInfo.emailList[0] : ""}
         onEditProfile={handleEditProfile}
       />
 

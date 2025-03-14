@@ -1,42 +1,45 @@
-export interface IdToken {
-    iss?: string;                 // Issuer - identifies the token issuer
-    sub?: string;                 // Subject - unique identifier for the user
-    aud?: string | string[];      // Audience - intended recipient of the token
-    exp?: number;                 // Expiration time
-    nbf?: number;                 // Not before time
-    iat?: number;                 // Issued at time
-    jti?: string;                 // JWT ID - unique identifier for this token
-    
+import { Expose } from "class-transformer";
+import "reflect-metadata";
+
+export class IdToken {
+    @Expose({ name: "iss" }) issuer?: string;  // Issuer
+    @Expose({ name: "sub" }) subject?: string; // Subject
+    @Expose({ name: "aud" }) audience?: string | string[];
+    @Expose({ name: "exp" }) expirationTime?: number;
+    @Expose({ name: "nbf" }) notBefore?: number;
+    @Expose({ name: "iat" }) issuedAt?: number;
+    @Expose({ name: "jti" }) jwtId?: string;
+
     // Standard user profile claims
-    given_name?: string;          // First name
-    family_name?: string;         // Last name
-    name?: string;                // Full name
-    email?: string;               // Email address
-    emails?: string[];            // Array of email addresses (Microsoft specific)
-    
+    @Expose({ name: "given_name" }) firstName?: string;
+    @Expose({ name: "family_name" }) lastName?: string;
+    @Expose({ name: "name" }) fullName?: string;
+    @Expose({ name: "email" }) emailAddress?: string;
+    @Expose({ name: "emails" }) emailList?: string[];
+
     // Azure B2C specific identifiers
-    oid?: string;                 // Object ID - unique identifier in Azure AD
-    tid?: string;                 // Tenant ID
-    
+    @Expose({ name: "oid" }) objectId?: string;
+    @Expose({ name: "tid" }) tenantId?: string;
+
     // Additional profile information
-    postalCode?: string;
-    country?: string;
-    state?: string;
-    streetAddress?: string;
-    city?: string;
-    
+    @Expose({ name: "postalCode" }) postalCode?: string;
+    @Expose({ name: "country" }) country?: string;
+    @Expose({ name: "state" }) state?: string;
+    @Expose({ name: "streetAddress" }) streetAddress?: string;
+    @Expose({ name: "city" }) city?: string;
+
     // Authentication context
-    nonce?: string;               // Value used to associate a client session with an ID token
-    auth_time?: number;           // Time when authentication occurred
-    acr?: string;                 // Authentication context class reference
-    amr?: string[];               // Authentication methods references
-    
-    // Extended profile information (common in many ID tokens)
-    preferred_username?: string;
-    picture?: string;             // URL to user's profile picture
-    locale?: string;              // User's locale/language
-    verified_email?: boolean;     // Whether email has been verified
-    
-    // Allow for additional custom claims
+    @Expose({ name: "nonce" }) nonce?: string;
+    @Expose({ name: "auth_time" }) authenticationTime?: number;
+    @Expose({ name: "acr" }) authenticationContextClassRef?: string;
+    @Expose({ name: "amr" }) authenticationMethods?: string[];
+
+    // Extended profile information
+    @Expose({ name: "preferred_username" }) preferredUsername?: string;
+    @Expose({ name: "picture" }) profilePicture?: string;
+    @Expose({ name: "locale" }) locale?: string;
+    @Expose({ name: "verified_email" }) isEmailVerified?: boolean;
+
+    // Additional properties
     [key: string]: unknown;
 }

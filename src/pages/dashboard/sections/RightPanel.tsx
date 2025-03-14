@@ -8,6 +8,7 @@ import { ClearChat } from '../../../components/modals/ClearChat';
 import { ReturnContent } from '../../../components/modals/LogoutModal';
 import { Modal } from '../../../components/modals/Modal';
 import authService from '../../../services/authService';
+import { CustomStorage } from '../../../utils/customStorage';
 import { HomeContent } from './HomeContent';
 import { PathContent } from './PathContent';
 import { SupportContent } from './SupportContent';
@@ -16,6 +17,7 @@ import { UserContent } from './UserContent';
 import { GlobalContext } from '../../../hooks/globalContext';
 
 
+const storage = new CustomStorage();
 
 export const RightPane: React.FC = () => {
   const navigate = useNavigate();
@@ -67,8 +69,8 @@ export const RightPane: React.FC = () => {
     navigate(`/`)
   };
 
-  const handleConfirmDelete = ()=> {
-    sessionStorage.removeItem('RecentPrompts');
+  const handleConfirmDelete = () => {
+    storage.removeItem('RecentPrompts');
     setShowDeleteModal(false);
     window.location.reload();
   };
@@ -139,9 +141,9 @@ export const RightPane: React.FC = () => {
             <div className=" h-30 border-t items-center flex p-7">
               <Btn
                 className={`${selectedTab === 'road'
-                    ? 'bg-gradient-to-b from-[#FF9040] to-[#FF6B00] text-white '
-                    : 'bg-neutral-300 text-neutral-500'
-                  } p-1 w-full max-w-[385px] `}
+                  ? 'bg-gradient-to-b from-[#FF9040] to-[#FF6B00] text-white '
+                  : 'bg-neutral-300 text-neutral-500'
+                  } p-1 w-full max-w-[385px]`}
               >
                 Search
               </Btn>
