@@ -11,6 +11,16 @@ export interface Airport {
   airportType: string;
 }
 
+export interface Route {
+  Type: string;
+  Subtype: string;
+  Name: string;
+  IataCode: string;
+  GeoCode:{Latitude:number; Longitude:number},
+  Address:{CountryName:string; CountryCode:string; StateCode:string; RegionCode:string;}
+  TimeZone: string;
+}
+
 export interface UserPreferences {
   originAirport: string;
   destinationAirport: string;
@@ -54,6 +64,28 @@ export const useAirports = () => {
   }, [cacheExpiryTIme, getData]);
 
   return { airportSuggestions, fetchAirports, loading };
+};
+
+
+export const useRoutes =()=> {
+  const [RouteData, setRouteData] = useState<Route[]>([])
+  const [loading, setLoading] = useState(false);
+  const {getData} = useApi();
+
+  const fetchRoutes = useCallback( async() => {
+    setLoading(true);
+    try {
+      const data = await getData<Route[]>(`${ENDPOINTS_API_PATH.route}?airlineCode=AA&max=20`)
+      setRouteData(data ?? [])
+    }
+    catch (error){
+      console.error("Error fetching routes:", error);
+    } finally {
+      setLoading(false);
+    }
+    
+  },[getData])
+  return {fetchRoutes, RouteData, loading };
 };
 
 export const useUserPreferences = () => {

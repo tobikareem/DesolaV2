@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { NavLink, useLocation } from "react-router-dom";
-import { useAuthInfo } from "../hooks/useAuthInfo";
-import authService from "../services/authService";
+import { useAuthInfo} from "../../hooks/useAuthInfo";
 import { Logo } from "./Logo";
-import { GlobalContext } from "../hooks/globalContext";
 import React from "react";
 import { LogOut } from "lucide-react";
+import { GlobalContext } from "../../hooks/globalContext";
+import authService from "../../services/authService";
 
 export const Navbar = () => {
     const [slider, setSlider] = useState<boolean>(false);

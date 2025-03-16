@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { X } from 'lucide-react';
-import { Btn } from '../Button';
+import { Btn } from '../ui/Button';
 
 
 

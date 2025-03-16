@@ -1,6 +1,6 @@
 import { BiWorld } from "react-icons/bi";
 import { PiBookBookmark, PiHandshake } from "react-icons/pi";
-import { Text } from "../../../components/TextComp";
+import { Text } from "../../../components/ui/TextComp";
 import { Img as ReactImage } from 'react-image';
 
 export const HowItWorks = () => {

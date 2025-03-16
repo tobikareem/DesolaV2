@@ -5,5 +5,6 @@ export const ENDPOINTS_API_PATH ={
     authRefresh:"auth/refresh",
     airports_autocomplete: "airports/autocomplete",
     airports: "airports",
+    route: "airline/route",
     user_preferences: "user/preferences",
 }

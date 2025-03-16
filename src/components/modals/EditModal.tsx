@@ -3,10 +3,10 @@ import React, { useRef } from 'react';
 import { BsStars } from 'react-icons/bs';
 import { FaUser } from 'react-icons/fa';
 import { IoSend } from 'react-icons/io5';
-import { Input } from '../InputField';
+import { Input } from '../ui/InputField';
 import { IoMdCloseCircleOutline } from 'react-icons/io';
 import { X } from 'lucide-react';
-import { Btn } from '../Button';
+import { Btn } from '../ui/Button';
 
 interface EditModalProps {
   prompts: string[] | null;

@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { Text } from "../../components/TextComp";
+import { Text } from "../ui/TextComp";
 import { Airport, UserPreferences } from "../../hooks/useDashboardInfo";
-import { Btn } from "../Button";
-import { Input } from "../InputField";
+import { Btn } from "../ui/Button";
+import { Input } from "../ui/InputField";
 import { AirportSuggestions } from "./airport-suggestions";
 import { Listbox, ListboxButton, ListboxOption, ListboxOptions } from '@headlessui/react'
 import { MdKeyboardArrowDown } from "react-icons/md";

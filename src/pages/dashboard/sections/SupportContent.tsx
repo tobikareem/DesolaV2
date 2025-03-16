@@ -1,8 +1,8 @@
 import React from "react";
-import { Input } from "../../../components/InputField";
-import { TextArea } from "../../../components/TextAreaField";
-import { Btn } from "../../../components/Button";
-import { Text } from "../../../components/TextComp";
+import { Input } from "../../../components/ui/InputField";
+import { TextArea } from "../../../components/ui/TextAreaField";
+import { Btn } from "../../../components/ui/Button";
+import { Text } from "../../../components/ui/TextComp";
 
 
 export const SupportContent: React.FC = () => {

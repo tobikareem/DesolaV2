@@ -1,5 +1,5 @@
-import { FlightAnimation } from "../../components/Animation"
-import BackgroundImageSection from "../../components/SideHeroComp"
+import { FlightAnimation } from "../../components/layout/Animation"
+import BackgroundImageSection from "../../components/layout/SideHeroComp"
 import frame from '../../assets/Frame 2147207438.png';
 import plane from '../../assets/Leonardo_Kino_XL_give_me_an_image_of_an_airplane_flying_2 1.png';
 
