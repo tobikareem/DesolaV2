@@ -3,7 +3,7 @@ import {House,Trash2,User,Headset, LogOut,} from 'lucide-react';
 import { PiHeadsetFill, PiRoadHorizonBold, PiRoadHorizonFill, PiTrashFill } from 'react-icons/pi';
 import { RiHome5Fill, RiUserFill } from 'react-icons/ri';
 import { useNavigate } from 'react-router';
-import { Btn } from '../../../components/Button';
+import { Btn } from '../../../components/ui/Button';
 import { ClearChat } from '../../../components/modals/ClearChat';
 import { ReturnContent } from '../../../components/modals/LogoutModal';
 import { Modal } from '../../../components/modals/Modal';
@@ -16,7 +16,7 @@ import { TrashContent } from './TrashContent';
 import { UserContent } from './UserContent';
 import { GlobalContext } from '../../../hooks/globalContext';
 import FlightOffersModal from '../../../components/modals/FlightOffersModal';
-import { offers } from '../../../components/ui/offers';
+import { offers } from '../../../components/layout/offers';
 
 
 const storage = new CustomStorage();

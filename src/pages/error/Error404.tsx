@@ -1,5 +1,5 @@
 import { Img as ReactImage } from 'react-image';
-import { Text } from '../../components/TextComp';
+import { Text } from '../../components/ui/TextComp';
 import { Link } from 'react-router-dom';
 import { AiOutlineRollback } from 'react-icons/ai';
 

@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import ErrorScreen from "../components/ErrorScreen";
-import LoadingScreen from "../components/LoadingScreen";
-import SuccessScreen from "../components/SuccessScreen";
+
 import authService from "../services/authService";
 import { toast } from "react-toastify";
 import { CustomStorage } from "../utils/customStorage";
 import { SESSION_VALUES } from "../utils/constants";
+import ErrorScreen from "../components/layout/ErrorScreen";
+import LoadingScreen from "../components/layout/LoadingScreen";
+import SuccessScreen from "../components/layout/SuccessScreen";
 
 const storage = new CustomStorage();
 

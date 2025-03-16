@@ -1,7 +1,7 @@
 import { FaCheck } from "react-icons/fa"
-import { Text } from "../../components/TextComp"
+import { Text } from "../../components/ui/TextComp"
 import { useNavigate } from "react-router"
-import { Btn } from "../../components/Button"
+import { Btn } from "../../components/ui/Button"
 
 const PasswordSetSuccess =()=> {
   const navigate = useNavigate()

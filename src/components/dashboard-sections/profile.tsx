@@ -1,9 +1,9 @@
 import { CgProfile } from "react-icons/cg";
-import { Text } from "../../components/TextComp";
+import { Text } from "../ui/TextComp";
 import { useAuthInfo } from "../../hooks/useAuthInfo";
 import authService from "../../services/authService";
-import { Btn } from "../Button";
-import { Input } from "../InputField";
+import { Btn } from "../ui/Button";
+import { Input } from "../ui/InputField";
 
 // ReadOnly profile section
 export const ProfileSection = () => {

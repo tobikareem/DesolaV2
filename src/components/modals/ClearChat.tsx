@@ -1,5 +1,5 @@
-import { Text } from "../TextComp"
-import { Btn } from "../Button"
+import { Text } from "../ui/TextComp"
+import { Btn } from "../ui/Button"
 import { FaRegBell } from "react-icons/fa6";
 
 export const ClearChat

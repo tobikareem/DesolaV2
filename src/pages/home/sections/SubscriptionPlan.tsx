@@ -1,6 +1,6 @@
 
-import { SubscriptionCard } from "../../../components/SubscriptionCard";
-import { Text } from "../../../components/TextComp";
+import { SubscriptionCard } from "../../../components/layout/SubscriptionCard";
+import { Text } from "../../../components/ui/TextComp";
 import usePageContent from "../../../hooks/usePageContent";
 import { WEB_PAGES } from "../../../utils/constants";
 import { ENDPOINTS_API_PATH } from "../../../utils/endpoints";

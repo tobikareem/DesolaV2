@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
-import { Text } from '../../components/TextComp';
-import { Input } from '../../components/InputField';
-import { Btn } from '../../components/Button';
+import { Text } from '../../components/ui/TextComp';
+import { Input } from '../../components/ui/InputField';
+import { Btn } from '../../components/ui/Button';
 
 
 

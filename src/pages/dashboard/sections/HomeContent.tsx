@@ -1,4 +1,4 @@
-import { Text } from "../../../components/TextComp";
+import { Text } from "../../../components/ui/TextComp";
 import {
   Route,
   PlaneTakeoff,

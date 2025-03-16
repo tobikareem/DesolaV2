@@ -3,17 +3,17 @@ import React, { useEffect, useRef, useState, WheelEvent } from 'react';
 import { BsStars } from 'react-icons/bs';
 import { FaUser } from 'react-icons/fa';
 import { IoSend } from 'react-icons/io5';
-import { Input } from '../../components/InputField';
+import { Input } from '../../components/ui/InputField';
 import EditModal from '../../components/modals/EditModal';
 import { Modal } from '../../components/modals/Modal';
 import { RightPane } from './sections/RightPanel';
 import { useAuthInfo } from '../../hooks/useAuthInfo';
-import { PopData } from '../../components/ui/PopData';
-import { Text } from '../../components/TextComp';
-import { useAirports } from '../../hooks/useDashboardInfo';
+import { PopData } from '../../components/layout/PopData';
+import { Text } from '../../components/ui/TextComp';
+import { useAirports, useRoutes } from '../../hooks/useDashboardInfo';
 import { useDebounce } from '../../hooks/useDebounce';
 import MobileRender from '../../components/dashboard-sections/mobileRender';
-import Calendar from '../../components/Calender';
+import Calendar from '../../components/modals/Calender';
 
 
 
@@ -29,10 +29,15 @@ const Dashboard: React.FC = () => {
   const debounce = useDebounce();
   const { userName, isAuthenticated,  } = useAuthInfo();
   const {fetchAirports, airportSuggestions} = useAirports();
+  const {fetchRoutes, RouteData} = useRoutes();
+
 
   useEffect(()=> {
     fetchAirports()
   },[])
+
+
+  console.log('Route:', RouteData)
 
   const [searchParam, setSearchParam] = useState<string>('');
   const airportSuggestionFilter = searchParam.trim() !== '' ?  airportSuggestions?.filter((item)=>{
@@ -51,9 +56,9 @@ const Dashboard: React.FC = () => {
     setShowCalendar((prevState) => !prevState);
   };
 
-  const toggleFlightModal = () => {
-    setShowFlightModal((prevState) => !prevState)
-  }
+  // const toggleFlightModal = () => {
+  //   setShowFlightModal((prevState) => !prevState)
+  // }
 
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
