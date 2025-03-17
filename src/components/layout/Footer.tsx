@@ -1,11 +1,12 @@
 import React from 'react';
-import { Text } from './TextComp';
+import { Text } from '../ui/TextComp';
 import { FaInstagram, FaTwitter, FaLinkedin } from 'react-icons/fa';
 import { Link, useLocation } from 'react-router-dom';
-import { ENDPOINTS_API_PATH } from '../utils/endpoints';
-import { WEB_PAGES } from '../utils/constants';
-import usePageContent from '../hooks/usePageContent';
+
 import { Img as ReactImage } from 'react-image';
+import usePageContent from '../../hooks/usePageContent';
+import { WEB_PAGES } from '../../utils/constants';
+import { ENDPOINTS_API_PATH } from '../../utils/endpoints';
 
 const Footer: React.FC = () => {
   const { content: faqData } = usePageContent(`/${ENDPOINTS_API_PATH.page}`, `${WEB_PAGES.contact}`, "PhoneAndEmail");

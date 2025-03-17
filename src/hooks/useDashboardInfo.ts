@@ -11,6 +11,16 @@ export interface Airport {
   airportType: string;
 }
 
+export interface Route {
+  Type: string;
+  Subtype: string;
+  Name: string;
+  IataCode: string;
+  GeoCode:{Latitude:number; Longitude:number},
+  Address:{CountryName:string; CountryCode:string; StateCode:string; RegionCode:string;}
+  TimeZone: string;
+}
+
 export interface UserPreferences {
   originAirport: string;
   destinationAirport: string;
@@ -23,16 +33,27 @@ export const useAirports = () => {
   const [airportSuggestions, setAirportSuggestions] = useState<Airport[]>([]);
   const [loading, setLoading] = useState(false);
   const { getData } = useApi();
+  const cacheExpiryTIme = 3*24*60*60*1000; // 3 days
 
-  const fetchAirports = useCallback(async (query: string) => {
-    if (!query) {
-      setAirportSuggestions([]);
+
+  const fetchAirports = useCallback(async () => {
+    const cachedData = localStorage.getItem("cachedAirportData");
+    const cachedAirportData = cachedData ? JSON.parse(cachedData) : null;
+    if (cachedAirportData) {
+      if (Date.now() - cachedAirportData.timestamp > cacheExpiryTIme){
+        localStorage.removeItem("cachedAirportData");
+      }
+    } 
+    if (cachedAirportData && Array.isArray(cachedAirportData)) {
+      setAirportSuggestions(cachedAirportData);
       return;
     }
 
     setLoading(true);
     try {
-      const data = await getData<Airport[]>(`${ENDPOINTS_API_PATH.airports_autocomplete}?name=${query}`);
+      const data = await getData<Airport[]>(`${ENDPOINTS_API_PATH.airports}`);
+      const cachedData = {data , timestamp: Date.now()};
+      localStorage.setItem("cachedAirportData", JSON.stringify(cachedData));
       setAirportSuggestions(data ?? []);
     } catch (error) {
       console.error("Error fetching airports:", error);
@@ -40,9 +61,31 @@ export const useAirports = () => {
     } finally {
       setLoading(false);
     }
-  }, [getData]);
+  }, [cacheExpiryTIme, getData]);
 
   return { airportSuggestions, fetchAirports, loading };
+};
+
+
+export const useRoutes =()=> {
+  const [RouteData, setRouteData] = useState<Route[]>([])
+  const [loading, setLoading] = useState(false);
+  const {getData} = useApi();
+
+  const fetchRoutes = useCallback( async() => {
+    setLoading(true);
+    try {
+      const data = await getData<Route[]>(`${ENDPOINTS_API_PATH.route}?airlineCode=AA&max=20`)
+      setRouteData(data ?? [])
+    }
+    catch (error){
+      console.error("Error fetching routes:", error);
+    } finally {
+      setLoading(false);
+    }
+    
+  },[getData])
+  return {fetchRoutes, RouteData, loading };
 };
 
 export const useUserPreferences = () => {

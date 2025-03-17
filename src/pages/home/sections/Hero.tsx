@@ -1,7 +1,7 @@
 import { Img as ReactImage } from 'react-image';
-import { FlightAnimation } from '../../../components/Animation';
-import { Btn } from '../../../components/Button';
-import { Text } from '../../../components/TextComp';
+import { FlightAnimation } from '../../../components/layout/Animation';
+import { Btn } from '../../../components/ui/Button';
+import { Text } from '../../../components/ui/TextComp';
 import { useAuthInfo } from '../../../hooks/useAuthInfo';
 import authService from '../../../services/authService';
 

@@ -1,13 +1,13 @@
 import { IoCallOutline } from "react-icons/io5";
 import { MdOutlineEmail } from "react-icons/md";
 import { Img as ReactImage } from 'react-image';
-import { Btn } from "../../../components/Button";
-import { Input } from "../../../components/InputField";
-import { Text } from '../../../components/TextComp';
+import { Btn } from "../../../components/ui/Button";
+import { Input } from "../../../components/ui/InputField";
+import { Text } from '../../../components/ui/TextComp';
 import { WEB_PAGES } from "../../../utils/constants";
 import { ENDPOINTS_API_PATH } from "../../../utils/endpoints";
 import usePageContent from "../../../hooks/usePageContent";
-import { TextArea } from "../../../components/TextAreaField";
+import { TextArea } from "../../../components/ui/TextAreaField";
 
 const Contact = () => {
     const { content: faqData, loading, error } = usePageContent(`${ENDPOINTS_API_PATH.page}`, `${WEB_PAGES.contact}`, "PhoneAndEmail");

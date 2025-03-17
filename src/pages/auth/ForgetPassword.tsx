@@ -1,10 +1,10 @@
-import { Text } from '../../components/TextComp';
-import { Input } from '../../components/InputField';
-import { Btn } from '../../components/Button';
+import { Text } from '../../components/ui/TextComp';
+import { Input } from '../../components/ui/InputField';
+import { Btn } from '../../components/ui/Button';
 import { FaArrowLeft } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import { AuthHero } from './AuthHero';
-import { Logo } from '../../components/Logo';
+import { Logo } from '../../components/layout/Logo';
 
 const ForgetPassword: React.FC = () => {
   return (
