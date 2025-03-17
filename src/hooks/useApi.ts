@@ -1,7 +1,5 @@
-
 import { useCallback } from 'react';
-import { toast } from 'react-toastify';
-import apiClient from '../services/apiClient';
+import { apiService } from '../services/apiService';
 
 interface ApiHookResult {
   getData: <T = unknown>(link: string) => Promise<T | undefined>;
@@ -12,61 +10,36 @@ interface ApiHookResult {
 }
 
 const useApi = (): ApiHookResult => {
-
   const getData = useCallback(async <T = unknown>(link: string): Promise<T | undefined> => {
-    try {
-      const response = await apiClient.get<T>(link);
-      return response.data;
-    } catch (err) {
-      console.log('get api:', err);
-      toast.error('Failed to fetch data from the server');
-      return undefined;
-    }
+    return apiService.getData<T>(link);
   }, []);
 
-  const postData = useCallback(async <T = unknown, R = unknown>(link: string, req: T): Promise<R | undefined> => {
-    try {
-      const response = await apiClient.post<R>(link, req);
-      return response.data;
-    } catch (err) {
-      console.log('post api:', err);
-      toast.error('Failed to send data to the server');
-      return undefined;
-    }
+  const postData = useCallback(async <T = unknown, R = unknown>(
+    link: string,
+    req: T
+  ): Promise<R | undefined> => {
+    return apiService.postData<T, R>(link, req);
   }, []);
 
-  const putData = useCallback(async <T = unknown, R = unknown>(link: string, update: T): Promise<R | undefined> => {
-    try {
-      const response = await apiClient.put<R>(link, update);
-      return response.data;
-    } catch (err) {
-      toast.error('Failed to update data on the server');
-      console.error('put api:', err);
-      return undefined;
-    }
+  const putData = useCallback(async <T = unknown, R = unknown>(
+    link: string,
+    update: T
+  ): Promise<R | undefined> => {
+    return apiService.putData<T, R>(link, update);
   }, []);
 
-  const patchData = useCallback(async <T = unknown, R = unknown>(link: string, patch: T): Promise<R | undefined> => {
-    try {
-      const response = await apiClient.patch<R>(link, patch);
-      return response.data;
-    } catch (err) {
-      toast.error('Failed to update data on the server');
-      console.error('patch api:', err);
-      return undefined;
-    }
+  const patchData = useCallback(async <T = unknown, R = unknown>(
+    link: string,
+    patch: T
+  ): Promise<R | undefined> => {
+    return apiService.patchData<T, R>(link, patch);
   }, []);
 
-  const deleteData = useCallback(async <R = unknown>(link: string, id?: string | number): Promise<R | undefined> => {
-    try {
-      const url = id ? `${link}/${id}` : link;
-      const response = await apiClient.delete<R>(url);
-      return response.data;
-    } catch (err) {
-      toast.error('Failed to delete data on the server');
-      console.error('delete api:', err);
-      return undefined;
-    }
+  const deleteData = useCallback(async <R = unknown>(
+    link: string,
+    id?: string | number
+  ): Promise<R | undefined> => {
+    return apiService.deleteData<R>(link, id);
   }, []);
 
   return {
@@ -79,10 +52,3 @@ const useApi = (): ApiHookResult => {
 };
 
 export default useApi;
-
-
-
-
-
-
-

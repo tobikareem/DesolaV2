@@ -1,8 +1,10 @@
 
-export const ENDPOINTS_API_PATH ={
+export const ENDPOINTS_API_PATH = {
     page: "page",
     authToken: "auth/token",
-    authRefresh:"auth/refresh",
+    authRefresh: "auth/refresh",
     airports_autocomplete: "airports",
     user_preferences: "user/preferences",
+    getCommands: "chat/commands",
+    executeCommand: "chat/execute"
 }

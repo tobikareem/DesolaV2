@@ -1,9 +1,9 @@
 import { useEffect, useRef } from "react";
 import { PreferencesSection } from "../../../components/dashboard-sections/preference";
 import { ProfileSection } from "../../../components/dashboard-sections/profile";
+import { useAuthInfo } from "../../../hooks/useAuthInfo";
 import { useDashboardInfo } from "../../../hooks/useDashboardInfo";
 import authService from "../../../services/authService";
-import { useAuthInfo } from "../../../hooks/useAuthInfo";
 
 export const UserContent: React.FC = () => {
   const { isAuthenticated, isLoading: authLoading } = useAuthInfo();

@@ -19,6 +19,7 @@ import { CustomStorage } from './utils/customStorage';
 import PrivacyPolicy from './pages/legal/PrivacyPolicy';
 import TermsAndConditions from './pages/legal/TermsAndConditions';
 import Callback from './auth/Callback';
+import GuidedFlightBooking from './pages/dashboard/chat/guidedflightbooking';
 
 const storage = new CustomStorage();
 
@@ -42,6 +43,7 @@ function App() {
     { path: '/privacy', element: <PrivacyPolicy />, name: 'Privacy' },
     { path: '/terms', element: <TermsAndConditions />, name: 'Terms' },
     { path: '/callback', element: <Callback />, name: 'Callback' },
+    { path: '/guide', element: <GuidedFlightBooking />, name: 'Guide' },
     { path: '*', element: <Error404Page />, name: 'Error404' },
   ];
   const privateRoutes: RouteType[] = [

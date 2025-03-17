@@ -1,26 +1,31 @@
 import { useEffect, useState } from "react";
 import { PageResponse } from "../models/FaqItemResponse";
-import { getPageSection } from "../services/pageContentService";
+import useApi from "./useApi";
 
-const usePageContent = (path:string, partitionKey: string, rowKey: string) => {
-  const [content, setContent] = useState<PageResponse | null>(null);
+const usePageContent = (path: string, partitionKey: string, rowKey: string) => {
+  const [content, setContent] = useState<PageResponse | undefined>(undefined);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const { getData } = useApi();
 
   useEffect(() => {
     const fetchContent = async () => {
       try {
-        const data: PageResponse = await getPageSection(path, partitionKey, rowKey);
-        setContent(data);
+
+        setLoading(true);
+
+        const response = await getData<PageResponse>(`${path}/${partitionKey}/${rowKey}`);
+        setContent(response);
       } catch {
         setError(`Failed to fetch content`);
+        setContent(undefined);
       } finally {
         setLoading(false);
       }
     };
 
     fetchContent();
-  }, [path, partitionKey, rowKey]);
+  }, [path, partitionKey, rowKey, getData]);
 
   return { content, loading, error };
 };

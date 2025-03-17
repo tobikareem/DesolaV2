@@ -1,18 +1,18 @@
 import { PenLine } from 'lucide-react';
-import React, { useEffect, useRef, useState, WheelEvent, useContext } from 'react';
+import React, { useContext, useEffect, useRef, useState, WheelEvent } from 'react';
 import { BsStars } from 'react-icons/bs';
 import { FaUser } from 'react-icons/fa';
 import { IoSend } from 'react-icons/io5';
 import { Input } from '../../components/InputField';
 import EditModal from '../../components/modals/EditModal';
 import { Modal } from '../../components/modals/Modal';
-import { RightPane } from './sections/RightPanel';
-import { useAuthInfo } from '../../hooks/useAuthInfo';
-import { PopData } from '../../components/ui/PopData';
 import { Text } from '../../components/TextComp';
+import { PopData } from '../../components/ui/PopData';
+import { GlobalContext } from '../../hooks/globalContext';
+import { useAuthInfo } from '../../hooks/useAuthInfo';
 import { useAirports } from '../../hooks/useDashboardInfo';
 import { useDebounce } from '../../hooks/useDebounce';
-import { GlobalContext } from '../../hooks/globalContext';
+import { RightPane } from './sections/RightPanel';
 
 
 // interface AirportType {
@@ -33,12 +33,12 @@ const Dashboard: React.FC = () => {
   //  const [airport, setAirport] = React.useState<AirportType[]>([]);
   //  const [Loading, setLoading] = useState<boolean>(true);
   //  const [error , setError] = useState<null>();
-  
+
   const debounce = useDebounce();
-  const { userName, isAuthenticated,  } = useAuthInfo();
-  const {fetchAirports, airportSuggestions, loading} = useAirports();
- 
-  
+  const { userName, isAuthenticated, } = useAuthInfo();
+  const { fetchAirports, airportSuggestions, loading } = useAirports();
+
+
   const toggleModal = () => {
     setShowModal((prevState) => !prevState);
   };
@@ -79,7 +79,7 @@ const Dashboard: React.FC = () => {
       setRecentPrompts((prevRecentPrompts) => {
         const updatedPrompts = [...prevRecentPrompts, newPrompt];
         saveTosessionStorage('RecentPrompts', updatedPrompts);
-        setRecentPromptsData(updatedPrompts); 
+        setRecentPromptsData(updatedPrompts);
         return updatedPrompts;
       });
       setInputValue('');
@@ -109,10 +109,10 @@ const Dashboard: React.FC = () => {
     }
   }, []);
 
-  const handleOpenPopData =()=> {
+  const handleOpenPopData = () => {
     setShowPopData(true)
   }
-  const handleClosePopData =()=> {
+  const handleClosePopData = () => {
     setShowPopData(false)
   }
 
@@ -262,37 +262,37 @@ const Dashboard: React.FC = () => {
           </div>
 
           <div className="flex flex-col flex-1 bg-background space-y-4 mt-16 lg:mt-0 p-5 lg:pl-20  overflow-y-auto">
-            {ChatSystem?.map((item:{ id: number; send?: string; receive?: undefined } | { id: number; send?: undefined; receive?: string }) => {
-                const position = item?.send === undefined;
-                return (
-                  <div
-                    key={item?.id}
-                    className={`font-work flex  ${position ? 'justify-end' : 'items-start'} space-x-2 `}
+            {ChatSystem?.map((item: { id: number; send?: string; receive?: undefined } | { id: number; send?: undefined; receive?: string }) => {
+              const position = item?.send === undefined;
+              return (
+                <div
+                  key={item?.id}
+                  className={`font-work flex  ${position ? 'justify-end' : 'items-start'} space-x-2 `}
+                >
+                  {item?.send === undefined ?
+                    (<FaUser className="bg-white border border-primary-100 text-primary-500 size-7 p-1.5 rounded-full text-lg " />)
+                    :
+                    (<BsStars className="bg-primary-500 text-white  size-7 p-1.5 rounded-full text-lg " />)
+                  }
+                  <span
+                    className={`${position ? 'bg-secondary-100' : 'bg-primary-100'} text-neutral p-3 rounded-lg`}
                   >
-                    {item?.send === undefined ? 
-                      (<FaUser className="bg-white border border-primary-100 text-primary-500 size-7 p-1.5 rounded-full text-lg " />) 
-                      : 
-                      (<BsStars className="bg-primary-500 text-white  size-7 p-1.5 rounded-full text-lg " />)
-                    }
-                    <span
-                      className={`${
-                        position ? 'bg-secondary-100' : 'bg-primary-100'} text-neutral p-3 rounded-lg`}
-                    >
-                      {item?.send ?? item?.receive}
-                    </span>
-                  </div>
-                );
-              }
+                    {item?.send ?? item?.receive}
+                  </span>
+                </div>
+              );
+            }
             )}
           </div>
           <div className="relative w-full p-2 flex items-center justify-center  bg-white border-t h-30">
             <div className="items-center max-w-[678px] w-full rounded-2xl py-4 px-8 flex message bg-tint">
               <Input
                 value={inputValue}
-                onChange={(e)=>{handleInputChange(e); 
-                  debounce(() => fetchAirports(e.target.value)); 
+                onChange={(e) => {
+                  handleInputChange(e);
+                  debounce(() => fetchAirports(e.target.value));
                   handleOpenPopData()
-                  }}
+                }}
                 onKeyDown={handleKeyPress}
                 onFocus={handleOpenPopData}
                 type="text"
@@ -306,8 +306,8 @@ const Dashboard: React.FC = () => {
               />
             </div>
             <PopData visibility={showPopData} position={'bottom-30 md:left-30'}>
-              { loading &&
-                  airportSuggestions?.map((item, index:number) => (
+              {loading &&
+                airportSuggestions?.map((item, index: number) => (
                   <button
                     key={index}
                     type="submit"
@@ -335,7 +335,7 @@ const Dashboard: React.FC = () => {
           <Modal position='absolute' close={toggleCalendar} display={showCalendar}>
             { }
           </Modal>
-          
+
         </div>
         <RightPane />
       </div>
