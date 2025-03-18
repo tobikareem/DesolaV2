@@ -1,9 +1,9 @@
-import profileImg from "../../assets/Ellipse 137.png";
-import { Text } from "../../components/TextComp";
+import { CgProfile } from "react-icons/cg";
+import { Text } from "../ui/TextComp";
 import { useAuthInfo } from "../../hooks/useAuthInfo";
 import authService from "../../services/authService";
-import { Btn } from "../Button";
-import { Input } from "../InputField";
+import { Btn } from "../ui/Button";
+import { Input } from "../ui/InputField";
 
 // ReadOnly profile section
 export const ProfileSection = () => {
@@ -15,7 +15,7 @@ export const ProfileSection = () => {
                 Profile
             </Text>
             <div className="flex flex-col items-center">
-                <img src={profileImg} className="w-24 h-24 rounded-full mb-4" alt="User Profile" />
+                <CgProfile className="w-24 h-24 text-primary-600 rounded-full mb-4"/>
                 <Input label="First Name" value={accountInfo?.firstName ?? ""} className="w-full mb-2 rounded-[10px]" readOnly />
                 <Input label="Last Name" value={accountInfo?.lastName ?? ""} className="w-full mb-2 rounded-[10px]" readOnly />
                 <Input label="Email" value={accountInfo?.emailList?.length ? accountInfo.emailList[0] : ""} className="w-full mb-2 rounded-[10px]" readOnly />

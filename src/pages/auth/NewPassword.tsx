@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { Text } from '../../components/TextComp';
-import { Input } from '../../components/InputField';
-import { Btn } from '../../components/Button';
+import { Text } from '../../components/ui/TextComp';
+import { Input } from '../../components/ui/InputField';
+import { Btn } from '../../components/ui/Button';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { GoKey } from 'react-icons/go';
 

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Btn } from './Button';
+import { Btn } from '../ui/Button';
 
 interface ErrorScreenProps {
   message: string;

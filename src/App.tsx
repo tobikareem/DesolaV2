@@ -4,9 +4,7 @@ import { Route, Routes, useLocation } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import './App.css';
 import AuthEventListener from './auth/auth-event-listener';
-import Footer from './components/Footer';
-import { Navbar } from './components/Navbar';
-import { Preloader } from './components/Preloader';
+import { Preloader } from './components/layout/Preloader';
 import { GlobalProvider } from './hooks/contextProvider';
 import ForgetPassword from './pages/auth/ForgetPassword';
 import RedirectToLogin from './pages/auth/RedirectToLogin';
@@ -19,6 +17,9 @@ import { CustomStorage } from './utils/customStorage';
 import PrivacyPolicy from './pages/legal/PrivacyPolicy';
 import TermsAndConditions from './pages/legal/TermsAndConditions';
 import Callback from './auth/Callback';
+import { Navbar } from './components/layout/Navbar';
+import Footer from './components/layout/Footer';
+
 import GuidedFlightBooking from './pages/dashboard/chat/guidedflightbooking';
 
 const storage = new CustomStorage();
@@ -114,7 +115,7 @@ function App() {
       <Preloader visibility={showPreloader} />
       <Navbar />
       <main>
-        <ToastContainer position='top-right' />
+        <ToastContainer position='top-right' closeOnClick />
         <Routes>
           {publicRoutes.map((route) => (
             <Route key={route.name} path={route.path} element={route.element} />

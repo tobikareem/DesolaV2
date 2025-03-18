@@ -1,6 +1,6 @@
 
 import { IoIosCheckmarkCircleOutline } from "react-icons/io";
-import { Btn } from "./Button";
+import { Btn } from "../ui/Button";
 import { MdOutlineArrowOutward } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 

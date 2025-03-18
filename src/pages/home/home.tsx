@@ -1,5 +1,5 @@
 
-import { Text } from "../../components/TextComp";
+import { Text } from "../../components/ui/TextComp";
 import { VITE_APP_NAME } from "../../utils/constants";
 import Contact from "./sections/Contact";
 import FaqSupport from "./sections/FaqSupport";

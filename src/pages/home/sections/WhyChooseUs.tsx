@@ -1,8 +1,8 @@
 import { IoCheckmarkCircleSharp } from "react-icons/io5";
 import { Img as ReactImage } from 'react-image';
 import { useNavigate } from "react-router-dom";
-import { Btn } from "../../../components/Button";
-import { Text } from "../../../components/TextComp";
+import { Btn } from "../../../components/ui/Button";
+import { Text } from "../../../components/ui/TextComp";
 
 export const WhyChooseUs = () => {
     const navigate = useNavigate();

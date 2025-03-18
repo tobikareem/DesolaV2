@@ -1,5 +1,5 @@
 import { SlidersHorizontal, PlaneTakeoff, CalendarCheck, PlaneLanding, Plane, Route } from "lucide-react";
-import { Text } from "../../../components/TextComp"
+import { Text } from "../../../components/ui/TextComp"
 
 
 interface PathContentProps {

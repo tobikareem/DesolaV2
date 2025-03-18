@@ -8,11 +8,11 @@ import {
     FaWindows,
 } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
-import { AuthHero } from '../pages/auth/AuthHero';
-import { Btn } from './Button';
-import { Input } from './InputField';
+import { AuthHero } from '../../pages/auth/AuthHero';
+import { Btn } from '../ui/Button';
+import { Input } from '../ui/InputField';
 import { Logo } from './Logo';
-import { Text } from './TextComp';
+import { Text } from '../ui/TextComp';
 
 interface PasswordFieldProps {
     label: string;

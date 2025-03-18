@@ -3,8 +3,10 @@ import React, { useRef } from 'react';
 import { BsStars } from 'react-icons/bs';
 import { FaUser } from 'react-icons/fa';
 import { IoSend } from 'react-icons/io5';
-import { Input } from '../InputField';
+import { Input } from '../ui/InputField';
 import { IoMdCloseCircleOutline } from 'react-icons/io';
+import { X } from 'lucide-react';
+import { Btn } from '../ui/Button';
 
 interface EditModalProps {
   prompts: string[] | null;
@@ -32,12 +34,15 @@ const EditModal: React.FC<EditModalProps> = ({
   };
 
   return (
-    <div className="w-full max-h-[618px]">
-      <div className="relative flex flex-col w-full">
-        <IoMdCloseCircleOutline
+    <div className="w-full max-w-[600px]  bg-white max-h-[618px]">
+      <div className="relative flex p-1 flex-col w-full">
+        {/* <IoMdCloseCircleOutline
           onClick={close}
           className="text-2xl text-black self-end"
-        />
+        /> */}
+          <Btn onClick={close} className="text-black self-end">
+                  <X size={24} />
+                </Btn>
         <div
           ref={scrollContainerRef}
           onWheel={handleScroll}

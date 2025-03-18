@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { RxCaretRight } from "react-icons/rx";
-import { Text } from "../../../components/TextComp";
+import { Text } from "../../../components/ui/TextComp";
 import usePageContent from "../../../hooks/usePageContent";
 import { WEB_PAGES } from "../../../utils/constants";
 import { ENDPOINTS_API_PATH } from "../../../utils/endpoints";
