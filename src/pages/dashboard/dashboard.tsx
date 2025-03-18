@@ -1,14 +1,12 @@
 import { PenLine } from 'lucide-react';
-import React, { useContext, useEffect, useRef, useState, WheelEvent } from 'react';
+import React, { useEffect, useRef, useState, WheelEvent } from 'react';
 import { BsStars } from 'react-icons/bs';
 import { FaUser } from 'react-icons/fa';
 import { IoSend } from 'react-icons/io5';
 import { Input } from '../../components/ui/InputField';
 import EditModal from '../../components/modals/EditModal';
 import { Modal } from '../../components/modals/Modal';
-import { Text } from '../../components/TextComp';
-import { PopData } from '../../components/ui/PopData';
-import { GlobalContext } from '../../hooks/globalContext';
+import { RightPane } from './sections/RightPanel';
 import { useAuthInfo } from '../../hooks/useAuthInfo';
 import { PopData } from '../../components/layout/PopData';
 import { Text } from '../../components/ui/TextComp';
@@ -19,15 +17,6 @@ import Calendar from '../../components/modals/Calender';
 
 
 
-import { RightPane } from './sections/RightPanel';
-
-
-// interface AirportType {
-//   name?: string;
-//   city?: string;
-//   code?: string;
-//   airportType?:string;
-// }
 
 const Dashboard: React.FC = () => {
 
@@ -123,10 +112,10 @@ const Dashboard: React.FC = () => {
     }
   }, []);
 
-  const handleOpenPopData = () => {
+  const handleOpenPopData =()=> {
     setShowPopData(true)
   }
-  const handleClosePopData = () => {
+  const handleClosePopData =()=> {
     setShowPopData(false)
   }
 
