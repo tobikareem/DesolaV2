@@ -11,7 +11,7 @@ import { Airport } from '../../hooks/useDashboardInfo';
 import { ChatProp } from '../../utils/ChatBotHandler';
 
 interface EditModalProps {
-  prompts: string[] | null;
+  prompts: string[] | undefined;
   chatSystem: ChatProp[];
   airport: Airport[];
   close: () => void;

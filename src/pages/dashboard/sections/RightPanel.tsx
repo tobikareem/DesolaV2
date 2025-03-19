@@ -1,4 +1,4 @@
-import React, { useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {House,Trash2,User,Headset, LogOut,} from 'lucide-react';
 import { PiHeadsetFill, PiRoadHorizonBold, PiRoadHorizonFill, PiTrashFill } from 'react-icons/pi';
 import { RiHome5Fill, RiUserFill } from 'react-icons/ri';
@@ -23,16 +23,15 @@ const storage = new CustomStorage();
 
 export const RightPane: React.FC = () => {
   const navigate = useNavigate();
-
-  const {setNavigationData} = React.useContext(GlobalContext);
-
   const [selectedTab, setSelectedTab] = useState<string>('home');
   const {showLogoutModal,
     setShowLogoutModal, 
     showDeleteModal, 
     setShowDeleteModal, 
     toggleDeleteModal,
-    toggleLogoutModal
+    toggleLogoutModal,
+    RecentPrompts,
+    setNavigationData
   } = React.useContext(GlobalContext);
 
   const [showFlightModal, setShowFlightModal] = useState<boolean>(false);
@@ -82,19 +81,33 @@ export const RightPane: React.FC = () => {
     setShowFlightModal(prevState => !prevState)
   }
 
+  console.log('Recent:', RecentPrompts)
+
 
   const renderContentsHere = () => {
     switch (selectedTab) {
       case 'home':
         return (
           <HomeContent
-            departure={''} destination={''} departureDate={''} returnDate={''} travelRoute={''} flightClass={''}
+            departure={RecentPrompts?.[0] ?? ''} 
+            destination={RecentPrompts?.[1] ?? ''} 
+            departureDate={RecentPrompts?.[2] ?? ''} 
+            returnDate={RecentPrompts?.[3] ?? ''} 
+            travelRoute={RecentPrompts?.[4] ?? ''} 
+            flightClass={RecentPrompts?.[5] ?? ''}
           />
         );
 
       case 'road':
         return (
-          <PathContent departure={''} destination={''} departureDate={''} returnDate={''} travelRoute={''} flightClass={''} />
+          <PathContent 
+            departure={RecentPrompts?.[0] ?? ''} 
+            destination={RecentPrompts?.[1] ?? ''} 
+            departureDate={RecentPrompts?.[2] ?? ''} 
+            returnDate={RecentPrompts?.[3] ?? ''} 
+            travelRoute={RecentPrompts?.[4] ?? ''} 
+            flightClass={RecentPrompts?.[5] ?? ''}
+          />
         );
 
       case 'trash':

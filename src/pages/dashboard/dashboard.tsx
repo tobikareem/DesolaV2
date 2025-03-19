@@ -1,5 +1,5 @@
 import { PenLine } from 'lucide-react';
-import React, { useEffect, useRef, useState, WheelEvent } from 'react';
+import React, { useContext, useEffect, useRef, useState, WheelEvent } from 'react';
 import { BsStars } from 'react-icons/bs';
 import { FaUser } from 'react-icons/fa';
 import { IoSend } from 'react-icons/io5';
@@ -16,6 +16,7 @@ import MobileRender from '../../components/dashboard-sections/mobileRender';
 import Calendar from '../../components/modals/Calender';
 import ChatBotResponseHandler, { ChatProp } from '../../utils/ChatBotHandler';
 import { GiBoatPropeller } from 'react-icons/gi';
+import { GlobalContext } from '../../hooks/globalContext';
 
 
 
@@ -26,14 +27,14 @@ const Dashboard: React.FC = () => {
   const [showCalendar, setShowCalendar] = useState<boolean>(false);
   const [showFlightModal, setShowFlightModal] = useState<boolean>(false);
   const [showPopData, setShowPopData] = useState<boolean>(false);
-  const [RecentPrompts, setRecentPrompts] = useState<string[]>([]);
   const [inputValue, setInputValue] = useState<string>('');
   const debounce = useDebounce();
   const { userName, isAuthenticated,  } = useAuthInfo();
   const {fetchAirports, airportSuggestions} = useAirports();
   const {fetchRoutes, RouteData} = useRoutes();
   const [botResponse, setBotResponse] = useState<boolean>(false);
-  const [chatLoading , setIsLoading] = useState<boolean>(false);
+  const [chatLoading, setChatLoading] = useState<boolean>(false);
+  const {RecentPrompts,setRecentPrompts} = useContext(GlobalContext);
 
   const [chatLog, setChatLog] = useState<ChatProp[]>([
     {
@@ -143,11 +144,13 @@ const Dashboard: React.FC = () => {
   }, []);
 
   const handleOpenPopData =()=> {
-      if(chatLog.length == 1 || chatLog.length == 3){
+      if(chatLog[chatLog.length - 1]?.message?.includes('flying') 
+        || chatLog[chatLog.length - 1]?.message?.includes('destination')
+        || chatLog[chatLog.length - 1]?.message?.includes('routes')
+      ){
         setShowPopData(true)
       }
   }
-
 
   const handleClosePopData =()=> {
     setShowPopData(false)
@@ -261,26 +264,45 @@ const Dashboard: React.FC = () => {
               />
             </div>
             <PopData visibility={showPopData} position={'bottom-30 lg:left-[12%]'}>
-              {   
-                airportSuggestionFilter?.slice(0,6)?.map((airport, index:number) => (
-                  <button
-                    key={index}
-                    type="submit"
-                    className="flex items-center p-3 border-b border-neutral-300"
-                    onClick={() => {
-                      setInputValue(airport?.name);
-                      handleClosePopData()
-                    }}
-                  >
-                    <Text
-                      size="xs"
-                      color="text-neutral-500 text-left"
-                      className="font-work"
+              {  chatLog[chatLog.length - 1]?.message?.includes('route') ? 
+                  (['Round Trip','Two way Trip','Multi city'].map((route, index:number) => (
+                    <button
+                      key={index}
+                      type="submit"
+                      className="flex items-center p-3 border-b border-neutral-300"
+                      onClick={() => {
+                        setInputValue(`${route}`);
+                        handleClosePopData()
+                      }}
                     >
-                      {airport?.name} ({airport?.code})
-                    </Text>
-                  </button>
-                ))
+                      <Text
+                        size="xs"
+                        color="text-neutral-500 text-left"
+                        className="font-work"
+                      >
+                        {route}
+                      </Text>
+                    </button>)))
+                :
+                  (airportSuggestionFilter?.slice(0,6)?.map((airport, index:number) => (
+                    <button
+                      key={index}
+                      type="submit"
+                      className="flex items-center p-3 border-b border-neutral-300"
+                      onClick={() => {
+                        setInputValue(`${airport?.name} (${airport?.code})`);
+                        handleClosePopData()
+                      }}
+                    >
+                      <Text
+                        size="xs"
+                        color="text-neutral-500 text-left"
+                        className="font-work"
+                      >
+                        {airport?.name} ({airport?.code})
+                      </Text>
+                    </button>
+                  )))
               }
             </PopData>
           </div>
