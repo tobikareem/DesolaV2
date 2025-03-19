@@ -13,6 +13,7 @@ export const GlobalProvider = ({children}:ContextProps) => {
   const [showLogoutModal, setShowLogoutModal] = useState<boolean>(false);
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
   const [MobileTab, setMobileTab] = useState<string>('');
+  const [RecentPrompts, setRecentPrompts] = useState<string[]>([]);
   
 
   const toggleLogoutModal = () => {
@@ -37,7 +38,9 @@ export const GlobalProvider = ({children}:ContextProps) => {
       toggleLogoutModal, 
       toggleDeleteModal,
       MobileTab,
-      setMobileTab 
+      setMobileTab ,
+      RecentPrompts,
+      setRecentPrompts,
     }}>
       {children}
     </GlobalContext.Provider>
