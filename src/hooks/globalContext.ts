@@ -15,13 +15,15 @@ interface GlobalContextType {
   setMobileTab:React.Dispatch<React.SetStateAction<string>>;
   RecentPrompts: string[] | undefined;
   setRecentPrompts: React.Dispatch<React.SetStateAction<string[]>>;
-
+  showFlightModal: boolean;
+  setShowFlightModal: React.Dispatch<React.SetStateAction<boolean>>;
+  toggleFlightModal: ()=> void;
 }
 export const GlobalContext = createContext<GlobalContextType>({
   user: undefined,
   setUser:() => {},
   NavigationData: undefined,
-  setNavigationData: () => { },
+  setNavigationData: () => {},
   showLogoutModal: false,
   setShowLogoutModal: () => {},
   showDeleteModal:false,
@@ -32,4 +34,7 @@ export const GlobalContext = createContext<GlobalContextType>({
   toggleLogoutModal: () => {},
   RecentPrompts:undefined,
   setRecentPrompts:() => {},
+  showFlightModal:false,
+  setShowFlightModal:() => {},
+  toggleFlightModal:()=> {},
 });

@@ -10,13 +10,14 @@ import { RightPane } from './sections/RightPanel';
 import { useAuthInfo } from '../../hooks/useAuthInfo';
 import { PopData } from '../../components/layout/PopData';
 import { Text } from '../../components/ui/TextComp';
-import { useAirports, useRoutes } from '../../hooks/useDashboardInfo';
+import { useAirports } from '../../hooks/useDashboardInfo';
 import { useDebounce } from '../../hooks/useDebounce';
 import MobileRender from '../../components/dashboard-sections/mobileRender';
 import Calendar from '../../components/modals/Calender';
 import ChatBotResponseHandler, { ChatProp } from '../../utils/ChatBotHandler';
 import { GiBoatPropeller } from 'react-icons/gi';
 import { GlobalContext } from '../../hooks/globalContext';
+import { Btn } from '../../components/ui/Button';
 
 
 
@@ -25,45 +26,42 @@ const Dashboard: React.FC = () => {
 
   const [showModal, setShowModal] = useState<boolean>(false);
   const [showCalendar, setShowCalendar] = useState<boolean>(false);
-  const [showFlightModal, setShowFlightModal] = useState<boolean>(false);
   const [showPopData, setShowPopData] = useState<boolean>(false);
   const [inputValue, setInputValue] = useState<string>('');
   const debounce = useDebounce();
   const { userName, isAuthenticated,  } = useAuthInfo();
   const {fetchAirports, airportSuggestions} = useAirports();
-  const {fetchRoutes, RouteData} = useRoutes();
   const [botResponse, setBotResponse] = useState<boolean>(false);
-  const [chatLoading, setChatLoading] = useState<boolean>(false);
-  const {RecentPrompts,setRecentPrompts} = useContext(GlobalContext);
-
+  const [chatLoading, setChatLoading] = useState<boolean>(true);
+  const {RecentPrompts,setRecentPrompts, toggleFlightModal} = useContext(GlobalContext);
+  const [searchParam, setSearchParam] = useState<string>('');
   const [chatLog, setChatLog] = useState<ChatProp[]>([
     {
-      message: `Hi ${isAuthenticated ? userName?.split(' ')[0] : "Anonymous"}, Which airport will you be flying from?`,
+      message: `Hi ${isAuthenticated ? userName?.split(' ')[0] : "Traveler"}, Which airport will you be flying from?`,
       sender: 'bot'
     }
   ]);
 
-  useEffect(()=> {
+  useEffect(() => {
     fetchAirports()
+    const Timeout = setTimeout(()=> {
+      setChatLoading(false)
+    },500)
+    return () =>  clearTimeout(Timeout)
   },[])
-
-  
-
-
   // console.log('Route:', RouteData)
-
-  const [searchParam, setSearchParam] = useState<string>('');
   const airportSuggestionFilter = searchParam.trim() !== '' ?  airportSuggestions?.filter((item) => {
-      return(item?.name.toLowerCase().includes(searchParam.toLowerCase()) || item?.city.toLowerCase().includes(searchParam.toLowerCase()));
+      return(item?.name.toLowerCase().includes(searchParam.toLowerCase()) 
+        || item?.city.toLowerCase().includes(searchParam.toLowerCase())
+    );
   }):[];
  
-  
   const toggleModal = () => {
     setShowModal((prevState) => !prevState);
   };
 
   const handleOpenCalendar = () => {
-    if(chatLog.length == 5 || chatLog.length == 7){
+    if(chatLog[chatLog.length - 1]?.message?.includes('date')){
       setShowCalendar(true);
     }
   };
@@ -71,11 +69,6 @@ const Dashboard: React.FC = () => {
   const handleCloseCalendar =()=> {
     setShowCalendar(false);
   };
-
-  const toggleFlightModal = () => {
-    setShowFlightModal((prevState) => !prevState)
-  }
-
  
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const handleScroll = (event: WheelEvent<HTMLDivElement>) => {
@@ -88,24 +81,26 @@ const Dashboard: React.FC = () => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
   };
+  
+  const saveTosessionStorage = (key: string, value: string[] | ChatProp[]) => {
+    sessionStorage.setItem(key, JSON.stringify(value));
+  };
 
   const handleSendMessage =()=> {
     const chatMessage = inputValue;
     setBotResponse(true);
     setChatLog((prevChatLog) => [...prevChatLog,  { message: inputValue, sender: 'user'}]);
-    setTimeout(()=> {
+    const timerId = setTimeout(()=> {
       const botResponse = ChatBotResponseHandler(chatMessage);
       if (botResponse) {
         setChatLog((prevChatLog) => [...prevChatLog , {message: botResponse, sender:'bot'}]);
       }
       setBotResponse(false)
     },2000)
+    saveTosessionStorage('chatLog', chatLog)
     setInputValue('')
+    return () => clearTimeout(timerId)
   }
-
-  const saveTosessionStorage = (key: string, value: string[]) => {
-    sessionStorage.setItem(key, JSON.stringify(value));
-  };
 
   const handlePromptUpdate = () => {
     const newPrompt = inputValue?.trim();
@@ -116,13 +111,6 @@ const Dashboard: React.FC = () => {
         return updatedPrompts;
       });
       setInputValue('');
-    }
-  };
-
-  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter' && inputValue?.length >= 4 ) {
-      handlePromptUpdate();
-      handleSendMessage();
     }
   };
 
@@ -141,16 +129,45 @@ const Dashboard: React.FC = () => {
         return updatedPrompts;
       });
     }
-  }, []);
+    const storedChatLog = sessionStorage.getItem('chatLog');
+    if (storedChatLog) {
+      const parsedChatLog = JSON.parse(storedChatLog);
+      setChatLog(parsedChatLog);
+      setChatLog((prevChatLog:ChatProp[]) => {
+        const updatedChatLog = [...prevChatLog];
+        parsedChatLog.forEach((chat:{message:string, sender:string})=> {
+          if(!(updatedChatLog ?? []).includes(chat)) {
+            updatedChatLog.push(chat)
+          }
+        });
+        return updatedChatLog;
+      })
+    }
+  },[]);
+
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && inputValue?.length >= 4 ) {
+      handlePromptUpdate();
+      handleSendMessage();
+    }
+  };
+
+  
 
   const handleOpenPopData =()=> {
       if(chatLog[chatLog.length - 1]?.message?.includes('flying') 
         || chatLog[chatLog.length - 1]?.message?.includes('destination')
-        || chatLog[chatLog.length - 1]?.message?.includes('routes')
+        || chatLog[chatLog.length - 1]?.message?.includes('route')
       ){
         setShowPopData(true)
       }
   }
+
+  const handleOpenClassData =()=> {
+    if(chatLog[chatLog.length - 1]?.message?.includes('class')){
+      setShowPopData(true)
+    }
+}
 
   const handleClosePopData =()=> {
     setShowPopData(false)
@@ -214,34 +231,41 @@ const Dashboard: React.FC = () => {
             })}
           </div>
 
-          <div className={`flex flex-col flex-1 bg-background space-y-6 mt-16 lg:mt-0 p-5 lg:pl-20  ${chatLoading ? '':'overflow-y-auto'}`}>
-            { chatLoading ? <div className='flex w-full h-full items-center justify-center text-3xl animate-spin text-primary-600 pointer-events-none'><GiBoatPropeller /></div>
-              :
-              chatLog?.map((chat:{ message?: string; sender?: string; }, index:number) => {
-                const position = chat?.sender === 'user';
-                return (
-                  <div
-                    key={index}
-                    className={`font-work flex ${position ? 'justify-end' : 'items-start'} space-x-2 `}
-                  >
-                    <div className={`${position ? 'bg-white text-primary-500' : 'bg-primary-500 text-white'} flex items-center justify-center size-10 rounded-full text-lg border border-neutral-300`}>
-                      { position ? 
-                        (<FaUser />) 
-                        :         
-                        (<BsStars />)
-                      }
+          <div className={`flex flex-col flex-1 bg-background space-y-6 mt-6 lg:mt-0 p-5 lg:pl-20  ${chatLoading ? '':'overflow-y-auto'}`}>
+            {Array.isArray(RecentPrompts) && RecentPrompts.length >= 6 ? 
+              <Btn onClick={toggleFlightModal}
+                className={`lg:hidden px-6 py-1 w-fit bg-neutral-300 text-neutral-500`}>
+                Search
+              </Btn> : null
+            }
+            { chatLoading ? 
+                <div className='flex w-full h-full items-center justify-center text-5xl animate-spin duration-300 transition-transform text-primary-600 pointer-events-none'><GiBoatPropeller /></div>
+                :
+                chatLog?.map((chat:{ message?: string; sender?: string; }, index:number) => {
+                  const position = chat?.sender === 'user';
+                  return (
+                    <div
+                      key={index}
+                      className={`font-work flex ${position ? 'justify-end' : 'items-start'} space-x-2`}
+                    >
+                      <div className={`${position ? 'bg-white text-primary-500' : 'bg-primary-500 text-white'} flex items-center justify-center size-10 rounded-full text-lg border border-neutral-300`}>
+                        { position ? 
+                          (<FaUser />) 
+                          :         
+                          (<BsStars />)
+                        }
+                      </div>
+                        <span
+                          className={`${
+                            position ? 'bg-secondary-100' : 'bg-primary-100'} text-neutral p-3 rounded-lg text-xs sm:text-sm md:text-base`}
+                        >
+                          { chat?.sender == 'bot' && index === chatLog?.length - 1 && botResponse ? <span className='text-3xl text-neutral-500 animate-pulse duration-75'>...</span> : chat?.message}
+                        </span>
                     </div>
-                      <span
-                        className={`${
-                          position ? 'bg-secondary-100' : 'bg-primary-100'} text-neutral p-3 rounded-lg text-xs sm:text-sm md:text-base`}
-                      >
-                        { chat?.sender == 'bot' && index === chatLog.length - 1 && botResponse ? <span className='text-3xl text-neutral-500 animate-pulse duration-75'>...</span> : chat?.message}
-                      </span>
-                  </div>
-                );
-              }
-            )
-          }
+                  );
+                }
+              )
+            }
           </div>
           <div className="relative w-full p-2 flex items-center justify-center  bg-white border-t h-30">
             <div className="items-center max-w-[678px] w-full rounded-2xl py-4 px-8 flex message bg-tint">
@@ -249,7 +273,7 @@ const Dashboard: React.FC = () => {
                 value={inputValue}
                 onChange={(e)=>{handleInputChange(e); 
                   debounce(() => setSearchParam(e.target.value)); 
-                  handleOpenPopData() 
+                  handleOpenPopData(); handleOpenClassData()
                 }}
                 onKeyDown={handleKeyPress}
                 onFocus={()=> {handleOpenPopData(); handleOpenCalendar() }}
@@ -263,48 +287,74 @@ const Dashboard: React.FC = () => {
                 size={24}
               />
             </div>
-            <PopData visibility={showPopData} position={'bottom-30 lg:left-[12%]'}>
-              {  chatLog[chatLog.length - 1]?.message?.includes('route') ? 
-                  (['Round Trip','Two way Trip','Multi city'].map((route, index:number) => (
-                    <button
-                      key={index}
-                      type="submit"
-                      className="flex items-center p-3 border-b border-neutral-300"
-                      onClick={() => {
-                        setInputValue(`${route}`);
-                        handleClosePopData()
-                      }}
-                    >
-                      <Text
-                        size="xs"
-                        color="text-neutral-500 text-left"
-                        className="font-work"
+            {
+              !chatLog[chatLog.length - 1]?.message?.includes('class') ? 
+              <PopData visibility={showPopData} position={'bottom-30 lg:left-[12%]'}>
+                {  chatLog[chatLog.length - 1]?.message?.includes('route') ? 
+                    (['Round Trip','Two way Trip','Multi city'].map((route, index:number) => (
+                      <button
+                        key={index}
+                        type="submit"
+                        className="flex items-center p-3 px-6 border-b border-neutral-300"
+                        onClick={() => {
+                          setInputValue(`${route}`);
+                          handleClosePopData()
+                        }}
                       >
-                        {route}
-                      </Text>
-                    </button>)))
-                :
-                  (airportSuggestionFilter?.slice(0,6)?.map((airport, index:number) => (
-                    <button
-                      key={index}
-                      type="submit"
-                      className="flex items-center p-3 border-b border-neutral-300"
-                      onClick={() => {
-                        setInputValue(`${airport?.name} (${airport?.code})`);
-                        handleClosePopData()
-                      }}
-                    >
-                      <Text
-                        size="xs"
-                        color="text-neutral-500 text-left"
-                        className="font-work"
+                        <Text
+                          size="xs"
+                          color="text-neutral-500 text-left"
+                          className="font-work"
+                        >
+                          {route}
+                        </Text>
+                      </button>)))
+                  :
+                    (airportSuggestionFilter?.slice(0,8)?.map((airport, index:number) => (
+                      <button
+                        key={index}
+                        type="submit"
+                        className="flex items-center p-3 border-b border-neutral-300"
+                        onClick={() => {
+                          setInputValue(`${airport?.name} (${airport?.code})`);
+                          handleClosePopData()
+                        }}
                       >
-                        {airport?.name} ({airport?.code})
-                      </Text>
-                    </button>
-                  )))
-              }
-            </PopData>
+                        <Text
+                          size="xs"
+                          color="text-neutral-500 text-left"
+                          className="font-work"
+                        >
+                          {airport?.name} ({airport?.code})
+                        </Text>
+                      </button>
+                    )))
+                }
+              </PopData>
+              :
+              <PopData visibility={showPopData} position={'bottom-30 lg:left-[12%]'}>
+                {
+                    (['First class','Business class','Premium Economy','Economy'].map((item, idx:number) => (
+                      <button
+                        key={idx}
+                        type="submit"
+                        className="flex items-center p-3 px-6 border-b border-neutral-300"
+                        onClick={() => {
+                          setInputValue(`${item}`);
+                          handleClosePopData()
+                        }}
+                      >
+                        <Text
+                          size="xs"
+                          color="text-neutral-500 text-left"
+                          className="font-work"
+                        >
+                          {item}
+                        </Text>
+                      </button>)))
+                }
+              </PopData>
+            }
           </div>
           <Modal close={toggleModal} display={showModal}>
             <EditModal
@@ -319,7 +369,6 @@ const Dashboard: React.FC = () => {
           </Modal>
           {/* mobile view */}
           <MobileRender/>
-          
         </div>
         <RightPane />
       </div>

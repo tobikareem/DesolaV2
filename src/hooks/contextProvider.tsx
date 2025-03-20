@@ -14,14 +14,18 @@ export const GlobalProvider = ({children}:ContextProps) => {
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
   const [MobileTab, setMobileTab] = useState<string>('');
   const [RecentPrompts, setRecentPrompts] = useState<string[]>([]);
+  const [showFlightModal, setShowFlightModal] = useState<boolean>(false);
   
-
   const toggleLogoutModal = () => {
     setShowLogoutModal(prevState => !prevState)
   }
 
   const toggleDeleteModal = () => {
     setShowDeleteModal(prevState => !prevState)
+  }
+
+  const toggleFlightModal = () => {
+    setShowFlightModal(prevState => !prevState)
   }
 
 
@@ -41,6 +45,9 @@ export const GlobalProvider = ({children}:ContextProps) => {
       setMobileTab ,
       RecentPrompts,
       setRecentPrompts,
+      showFlightModal, 
+      setShowFlightModal,
+      toggleFlightModal,
     }}>
       {children}
     </GlobalContext.Provider>
