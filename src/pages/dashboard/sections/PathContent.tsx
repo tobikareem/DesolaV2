@@ -51,80 +51,80 @@ export const PathContent: React.FC<PathContentProps> = ({
         </div>
       </div>
       <Text as="p" size="xs" className="mb-3">
-        2/17/2025
+        {`${new Date()}`}
       </Text>
 
-      <div className="mb-4">
+      <div className="mb-4 space-y-2">
         <div className="flex  items-center space-x-2 mb-2">
           <PlaneTakeoff
             className="text-secondary-700 hover:scale-110 transition duration-300"
             size={20}
           />
-          <label className="block text-sm font-medium text-neutral">
+          <label className="font-grotesk block !text-xl font-bold text-neutral">
             Departure
           </label>
         </div>
-        <Text as="p" className="text-xs text-neutral-500">
+        <Text as="p" className="font-work text-xs text-neutral-500">
           {departure}
         </Text>
       </div>
 
-      <div className="mb-4">
+      <div className="mb-4 space-y-2">
         <div className="flex items-center space-x-2 mb-2">
           <Route
             size={20}
             className="text-primary-700 hover:scale-110 transition duration-300"
           />
-          <label className="block text-sm font-medium text-neutral">
+          <label className="font-grotesk block !text-xl font-bold text-neutral">
             Destination
           </label>
         </div>
-        <Text as="p" className="text-xs text-neutral-500">
+        <Text as="p" className="font-work text-xs text-neutral-500">
           {destination}
         </Text>
       </div>
 
-      <div className="mb-4">
+      <div className="mb-4 space-y-2">
         <div className="flex items-center space-x-2 mb-2">
           <CalendarCheck
             className="text-success hover:scale-110 transition duration-300"
             size={20}
           />
-          <label className="block text-sm font-medium text-neutral">
+          <label className="font-grotesk block !text-xl font-bold text-neutral">
             Departure Date
           </label>
         </div>
-        <Text as="p" className=" text-xs text-neutral-500">
+        <Text as="p" className="font-work  text-xs text-neutral-500">
           {departureDate}
         </Text>
       </div>
 
-      <div className="mb-4">
+      <div className="mb-4 space-y-2">
         <div className="flex items-center space-x-2 mb-2">
           <CalendarCheck
             className="text-primary-300 hover:scale-110 transition duration-300"
             size={20}
           />
-          <label className="block text-sm font-medium text-neutral">
+          <label className="font-grotesk block !text-xl font-bold text-neutral">
             Returning Date
           </label>
         </div>
-        <Text as="p" className="text-xs text-neutral-500">
+        <Text as="p" className="font-work text-xs text-neutral-500">
           {returnDate}
         </Text>
       </div>
 
-      <div className="mb-4">
+      <div className="mb-4 space-y-2">
         <div className="flex items-center space-x-2 mb-2">
           <PlaneLanding
             className="text-primary-600 hover:scale-110 transition duration-300"
             size={20}
           />
-          <label className="block text-sm font-medium text-neutral">
+          <label className="font-grotesk block !text-xl font-bold text-neutral">
             Travel Route
           </label>
         </div>
-        <Text as="p" className="mt-1 text-xs text-neutral-500">
+        <Text as="p" className="font-work mt-1 text-xs text-neutral-500">
           {travelRoute}
         </Text>
       </div>
@@ -135,11 +135,11 @@ export const PathContent: React.FC<PathContentProps> = ({
             className="text-secondary-700 hover:scale-110 transition duration-300"
             size={20}
           />
-          <label className="block text-sm font-medium text-neutral">
+          <label className="font-grotesk block !text-xl font-bold text-neutral">
             Flight
           </label>
         </div>
-        <Text as="p" className="mt-1 text-xs text-neutral-500">
+        <Text as="p" className="font-work mt-1 text-xs text-neutral-500">
           {flightClass}
         </Text>
       </div>

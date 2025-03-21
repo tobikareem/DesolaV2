@@ -5,16 +5,15 @@ import { FaUser } from 'react-icons/fa';
 import { IoSend } from 'react-icons/io5';
 import { Input } from '../ui/InputField';
 import { IoMdCloseCircleOutline } from 'react-icons/io';
-import { X } from 'lucide-react';
-import { Btn } from '../ui/Button';
+import { Text } from '../ui/TextComp';
+import { PopData } from '../layout/PopData';
+import { Airport } from '../../hooks/useDashboardInfo';
+import { ChatProp } from '../../utils/ChatBotHandler';
 
 interface EditModalProps {
-  prompts: string[] | null;
-  chatSystem: (
-    | { id: number; send?: string; receive?: undefined }
-    | { id: number; send?: undefined; receive?: string }
-  )[];
-  airport: object[];
+  prompts: string[] | undefined;
+  chatSystem: ChatProp[];
+  airport: Airport[];
   close: () => void;
 }
 
@@ -36,13 +35,10 @@ const EditModal: React.FC<EditModalProps> = ({
   return (
     <div className="w-full max-w-[600px]  bg-white max-h-[618px]">
       <div className="relative flex p-1 flex-col w-full">
-        {/* <IoMdCloseCircleOutline
+        <IoMdCloseCircleOutline
           onClick={close}
           className="text-2xl text-black self-end"
-        /> */}
-          <Btn onClick={close} className="text-black self-end">
-                  <X size={24} />
-                </Btn>
+        />
         <div
           ref={scrollContainerRef}
           onWheel={handleScroll}
@@ -83,36 +79,30 @@ const EditModal: React.FC<EditModalProps> = ({
         </div>
 
         <div className="flex flex-col flex-1 max-h-[520px] md:max-h-[430px] space-y-3 py-5 px-5 lg:px-20 overflow-y-auto">
-          {chatSystem?.map(
-            (
-              item:
-                | { id: number; send?: string; receive?: undefined }
-                | { id: number; send?: undefined; receive?: string }
-            ) => {
-              const position = item?.send === undefined;
-              return (
-                <div
-                  key={item?.id}
-                  className={`font-work flex  ${
-                    position ? 'justify-end' : 'items-start'
-                  } space-x-2 `}
-                >
-                  {item?.send === undefined ? (
-                    <FaUser className="bg-white border border-primary-100 text-primary-500 size-7 p-1.5 rounded-full text-lg " />
-                  ) : (
-                    <BsStars className="bg-primary-500 text-white  size-7 p-1.5 rounded-full text-lg " />
-                  )}
-                  <span
-                    className={`${
-                      position ? 'bg-secondary-100' : 'bg-primary-100'
-                    } text-neutral p-3 rounded-lg`}
+            {chatSystem?.map((chat:{ message?: string; sender?: string; }, index:number) => {
+                const position = chat?.sender === 'user';
+                return (
+                  <div
+                    key={index}
+                    className={`font-work flex ${position ? 'justify-end' : 'items-start'} space-x-2 `}
                   >
-                    {item?.send ?? item?.receive}
-                  </span>
-                </div>
-              );
-            }
-          )}
+                    <div className={`${position ? 'bg-white text-primary-500' : 'bg-primary-500 text-white'} flex items-center justify-center size-10 rounded-full text-lg border border-neutral-300`}>
+                      { position ? 
+                        (<FaUser />) 
+                        :         
+                        (<BsStars />)
+                      }
+                    </div>
+                      <span
+                        className={`${
+                          position ? 'bg-secondary-100' : 'bg-primary-100'} text-neutral p-3 rounded-lg text-xs sm:text-sm md:text-base`}
+                      >
+                        {chat?.message}
+                      </span>
+                  </div>
+                );
+              }
+            )}
         </div>
         <div className="relative w-full p-2 flex items-center justify-center bg-white">
           <div className="items-center max-w-[678px] w-full h-14 rounded-2xl py-4 px-8 flex message bg-tint">
@@ -123,7 +113,7 @@ const EditModal: React.FC<EditModalProps> = ({
             />
             <IoSend className="cursor-pointer text-primary-600" size={20} />
           </div>
-          {/* <PopData position={'bottom-10 left-10'}>
+            <PopData position={'bottom-10 left-10'} visibility={false}>
               {
                 airport?.map((item,index)=>(
                   <button key={index}
@@ -137,7 +127,7 @@ const EditModal: React.FC<EditModalProps> = ({
                   </button>
                 ))
               }
-            </PopData> */}
+            </PopData>
         </div>
       </div>
     </div>

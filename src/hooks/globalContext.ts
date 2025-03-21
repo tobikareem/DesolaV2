@@ -13,19 +13,23 @@ interface GlobalContextType {
   toggleLogoutModal: ()=> void;
   MobileTab: string | undefined;
   setMobileTab:React.Dispatch<React.SetStateAction<string>>;
+  RecentPrompts: string[] | undefined;
+  setRecentPrompts: React.Dispatch<React.SetStateAction<string[]>>;
 
 }
 export const GlobalContext = createContext<GlobalContextType>({
   user: undefined,
-  setUser: () => { },
+  setUser:() => {},
   NavigationData: undefined,
   setNavigationData: () => { },
   showLogoutModal: false,
-  setShowLogoutModal: ()=> {},
+  setShowLogoutModal: () => {},
   showDeleteModal:false,
   MobileTab:undefined,
-  setMobileTab:()=> {},
-  setShowDeleteModal: ()=>{},
-  toggleDeleteModal: ()=> {},
-  toggleLogoutModal: ()=> {},
+  setMobileTab:() => {},
+  setShowDeleteModal: () => {},
+  toggleDeleteModal: () => {},
+  toggleLogoutModal: () => {},
+  RecentPrompts:undefined,
+  setRecentPrompts:() => {},
 });
