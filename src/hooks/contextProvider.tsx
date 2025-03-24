@@ -1,5 +1,7 @@
 import { ReactNode, useState } from "react"
 import { GlobalContext } from "./globalContext";
+import { ChatProp } from "../utils/ChatBotHandler";
+import { useAuthInfo } from './useAuthInfo';
 
 
 interface ContextProps {
@@ -8,14 +10,20 @@ interface ContextProps {
 
 
 export const GlobalProvider = ({children}:ContextProps) => {
-  const [user, setUser] = useState<object | undefined>({});
+  const { userName, isAuthenticated,  } = useAuthInfo();
   const [NavigationData, setNavigationData] = useState<{id:string; label:string; icon:ReactNode; icon2:ReactNode; }[] | undefined>([]);
   const [showLogoutModal, setShowLogoutModal] = useState<boolean>(false);
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
   const [MobileTab, setMobileTab] = useState<string>('');
   const [RecentPrompts, setRecentPrompts] = useState<string[]>([]);
+  const [showFlightModal, setShowFlightModal] = useState<boolean>(false);
+  const [chatLog, setChatLog] = useState<ChatProp[]>([
+    {
+      message: `Hi ${isAuthenticated ? userName?.split(' ')[0] : "Traveler"}, Which airport will you be flying from?`,
+      sender: 'bot'
+    }
+  ]);
   
-
   const toggleLogoutModal = () => {
     setShowLogoutModal(prevState => !prevState)
   }
@@ -24,11 +32,13 @@ export const GlobalProvider = ({children}:ContextProps) => {
     setShowDeleteModal(prevState => !prevState)
   }
 
+  const toggleFlightModal = () => {
+    setShowFlightModal(prevState => !prevState)
+  }
+
 
   return(
     <GlobalContext.Provider value={{ 
-      user, 
-      setUser, 
       NavigationData, 
       setNavigationData, 
       showLogoutModal,
@@ -41,6 +51,11 @@ export const GlobalProvider = ({children}:ContextProps) => {
       setMobileTab ,
       RecentPrompts,
       setRecentPrompts,
+      showFlightModal, 
+      setShowFlightModal,
+      toggleFlightModal,
+      chatLog,
+      setChatLog,
     }}>
       {children}
     </GlobalContext.Provider>

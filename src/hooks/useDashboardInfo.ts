@@ -33,7 +33,7 @@ export const useAirports = () => {
   const [airportSuggestions, setAirportSuggestions] = useState<Airport[]>([]);
   const [loading, setLoading] = useState(false);
   const { getData } = useApi();
-  const cacheExpiryTIme = 3*24*60*60*1000; // 3 days
+  const cacheExpiryTIme = 5*24*60*60*1000; // 3 days
 
 
   const fetchAirports = useCallback(async () => {
