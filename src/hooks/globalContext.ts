@@ -1,8 +1,9 @@
 import React, { createContext, ReactNode} from "react";
+import { ChatProp } from "../utils/ChatBotHandler";
 
 interface GlobalContextType {
-  user: object | undefined;
-  setUser: React.Dispatch<React.SetStateAction<object | undefined>>;
+  chatLog: ChatProp[];
+  setChatLog: React.Dispatch<React.SetStateAction<ChatProp[]>>;
   NavigationData: {id:string; label:string; icon:ReactNode; icon2:ReactNode; }[] | undefined;
   setNavigationData: React.Dispatch<React.SetStateAction<{id:string; label:string; icon:ReactNode; icon2:ReactNode; }[] | undefined>>;
   showLogoutModal: boolean
@@ -20,8 +21,6 @@ interface GlobalContextType {
   toggleFlightModal: ()=> void;
 }
 export const GlobalContext = createContext<GlobalContextType>({
-  user: undefined,
-  setUser:() => {},
   NavigationData: undefined,
   setNavigationData: () => {},
   showLogoutModal: false,
@@ -37,4 +36,6 @@ export const GlobalContext = createContext<GlobalContextType>({
   showFlightModal:false,
   setShowFlightModal:() => {},
   toggleFlightModal:()=> {},
+  chatLog: {} as ChatProp[],
+  setChatLog: () => {}
 });

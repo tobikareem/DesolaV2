@@ -7,7 +7,6 @@ import { Input } from '../../components/ui/InputField';
 import EditModal from '../../components/modals/EditModal';
 import { Modal } from '../../components/modals/Modal';
 import { RightPane } from './sections/RightPanel';
-import { useAuthInfo } from '../../hooks/useAuthInfo';
 import { PopData } from '../../components/layout/PopData';
 import { Text } from '../../components/ui/TextComp';
 import { useAirports } from '../../hooks/useDashboardInfo';
@@ -18,29 +17,23 @@ import ChatBotResponseHandler, { ChatProp } from '../../utils/ChatBotHandler';
 import { GiBoatPropeller } from 'react-icons/gi';
 import { GlobalContext } from '../../hooks/globalContext';
 import { Btn } from '../../components/ui/Button';
+import { DateSelectArg} from '@fullcalendar/core/index.js';
+import { toast } from 'react-toastify';
 
 
-
-
-const Dashboard: React.FC = () => {
-
+  
+const Dashboard: React.FC =()=> {
+  
   const [showModal, setShowModal] = useState<boolean>(false);
   const [showCalendar, setShowCalendar] = useState<boolean>(false);
   const [showPopData, setShowPopData] = useState<boolean>(false);
   const [inputValue, setInputValue] = useState<string>('');
   const debounce = useDebounce();
-  const { userName, isAuthenticated,  } = useAuthInfo();
   const {fetchAirports, airportSuggestions} = useAirports();
   const [botResponse, setBotResponse] = useState<boolean>(false);
   const [chatLoading, setChatLoading] = useState<boolean>(true);
-  const {RecentPrompts,setRecentPrompts, toggleFlightModal} = useContext(GlobalContext);
+  const {RecentPrompts,setRecentPrompts, toggleFlightModal, chatLog, setChatLog} = useContext(GlobalContext);
   const [searchParam, setSearchParam] = useState<string>('');
-  const [chatLog, setChatLog] = useState<ChatProp[]>([
-    {
-      message: `Hi ${isAuthenticated ? userName?.split(' ')[0] : "Traveler"}, Which airport will you be flying from?`,
-      sender: 'bot'
-    }
-  ]);
 
   useEffect(() => {
     fetchAirports()
@@ -53,23 +46,15 @@ const Dashboard: React.FC = () => {
   const airportSuggestionFilter = searchParam.trim() !== '' ?  airportSuggestions?.filter((item) => {
       return(item?.name.toLowerCase().includes(searchParam.toLowerCase()) 
         || item?.city.toLowerCase().includes(searchParam.toLowerCase())
+        || item?.code.toLocaleLowerCase().includes(searchParam.toLocaleLowerCase())
     );
   }):[];
- 
-  const toggleModal = () => {
-    setShowModal((prevState) => !prevState);
-  };
 
-  const handleOpenCalendar = () => {
-    if(chatLog[chatLog.length - 1]?.message?.includes('date')){
-      setShowCalendar(true);
-    }
-  };
-
-  const handleCloseCalendar =()=> {
-    setShowCalendar(false);
+  const saveTosessionStorage = (key: string, value: string[] | ChatProp[]) => {
+    sessionStorage.setItem(key, JSON.stringify(value));
   };
  
+
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const handleScroll = (event: WheelEvent<HTMLDivElement>) => {
     event.preventDefault();
@@ -81,25 +66,22 @@ const Dashboard: React.FC = () => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
   };
-  
-  const saveTosessionStorage = (key: string, value: string[] | ChatProp[]) => {
-    sessionStorage.setItem(key, JSON.stringify(value));
-  };
 
-  const handleSendMessage =()=> {
-    const chatMessage = inputValue;
+  const handleSendMessage =async ()=> {
+    const chatMessage = inputValue.trim();
     setBotResponse(true);
-    setChatLog((prevChatLog) => [...prevChatLog,  { message: inputValue, sender: 'user'}]);
+    setChatLog((prevChatLog) => [...prevChatLog,  { message: chatMessage, sender: 'user'}]);
     const timerId = setTimeout(()=> {
       const botResponse = ChatBotResponseHandler(chatMessage);
       if (botResponse) {
         setChatLog((prevChatLog) => [...prevChatLog , {message: botResponse, sender:'bot'}]);
       }
       setBotResponse(false)
+      saveTosessionStorage('chatLog', chatLog);
     },2000)
-    saveTosessionStorage('chatLog', chatLog)
     setInputValue('')
     return () => clearTimeout(timerId)
+   
   }
 
   const handlePromptUpdate = () => {
@@ -145,6 +127,31 @@ const Dashboard: React.FC = () => {
     }
   },[]);
 
+
+
+  const toggleModal = () => {
+    setShowModal((prevState) => !prevState);
+  };
+
+  const handleOpenCalendar = () => {
+    if(chatLog[chatLog.length - 1]?.message?.includes('date')){
+      setShowCalendar(true);
+    }
+  };
+
+  const handleCloseCalendar =()=> {
+    setShowCalendar(false);
+  };
+
+  const handleDateSelect =(arg:DateSelectArg)=> {
+    const formattedDate = arg.start?.toLocaleDateString('en-US',{
+      month: '2-digit',
+      day: '2-digit',
+      year:'numeric',
+    });
+    setInputValue(formattedDate)
+  }
+
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && inputValue?.length >= 4 ) {
       handlePromptUpdate();
@@ -152,12 +159,11 @@ const Dashboard: React.FC = () => {
     }
   };
 
-  
-
   const handleOpenPopData =()=> {
       if(chatLog[chatLog.length - 1]?.message?.includes('flying') 
         || chatLog[chatLog.length - 1]?.message?.includes('destination')
         || chatLog[chatLog.length - 1]?.message?.includes('route')
+        || chatLog[chatLog.length - 1]?.message?.includes('class')
       ){
         setShowPopData(true)
       }
@@ -287,74 +293,69 @@ const Dashboard: React.FC = () => {
                 size={24}
               />
             </div>
-            {
-              !chatLog[chatLog.length - 1]?.message?.includes('class') ? 
               <PopData visibility={showPopData} position={'bottom-30 lg:left-[12%]'}>
-                {  chatLog[chatLog.length - 1]?.message?.includes('route') ? 
-                    (['Round Trip','Two way Trip','Multi city'].map((route, index:number) => (
-                      <button
-                        key={index}
-                        type="submit"
-                        className="flex items-center p-3 px-6 border-b border-neutral-300"
-                        onClick={() => {
-                          setInputValue(`${route}`);
-                          handleClosePopData()
-                        }}
-                      >
-                        <Text
-                          size="xs"
-                          color="text-neutral-500 text-left"
-                          className="font-work"
+                {!chatLog[chatLog.length - 1]?.message?.includes('class') ? 
+                  (chatLog[chatLog.length - 1]?.message?.includes('route') ? 
+                      (['Round Trip','Two way Trip','Multi city'].map((route, index:number) => (
+                        <button
+                          key={index}
+                          type="submit"
+                          className="flex items-center p-3 px-6 border-b border-neutral-300"
+                          onClick={() => {
+                            setInputValue(`${route}`);
+                            handleClosePopData()
+                          }}
                         >
-                          {route}
-                        </Text>
-                      </button>)))
+                          <Text
+                            size="xs"
+                            color="text-neutral-500 text-left"
+                            className="font-work"
+                          >
+                            {route}
+                          </Text>
+                        </button>)))
+                    :
+                      (airportSuggestionFilter?.slice(0,8)?.map((airport, index:number) => (
+                        <button
+                          key={index}
+                          type="submit"
+                          className="flex items-center p-3 border-b border-neutral-300"
+                          onClick={() => {
+                            setInputValue(`${airport?.name} (${airport?.code})`);
+                            handleClosePopData()
+                          }}
+                        >
+                          <Text
+                            size="xs"
+                            color="text-neutral-500 text-left"
+                            className="font-work"
+                          >
+                            {airport?.name} ({airport?.code})
+                          </Text>
+                        </button>
+                      ))))
                   :
-                    (airportSuggestionFilter?.slice(0,8)?.map((airport, index:number) => (
-                      <button
-                        key={index}
-                        type="submit"
-                        className="flex items-center p-3 border-b border-neutral-300"
-                        onClick={() => {
-                          setInputValue(`${airport?.name} (${airport?.code})`);
-                          handleClosePopData()
-                        }}
+                  (['First class','Business class','Premium Economy','Economy'].map((item, idx:number) => (
+                    <button
+                      key={idx}
+                      type="submit"
+                      className="flex items-center p-3 px-6 border-b border-neutral-300"
+                      onClick={() => {
+                        setInputValue(`${item}`);
+                        handleClosePopData()
+                      }}
+                    >
+                      <Text
+                        size="xs"
+                        color="text-neutral-500 text-left"
+                        className="font-work"
                       >
-                        <Text
-                          size="xs"
-                          color="text-neutral-500 text-left"
-                          className="font-work"
-                        >
-                          {airport?.name} ({airport?.code})
-                        </Text>
-                      </button>
-                    )))
+                        {item}
+                      </Text>
+                    </button>)))
+                  
                 }
               </PopData>
-              :
-              <PopData visibility={showPopData} position={'bottom-30 lg:left-[12%]'}>
-                {
-                    (['First class','Business class','Premium Economy','Economy'].map((item, idx:number) => (
-                      <button
-                        key={idx}
-                        type="submit"
-                        className="flex items-center p-3 px-6 border-b border-neutral-300"
-                        onClick={() => {
-                          setInputValue(`${item}`);
-                          handleClosePopData()
-                        }}
-                      >
-                        <Text
-                          size="xs"
-                          color="text-neutral-500 text-left"
-                          className="font-work"
-                        >
-                          {item}
-                        </Text>
-                      </button>)))
-                }
-              </PopData>
-            }
           </div>
           <Modal close={toggleModal} display={showModal}>
             <EditModal
@@ -365,7 +366,19 @@ const Dashboard: React.FC = () => {
             />
           </Modal>
           <Modal position="absolute" close={handleCloseCalendar} display={showCalendar}>
-            <Calendar />
+            <Calendar
+              Click={handleDateSelect}
+              Close={()=>{
+                if(inputValue.length != 0) {
+                  handleSendMessage();
+                  handlePromptUpdate();
+                  handleCloseCalendar();
+                }
+                else {
+                  return toast.warning('Pick a date')
+                }
+              }}
+            />
           </Modal>
           {/* mobile view */}
           <MobileRender/>
@@ -377,3 +390,4 @@ const Dashboard: React.FC = () => {
 };
 
 export default Dashboard;
+
