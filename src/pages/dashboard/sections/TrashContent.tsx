@@ -1,4 +1,6 @@
+import { EmptyState } from "../../../components/layout/EmptyState"
 import { Text } from "../../../components/ui/TextComp"
+
 
 export const TrashContent: React.FC = () => {
   return(
@@ -11,12 +13,7 @@ export const TrashContent: React.FC = () => {
       >
         Great Deals for Your Trip!
       </Text>
-      <div className="mt-25 items-center justify-center flex-col flex text-center">
-        <img src={''} alt="" />
-        <Text as="p" className="mt-1 text-xs text-neutral-500">
-          Start a conversation to find your perfect flight
-        </Text>
-      </div>
+      <EmptyState center={"justify-center"}/>
     </div>
   )
 }

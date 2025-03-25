@@ -1,7 +1,7 @@
 
 import React from 'react';
-import { X } from 'lucide-react';
-import { Btn } from '../ui/Button';
+import { Text } from '../ui/TextComp';
+import { IoMdCloseCircleOutline } from 'react-icons/io';
 
 
 
@@ -26,20 +26,19 @@ type Props = {
 
 const FlightOffersModal: React.FC<Props> = ({ offers, onClose}) => {
   return (
-    <div className="rounded-xl w-full max-w-5xl shadow-lg bg-white">
-      <div className="flex bg-primary-100  rounded-tl rounded-tr justify-between items-center border-b pb-2">
-        <h2 className="text-xl font-semibold text-center font-grotesk py-10 text-primary-500 w-full">
-          Best Offer
-        </h2>
-        <Btn onClick={onClose} className="text-gray-500 hover:text-gray-700">
-          <X size={24} />
-        </Btn>
+    <div className="w-full rounded-2xl overflow-hidden max-w-5xl bg-neutral-100">
+      <div className='flex items-center justify-between bg-primary-100 w-full lg:h-[100px] p-6 md:p-8'>
+        <Text as='h3' weight="bold" color='text-primary-600' className='font-grotesk w-full text-center'>
+          Best Offers
+        </Text>
+        <IoMdCloseCircleOutline
+          onClick={onClose}
+          className="text-2xl text-black hover:scale-125 transition-transform duration-200 ease-in-out"
+        />
       </div>
 
       <div className="p-4">
-        <p className="text-sm px-4 text-gray-500 my-2">
-          Ranked based on price and convenience
-        </p>
+        
         <div className="space-y-4 px-4 max-h-96 overflow-auto">
           {offers.map((offer, index) => (
             <div
