@@ -11,11 +11,10 @@ const ChatBotResponseHandler = (chatMessage:string) => {
 
   const commands = {
     airport: 'What is your destination?',
-    departure: 'What is your departure date?',
-    return: 'Do you have a return date?',
+    departure: 'What is your departure date? (MM/DD/YYYY)',
+    return: 'Do you have a return date? (MM/DD/YYYY)',
     route: 'Select travel route...',
     class: 'Select travel class...',
-    passengers: 'How many passengers?',
     ticket: 'Click the search button to get the best deals...',
     default: 'Please, respond to the last prompt.'
 
@@ -24,11 +23,12 @@ const ChatBotResponseHandler = (chatMessage:string) => {
 
   const userMessage:string = chatMessage.toLowerCase();
 
-  if (userMessage.includes('airport') || userMessage.includes('international') || userMessage.includes('local') || userMessage.includes('base') || userMessage.includes('airfield')) {
+  if (userMessage.includes('airport') || userMessage.includes('international') || userMessage.includes('airstrip') || userMessage.includes('base') || userMessage.includes('airfield')) {
     commandCount['airport'] = (commandCount['airport'] || 0) + 1;
     commandCount['base'] = (commandCount['base'] || 0) + 1;
-    commandCount['airfield'] = (commandCount['airfield'] || 0) + 1
-      if (commandCount['airport'] > 1 || commandCount['base'] > 1 || commandCount['airfield'] > 1) {
+    commandCount['airfield'] = (commandCount['airfield'] || 0) + 1;
+    commandCount['airstrip'] = (commandCount['airstrip'] || 0) + 1;
+      if (commandCount['airport'] > 1 || commandCount['base'] > 1 || commandCount['airfield'] > 1 || commandCount['airstrip'] > 1) {
         return commands.departure
       } else return commands.airport
 

@@ -21,7 +21,7 @@ import { offers } from '../../../components/layout/offers';
 
 const storage = new CustomStorage();
 
-export const RightPane: React.FC = () => {
+export const RightPanel: React.FC = () => {
   const navigate = useNavigate();
   const [selectedTab, setSelectedTab] = useState<string>('home');
   const {showLogoutModal,
@@ -153,7 +153,7 @@ export const RightPane: React.FC = () => {
                 className={`${
                   Array.isArray(RecentPrompts) && RecentPrompts.length >= 6 
                     ? 'bg-gradient-to-b from-[#FF9040] to-[#FF6B00] text-white  '
-                    : 'bg-neutral-300 text-neutral-500 cursor-not-allowed'
+                    : 'bg-neutral-300 text-neutral-500 cursor-not-allowed opacity-50'
                 } p-1 w-full max-w-[385px]`}
                 onClick={()=> {
                   if(Array.isArray(RecentPrompts) && RecentPrompts?.length >= 6) {

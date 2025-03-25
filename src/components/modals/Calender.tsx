@@ -9,10 +9,12 @@ import { Btn } from '../ui/Button';
 type CalendarProps = {
   Click: ((arg: DateSelectArg) => void);
   Close: () => void;
+  selectedDate: Date | null;
 }
 
-const Calendar = ({Click, Close}:CalendarProps) => {
-
+const Calendar = ({Click, Close, selectedDate}:CalendarProps) => {
+  const today = new Date();
+  const validDates = selectedDate == null ? today : selectedDate
 
   return (
     <div className="p-4 flex flex-col justify-between w-full h-[460px]  md:w-[505px] sm:h-[520px] bg-white rounded-lg shadow-md ">
@@ -21,6 +23,9 @@ const Calendar = ({Click, Close}:CalendarProps) => {
           initialView="dayGridMonth" 
           selectable={true}
           select={Click}
+          validRange={{
+            start: validDates,
+          }}
         />
       </div>
       <Btn onClick={Close}
