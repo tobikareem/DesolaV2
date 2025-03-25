@@ -17,12 +17,14 @@ export const GlobalProvider = ({children}:ContextProps) => {
   const [MobileTab, setMobileTab] = useState<string>('');
   const [RecentPrompts, setRecentPrompts] = useState<string[]>([]);
   const [showFlightModal, setShowFlightModal] = useState<boolean>(false);
-  const [chatLog, setChatLog] = useState<ChatProp[]>([
+  const [chatLog, setChatLog] = useState<ChatProp[]>(() => { 
+    const storedChatLog = sessionStorage.getItem('chatLog');
+    return storedChatLog ? JSON.parse(storedChatLog) : [
     {
       message: `Hi ${isAuthenticated ? userName?.split(' ')[0] : "Traveler"}, Which airport will you be flying from?`,
       sender: 'bot'
     }
-  ]);
+  ]});
   
   const toggleLogoutModal = () => {
     setShowLogoutModal(prevState => !prevState)

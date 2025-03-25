@@ -6,7 +6,6 @@ import { IoSend } from 'react-icons/io5';
 import { Input } from '../../components/ui/InputField';
 import EditModal from '../../components/modals/EditModal';
 import { Modal } from '../../components/modals/Modal';
-import { RightPane } from './sections/RightPanel';
 import { PopData } from '../../components/layout/PopData';
 import { Text } from '../../components/ui/TextComp';
 import { useAirports } from '../../hooks/useDashboardInfo';
@@ -14,11 +13,12 @@ import { useDebounce } from '../../hooks/useDebounce';
 import MobileRender from '../../components/dashboard-sections/mobileRender';
 import Calendar from '../../components/modals/Calender';
 import ChatBotResponseHandler, { ChatProp } from '../../utils/ChatBotHandler';
-import { GiBoatPropeller } from 'react-icons/gi';
+import { TbPropeller } from 'react-icons/tb';
 import { GlobalContext } from '../../hooks/globalContext';
 import { Btn } from '../../components/ui/Button';
 import { DateSelectArg} from '@fullcalendar/core/index.js';
 import { toast } from 'react-toastify';
+import { RightPanel } from './sections/RightPanel';
 
 
   
@@ -30,10 +30,12 @@ const Dashboard: React.FC =()=> {
   const [inputValue, setInputValue] = useState<string>('');
   const debounce = useDebounce();
   const {fetchAirports, airportSuggestions} = useAirports();
-  const [botResponse, setBotResponse] = useState<boolean>(false);
+  const [botLoader, setBotLoader] = useState<boolean>(false);
   const [chatLoading, setChatLoading] = useState<boolean>(true);
   const {RecentPrompts,setRecentPrompts, toggleFlightModal, chatLog, setChatLog} = useContext(GlobalContext);
   const [searchParam, setSearchParam] = useState<string>('');
+  const [ dateSelect , setDateSelect ] = useState<Date | null>(null);
+  const [date, setDate] = useState<Date | null>(null);
 
   useEffect(() => {
     fetchAirports()
@@ -51,10 +53,13 @@ const Dashboard: React.FC =()=> {
   }):[];
 
   const saveTosessionStorage = (key: string, value: string[] | ChatProp[]) => {
-    sessionStorage.setItem(key, JSON.stringify(value));
+    try {sessionStorage.setItem(key, JSON.stringify(value));}
+    catch (error) {
+      console.error('Error saving to session storage:', error)
+    }
   };
  
-
+  const chatContainerRef = useRef<HTMLDivElement>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const handleScroll = (event: WheelEvent<HTMLDivElement>) => {
     event.preventDefault();
@@ -67,22 +72,44 @@ const Dashboard: React.FC =()=> {
     setInputValue(e.target.value);
   };
 
-  const handleSendMessage =async ()=> {
+  const handleSendMessage = () => {
     const chatMessage = inputValue.trim();
-    setBotResponse(true);
-    setChatLog((prevChatLog) => [...prevChatLog,  { message: chatMessage, sender: 'user'}]);
-    const timerId = setTimeout(()=> {
-      const botResponse = ChatBotResponseHandler(chatMessage);
-      if (botResponse) {
-        setChatLog((prevChatLog) => [...prevChatLog , {message: botResponse, sender:'bot'}]);
-      }
-      setBotResponse(false)
-      saveTosessionStorage('chatLog', chatLog);
-    },2000)
-    setInputValue('')
-    return () => clearTimeout(timerId)
-   
-  }
+    if (!chatMessage) return;
+
+    setChatLog((prevChatLog) => [
+      ...prevChatLog,
+      { message: chatMessage, sender: 'user' },
+    ]);
+
+    setChatLog((prevChatLog) => [
+      ...prevChatLog,
+      { message: '...', sender: 'bot' },
+    ]);
+    
+    setBotLoader(true); 
+    setInputValue(''); 
+  
+    try {
+      const timerId = setTimeout(() => {
+        const botMessage = ChatBotResponseHandler(chatMessage);
+        if (botMessage) {
+          setChatLog((prevChatLog) => {
+            const updatedChatLog = [...prevChatLog];
+            updatedChatLog[updatedChatLog.length - 1] = {
+              message: botMessage,
+              sender: 'bot',
+            };
+            return updatedChatLog;
+          });
+        }
+        setBotLoader(false);
+      }, 2000);
+      return () => clearTimeout(timerId);
+    } catch (error) {
+      console.error('Error handling bot response:', error);
+      setBotLoader(false); // Ensure botLoader is cleared in case of an error
+    }
+  };
 
   const handlePromptUpdate = () => {
     const newPrompt = inputValue?.trim();
@@ -95,6 +122,13 @@ const Dashboard: React.FC =()=> {
       setInputValue('');
     }
   };
+
+  useEffect(()=> {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+    }
+    saveTosessionStorage('chatLog', chatLog);
+  },[chatLog])
 
   useEffect(() => {
     const storedPrompts = sessionStorage.getItem('RecentPrompts');
@@ -111,21 +145,7 @@ const Dashboard: React.FC =()=> {
         return updatedPrompts;
       });
     }
-    const storedChatLog = sessionStorage.getItem('chatLog');
-    if (storedChatLog) {
-      const parsedChatLog = JSON.parse(storedChatLog);
-      setChatLog(parsedChatLog);
-      setChatLog((prevChatLog:ChatProp[]) => {
-        const updatedChatLog = [...prevChatLog];
-        parsedChatLog.forEach((chat:{message:string, sender:string})=> {
-          if(!(updatedChatLog ?? []).includes(chat)) {
-            updatedChatLog.push(chat)
-          }
-        });
-        return updatedChatLog;
-      })
-    }
-  },[]);
+  }, []);
 
 
 
@@ -150,6 +170,12 @@ const Dashboard: React.FC =()=> {
       year:'numeric',
     });
     setInputValue(formattedDate)
+    setDate(arg?.start)
+
+  }
+
+  const handleValidDates =()=> {
+    setDateSelect(date);
   }
 
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -237,15 +263,10 @@ const Dashboard: React.FC =()=> {
             })}
           </div>
 
-          <div className={`flex flex-col flex-1 bg-background space-y-6 mt-6 lg:mt-0 p-5 lg:pl-20  ${chatLoading ? '':'overflow-y-auto'}`}>
-            {Array.isArray(RecentPrompts) && RecentPrompts.length >= 6 ? 
-              <Btn onClick={toggleFlightModal}
-                className={`lg:hidden px-6 py-1 w-fit bg-neutral-300 text-neutral-500`}>
-                Search
-              </Btn> : null
-            }
+          <div ref={chatContainerRef}
+            className={`relative flex flex-col flex-1 bg-background space-y-6 mt-6 lg:mt-0 p-5 lg:pl-20  ${chatLoading ? '':'overflow-y-auto'}`}>
             { chatLoading ? 
-                <div className='flex w-full h-full items-center justify-center text-5xl animate-spin duration-300 transition-transform text-primary-600 pointer-events-none'><GiBoatPropeller /></div>
+                <div className='flex w-full h-full items-center justify-center text-5xl animate-spin duration-300 transition-transform text-primary-600 pointer-events-none'><TbPropeller /></div>
                 :
                 chatLog?.map((chat:{ message?: string; sender?: string; }, index:number) => {
                   const position = chat?.sender === 'user';
@@ -265,12 +286,18 @@ const Dashboard: React.FC =()=> {
                           className={`${
                             position ? 'bg-secondary-100' : 'bg-primary-100'} text-neutral p-3 rounded-lg text-xs sm:text-sm md:text-base`}
                         >
-                          { chat?.sender == 'bot' && index === chatLog?.length - 1 && botResponse ? <span className='text-3xl text-neutral-500 animate-pulse duration-75'>...</span> : chat?.message}
+                          { chat?.sender == 'bot' &&  index === chatLog.length -1 && botLoader ? <span className='text-3xl text-neutral-500 animate-pulse duration-75'>...</span> : chat?.message}
                         </span>
                     </div>
                   );
                 }
               )
+            }
+            {Array.isArray(RecentPrompts) && RecentPrompts.length >= 6 ? 
+              <Btn onClick={toggleFlightModal}
+                className={`lg:hidden px-6 py-1 w-fit bg-secondary-500 text-neutral-100 self-end`}>
+                Search
+              </Btn> : null
             }
           </div>
           <div className="relative w-full p-2 flex items-center justify-center  bg-white border-t h-30">
@@ -296,7 +323,7 @@ const Dashboard: React.FC =()=> {
               <PopData visibility={showPopData} position={'bottom-30 lg:left-[12%]'}>
                 {!chatLog[chatLog.length - 1]?.message?.includes('class') ? 
                   (chatLog[chatLog.length - 1]?.message?.includes('route') ? 
-                      (['Round Trip','Two way Trip','Multi city'].map((route, index:number) => (
+                      (['One way Trip','Round Trip','Two way Trip','Multi city'].map((route, index:number) => (
                         <button
                           key={index}
                           type="submit"
@@ -368,11 +395,13 @@ const Dashboard: React.FC =()=> {
           <Modal position="absolute" close={handleCloseCalendar} display={showCalendar}>
             <Calendar
               Click={handleDateSelect}
+              selectedDate={dateSelect}
               Close={()=>{
                 if(inputValue.length != 0) {
                   handleSendMessage();
                   handlePromptUpdate();
                   handleCloseCalendar();
+                  handleValidDates();
                 }
                 else {
                   return toast.warning('Pick a date')
@@ -383,7 +412,7 @@ const Dashboard: React.FC =()=> {
           {/* mobile view */}
           <MobileRender/>
         </div>
-        <RightPane />
+        <RightPanel />
       </div>
     </>
   );
