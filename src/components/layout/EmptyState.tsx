@@ -9,9 +9,9 @@ export const EmptyState =({center}:{center:string})=> {
       <ReactImage
         src="/empty-icon.svg"
         alt="empty"
-        className="w-full"
+        className="w-[100px]"
       />
-      <Text size="sm" color="text-neutral-500" className="">
+      <Text size="sm" color="text-neutral-500 text-center" className="">
         Start a conversation to find your perfect flight.
       </Text>
     </div>

@@ -37,77 +37,77 @@ export const HomeContent: React.FC<homeProps> = ({
       >
         Great Deals for Your Trip!
       </Text>
-      <div className="mb-4">
+      <div className="mb-4 space-y-2">
         <div className="flex  items-center space-x-2 mb-2">
           <PlaneTakeoff
             className="text-secondary-700 hover:scale-110 transition duration-300"
             size={20}
           />
-          <label className="block text-sm font-medium text-neutral">
-            Departure:
+          <label className="font-grotesk block !text-xl font-bold text-neutral">
+            Departure
           </label>
         </div>
-        <Text as="p" className="text-xs text-neutral-500">
+        <Text as="p" className="text-xs text-neutral-500 font-work">
           {departure}
         </Text>
       </div>
 
-      <div className="mb-4">
+      <div className="mb-4 space-y-2">
         <div className="flex items-center space-x-2 mb-2">
           <Route
             size={20}
             className="text-primary-700 hover:scale-110 transition duration-300"
           />
-          <label className="block text-sm font-medium text-neutral">
+          <label className="font-grotesk block !text-xl font-bold text-neutral">
             Destination
           </label>
         </div>
-        <Text as="p" className="text-xs text-neutral-500">
+        <Text as="p" className="text-xs text-neutral-500 font-work">
           {destination}
         </Text>
       </div>
 
-      <div className="mb-4">
+      <div className="mb-4 space-y-2">
         <div className="flex items-center space-x-2 mb-2">
           <CalendarCheck
             className="text-success hover:scale-110 transition duration-300"
             size={20}
           />
-          <label className="block text-sm font-medium text-neutral">
+          <label className="font-grotesk block !text-xl font-bold text-neutral">
             Departure Date
           </label>
         </div>
-        <Text as="p" className=" text-xs text-neutral-500">
+        <Text as="p" className=" text-xs text-neutral-500 font-work">
           {departureDate}
         </Text>
       </div>
 
-      <div className="mb-4">
+      <div className="mb-4 space-y-2">
         <div className="flex items-center space-x-2 mb-2">
           <CalendarCheck
             className="text-primary-300 hover:scale-110 transition duration-300"
             size={20}
           />
-          <label className="block text-sm font-medium text-neutral">
+          <label className="font-grotesk block !text-xl font-bold text-neutral">
             Returning Date
           </label>
         </div>
-        <Text as="p" className="text-xs text-neutral-500">
+        <Text as="p" className="text-xs text-neutral-500 font-work">
           {returnDate}
         </Text>
       </div>
 
-      <div className="mb-4">
+      <div className="mb-4 space-y-2">
         <div className="flex items-center space-x-2 mb-2">
           <PlaneLanding
             className="text-primary-600 hover:scale-110 transition duration-300"
             size={20}
           />
-          <label className="block text-sm font-medium text-neutral">
+          <label className="font-grotesk block !text-xl font-bold text-neutral">
             Travel Route
           </label>
         </div>
-        <Text as="p" className="mt-1 text-xs text-neutral-500">
+        <Text as="p" className="mt-1 text-xs text-neutral-500 font-work">
           {travelRoute}
         </Text>
       </div>
@@ -118,11 +118,11 @@ export const HomeContent: React.FC<homeProps> = ({
             className="text-secondary-700 hover:scale-110 transition duration-300"
             size={20}
           />
-          <label className="block text-sm font-medium text-neutral">
+          <label className="font-grotesk block !text-xl font-bold text-neutral">
             Flight
           </label>
         </div>
-        <Text as="p" className="mt-1 text-xs text-neutral-500">
+        <Text as="p" className="mt-1 text-xs text-neutral-500 font-work">
           {flightClass}
         </Text>
       </div>

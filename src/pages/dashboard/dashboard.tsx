@@ -1,81 +1,65 @@
 import { PenLine } from 'lucide-react';
-import React, { useEffect, useRef, useState, WheelEvent } from 'react';
+import React, { useContext, useEffect, useRef, useState, WheelEvent } from 'react';
 import { BsStars } from 'react-icons/bs';
 import { FaUser } from 'react-icons/fa';
 import { IoSend } from 'react-icons/io5';
 import { Input } from '../../components/ui/InputField';
 import EditModal from '../../components/modals/EditModal';
 import { Modal } from '../../components/modals/Modal';
-import { RightPane } from './sections/RightPanel';
-import { useAuthInfo } from '../../hooks/useAuthInfo';
 import { PopData } from '../../components/layout/PopData';
 import { Text } from '../../components/ui/TextComp';
-import { useAirports, useRoutes } from '../../hooks/useDashboardInfo';
+import { useAirports } from '../../hooks/useDashboardInfo';
 import { useDebounce } from '../../hooks/useDebounce';
 import MobileRender from '../../components/dashboard-sections/mobileRender';
 import Calendar from '../../components/modals/Calender';
 import ChatBotResponseHandler, { ChatProp } from '../../utils/ChatBotHandler';
-import { GiBoatPropeller } from 'react-icons/gi';
+import { TbPropeller } from 'react-icons/tb';
+import { GlobalContext } from '../../hooks/globalContext';
+import { Btn } from '../../components/ui/Button';
+import { DateSelectArg} from '@fullcalendar/core/index.js';
+import { toast } from 'react-toastify';
+import { RightPanel } from './sections/RightPanel';
 
 
-
-
-const Dashboard: React.FC = () => {
-
+  
+const Dashboard: React.FC =()=> {
+  
   const [showModal, setShowModal] = useState<boolean>(false);
   const [showCalendar, setShowCalendar] = useState<boolean>(false);
-  const [showFlightModal, setShowFlightModal] = useState<boolean>(false);
   const [showPopData, setShowPopData] = useState<boolean>(false);
-  const [RecentPrompts, setRecentPrompts] = useState<string[]>([]);
   const [inputValue, setInputValue] = useState<string>('');
   const debounce = useDebounce();
-  const { userName, isAuthenticated,  } = useAuthInfo();
   const {fetchAirports, airportSuggestions} = useAirports();
-  const {fetchRoutes, RouteData} = useRoutes();
-  const [botResponse, setBotResponse] = useState<boolean>(false);
-  const [chatLoading , setIsLoading] = useState<boolean>(false);
-
-  const [chatLog, setChatLog] = useState<ChatProp[]>([
-    {
-      message: `Hi ${isAuthenticated ? userName?.split(' ')[0] : "Anonymous"}, Which airport will you be flying from?`,
-      sender: 'bot'
-    }
-  ]);
-
-  useEffect(()=> {
-    fetchAirports()
-  },[])
-
-  
-
-
-  // console.log('Route:', RouteData)
-
+  const [botLoader, setBotLoader] = useState<boolean>(false);
+  const [chatLoading, setChatLoading] = useState<boolean>(true);
+  const {RecentPrompts,setRecentPrompts, toggleFlightModal, chatLog, setChatLog} = useContext(GlobalContext);
   const [searchParam, setSearchParam] = useState<string>('');
-  const airportSuggestionFilter = searchParam.trim() !== '' ?  airportSuggestions?.filter((item) => {
-      return(item?.name.toLowerCase().includes(searchParam.toLowerCase()) || item?.city.toLowerCase().includes(searchParam.toLowerCase()));
-  }):[];
- 
-  
-  const toggleModal = () => {
-    setShowModal((prevState) => !prevState);
-  };
+  const [ dateSelect , setDateSelect ] = useState<Date | null>(null);
+  const [date, setDate] = useState<Date | null>(null);
 
-  const handleOpenCalendar = () => {
-    if(chatLog.length == 5 || chatLog.length == 7){
-      setShowCalendar(true);
+  useEffect(() => {
+    fetchAirports()
+    const Timeout = setTimeout(()=> {
+      setChatLoading(false)
+    },500)
+    return () =>  clearTimeout(Timeout)
+  },[])
+  // console.log('Route:', RouteData)
+  const airportSuggestionFilter = searchParam.trim() !== '' ?  airportSuggestions?.filter((item) => {
+      return(item?.name.toLowerCase().includes(searchParam.toLowerCase()) 
+        || item?.city.toLowerCase().includes(searchParam.toLowerCase())
+        || item?.code.toLocaleLowerCase().includes(searchParam.toLocaleLowerCase())
+    );
+  }):[];
+
+  const saveTosessionStorage = (key: string, value: string[] | ChatProp[]) => {
+    try {sessionStorage.setItem(key, JSON.stringify(value));}
+    catch (error) {
+      console.error('Error saving to session storage:', error)
     }
   };
-
-  const handleCloseCalendar =()=> {
-    setShowCalendar(false);
-  };
-
-  const toggleFlightModal = () => {
-    setShowFlightModal((prevState) => !prevState)
-  }
-
  
+  const chatContainerRef = useRef<HTMLDivElement>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const handleScroll = (event: WheelEvent<HTMLDivElement>) => {
     event.preventDefault();
@@ -88,22 +72,43 @@ const Dashboard: React.FC = () => {
     setInputValue(e.target.value);
   };
 
-  const handleSendMessage =()=> {
-    const chatMessage = inputValue;
-    setBotResponse(true);
-    setChatLog((prevChatLog) => [...prevChatLog,  { message: inputValue, sender: 'user'}]);
-    setTimeout(()=> {
-      const botResponse = ChatBotResponseHandler(chatMessage);
-      if (botResponse) {
-        setChatLog((prevChatLog) => [...prevChatLog , {message: botResponse, sender:'bot'}]);
-      }
-      setBotResponse(false)
-    },2000)
-    setInputValue('')
-  }
+  const handleSendMessage = () => {
+    const chatMessage = inputValue.trim();
+    if (!chatMessage) return;
 
-  const saveTosessionStorage = (key: string, value: string[]) => {
-    sessionStorage.setItem(key, JSON.stringify(value));
+    setChatLog((prevChatLog) => [
+      ...prevChatLog,
+      { message: chatMessage, sender: 'user' },
+    ]);
+
+    setChatLog((prevChatLog) => [
+      ...prevChatLog,
+      { message: '...', sender: 'bot' },
+    ]);
+    
+    setBotLoader(true); 
+    setInputValue(''); 
+  
+    try {
+      const timerId = setTimeout(() => {
+        const botMessage = ChatBotResponseHandler(chatMessage);
+        if (botMessage) {
+          setChatLog((prevChatLog) => {
+            const updatedChatLog = [...prevChatLog];
+            updatedChatLog[updatedChatLog.length - 1] = {
+              message: botMessage,
+              sender: 'bot',
+            };
+            return updatedChatLog;
+          });
+        }
+        setBotLoader(false);
+      }, 2000);
+      return () => clearTimeout(timerId);
+    } catch (error) {
+      console.error('Error handling bot response:', error);
+      setBotLoader(false); // Ensure botLoader is cleared in case of an error
+    }
   };
 
   const handlePromptUpdate = () => {
@@ -118,12 +123,12 @@ const Dashboard: React.FC = () => {
     }
   };
 
-  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter' && inputValue?.length >= 4 ) {
-      handlePromptUpdate();
-      handleSendMessage();
+  useEffect(()=> {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
     }
-  };
+    saveTosessionStorage('chatLog', chatLog);
+  },[chatLog])
 
   useEffect(() => {
     const storedPrompts = sessionStorage.getItem('RecentPrompts');
@@ -142,12 +147,59 @@ const Dashboard: React.FC = () => {
     }
   }, []);
 
+
+
+  const toggleModal = () => {
+    setShowModal((prevState) => !prevState);
+  };
+
+  const handleOpenCalendar = () => {
+    if(chatLog[chatLog.length - 1]?.message?.includes('date')){
+      setShowCalendar(true);
+    }
+  };
+
+  const handleCloseCalendar =()=> {
+    setShowCalendar(false);
+  };
+
+  const handleDateSelect =(arg:DateSelectArg)=> {
+    const formattedDate = arg.start?.toLocaleDateString('en-US',{
+      month: '2-digit',
+      day: '2-digit',
+      year:'numeric',
+    });
+    setInputValue(formattedDate)
+    setDate(arg?.start)
+
+  }
+
+  const handleValidDates =()=> {
+    setDateSelect(date);
+  }
+
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && inputValue?.length >= 4 ) {
+      handlePromptUpdate();
+      handleSendMessage();
+    }
+  };
+
   const handleOpenPopData =()=> {
-      if(chatLog.length == 1 || chatLog.length == 3){
+      if(chatLog[chatLog.length - 1]?.message?.includes('flying') 
+        || chatLog[chatLog.length - 1]?.message?.includes('destination')
+        || chatLog[chatLog.length - 1]?.message?.includes('route')
+        || chatLog[chatLog.length - 1]?.message?.includes('class')
+      ){
         setShowPopData(true)
       }
   }
 
+  const handleOpenClassData =()=> {
+    if(chatLog[chatLog.length - 1]?.message?.includes('class')){
+      setShowPopData(true)
+    }
+}
 
   const handleClosePopData =()=> {
     setShowPopData(false)
@@ -211,34 +263,42 @@ const Dashboard: React.FC = () => {
             })}
           </div>
 
-          <div className={`flex flex-col flex-1 bg-background space-y-6 mt-16 lg:mt-0 p-5 lg:pl-20  ${chatLoading ? '':'overflow-y-auto'}`}>
-            { chatLoading ? <div className='flex w-full h-full items-center justify-center text-3xl animate-spin text-primary-600 pointer-events-none'><GiBoatPropeller /></div>
-              :
-              chatLog?.map((chat:{ message?: string; sender?: string; }, index:number) => {
-                const position = chat?.sender === 'user';
-                return (
-                  <div
-                    key={index}
-                    className={`font-work flex ${position ? 'justify-end' : 'items-start'} space-x-2 `}
-                  >
-                    <div className={`${position ? 'bg-white text-primary-500' : 'bg-primary-500 text-white'} flex items-center justify-center size-10 rounded-full text-lg border border-neutral-300`}>
-                      { position ? 
-                        (<FaUser />) 
-                        :         
-                        (<BsStars />)
-                      }
+          <div ref={chatContainerRef}
+            className={`relative flex flex-col flex-1 bg-background space-y-6 mt-6 lg:mt-0 p-5 lg:pl-20  ${chatLoading ? '':'overflow-y-auto'}`}>
+            { chatLoading ? 
+                <div className='flex w-full h-full items-center justify-center text-5xl animate-spin duration-300 transition-transform text-primary-600 pointer-events-none'><TbPropeller /></div>
+                :
+                chatLog?.map((chat:{ message?: string; sender?: string; }, index:number) => {
+                  const position = chat?.sender === 'user';
+                  return (
+                    <div
+                      key={index}
+                      className={`font-work flex ${position ? 'justify-end' : 'items-start'} space-x-2`}
+                    >
+                      <div className={`${position ? 'bg-white text-primary-500' : 'bg-primary-500 text-white'} flex items-center justify-center size-10 rounded-full text-lg border border-neutral-300`}>
+                        { position ? 
+                          (<FaUser />) 
+                          :         
+                          (<BsStars />)
+                        }
+                      </div>
+                        <span
+                          className={`${
+                            position ? 'bg-secondary-100' : 'bg-primary-100'} text-neutral p-3 rounded-lg text-xs sm:text-sm md:text-base`}
+                        >
+                          { chat?.sender == 'bot' &&  index === chatLog.length -1 && botLoader ? <span className='text-3xl text-neutral-500 animate-pulse duration-75'>...</span> : chat?.message}
+                        </span>
                     </div>
-                      <span
-                        className={`${
-                          position ? 'bg-secondary-100' : 'bg-primary-100'} text-neutral p-3 rounded-lg text-xs sm:text-sm md:text-base`}
-                      >
-                        { chat?.sender == 'bot' && index === chatLog.length - 1 && botResponse ? <span className='text-3xl text-neutral-500 animate-pulse duration-75'>...</span> : chat?.message}
-                      </span>
-                  </div>
-                );
-              }
-            )
-          }
+                  );
+                }
+              )
+            }
+            {Array.isArray(RecentPrompts) && RecentPrompts.length >= 6 ? 
+              <Btn onClick={toggleFlightModal}
+                className={`lg:hidden px-6 py-1 w-fit bg-secondary-500 text-neutral-100 self-end`}>
+                Search
+              </Btn> : null
+            }
           </div>
           <div className="relative w-full p-2 flex items-center justify-center  bg-white border-t h-30">
             <div className="items-center max-w-[678px] w-full rounded-2xl py-4 px-8 flex message bg-tint">
@@ -246,7 +306,7 @@ const Dashboard: React.FC = () => {
                 value={inputValue}
                 onChange={(e)=>{handleInputChange(e); 
                   debounce(() => setSearchParam(e.target.value)); 
-                  handleOpenPopData() 
+                  handleOpenPopData(); handleOpenClassData()
                 }}
                 onKeyDown={handleKeyPress}
                 onFocus={()=> {handleOpenPopData(); handleOpenCalendar() }}
@@ -260,29 +320,69 @@ const Dashboard: React.FC = () => {
                 size={24}
               />
             </div>
-            <PopData visibility={showPopData} position={'bottom-30 lg:left-[12%]'}>
-              {   
-                airportSuggestionFilter?.slice(0,6)?.map((airport, index:number) => (
-                  <button
-                    key={index}
-                    type="submit"
-                    className="flex items-center p-3 border-b border-neutral-300"
-                    onClick={() => {
-                      setInputValue(airport?.name);
-                      handleClosePopData()
-                    }}
-                  >
-                    <Text
-                      size="xs"
-                      color="text-neutral-500 text-left"
-                      className="font-work"
+              <PopData visibility={showPopData} position={'bottom-30 lg:left-[12%]'}>
+                {!chatLog[chatLog.length - 1]?.message?.includes('class') ? 
+                  (chatLog[chatLog.length - 1]?.message?.includes('route') ? 
+                      (['One way Trip','Round Trip','Two way Trip','Multi city'].map((route, index:number) => (
+                        <button
+                          key={index}
+                          type="submit"
+                          className="flex items-center p-3 px-6 border-b border-neutral-300"
+                          onClick={() => {
+                            setInputValue(`${route}`);
+                            handleClosePopData()
+                          }}
+                        >
+                          <Text
+                            size="xs"
+                            color="text-neutral-500 text-left"
+                            className="font-work"
+                          >
+                            {route}
+                          </Text>
+                        </button>)))
+                    :
+                      (airportSuggestionFilter?.slice(0,8)?.map((airport, index:number) => (
+                        <button
+                          key={index}
+                          type="submit"
+                          className="flex items-center p-3 border-b border-neutral-300"
+                          onClick={() => {
+                            setInputValue(`${airport?.name} (${airport?.code})`);
+                            handleClosePopData()
+                          }}
+                        >
+                          <Text
+                            size="xs"
+                            color="text-neutral-500 text-left"
+                            className="font-work"
+                          >
+                            {airport?.name} ({airport?.code})
+                          </Text>
+                        </button>
+                      ))))
+                  :
+                  (['First class','Business class','Premium Economy','Economy'].map((item, idx:number) => (
+                    <button
+                      key={idx}
+                      type="submit"
+                      className="flex items-center p-3 px-6 border-b border-neutral-300"
+                      onClick={() => {
+                        setInputValue(`${item}`);
+                        handleClosePopData()
+                      }}
                     >
-                      {airport?.name} ({airport?.code})
-                    </Text>
-                  </button>
-                ))
-              }
-            </PopData>
+                      <Text
+                        size="xs"
+                        color="text-neutral-500 text-left"
+                        className="font-work"
+                      >
+                        {item}
+                      </Text>
+                    </button>)))
+                  
+                }
+              </PopData>
           </div>
           <Modal close={toggleModal} display={showModal}>
             <EditModal
@@ -293,16 +393,30 @@ const Dashboard: React.FC = () => {
             />
           </Modal>
           <Modal position="absolute" close={handleCloseCalendar} display={showCalendar}>
-            <Calendar />
+            <Calendar
+              Click={handleDateSelect}
+              selectedDate={dateSelect}
+              Close={()=>{
+                if(inputValue.length != 0) {
+                  handleSendMessage();
+                  handlePromptUpdate();
+                  handleCloseCalendar();
+                  handleValidDates();
+                }
+                else {
+                  return toast.warning('Pick a date')
+                }
+              }}
+            />
           </Modal>
           {/* mobile view */}
           <MobileRender/>
-          
         </div>
-        <RightPane />
+        <RightPanel />
       </div>
     </>
   );
 };
 
 export default Dashboard;
+
