@@ -8,7 +8,6 @@ import {
 } from 'lucide-react';
 
 interface homeProps {
-  
   departure: string;
   destination: string;
   departureDate: string;
@@ -16,8 +15,6 @@ interface homeProps {
   travelRoute: string;
   flightClass: string;
 }
-
-
 
 export const HomeContent: React.FC<homeProps> = ({
   departure,
@@ -27,7 +24,10 @@ export const HomeContent: React.FC<homeProps> = ({
   travelRoute,
   flightClass,
 }) => {
-  return(
+  // Check if it's a one-way trip
+  const isOneWay = travelRoute.toLowerCase().includes('one way');
+
+  return (
     <div className="flex-1 overflow-y-auto">
       <Text
         as="h1"
@@ -38,7 +38,7 @@ export const HomeContent: React.FC<homeProps> = ({
         Great Deals for Your Trip!
       </Text>
       <div className="mb-4 space-y-2">
-        <div className="flex  items-center space-x-2 mb-2">
+        <div className="flex items-center space-x-2 mb-2">
           <PlaneTakeoff
             className="text-secondary-700 hover:scale-110 transition duration-300"
             size={20}
@@ -69,36 +69,6 @@ export const HomeContent: React.FC<homeProps> = ({
 
       <div className="mb-4 space-y-2">
         <div className="flex items-center space-x-2 mb-2">
-          <CalendarCheck
-            className="text-success hover:scale-110 transition duration-300"
-            size={20}
-          />
-          <label className="font-grotesk block !text-xl font-bold text-neutral">
-            Departure Date
-          </label>
-        </div>
-        <Text as="p" className=" text-xs text-neutral-500 font-work">
-          {departureDate}
-        </Text>
-      </div>
-
-      <div className="mb-4 space-y-2">
-        <div className="flex items-center space-x-2 mb-2">
-          <CalendarCheck
-            className="text-primary-300 hover:scale-110 transition duration-300"
-            size={20}
-          />
-          <label className="font-grotesk block !text-xl font-bold text-neutral">
-            Returning Date
-          </label>
-        </div>
-        <Text as="p" className="text-xs text-neutral-500 font-work">
-          {returnDate}
-        </Text>
-      </div>
-
-      <div className="mb-4 space-y-2">
-        <div className="flex items-center space-x-2 mb-2">
           <PlaneLanding
             className="text-primary-600 hover:scale-110 transition duration-300"
             size={20}
@@ -111,6 +81,39 @@ export const HomeContent: React.FC<homeProps> = ({
           {travelRoute}
         </Text>
       </div>
+
+      <div className="mb-4 space-y-2">
+        <div className="flex items-center space-x-2 mb-2">
+          <CalendarCheck
+            className="text-success hover:scale-110 transition duration-300"
+            size={20}
+          />
+          <label className="font-grotesk block !text-xl font-bold text-neutral">
+            Departure Date
+          </label>
+        </div>
+        <Text as="p" className="text-xs text-neutral-500 font-work">
+          {departureDate}
+        </Text>
+      </div>
+
+      {/* Only show return date for non-one-way trips */}
+      {!isOneWay && (
+        <div className="mb-4 space-y-2">
+          <div className="flex items-center space-x-2 mb-2">
+            <CalendarCheck
+              className="text-primary-300 hover:scale-110 transition duration-300"
+              size={20}
+            />
+            <label className="font-grotesk block !text-xl font-bold text-neutral">
+              Returning Date
+            </label>
+          </div>
+          <Text as="p" className="text-xs text-neutral-500 font-work">
+            {returnDate}
+          </Text>
+        </div>
+      )}
 
       <div>
         <div className="flex items-center space-x-2 mb-2">
