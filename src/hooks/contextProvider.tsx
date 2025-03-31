@@ -25,6 +25,7 @@ export const GlobalProvider = ({children}:ContextProps) => {
       sender: 'bot'
     }
   ]});
+
   
   const toggleLogoutModal = () => {
     setShowLogoutModal(prevState => !prevState)

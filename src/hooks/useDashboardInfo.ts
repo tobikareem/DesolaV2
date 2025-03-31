@@ -32,7 +32,7 @@ export interface UserPreferences {
 export const useAirports = () => {
   const [airportSuggestions, setAirportSuggestions] = useState<Airport[]>([]);
   const [loading, setLoading] = useState(false);
-  const { getData } = useApi();
+  const { getData} = useApi();
   const cacheExpiryTIme = 5*24*60*60*1000; // 3 days
 
 
@@ -65,6 +65,32 @@ export const useAirports = () => {
 
   return { airportSuggestions, fetchAirports, loading };
 };
+
+export const useFlightSearch =()=> {
+  const {postData} = useApi();
+  const [flightSearch, setFlightSearch] = useState<>({
+    origin: "",
+    destination: "",
+    departureDate: "",
+    returnDate:"",
+  })
+
+  const FlightSearchFn = useCallback(async()=> {
+
+    try { 
+      await postData<flightSearch>(`${ENDPOINTS_API_PATH.flight_search}`, { ...flightSearch})
+      toast.success('Flight search was successful')
+  
+    } catch (error: unknown) {
+      console.error(error)
+      toast.error(`Error searching flights: ${error instanceof Error ? error.message : 'Unknown error'}`)
+    }
+
+  },[]); 
+
+  return {FlightSearchFn, flightSearch, setFlightSearch}
+  
+}
 
 
 export const useRoutes =()=> {
@@ -231,3 +257,5 @@ export const useDashboardInfo = () => {
     loadPreferences
   };
 };
+
+
