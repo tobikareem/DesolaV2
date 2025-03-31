@@ -4,21 +4,21 @@ import { Route, Routes, useLocation } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import './App.css';
 import AuthEventListener from './auth/auth-event-listener';
+import Callback from './auth/Callback';
+import Footer from './components/layout/Footer';
+import { Navbar } from './components/layout/Navbar';
 import { Preloader } from './components/layout/Preloader';
-import { GlobalProvider } from './hooks/contextProvider';
+import { AppProvider } from './providers/AppProvider';
 import ForgetPassword from './pages/auth/ForgetPassword';
 import RedirectToLogin from './pages/auth/RedirectToLogin';
 import Verify from './pages/auth/verify';
-import Dashboard from './pages/dashboard/dashboard';
+import Dashboard from './pages/dashboard/chats/Dashboard';
 import Error404Page from './pages/error/Error404';
 import HomeScreen from './pages/home/home';
-import authService from './services/authService';
-import { CustomStorage } from './utils/customStorage';
 import PrivacyPolicy from './pages/legal/PrivacyPolicy';
 import TermsAndConditions from './pages/legal/TermsAndConditions';
-import Callback from './auth/Callback';
-import { Navbar } from './components/layout/Navbar';
-import Footer from './components/layout/Footer';
+import authService from './services/authService';
+import { CustomStorage } from './utils/customStorage';
 
 
 const storage = new CustomStorage();
@@ -108,7 +108,7 @@ function App() {
   }
 
   return (
-    <GlobalProvider>
+    <AppProvider>
       <AuthEventListener />
       <Preloader visibility={showPreloader} />
       <Navbar />
@@ -135,7 +135,7 @@ function App() {
         </Routes>
       </main>
       <Footer />
-    </GlobalProvider>
+    </AppProvider>
   );
 }
 

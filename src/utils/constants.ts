@@ -35,6 +35,11 @@ export const SESSION_VALUES = {
     postLoginRedirectUrl: "post_login_redirect_url"
 };
 
+export const LOCAL_STORAGE_VALUES = {
+    usa_airports: "usa_airports",
+};
+
+
 // **Web Page Routes**
 export const WEB_PAGES = {
     home: "Home",

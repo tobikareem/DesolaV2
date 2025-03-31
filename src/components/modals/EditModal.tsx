@@ -8,11 +8,11 @@ import { IoMdCloseCircleOutline } from 'react-icons/io';
 import { Text } from '../ui/TextComp';
 import { PopData } from '../layout/PopData';
 import { Airport } from '../../hooks/useDashboardInfo';
-import { ChatProp } from '../../utils/ChatBotHandler';
+import { ChatMessage } from '../../utils/ChatBotHandler';
 
 interface EditModalProps {
   prompts: string[] | undefined;
-  chatSystem: ChatProp[];
+  chatSystem: ChatMessage[];
   airport: Airport[];
   close: () => void;
 }
