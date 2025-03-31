@@ -184,15 +184,15 @@ const Dashboard: React.FC = () => {
     if (lastBotMessage.toLowerCase().includes('flying from') && preferences?.originAirport) {
       const airport = airportSuggestions.find(airport => airport.code === preferences.originAirport);
       if (airport) {
-        setInputValue(`${airport?.name} (${airport?.code})`);
+        // setInputValue(`${airport?.name} (${airport?.code})`);
       }
     } else if (lastBotMessage.toLowerCase().includes('destination') && preferences?.destinationAirport) {
       const airport = airportSuggestions.find(airport => airport.code === preferences.destinationAirport);
       if (airport) {
-        setInputValue(`${airport?.name} (${airport?.code})`);
+        // setInputValue(`${airport?.name} (${airport?.code})`);
       }
     } else if (analysis.needsClass && lastBotMessage.toLowerCase().includes('class') && preferences?.travelClass) {
-      setInputValue(preferences.travelClass);
+      // setInputValue(preferences.travelClass);
     }
 
 
