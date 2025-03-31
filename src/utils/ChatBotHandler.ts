@@ -70,12 +70,11 @@ class ChatBotState {
     if (this.stage === 'route_selected' && this.detectDate(lowerMessage)) {
       this.stage = 'departure_date_selected';
 
-      // If one-way trip, skip the return date question
       if (this.isOneWayTrip) {
-        return this.stages.return_date_selected; // Skip to class selection
+        return this.stages.return_date_selected; 
       }
 
-      return this.stages.departure_date_selected; // Ask for return date
+      return this.stages.departure_date_selected;
     }
 
     if (this.stage === 'departure_date_selected' && this.detectDate(lowerMessage)) {
@@ -90,7 +89,6 @@ class ChatBotState {
       return this.stages.class_selected;
     }
 
-    // Additional detection logic for out-of-sequence inputs
     if (this.detectAirport(lowerMessage) && (this.stage === 'initial' || this.stage === 'departure_selected')) {
       if (this.stage === 'initial') {
         this.stage = 'departure_selected';
