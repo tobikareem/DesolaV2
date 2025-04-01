@@ -66,31 +66,31 @@ export const useAirports = () => {
   return { airportSuggestions, fetchAirports, loading };
 };
 
-export const useFlightSearch =()=> {
-  const {postData} = useApi();
-  const [flightSearch, setFlightSearch] = useState<>({
-    origin: "",
-    destination: "",
-    departureDate: "",
-    returnDate:"",
-  })
+// export const useFlightSearch =()=> {
+//   const {postData} = useApi();
+//   const [flightSearch, setFlightSearch] = useState<>({
+//     origin: "",
+//     destination: "",
+//     departureDate: "",
+//     returnDate:"",
+//   })
 
-  const FlightSearchFn = useCallback(async()=> {
+//   const FlightSearchFn = useCallback(async()=> {
 
-    try { 
-      await postData<flightSearch>(`${ENDPOINTS_API_PATH.flight_search}`, { ...flightSearch})
-      toast.success('Flight search was successful')
+//     try { 
+//       await postData<flightSearch>(`${ENDPOINTS_API_PATH.flight_search}`, { ...flightSearch})
+//       toast.success('Flight search was successful')
   
-    } catch (error: unknown) {
-      console.error(error)
-      toast.error(`Error searching flights: ${error instanceof Error ? error.message : 'Unknown error'}`)
-    }
+//     } catch (error: unknown) {
+//       console.error(error)
+//       toast.error(`Error searching flights: ${error instanceof Error ? error.message : 'Unknown error'}`)
+//     }
 
-  },[]); 
+//   },[]); 
 
-  return {FlightSearchFn, flightSearch, setFlightSearch}
+//   return {FlightSearchFn, flightSearch, setFlightSearch}
   
-}
+// }
 
 
 export const useRoutes =()=> {

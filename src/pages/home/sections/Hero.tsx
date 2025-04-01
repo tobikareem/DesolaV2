@@ -4,10 +4,11 @@ import { Btn } from '../../../components/ui/Button';
 import { Text } from '../../../components/ui/TextComp';
 import { useAuthInfo } from '../../../hooks/useAuthInfo';
 import authService from '../../../services/authService';
+import { useSmoothScroll } from '../../../hooks/useSmoothScroll';
 
 export const Hero = () => {
   const { isAuthenticated } = useAuthInfo();
-
+  const smoothScroll = useSmoothScroll();
   return (
     <section
       id="home"
@@ -48,7 +49,8 @@ export const Hero = () => {
                 >
                   Get Started
                 </Btn>
-                <Btn className="bg-gradient-to-b text-nowrap from-[#FF9040] to-[#FF6B00] w-full md:w-[250px] lg:text-lg lg:px-7 lg:h-14 text-white !rounded-[48px]">
+                <Btn onClick={()=> {smoothScroll('#subscription');}}
+                  className="bg-gradient-to-b text-nowrap from-[#FF9040] to-[#FF6B00] w-full md:w-[250px] lg:text-lg lg:px-7 lg:h-14 text-white !rounded-[48px]">
                   See the Best Deals
                 </Btn>
 
