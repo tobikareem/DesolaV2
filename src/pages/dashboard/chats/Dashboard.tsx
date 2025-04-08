@@ -1,4 +1,4 @@
-import { DateSelectArg } from "@fullcalendar/core/index.js";
+
 import { ChangeEvent, KeyboardEvent, useContext, useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import MobileRender from "../../../components/dashboard-sections/mobileRender";
@@ -9,7 +9,7 @@ import { Btn } from "../../../components/ui/Button";
 import { ChatContext } from "../../../contexts/ChatContext";
 import { UIContext } from "../../../contexts/UIContext";
 import { useAuthInfo } from "../../../hooks/useAuthInfo";
-import { useAirports, useDashboardInfo } from "../../../hooks/useDashboardInfo";
+import { useAirports, useDashboardInfo, useFlightSearch } from "../../../hooks/useDashboardInfo";
 import { useDebounce } from "../../../hooks/useDebounce";
 import { ChatBotResponseHandler, resetChatBot } from "../../../utils/ChatBotHandler";
 import { RightPanel } from "../sections/RightPanel";
@@ -17,6 +17,10 @@ import ChatHistory from "./ChatHistory";
 import ChatInput from "./ChatInput";
 import RecentPromptsBar from "./RecentPromptsBar";
 import SuggestionPanel from "./SuggestionPanel";
+import { useModals } from "../../../hooks/useModals";
+import { useInput } from "../../../hooks/useInput";
+import { DateSelectArg } from "@fullcalendar/core/index.js";
+import { PenLine } from "lucide-react";
 
 const analyzeLastMessage = (message?: string) => {
   if (!message) return {
@@ -45,22 +49,19 @@ const Dashboard: React.FC = () => {
   const { toggleModal } = useContext(UIContext);
 
   // Custom hooks
+  const { showEditModal, setShowEditModal, showCalendar, setShowCalendar, showPopData, setShowPopData, setSearchParam, searchParam } = useModals();
+  const {inputValue, setInputValue, dateSelect, setDateSelect, setDate, date} = useInput();
   const { fetchAirports, airportSuggestions } = useAirports();
   const { preferences, loadPreferences } = useDashboardInfo();
+  const {FlightSearchFn} = useFlightSearch();
   const debounce = useDebounce();
 
   // Local UI state
-  const [inputValue, setInputValue] = useState<string>('');
-  const [searchParam, setSearchParam] = useState<string>('');
-  const [dateSelect, setDateSelect] = useState<Date | null>(null);
-  const [date, setDate] = useState<Date | null>(null);
-  const [showEditModal, setShowEditModal] = useState(false);
-  const [showCalendar, setShowCalendar] = useState(false);
-  const [showPopData, setShowPopData] = useState(false);
   const [botLoader, setBotLoader] = useState(false);
   const [chatLoading] = useState(false);
   const { isAuthenticated } = useAuthInfo();
   const loadedRef = useRef(false);
+
 
 
 
@@ -114,7 +115,7 @@ const Dashboard: React.FC = () => {
     const newPrompts = [inputValue, ...recentPrompts].slice(0, 10); // Keep only the 10 most recent
     setRecentPrompts(newPrompts);
 
-    // Get response from ChatBotHandler based on the current user input
+
     setBotLoader(true);
     setTimeout(() => {
       const botResponseMessage = ChatBotResponseHandler(inputValue);
@@ -125,7 +126,7 @@ const Dashboard: React.FC = () => {
       };
       setChatLog([...newChatLog, botResponse]);
       setBotLoader(false);
-    }, 500);
+    }, 1000);
 
     setInputValue('');
     setShowPopData(false);
@@ -139,6 +140,7 @@ const Dashboard: React.FC = () => {
   };
 
   const toggleEditModal = () => setShowEditModal(prev => !prev);
+  const handleClosePopData = () => setShowPopData(false);
   const handleCloseCalendar = () => setShowCalendar(false);
 
   const handleDateSelect = (arg: DateSelectArg) => {
@@ -155,17 +157,19 @@ const Dashboard: React.FC = () => {
     setDateSelect(date);
   };
 
+
   const handleSubmitDate = () => {
     if (inputValue.length !== 0) {
       handleSendMessage();
-      handleCloseCalendar();
       updateDateSelect();
+      handleCloseCalendar();
     } else {
       toast.warning('Pick a date');
     }
   };
 
-  const handleClosePopData = () => setShowPopData(false);
+  console.log('date', dateSelect);
+
 
   const handleSelectSuggestion = (value: string) => {
     setInputValue(value);
@@ -207,17 +211,36 @@ const Dashboard: React.FC = () => {
 
   };
 
+  const handleUpdatePrompt = (index: number, newValue: string) => {
+    const updatedPrompts = [...recentPrompts];
+    const oldValue = updatedPrompts[index];
+    updatedPrompts[index] = newValue;
+    setRecentPrompts(updatedPrompts);
+
+    const updatedChatLog = chatLog.map((chat) =>
+      chat.message === oldValue ? { ...chat, message: newValue } : chat
+    );
+    setChatLog(updatedChatLog);
+  };
+
   return (
     <div className="flex">
       <div className="relative flex flex-col bg-background border border-neutral-300 w-full lg:w-[60%] h-screen">
         <RecentPromptsBar prompts={recentPrompts} onEditClick={toggleEditModal} />
 
-        <ChatHistory chatLog={chatLog} botLoader={botLoader} isLoading={chatLoading} />
+        <div className={`flex lg:hidden w-full mt-14 justify-end items-center px-5`}>
+          <PenLine onClick={toggleEditModal} className={`${recentPrompts?.length != 0 ? '':'hidden'} text-primary-500 text-4xl`} />
+        </div>
 
-        {Array.isArray(recentPrompts) && recentPrompts.length >= 6 && (
+        <ChatHistory chatLog={chatLog} botLoader={botLoader} isLoading={chatLoading}/>
+
+        {Array.isArray(recentPrompts) && recentPrompts.length >= 5 && (
           <Btn
-            onClick={() => toggleModal('flight')}
-            className="lg:hidden px-6 py-1 w-fit bg-secondary-500 text-neutral-100 self-end"
+            onClick={() => {
+              toggleModal('flight');
+              FlightSearchFn();
+            }}
+            className="fixed lg:hidden px-6 py-1 w-fit bg-secondary-500 text-neutral-100 self-end bottom-[130px] right-4"
           >
             Search
           </Btn>
@@ -235,7 +258,7 @@ const Dashboard: React.FC = () => {
 
         <SuggestionPanel
           visible={showPopData}
-          position="bottom-30 lg:left-[12%]"
+          position="bottom-30 left-4 lg:left-[12%]"
           lastMessage={chatLog[chatLog.length - 1]?.message || ''}
           airportSuggestions={airportSuggestions}
           searchParam={searchParam}
@@ -243,7 +266,8 @@ const Dashboard: React.FC = () => {
         />
 
         <Modal close={toggleEditModal} display={showEditModal}>
-          <EditModal prompts={recentPrompts} chatSystem={chatLog} airport={[]} close={toggleEditModal} />
+          <EditModal prompts={recentPrompts} close={toggleEditModal} onUpdatePrompt={handleUpdatePrompt}
+          />
         </Modal>
 
         <Modal position="absolute" close={handleCloseCalendar} display={showCalendar}>

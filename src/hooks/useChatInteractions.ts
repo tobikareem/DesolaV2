@@ -34,14 +34,14 @@ export const useChatInteractions = (
     const sendUserMessage = (message: string): void => {
         if (!message.trim()) return;
 
+
+        
         setChatLog((prev) => [
             ...prev,
             { message, sender: 'user' },
-            { message: '...', sender: 'bot' }
         ]);
+        
         setBotLoader(true);
-
-        // Simulate a delay and then process the bot's response
         setTimeout(() => {
             try {
                 const botMessage: string = ChatBotResponseHandler(message);

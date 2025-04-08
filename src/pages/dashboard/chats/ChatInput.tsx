@@ -29,7 +29,7 @@ const ChatInput: React.FC<ChatInputProps> = ({
                     onFocus={onFocus}
                     type="text"
                     placeholder="Please Enter Your Message"
-                    className="text-xl flex-grow bg-transparent focus:bg-transparent border-0 rounded-lg outline-0"
+                    className="text-xs sm:text-sm md:text-base lg:text-xl flex-grow bg-transparent focus:bg-transparent border-0 rounded-lg outline-0"
                 />
                 <IoSend
                     onClick={onSend}

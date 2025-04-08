@@ -1,29 +1,27 @@
 import { PenLine } from 'lucide-react';
-import React, { useRef, WheelEvent } from 'react';
+import React from 'react';
+import { useScroll } from '../../../hooks/useSmoothScroll';
 
-interface RecentPromptsBarProps {
+export interface RecentPromptsBarProps {
     prompts: string[];
     onEditClick: () => void;
 }
 
+export const getPromptColor = (index: number): string => {
+    const colors = [
+        'bg-primary-100', 'bg-secondary-100', 'bg-neutral-300',
+        'bg-[#5C88DA60]', 'bg-[#CAFFD640]', 'bg-[#96962240]',
+        'bg-[#FFC097]', 'bg-secondary-100', 'bg-neutral-300', 'bg-[#5C88DA80]'
+    ];
+    return colors[index % colors.length] || 'bg-primary-100';
+};
+
+
+
 const RecentPromptsBar: React.FC<RecentPromptsBarProps> = ({ prompts, onEditClick }) => {
-    const scrollContainerRef = useRef<HTMLDivElement>(null);
 
-    const handleScroll = (event: WheelEvent<HTMLDivElement>) => {
-        event.preventDefault();
-        if (scrollContainerRef.current) {
-            scrollContainerRef.current.scrollLeft += event.deltaY;
-        }
-    };
-
-    const getPromptColor = (index: number): string => {
-        const colors = [
-            'bg-primary-100', 'bg-secondary-100', 'bg-neutral-300',
-            'bg-[#5C88DA60]', 'bg-[#CAFFD640]', 'bg-[#96962240]',
-            'bg-[#FFC097]', 'bg-secondary-100', 'bg-neutral-300', 'bg-[#5C88DA80]'
-        ];
-        return colors[index % colors.length] || 'bg-primary-100';
-    };
+    const {scrollContainerRef, handleScroll} = useScroll()
+    
 
     return (
         <div

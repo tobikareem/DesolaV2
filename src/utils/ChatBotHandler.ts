@@ -21,7 +21,7 @@ class ChatBotState {
     departure_selected: 'What is your destination?',
     destination_selected: 'Select travel route...',
     route_selected: 'What is your departure date? (MM/DD/YYYY)',
-    departure_date_selected: 'Do you have a return date? (MM/DD/YYYY)',
+    departure_date_selected: 'Select your return date? (MM/DD/YYYY)',
     return_date_selected: 'Select travel class...',
     class_selected: 'Click the search button to get the best deals...'
   };

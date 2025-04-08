@@ -22,7 +22,8 @@ const Calendar = ({Click, Close, selectedDate}:CalendarProps) => {
         <FullCalendar plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]} 
           initialView="dayGridMonth" 
           selectable={true}
-          select={Click}
+          select={Click}   
+          longPressDelay={0}      
           validRange={{
             start: validDates,
           }}

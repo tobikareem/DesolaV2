@@ -31,10 +31,12 @@ const ChatHistory: React.FC<ChatHistoryProps> = ({ chatLog, botLoader, isLoading
         );
     }
 
+    
+
     return (
         <div
             ref={chatContainerRef}
-            className="relative flex flex-col flex-1 bg-background space-y-6 mt-6 lg:mt-0 p-5 lg:pl-20 overflow-y-auto"
+            className="relative flex flex-col flex-1 bg-background space-y-6 p-5 lg:pl-20 overflow-y-auto"
         >
             {chatLog.map((chat, index) => {
                 const isUser = chat.sender === 'user';
@@ -42,15 +44,17 @@ const ChatHistory: React.FC<ChatHistoryProps> = ({ chatLog, botLoader, isLoading
                 return (
                     <div
                         key={index}
-                        className={`font-work flex ${isUser ? 'justify-end' : 'items-start'} space-x-2`}
+                        
+                        className={`font-work flex ${isUser ? 'justify-end' : 'items-start'} space-x-2 cursor-default`}
                     >
                         <div className={`${isUser ? 'bg-white text-primary-500' : 'bg-primary-500 text-white'} flex items-center justify-center size-10 rounded-full text-lg border border-neutral-300`}>
                             {isUser ? <FaUser /> : <BsStars />}
                         </div>
                         <span className={`${isUser ? 'bg-secondary-100' : 'bg-primary-100'} text-neutral p-3 rounded-lg text-xs sm:text-sm md:text-base`}>
-                            {isLastBotMessage ?
+                            {/* {isLastBotMessage && botLoader ?
                                 <span className="text-3xl text-neutral-500 animate-pulse duration-75">...</span> :
-                                chat.message}
+                                chat.message} */}
+                            { isLastBotMessage ? <span className='text-3xl text-neutral-500 animate-pulse duration-75'>...</span> : chat?.message}
                         </span>
                     </div>
                 );

@@ -3,9 +3,11 @@ import { Img as ReactImage } from 'react-image';
 import { useNavigate } from "react-router-dom";
 import { Btn } from "../../../components/ui/Button";
 import { Text } from "../../../components/ui/TextComp";
+import { useSmoothScroll } from "../../../hooks/useSmoothScroll";
 
 export const WhyChooseUs = () => {
     const navigate = useNavigate();
+    const smoothScroll = useSmoothScroll();
     return (
         <section id="why-choose-us"
             className="flex flex-col lg:flex-row lg:items-center  w-full py-18 lg:py-30 px-4 md:px-8 lg:px-28 gap-8"
@@ -42,7 +44,8 @@ export const WhyChooseUs = () => {
                         className="bg-white w-full lg:max-w-[250px] text-nowrap lg:text-lg lg:px-7 lg:h-14 text-primary-500">
                         Sign Up
                     </Btn>
-                    <Btn className="bg-gradient-to-b text-nowrap from-[#FF9040] to-[#FF6B00] w-full lg:max-w-[250px] lg:text-lg lg:px-7 lg:h-14 text-white">
+                    <Btn onClick={()=> {smoothScroll('#subscription');}}
+                        className="bg-gradient-to-b text-nowrap from-[#FF9040] to-[#FF6B00] w-full lg:max-w-[250px] lg:text-lg lg:px-7 lg:h-14 text-white">
                         See the Best Deals
                     </Btn>
                 </div>
