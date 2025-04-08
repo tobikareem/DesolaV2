@@ -1,20 +1,22 @@
-import { useEffect, useState } from "react";
+import { LogOut } from "lucide-react";
+import React, { useContext, useEffect, useState } from "react";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { NavLink, useLocation } from "react-router-dom";
-import { useAuthInfo} from "../../hooks/useAuthInfo";
-import { Logo } from "./Logo";
-import React from "react";
-import { LogOut } from "lucide-react";
-import { GlobalContext } from "../../hooks/globalContext";
+import { NavigationContext } from "../../contexts/NavigationContext";
+import { UIContext } from "../../contexts/UIContext";
+import { useAuthInfo } from "../../hooks/useAuthInfo";
 import authService from "../../services/authService";
+import { Logo } from "./Logo";
 import { useSmoothScroll } from "../../hooks/useSmoothScroll";
 
 export const Navbar = () => {
     const [slider, setSlider] = useState<boolean>(false);
     const [isDesktop, setIsDesktop] = useState<boolean>(false);
     const { userName, isAuthenticated, logout } = useAuthInfo();
-    const {NavigationData,toggleDeleteModal, toggleLogoutModal,MobileTab, setMobileTab} = React.useContext(GlobalContext);
+
+    const { navigationData, mobileTab, setMobileTab } = useContext(NavigationContext);
+    const { toggleModal } = useContext(UIContext);
 
     const handleDrawer = (e: React.MouseEvent<HTMLDivElement | HTMLButtonElement | HTMLAnchorElement | SVGElement>) => {
         if ((e.target as HTMLElement).id !== 'drawer') { setSlider(prevState => !prevState) }
@@ -126,48 +128,48 @@ export const Navbar = () => {
                             <div id="drawer"
                                 className={`flex flex-col justify-between items-center px-4 py-10  w-full h-full `}>
                                 <nav className={`flex flex-col w-full py-1 px-1.5 gap-6 `}>
-                                    {  router === '/dashboard' ? 
-                                            NavigationData?.map((option) => (
-                                                <>
-                                                    <div
+                                    {router === '/dashboard' ?
+                                        navigationData?.map((option) => (
+                                            <>
+                                                <div
                                                     key={option.id}
                                                     onClick={() => {
-                                                        if(option.id == 'home') {
+                                                        if (option.id == 'home') {
                                                             setMobileTab('')
                                                         }
-                                                        if(option.id !== 'home'){
+                                                        if (option.id !== 'home') {
                                                             setMobileTab(option.id);
                                                         }
                                                         if (option.id === 'trash') {
-                                                          toggleDeleteModal();
+                                                            toggleModal('delete');
                                                         }
                                                         setSlider(false)
                                                     }}
                                                     className={`flex w-fit items-center gap-3 text-primary-300 font-medium font-work text-base cursor-pointer hover:scale-105 duration-300 `}>
-                                                        <div className={`text-2xl text-primary-300`} >
-                                                            {MobileTab === option?.id ? option?.icon2 : option?.icon}
-                                                        </div>
-                                                        <div className="">
-                                                            {option?.label}
-                                                        </div>
+                                                    <div className={`text-2xl text-primary-300`} >
+                                                        {mobileTab === option?.id ? option?.icon2 : option?.icon}
                                                     </div>
-                                                    
-                                                </>
-                                            ))
+                                                    <div className="">
+                                                        {option?.label}
+                                                    </div>
+                                                </div>
+
+                                            </>
+                                        ))
                                         :
-                                            Navigation?.map((item, index) => {
-                                                return (
-                                                    <NavLink to={item?.href}
-                                                        key={index}
-                                                        onClick={(e) => { e.preventDefault(); smoothScroll(item?.href); handleDrawer(e) }}
-                                                        className={() => `font-work size-full p-3 text-base text-neutral-900 !font-medium rounded-lg text-nowrap hover:bg-secondary-100 hover:scale-105 transition-transform duration-300 ease-in-out ${activeSection === item?.href ? 'bg-secondary-100' : 'bg-transparent'}`}
-                                                    >
-                                                        {item?.path}
-                                                    </NavLink>
-                                                )
-                                            })
+                                        Navigation?.map((item, index) => {
+                                            return (
+                                                <NavLink to={item?.href}
+                                                    key={index}
+                                                    onClick={(e) => { e.preventDefault(); smoothScroll(item?.href); handleDrawer(e) }}
+                                                    className={() => `font-work size-full p-3 text-base text-neutral-900 !font-medium rounded-lg text-nowrap hover:bg-secondary-100 hover:scale-105 transition-transform duration-300 ease-in-out ${activeSection === item?.href ? 'bg-secondary-100' : 'bg-transparent'}`}
+                                                >
+                                                    {item?.path}
+                                                </NavLink>
+                                            )
+                                        })
                                     }
-                                    <div onClick={()=> {toggleLogoutModal(); setSlider(false)}}
+                                    <div onClick={() => { toggleModal('logout'); setSlider(false) }}
                                         className={`${router === '/dashboard' ? 'flex' : 'hidden'} w-fit items-center gap-3 text-primary-300 font-medium font-work text-base cursor-pointer hover:scale-105 duration-300 `}>
                                         <div className="text-2xl">
                                             <LogOut size={24} />
@@ -177,7 +179,7 @@ export const Navbar = () => {
                                         </div>
                                     </div>
                                 </nav>
- 
+
                                 <button
                                     onClick={(e) => {
                                         handleDrawer(e);

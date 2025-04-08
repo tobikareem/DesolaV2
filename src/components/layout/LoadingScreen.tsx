@@ -8,7 +8,7 @@ const LoadingScreen = ({ message }: { message: string }) => (
             alt="Globe"
             className="w-[120px]"
         />
-        <Text as="h1" weight="bold" size="xl" color="text-primary-600">{message}</Text>
+        <Text as="h1" weight="bold" size="xl" color="text-primary-600 animate-pulse duration-300 ease-in">{message}</Text>
     </div>
 );
 

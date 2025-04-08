@@ -1,57 +1,159 @@
-
-
-export interface ChatProp {
-  message?: string;
-  sender?: string | undefined;
+export interface ChatMessage {
+  message: string;
+  sender: 'user' | 'bot';
 }
 
-const commandCount: { [key: string]: number } = {};
+type ChatStage =
+  | 'initial'
+  | 'departure_selected'
+  | 'destination_selected'
+  | 'route_selected'
+  | 'departure_date_selected'
+  | 'return_date_selected'
+  | 'class_selected';
 
-const ChatBotResponseHandler = (chatMessage:string) => {
+class ChatBotState {
+  private stage: ChatStage = 'initial';
+  private isOneWayTrip: boolean = false;
 
-  const commands = {
-    airport: 'What is your destination?',
-    departure: 'What is your departure date? (MM/DD/YYYY)',
-    return: 'Do you have a return date? (MM/DD/YYYY)',
-    route: 'Select travel route...',
-    class: 'Select travel class...',
-    ticket: 'Click the search button to get the best deals...',
-    default: 'Please, respond to the last prompt.'
+  private stages: Record<ChatStage, string> = {
+    initial: 'What is your destination?',
+    departure_selected: 'What is your destination?',
+    destination_selected: 'Select travel route...',
+    route_selected: 'What is your departure date? (MM/DD/YYYY)',
+    departure_date_selected: 'Select your return date? (MM/DD/YYYY)',
+    return_date_selected: 'Select travel class...',
+    class_selected: 'Click the search button to get the best deals...'
+  };
 
-
+  private detectAirport(message: string): boolean {
+    const airportTerms = ['airport', 'international', 'airstrip', 'base', 'airfield'];
+    return airportTerms.some(term => message.includes(term));
   }
 
-  const userMessage:string = chatMessage.toLowerCase();
+  private detectDate(message: string): boolean {
+    return message.includes('/');
+  }
 
-  if (userMessage.includes('airport') || userMessage.includes('international') || userMessage.includes('airstrip') || userMessage.includes('base') || userMessage.includes('airfield')) {
-    commandCount['airport'] = (commandCount['airport'] || 0) + 1;
-    commandCount['base'] = (commandCount['base'] || 0) + 1;
-    commandCount['airfield'] = (commandCount['airfield'] || 0) + 1;
-    commandCount['airstrip'] = (commandCount['airstrip'] || 0) + 1;
-      if (commandCount['airport'] > 1 || commandCount['base'] > 1 || commandCount['airfield'] > 1 || commandCount['airstrip'] > 1) {
-        return commands.departure
-      } else return commands.airport
+  private detectRoute(message: string): boolean {
+    const routeTerms = ['one way', 'multi city', 'round trip'];
+    const isRoute = routeTerms.some(term => message.includes(term));
+    
+    this.isOneWayTrip = isRoute && message.toLowerCase().includes('one way');
 
-  
+    return isRoute;
+  }
 
-  } else if (userMessage.includes('/')) {
-      commandCount['/'] = (commandCount['/'] || 0) + 1;
-      if (commandCount['/'] > 1) {
-        return commands.route;
-      } else {
-        return commands.return;
+  private detectClass(message: string): boolean {
+    const classTerms = ['business class', 'economy', 'premium economy', 'first class'];
+    return classTerms.some(term => message.includes(term));
+  }
+
+  public processMessage(message: string): string {
+    const lowerMessage = message.toLowerCase();
+
+    if (this.stage === 'initial' && this.detectAirport(lowerMessage)) {
+      this.stage = 'departure_selected';
+      return this.stages.departure_selected;
+    }
+
+    if (this.stage === 'departure_selected' && this.detectAirport(lowerMessage)) {
+      this.stage = 'destination_selected';
+      return this.stages.destination_selected;
+    }
+
+    if (this.stage === 'destination_selected' && this.detectRoute(lowerMessage)) {
+      this.stage = 'route_selected';
+      return this.stages.route_selected;
+    }
+
+    if (this.stage === 'route_selected' && this.detectDate(lowerMessage)) {
+      this.stage = 'departure_date_selected';
+
+      if (this.isOneWayTrip) {
+        return this.stages.return_date_selected; 
       }
 
-  } else if (userMessage.includes('one way') || userMessage.includes('multi city') || userMessage.includes('round trip') || userMessage.includes('two way')) {
-    commandCount['route'] = (commandCount['route'] || 0) + 1;
-      if (commandCount['route'] > 1) {
-        return commands.class
-      } else return commands.class
-  } else if (userMessage.includes('business class') || userMessage.includes('economy') || userMessage.includes('premium economy') || userMessage.includes('first class')) {
-    return commands.ticket
-  } else 
-    return commands.default
+      return this.stages.departure_date_selected;
+    }
 
+    if (this.stage === 'departure_date_selected' && this.detectDate(lowerMessage)) {
+      this.stage = 'return_date_selected';
+      return this.stages.return_date_selected;
+    }
+
+    if ((this.stage === 'return_date_selected' ||
+      (this.isOneWayTrip && this.stage === 'departure_date_selected')) &&
+      this.detectClass(lowerMessage)) {
+      this.stage = 'class_selected';
+      return this.stages.class_selected;
+    }
+
+    if (this.detectAirport(lowerMessage) && (this.stage === 'initial' || this.stage === 'departure_selected')) {
+      if (this.stage === 'initial') {
+        this.stage = 'departure_selected';
+      } else {
+        this.stage = 'destination_selected';
+      }
+      return this.stages[this.stage];
+    }
+
+    if (this.detectRoute(lowerMessage) && this.stage === 'destination_selected') {
+      this.stage = 'route_selected';
+      return this.stages.route_selected;
+    }
+
+    if (this.detectDate(lowerMessage) &&
+      (this.stage === 'route_selected' || this.stage === 'departure_date_selected')) {
+      if (this.stage === 'route_selected') {
+        this.stage = 'departure_date_selected';
+
+        // If one-way trip, skip return date question
+        if (this.isOneWayTrip) {
+          return this.stages.return_date_selected; // Skip to class selection
+        }
+
+        return this.stages.departure_date_selected;
+      } else {
+        this.stage = 'return_date_selected';
+        return this.stages.return_date_selected;
+      }
+    }
+
+    if (this.detectClass(lowerMessage) &&
+      (this.stage === 'return_date_selected' ||
+        (this.isOneWayTrip && this.stage === 'departure_date_selected'))) {
+      this.stage = 'class_selected';
+      return this.stages.class_selected;
+    }
+
+    return 'Please respond to the last prompt.';
+  }
+
+  public reset(): void {
+    this.stage = 'initial';
+    this.isOneWayTrip = false;
+  }
+
+  public getCurrentStage(): ChatStage {
+    return this.stage;
+  }
+
+  public isOneWay(): boolean {
+    return this.isOneWayTrip;
+  }
 }
 
-export default ChatBotResponseHandler;
+const chatBotState = new ChatBotState();
+
+export const ChatBotResponseHandler = (chatMessage: string): string => {
+  return chatBotState.processMessage(chatMessage);
+};
+
+export const resetChatBot = (): void => {
+  chatBotState.reset();
+};
+
+export const isOneWayTrip = (): boolean => {
+  return chatBotState.isOneWay();
+};

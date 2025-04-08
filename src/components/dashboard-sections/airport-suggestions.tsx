@@ -1,4 +1,4 @@
-// Airport suggestion item type
+
 type Airport = {
     code: string;
     name: string;
@@ -6,7 +6,6 @@ type Airport = {
 };
 
 
-// Airport suggestion dropdown component
 export const AirportSuggestions = ({
     suggestions,
     onSelect,
@@ -26,7 +25,7 @@ export const AirportSuggestions = ({
             title="airportSuggestions"
             id={id}
             className="absolute bg-white border shadow-lg rounded-lg w-full max-h-48 overflow-y-auto"
-            size={Math.min(suggestions.length, 5)} // Show up to 5 options at once. // TODO: probably do a server side pagination
+            size={Math.min(suggestions.length, 5)}
             onChange={(e) => onSelect(e.target.value)}
             onBlur={() => { }}
         >

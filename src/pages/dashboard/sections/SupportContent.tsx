@@ -35,7 +35,7 @@ export const SupportContent: React.FC = () => {
                   label="First Name"
                   type="text"
                   placeholder="First Name"
-                  className="bg-[#F3F3F3] w-full h-8 round-md placeholder:text-[#B7B7B7] placeholder:"
+                  className="bg-[#F3F3F3] w-full h-8 !round-md placeholder:text-[#B7B7B7] placeholder:"
                 />
               </div>
               <div className="w-full">
@@ -43,7 +43,7 @@ export const SupportContent: React.FC = () => {
                   label="Last Name"
                   type="text"
                   placeholder="Last Name"
-                  className="bg-[#F3F3F3] h-8 round-md placeholder:text-[#B7B7B7] placeholder:"
+                  className="bg-[#F3F3F3] h-8 !round-md placeholder:text-[#B7B7B7] placeholder:"
                 />
               </div>
 

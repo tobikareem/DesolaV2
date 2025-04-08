@@ -1,8 +1,11 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { toast } from 'react-toastify';
 import { ENDPOINTS_API_PATH } from "../utils/endpoints";
 import useApi from "./useApi";
 import { useAuthInfo } from "./useAuthInfo";
+import { LOCAL_STORAGE_VALUES } from "../utils/constants";
+import { TravelInformation } from "../contexts/types";
+import { ChatContext } from "../contexts/ChatContext";
 
 export interface Airport {
   name: string;
@@ -16,8 +19,8 @@ export interface Route {
   Subtype: string;
   Name: string;
   IataCode: string;
-  GeoCode:{Latitude:number; Longitude:number},
-  Address:{CountryName:string; CountryCode:string; StateCode:string; RegionCode:string;}
+  GeoCode: { Latitude: number; Longitude: number },
+  Address: { CountryName: string; CountryCode: string; StateCode: string; RegionCode: string; }
   TimeZone: string;
 }
 
@@ -29,89 +32,113 @@ export interface UserPreferences {
   userId: string;
 }
 
+
 export const useAirports = () => {
   const [airportSuggestions, setAirportSuggestions] = useState<Airport[]>([]);
   const [loading, setLoading] = useState(false);
-  const { getData} = useApi();
-  const cacheExpiryTIme = 5*24*60*60*1000; // 3 days
+  const { getData } = useApi();
+  const cacheExpiryTime = 5 * 24 * 60 * 60 * 1000; 
 
 
   const fetchAirports = useCallback(async () => {
-    const cachedData = localStorage.getItem("cachedAirportData");
-    const cachedAirportData = cachedData ? JSON.parse(cachedData) : null;
-    if (cachedAirportData) {
-      if (Date.now() - cachedAirportData.timestamp > cacheExpiryTIme){
-        localStorage.removeItem("cachedAirportData");
+    const cachedDataString = localStorage.getItem(LOCAL_STORAGE_VALUES.usa_airports);
+
+    if (cachedDataString) {
+      try {
+        const cachedData = JSON.parse(cachedDataString);
+
+        if (cachedData &&
+          cachedData.timestamp &&
+          cachedData.data &&
+          Array.isArray(cachedData.data) &&
+          (Date.now() - cachedData.timestamp <= cacheExpiryTime)) {
+
+          setAirportSuggestions(cachedData.data);
+          return;
+        } else {
+          localStorage.removeItem(LOCAL_STORAGE_VALUES.usa_airports);
+        }
+      } catch (error) {
+        console.error("Error parsing cached airport data:", error);
+        localStorage.removeItem(LOCAL_STORAGE_VALUES.usa_airports);
       }
-    } 
-    if (cachedAirportData && Array.isArray(cachedAirportData)) {
-      setAirportSuggestions(cachedAirportData);
-      return;
     }
 
     setLoading(true);
     try {
       const data = await getData<Airport[]>(`${ENDPOINTS_API_PATH.airports}`);
-      const cachedData = {data , timestamp: Date.now()};
-      localStorage.setItem("cachedAirportData", JSON.stringify(cachedData));
-      setAirportSuggestions(data ?? []);
+
+      if (data) {
+        const cachedData = { data, timestamp: Date.now() };
+        localStorage.setItem(LOCAL_STORAGE_VALUES.usa_airports, JSON.stringify(cachedData));
+        setAirportSuggestions(data);
+      } else {
+        setAirportSuggestions([]);
+      }
     } catch (error) {
       console.error("Error fetching airports:", error);
       toast.error(`Error fetching airports: ${error instanceof Error ? error.message : 'Unknown error'}`);
     } finally {
       setLoading(false);
     }
-  }, [cacheExpiryTIme, getData]);
+  }, [cacheExpiryTime, getData]);
 
   return { airportSuggestions, fetchAirports, loading };
 };
 
-// export const useFlightSearch =()=> {
-//   const {postData} = useApi();
-//   const [flightSearch, setFlightSearch] = useState<>({
-//     origin: "",
-//     destination: "",
-//     departureDate: "",
-//     returnDate:"",
-//   })
+export const useFlightSearch =()=> {
+  const {getData} = useApi();
+  const { travelInfo } = useContext(ChatContext);
+  const [flightResults, setFlightResults] = useState<TravelInformation[]>([]);
+  const [flightLoading, setFlightLoading] = useState(false);
 
-//   const FlightSearchFn = useCallback(async()=> {
-
-//     try { 
-//       await postData<flightSearch>(`${ENDPOINTS_API_PATH.flight_search}`, { ...flightSearch})
-//       toast.success('Flight search was successful')
+  const originCode = travelInfo.departure?.match(/\(([^)]+)\)/)?.[1] ?? travelInfo.departure;
+  const destinationCode = travelInfo.destination?.match(/\(([^)]+)\)/)?.[1] ?? travelInfo.destination;
   
-//     } catch (error: unknown) {
-//       console.error(error)
-//       toast.error(`Error searching flights: ${error instanceof Error ? error.message : 'Unknown error'}`)
-//     }
 
-//   },[]); 
+  const FlightSearchFn = useCallback(async()=> {
+    setFlightLoading(true);
+    try { 
+      const response = await getData<TravelInformation[]>(`${ENDPOINTS_API_PATH.flight_search}/amadeus?originLocationCode=${originCode}
+        &destinationLocationCode=${destinationCode}&departureDate=${travelInfo.departureDate}&returnDate=${travelInfo.returnDate}
+        &adults=1&travelClass=${travelInfo.flightClass}&nonStop=${travelInfo.travelRoute}&max=20&sortBy=price&sortOrder=asc`
+      );
+      setFlightResults(response ?? []);
+    } catch (error: unknown) {
+      console.error(error)
+      toast.error(`Error searching flights: ${error instanceof Error ? error.message : 'Unknown error'}`)
+    } finally {
+      setFlightLoading(false);
 
-//   return {FlightSearchFn, flightSearch, setFlightSearch}
+    }
+
+  },[getData, travelInfo]); 
+
+  return {FlightSearchFn, flightResults, flightLoading};
   
-// }
+}
 
 
-export const useRoutes =()=> {
+
+export const useRoutes = () => {
   const [RouteData, setRouteData] = useState<Route[]>([])
   const [loading, setLoading] = useState(false);
-  const {getData} = useApi();
+  const { getData } = useApi();
 
-  const fetchRoutes = useCallback( async() => {
+  const fetchRoutes = useCallback(async () => {
     setLoading(true);
     try {
       const data = await getData<Route[]>(`${ENDPOINTS_API_PATH.route}?airlineCode=AA&max=20`)
       setRouteData(data ?? [])
     }
-    catch (error){
+    catch (error) {
       console.error("Error fetching routes:", error);
     } finally {
       setLoading(false);
     }
-    
-  },[getData])
-  return {fetchRoutes, RouteData, loading };
+
+  }, [getData])
+  return { fetchRoutes, RouteData, loading };
 };
 
 export const useUserPreferences = () => {
@@ -147,10 +174,10 @@ export const useUserPreferences = () => {
 
     setLoading(true);
     setLoadAttempted(true);
-    
+
     try {
       const data = await getData<UserPreferences>(`${ENDPOINTS_API_PATH.user_preferences}/${userId}`);
-      
+
       if (data) {
         setPreferences(data);
       } else {
