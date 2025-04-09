@@ -1,5 +1,5 @@
 
-import React, { useContext, useEffect} from 'react';
+import React, { useContext, useEffect, useRef} from 'react';
 import { IoMdCloseCircleOutline } from 'react-icons/io';
 import { useAirports, useDashboardInfo } from '../../hooks/useDashboardInfo';
 import { useScroll } from '../../hooks/useSmoothScroll';
@@ -18,7 +18,6 @@ import { DateSelectArg } from '@fullcalendar/core/index.js';
 import { toast } from 'react-toastify';
 import { useInput } from '../../hooks/useInput';
 
-
 interface EditModalProps {
   prompts: string[] | undefined;
   close: () => void;
@@ -29,56 +28,80 @@ const EditModal: React.FC<EditModalProps> = ({
   prompts,
   close,
   onUpdatePrompt,
-
 }) => {
+
   const {scrollContainerRef, handleScroll} = useScroll();
   const {handleEditClick, setPromptIndex, editedValue, setEditedValue, promptIndex} = UseEdit();
-  const {date, setDate, dateSelect, setDateSelect} = useInput();
+  const {date, setDate, setDateSelect} = useInput();
   const { preferences} = useDashboardInfo();
   const {showCalendar, setShowCalendar} = useModals()
-  const { fetchAirports, airportSuggestions } = useAirports();
-  const {showPopData, setShowPopData, searchParam } = useModals();
+  const { fetchAirports,airportSuggestions } = useAirports();
+  const {showPopData, setShowPopData, searchParam, setSearchParam } = useModals();
   const {chatLog} = useContext(ChatContext)
   const {botLoader} = useChatInteractions()
   const chatLoading = false;
 
+  const chatContainerRef = useRef<HTMLDivElement>(null);
+  
+  useEffect(() => {
+      if (chatContainerRef.current) {
+          chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+      }
+  }, [chatLog]);
+
+  useEffect(()=> { fetchAirports()},[fetchAirports])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEditedValue(e.target.value);
-  };
+    const value = e.target.value
+    setEditedValue(value);
+    setSearchParam(value);
 
-
-  const handleSave = (index: number) => {
-    if (prompts) {
-      onUpdatePrompt(index, editedValue); 
-      setPromptIndex(null);
-      setEditedValue('');
+    if (value.toLowerCase().includes('airport')) {
+      setShowPopData(true);
+    } else if (value.toLowerCase().includes('/')) {
+      setShowCalendar(true);
+    } else if (value.toLowerCase().includes('economy') || value.toLowerCase().includes('business') || value.toLowerCase().includes('first')) {
+      setShowPopData(true);
+    } else if (value.toLowerCase().includes('one way') || value.toLowerCase().includes('round trip') || value.toLowerCase().includes('multi city')) {
+      setShowPopData(true);
     }
+  
   };
 
+  const analysis = editedValue;
 
   const handleInputFocus = () => {
-    if (editedValue.length === 0) return;
-
-    const analysis = editedValue;
-
-    if (analysis.toLowerCase().includes('airport') && preferences?.originAirport) {
-      const airport = airportSuggestions.find(airport => airport.code === preferences.originAirport);
-      if (airport && analysis.toLowerCase().includes(airport.code.toLowerCase())) {
-        setShowPopData(true)
+    if (editedValue.trim().length === 0) return;
+  
+    const lowerCaseAnalysis = analysis.toLowerCase();
+  
+    if (lowerCaseAnalysis.includes('airport')) {
+      const airport = airportSuggestions.find(
+        airport => airport.code === preferences?.originAirport
+      );
+      if (airport && lowerCaseAnalysis.includes(airport.code.toLowerCase())) {
+        setShowPopData(true);
+        return;
       }
     }
 
-    else if (analysis.toLocaleLowerCase().includes('/')) {
-      setShowCalendar(true)
+    if (lowerCaseAnalysis.includes('/')) {
+      setShowCalendar(true);
+      return; 
     }
-
-    else if (analysis.toLocaleLowerCase().includes('economy') || analysis.toLocaleLowerCase().includes('business') || analysis.toLocaleLowerCase().includes('first')) {
-      setShowPopData(true)
-    }
-
-    else if (analysis.toLocaleLowerCase().includes('one way') || analysis.toLocaleLowerCase().includes('round trip') || analysis.toLocaleLowerCase().includes('multi city')) {
-      setShowPopData(true)
+  
+    const keywords = [
+      'economy',
+      'business class',
+      'first class',
+      'premium economy',
+      'one way',
+      'trip',
+      'city',
+    ];
+  
+    if (keywords.some(keyword => lowerCaseAnalysis.includes(keyword))) {
+      setShowPopData(true);
     }
   };
 
@@ -96,7 +119,6 @@ const EditModal: React.FC<EditModalProps> = ({
       setDateSelect(date);
     };
   
-  
     const handleSubmitDate = () => {
       if (editedValue.length !== 0 && promptIndex !== null) {
         handleSave(promptIndex);
@@ -107,15 +129,21 @@ const EditModal: React.FC<EditModalProps> = ({
       }
     };
 
-
-    useEffect(() => {
-      fetchAirports();
-    }, [fetchAirports]);
-
-
+    const handleSave = (index: number) => {
+      if (!editedValue.trim()) {
+        toast.warning('Input cannot be empty');
+        return;
+      }
+      if (prompts) {
+        onUpdatePrompt(index, editedValue); 
+        setPromptIndex(null);
+        setShowPopData(false);
+        setEditedValue('');
+      }
+    };
 
   return (
-    <div className="relative flex flex-col w-full h-full bg-white justify-between">
+    <div className="relative flex flex-col w-full h-full bg-white justify-between rounded-2xl">
       <IoMdCloseCircleOutline
         onClick={close}
         className="text-2xl text-black self-end mt-2 mr-2 cursor-pointer"
@@ -137,38 +165,43 @@ const EditModal: React.FC<EditModalProps> = ({
             </div>
         ))}
       </div>
-      <div className='flex flex-col flex-1 overflow-y-auto'>
+      <div ref={chatContainerRef}
+        className='flex flex-col flex-1 overflow-y-auto'>
         <ChatHistory chatLog={chatLog} botLoader={botLoader} isLoading={chatLoading}/>
       </div>
       
       <div className="relative w-full p-2 flex items-center justify-center bg-white border-t h-30">
         <div className="items-center max-w-[678px] w-full rounded-2xl py-4 px-4 lg:px-8 flex message bg-tint">
-            <Input
-                value={editedValue}
-                onChange={handleInputChange}
-                onKeyDown={(e)=> {if(e.key === 'Enter' && promptIndex !== null) handleSave(promptIndex)}}
-                onFocus={handleInputFocus}
-                type="text"
-                placeholder="Please Enter Your Message"
-                className="text-xs md:text-sm lg:text-xl flex-grow bg-transparent focus:bg-transparent border-0 rounded-lg outline-0"
-            />
-            <IoSend
-                onClick={() => promptIndex !== null && handleSave(promptIndex)}
-                className={`${editedValue.length >= 4 ? 'text-primary-600' : 'text-neutral-400'} cursor-pointer`}
-                size={24}
-            />
+          <Input
+              value={editedValue}
+              onChange={handleInputChange}
+              onKeyDown={(e)=> {if(e.key === 'Enter' && promptIndex !== null) handleSave(promptIndex)}}
+              onFocus={handleInputFocus}
+              type="text"
+              placeholder="Please Enter Your Message"
+              className="text-xs md:text-sm lg:text-xl flex-grow bg-transparent focus:bg-transparent border-0 rounded-lg outline-0"
+          />
+          <IoSend
+              onClick={() => promptIndex !== null && handleSave(promptIndex)}
+              className={`${editedValue.length >= 4 ? 'text-primary-600' : 'text-neutral-400'} cursor-pointer`}
+              size={24}
+          />
         </div>
       </div>
 
         <SuggestionPanel
           visible={showPopData}
           position="bottom-30 lg:left-[12%]"
-          lastMessage={chatLog[chatLog.length - 1]?.message || ''}
+          lastMessage={''}
+          entryMessage={editedValue}
+          editContent={true}
           airportSuggestions={airportSuggestions}
           searchParam={searchParam}
-          onSelect={()=>{}}
+          onSelect={(value:string)=>{setEditedValue(value);
+          setShowPopData(false);
+        }}
         />
-        <Modal position="absolute" close={()=>setShowCalendar(false)} display={showCalendar}>
+        <Modal position="absolute" close={()=>setShowCalendar(false)} display={showCalendar} className='backdrop-blur-md'>
           <Calendar Click={handleDateSelect} selectedDate={null} Close={handleSubmitDate}  />
         </Modal>
         
