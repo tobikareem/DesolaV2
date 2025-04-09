@@ -101,7 +101,7 @@ export const useFlightSearch =()=> {
     try { 
       const response = await getData<TravelInformation[]>(`${ENDPOINTS_API_PATH.flight_search}/amadeus?originLocationCode=${originCode}
         &destinationLocationCode=${destinationCode}&departureDate=${travelInfo.departureDate}&returnDate=${travelInfo.returnDate}
-        &adults=1&travelClass=${travelInfo.flightClass}&nonStop=${travelInfo.travelRoute}&max=20&sortBy=price&sortOrder=asc`
+        &adults=1&travelClass=${travelInfo.flightClass}&nonStop=${travelInfo?.travelRoute}&max=20&sortBy=price&sortOrder=asc`
       );
       setFlightResults(response ?? []);
     } catch (error: unknown) {

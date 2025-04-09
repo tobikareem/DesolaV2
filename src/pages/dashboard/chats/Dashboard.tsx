@@ -104,14 +104,12 @@ const Dashboard: React.FC = () => {
   const handleSendMessage = () => {
     if (inputValue.length < 4) return;
 
-    // Add user message to chat
     const newChatLog = [
       ...chatLog,
       { message: inputValue, sender: 'user' as const }
     ];
     setChatLog(newChatLog);
 
-    // Save to recent prompts
     const newPrompts = [inputValue, ...recentPrompts].slice(0, 10); // Keep only the 10 most recent
     setRecentPrompts(newPrompts);
 
@@ -164,11 +162,10 @@ const Dashboard: React.FC = () => {
       updateDateSelect();
       handleCloseCalendar();
     } else {
-      toast.warning('Pick a date');
+      toast.error('Pick a date');
     }
   };
 
-  console.log('date', dateSelect);
 
 
   const handleSelectSuggestion = (value: string) => {
