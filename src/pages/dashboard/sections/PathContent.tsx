@@ -19,6 +19,13 @@ export const PathContent: React.FC<PathContentProps> = ({
   travelRoute,
   flightClass,
 }) => {
+
+  const today = new Date().toLocaleDateString('en-US', {
+    month: 'long',
+    day: '2-digit',
+    year: 'numeric'
+  });
+
   return(
     <div className=" flex-1 overflow-y-auto">
       <Text
@@ -53,7 +60,7 @@ export const PathContent: React.FC<PathContentProps> = ({
     {
       <div className="flex flex-col gap-4 py-4 border-t border-t-neutral-300">
         <Text as="p" size="xs" className="font-work">
-          {`${new Date()}`}
+          {today}
         </Text>
         <div className="space-y-2">
           <div className="flex items-center gap-2">
@@ -110,7 +117,7 @@ export const PathContent: React.FC<PathContentProps> = ({
           </label>
         </div>
         <Text as="p" className="font-work text-xs text-neutral-500">
-          {returnDate}
+          {returnDate ?? "Not Available"}
         </Text>
       </div>
 

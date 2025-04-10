@@ -8,6 +8,7 @@ import { UIContext } from "../../contexts/UIContext";
 import { useAuthInfo } from "../../hooks/useAuthInfo";
 import authService from "../../services/authService";
 import { Logo } from "./Logo";
+import { useSmoothScroll } from "../../hooks/useSmoothScroll";
 
 export const Navbar = () => {
     const [slider, setSlider] = useState<boolean>(false);
@@ -30,6 +31,7 @@ export const Navbar = () => {
 
 
     const location = useLocation();
+    const smoothScroll = useSmoothScroll();
     const router = location.pathname;
 
     const [activeSection, setActiveSection] = useState<string>('');
@@ -59,12 +61,7 @@ export const Navbar = () => {
 
     }, [])
 
-    const smoothScroll = (href: string) => {
-        const element = document.querySelector(href);
-        if (element) {
-            element.scrollIntoView({ behavior: 'smooth' });
-        }
-    };
+    
 
 
     return (

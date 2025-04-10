@@ -12,7 +12,7 @@ import { TextArea } from "../../../components/ui/TextAreaField";
 const Contact = () => {
     const { content: faqData, loading, error } = usePageContent(`${ENDPOINTS_API_PATH.page}`, `${WEB_PAGES.contact}`, "PhoneAndEmail");
 
-    const ContactInfo = [{ icon: <MdOutlineEmail /> }, { icon: <IoCallOutline /> },]
+    const ContactInfo = [{ icon: <IoCallOutline /> }, { icon: <MdOutlineEmail /> },]
 
     return (
         <section id="contact"

@@ -13,7 +13,7 @@ export const TrashContent: React.FC = () => {
       >
         Great Deals for Your Trip!
       </Text>
-      <EmptyState center={"justify-center"}/>
+      <EmptyState position={"center"} content={null}/>
     </div>
   )
 }

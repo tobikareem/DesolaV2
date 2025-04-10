@@ -24,18 +24,19 @@ import { PathContent } from './PathContent';
 import { SupportContent } from './SupportContent';
 import { TrashContent } from './TrashContent';
 import { UserContent } from './UserContent';
+import { useFlightSearch } from '../../../hooks/useDashboardInfo';
 
 const storageService = new CustomStorage();
 
 export const RightPanel: React.FC = () => {
   const navigate = useNavigate();
   const [selectedTab, setSelectedTab] = useState<string>('home');
-
   const { setNavigationData } = useContext(NavigationContext);
   const { showLogoutModal, showDeleteModal, showFlightModal, toggleModal } = useContext(UIContext);
   const { recentPrompts, travelInfo } = useContext(ChatContext);
+  const {FlightSearchFn} = useFlightSearch();
+  
 
-  // Check if search button should be enabled
   const isSearchEnabled = Array.isArray(recentPrompts) && recentPrompts.length >= 5;
 
   const sidebarOptions: NavItem[] = [
@@ -46,11 +47,9 @@ export const RightPanel: React.FC = () => {
     { id: 'support', icon: <Headset size={24} />, icon2: <PiHeadsetFill />, label: 'Support' },
   ];
 
-  // Update navigation data in context
   useEffect(() => {
     setNavigationData(sidebarOptions);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [setNavigationData]);
+  }, []);
 
   const handleTabClick = (tabId: string) => {
     setSelectedTab(tabId);
@@ -104,15 +103,17 @@ export const RightPanel: React.FC = () => {
 
 
   const renderContent = () => {
-    if (selectedTab === 'home' || selectedTab === 'road') {
-      const Component = TAB_COMPONENTS[selectedTab as 'home' | 'road'];
+    if (selectedTab === 'home') {
+      const Component = TAB_COMPONENTS[selectedTab as 'home'];
       return <Component {...travelInfo} />;
     }
 
     // For components that don't need props
-    const Component = TAB_COMPONENTS[selectedTab as 'trash' | 'user' | 'support'];
-    return Component ? <Component /> : null;
+    const Component = TAB_COMPONENTS[selectedTab as 'road'| 'trash' | 'user' | 'support'];
+    return Component ? <Component departure={''} destination={''} departureDate={''} returnDate={''} travelRoute={''} flightClass={''} /> : null;
   };
+
+  
 
   return (
     <>
@@ -147,13 +148,14 @@ export const RightPanel: React.FC = () => {
             {/* Search Button */}
             <div className="h-30 border-t items-center flex p-7">
               <Btn
-                className={`p-1 w-full max-w-[385px] ${isSearchEnabled
+                className={`${selectedTab !== 'home' ? 'hidden' : ''} p-1 w-full max-w-[385px] ${isSearchEnabled
                   ? 'bg-gradient-to-b from-[#FF9040] to-[#FF6B00] text-white'
                   : 'bg-neutral-300 text-neutral-500 cursor-not-allowed opacity-50'
                   }`}
                 onClick={() => {
                   if (isSearchEnabled) {
                     toggleModal('flight');
+                    FlightSearchFn();
                   }
                 }}
               >

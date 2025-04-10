@@ -51,11 +51,11 @@ const extractTravelInfo = (recentPrompts: string[], chatLog: ChatMessage[]): Tra
 
     // Get airports
     if (recentPrompts.length >= 1 && isAirport(recentPrompts[0])) {
-        info.departure = recentPrompts[0];
+        info.departure = recentPrompts[1];
     }
 
     if (recentPrompts.length >= 2 && isAirport(recentPrompts[1])) {
-        info.destination = recentPrompts[1];
+        info.destination = recentPrompts[0];
     }
 
     const classCandidate = recentPrompts.find(isFlightClass);
