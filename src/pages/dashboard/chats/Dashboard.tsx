@@ -2,7 +2,7 @@
 import { ChangeEvent, KeyboardEvent, useContext, useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import MobileRender from "../../../components/dashboard-sections/mobileRender";
-import Calendar from '../../../components/modals/Calender';
+import Calendar from '../../../components/modals/Calendar';
 import EditModal from "../../../components/modals/EditModal";
 import { Modal } from "../../../components/modals/Modal";
 import { Btn } from "../../../components/ui/Button";
