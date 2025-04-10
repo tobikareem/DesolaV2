@@ -1,7 +1,7 @@
 import { useState } from "react"
 
 
-export const UseEdit =()=> {
+export const useEdit =()=> {
   const [promptIndex, setPromptIndex] = useState<number | null>(null)
   const [ editedValue, setEditedValue] = useState<string>("")
 
