@@ -142,11 +142,7 @@ const Dashboard: React.FC = () => {
   const handleCloseCalendar = () => setShowCalendar(false);
 
   const handleDateSelect = (arg: DateSelectArg) => {
-    const formattedDate = arg.start?.toLocaleDateString('en-US', {
-      month: '2-digit',
-      day: '2-digit',
-      year: 'numeric',
-    });
+    const formattedDate = arg.start?.toISOString().split('T')[0]; 
     setInputValue(formattedDate || '');
     setDate(arg.start);
   };
