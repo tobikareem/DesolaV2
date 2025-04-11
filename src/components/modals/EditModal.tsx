@@ -3,8 +3,8 @@ import React, { useContext, useEffect, useRef} from 'react';
 import { IoMdCloseCircleOutline } from 'react-icons/io';
 import { useAirports, useDashboardInfo } from '../../hooks/useDashboardInfo';
 import { useScroll } from '../../hooks/useSmoothScroll';
-import { getPromptColor } from '../../pages/dashboard/chats/RecentPromptsBar';
-import { useEdit } from '../../hooks/useEdit';
+import { getPromptColor } from '../../pages/dashboard/chats/PromptColor';
+import { UseEdit } from '../../hooks/useEdit';
 import SuggestionPanel from '../../pages/dashboard/chats/SuggestionPanel';
 import { useModals } from '../../hooks/useModals';
 import { ChatContext } from '../../contexts/ChatContext';
@@ -17,6 +17,7 @@ import Calendar from './Calendar';
 import { DateSelectArg } from '@fullcalendar/core/index.js';
 import { toast } from 'react-toastify';
 import { useInput } from '../../hooks/useInput';
+
 
 interface EditModalProps {
   prompts: string[] | undefined;
@@ -85,7 +86,7 @@ const EditModal: React.FC<EditModalProps> = ({
       }
     }
 
-    if (lowerCaseAnalysis.includes('/')) {
+    if (lowerCaseAnalysis.includes('-') || lowerCaseAnalysis.includes('/')) {
       setShowCalendar(true);
       return; 
     }

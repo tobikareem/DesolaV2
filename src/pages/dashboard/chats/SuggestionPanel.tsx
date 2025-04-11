@@ -106,7 +106,6 @@ const SuggestionPanel: React.FC<SuggestionPanelProps> = ({
             ));
         }
     
-
         if (routeKeywords.some(keyword => entryMessage?.toLowerCase().includes(keyword))) {
             return routeKeywords.map((route, idx) => (
                 <SuggestionButton key={idx} text={route} onClick={() => onSelect(route)} />
