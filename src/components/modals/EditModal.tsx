@@ -13,7 +13,7 @@ import { useChatInteractions } from '../../hooks/useChatInteractions';
 import { Input } from '../ui/InputField';
 import { IoSend } from 'react-icons/io5';
 import { Modal } from './Modal';
-import Calendar from './Calender';
+import Calendar from './Calendar';
 import { DateSelectArg } from '@fullcalendar/core/index.js';
 import { toast } from 'react-toastify';
 import { useInput } from '../../hooks/useInput';
@@ -32,7 +32,7 @@ const EditModal: React.FC<EditModalProps> = ({
 }) => {
 
   const {scrollContainerRef, handleScroll} = useScroll();
-  const {handleEditClick, setPromptIndex, editedValue, setEditedValue, promptIndex} = UseEdit();
+  const {handleEditClick, setPromptIndex, editedValue, setEditedValue, promptIndex} = useEdit();
   const {date, setDate, setDateSelect} = useInput();
   const { preferences} = useDashboardInfo();
   const {showCalendar, setShowCalendar} = useModals()
