@@ -1,11 +1,12 @@
 import { useCallback, useContext, useEffect, useState } from "react";
 import { toast } from 'react-toastify';
+import { ChatContext } from "../contexts/ChatContext";
+import { FlightSearchResponse, transformApiToUiResponse } from "../models/FlightSearchResponse";
+import { LOCAL_STORAGE_VALUES } from "../utils/constants";
 import { ENDPOINTS_API_PATH } from "../utils/endpoints";
+import { ApiFlightSearchResponse } from './../models/ApiFlightSearchResponse';
 import useApi from "./useApi";
 import { useAuthInfo } from "./useAuthInfo";
-import { LOCAL_STORAGE_VALUES } from "../utils/constants";
-import { TravelInformation } from "../contexts/types";
-import { ChatContext } from "../contexts/ChatContext";
 
 export interface Airport {
   name: string;
@@ -37,7 +38,7 @@ export const useAirports = () => {
   const [airportSuggestions, setAirportSuggestions] = useState<Airport[]>([]);
   const [loading, setLoading] = useState(false);
   const { getData } = useApi();
-  const cacheExpiryTime = 5 * 24 * 60 * 60 * 1000; 
+  const cacheExpiryTime = 5 * 24 * 60 * 60 * 1000;
 
 
   const fetchAirports = useCallback(async () => {
@@ -86,41 +87,44 @@ export const useAirports = () => {
   return { airportSuggestions, fetchAirports, loading };
 };
 
-export const useFlightSearch =()=> {
-  const {getData} = useApi();
+export const useFlightSearch = () => {
+  const { getData } = useApi();
   const { travelInfo } = useContext(ChatContext);
-  const [flightResults, setFlightResults] = useState<TravelInformation[]>([]);
+  const [flightResults, setFlightResults] = useState<FlightSearchResponse | null>(null);
   const [flightLoading, setFlightLoading] = useState(false);
 
   const originCode = travelInfo.departure?.match(/\(([^)]+)\)/)?.[1] ?? travelInfo.departure;
   const destinationCode = travelInfo.destination?.match(/\(([^)]+)\)/)?.[1] ?? travelInfo.destination;
-  
 
-  const FlightSearchFn = useCallback(async()=> {
+  const FlightSearchFn = useCallback(async () => {
     setFlightLoading(true);
-    try { 
-      const response = await getData<TravelInformation[]>(
+    try {
+      // Get the raw API response
+      const apiResponse = await getData<ApiFlightSearchResponse>(
         `${ENDPOINTS_API_PATH.flight_search}/amadeus?` +
         `originLocationCode=${originCode}&destinationLocationCode=${destinationCode}` +
         `&departureDate=${travelInfo.departureDate}&returnDate=${travelInfo.returnDate}` +
         `&adults=1&travelClass=${travelInfo.flightClass}&nonStop=${travelInfo?.travelRoute}` +
         `&max=20&sortBy=price&sortOrder=asc`
       );
-      setFlightResults(response ?? []);
+
+      if (!apiResponse) {
+        throw new Error("No flight search results found");
+      }
+
+      // Transform the API response into UI-friendly format
+      const uiResponse = transformApiToUiResponse(apiResponse);
+      setFlightResults(uiResponse);
     } catch (error: unknown) {
-      console.error(error)
-      toast.error(`Error searching flights: ${error instanceof Error ? error.message : 'Unknown error'}`)
+      console.error(error);
+      toast.error(`Error searching flights: ${error instanceof Error ? error.message : 'Unknown error'}`);
     } finally {
       setFlightLoading(false);
-
     }
+  }, [getData, travelInfo, originCode, destinationCode]);
 
-  },[getData, travelInfo]); 
-
-  return {FlightSearchFn, flightResults, flightLoading};
-  
-}
-
+  return { FlightSearchFn, flightResults, flightLoading };
+};
 
 
 export const useRoutes = () => {

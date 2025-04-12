@@ -4,7 +4,7 @@ import { IoMdCloseCircleOutline } from 'react-icons/io';
 import { useAirports, useDashboardInfo } from '../../hooks/useDashboardInfo';
 import { useScroll } from '../../hooks/useSmoothScroll';
 import { getPromptColor } from '../../pages/dashboard/chats/PromptColor';
-import { UseEdit } from '../../hooks/useEdit';
+import { useEdit } from '../../hooks/useEdit';
 import SuggestionPanel from '../../pages/dashboard/chats/SuggestionPanel';
 import { useModals } from '../../hooks/useModals';
 import { ChatContext } from '../../contexts/ChatContext';
