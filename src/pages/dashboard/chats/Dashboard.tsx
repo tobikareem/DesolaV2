@@ -62,10 +62,6 @@ const Dashboard: React.FC = () => {
   const { isAuthenticated } = useAuthInfo();
   const loadedRef = useRef(false);
 
-
-
-
-
   useEffect(() => {
     fetchAirports();
     resetChatBot();

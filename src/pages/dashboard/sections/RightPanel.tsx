@@ -7,7 +7,6 @@ import { useNavigate } from 'react-router';
 
 import { SidebarLogout } from '../../../components/dashboard-sections/sidebar/SidebarLogout';
 import { SidebarTab } from '../../../components/dashboard-sections/sidebar/SidebarTab';
-import { offers } from '../../../components/layout/offers';
 import { ClearChat } from '../../../components/modals/ClearChat';
 import FlightOffersModal from '../../../components/modals/FlightOffersModal';
 import { ReturnContent } from '../../../components/modals/LogoutModal';
@@ -17,6 +16,7 @@ import { ChatContext } from '../../../contexts/ChatContext';
 import { NavigationContext } from '../../../contexts/NavigationContext';
 import { NavItem } from '../../../contexts/types';
 import { UIContext } from '../../../contexts/UIContext';
+import { useFlightSearch } from '../../../hooks/useDashboardInfo';
 import authService from '../../../services/authService';
 import { CustomStorage } from '../../../utils/customStorage';
 import { HomeContent } from './HomeContent';
@@ -24,7 +24,6 @@ import { PathContent } from './PathContent';
 import { SupportContent } from './SupportContent';
 import { TrashContent } from './TrashContent';
 import { UserContent } from './UserContent';
-import { useFlightSearch } from '../../../hooks/useDashboardInfo';
 
 const storageService = new CustomStorage();
 
@@ -33,11 +32,34 @@ export const RightPanel: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState<string>('home');
   const { setNavigationData } = useContext(NavigationContext);
   const { showLogoutModal, showDeleteModal, showFlightModal, toggleModal } = useContext(UIContext);
-  const { recentPrompts, travelInfo } = useContext(ChatContext);
-  const {FlightSearchFn} = useFlightSearch();
-  
+  const { travelInfo } = useContext(ChatContext);
+  const { FlightSearchFn } = useFlightSearch();
 
-  const isSearchEnabled = Array.isArray(recentPrompts) && recentPrompts.length >= 5;
+  const getRequiredFields = (route: string) => {
+    const isOneWay = route?.toLowerCase().startsWith('one way');
+    const requiredFields = ['departure', 'destination', 'departureDate', 'flightClass'];
+
+    if (!isOneWay) {
+      requiredFields.push('returnDate');
+    }
+
+    return requiredFields;
+  };
+
+  const isSearchEnabled = () => {
+    if (!travelInfo || typeof travelInfo !== 'object') {
+      return false;
+    }
+
+    const { travelRoute } = travelInfo;
+    const requiredFields = getRequiredFields(travelRoute);
+
+    // Check that all required fields have values
+    return requiredFields.every((field: string) => {
+      const value = travelInfo[field as keyof typeof travelInfo];
+      return value !== undefined && value !== null && value !== '';
+    });
+  };
 
   const sidebarOptions: NavItem[] = [
     { id: 'home', icon: <House size={24} />, icon2: <RiHome5Fill />, label: 'Home' },
@@ -109,11 +131,11 @@ export const RightPanel: React.FC = () => {
     }
 
     // For components that don't need props
-    const Component = TAB_COMPONENTS[selectedTab as 'road'| 'trash' | 'user' | 'support'];
+    const Component = TAB_COMPONENTS[selectedTab as 'road' | 'trash' | 'user' | 'support'];
     return Component ? <Component departure={''} destination={''} departureDate={''} returnDate={''} travelRoute={''} flightClass={''} /> : null;
   };
 
-  
+
 
   return (
     <>
@@ -148,12 +170,12 @@ export const RightPanel: React.FC = () => {
             {/* Search Button */}
             <div className="h-30 border-t items-center flex p-7">
               <Btn
-                className={`${selectedTab !== 'home' ? 'hidden' : ''} p-1 w-full max-w-[385px] ${isSearchEnabled
+                className={`${selectedTab !== 'home' ? 'hidden' : ''} p-1 w-full max-w-[385px] ${isSearchEnabled()
                   ? 'bg-gradient-to-b from-[#FF9040] to-[#FF6B00] text-white'
                   : 'bg-neutral-300 text-neutral-500 cursor-not-allowed opacity-50'
                   }`}
                 onClick={() => {
-                  if (isSearchEnabled) {
+                  if (isSearchEnabled()) {
                     toggleModal('flight');
                     FlightSearchFn();
                   }
@@ -185,7 +207,7 @@ export const RightPanel: React.FC = () => {
         close={() => toggleModal('flight')}
         display={showFlightModal}
       >
-        <FlightOffersModal offers={offers} onClose={() => toggleModal('flight')} />
+        <FlightOffersModal onClose={() => toggleModal('flight')} />
       </Modal>
     </>
   );
