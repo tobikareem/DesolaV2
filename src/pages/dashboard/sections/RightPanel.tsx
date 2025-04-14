@@ -73,6 +73,7 @@ export const RightPanel: React.FC = () => {
     setNavigationData(sidebarOptions);
   }, []);
 
+
   const handleTabClick = (tabId: string) => {
     setSelectedTab(tabId);
     if (tabId === 'trash') {
