@@ -93,13 +93,14 @@ export const useFlightSearch = () => {
   const [flightResults, setFlightResults] = useState<FlightSearchResponse | null>(null);
   const [flightLoading, setFlightLoading] = useState(false);
 
+
   const originCode = travelInfo.departure?.match(/\(([^)]+)\)/)?.[1] ?? travelInfo.departure;
   const destinationCode = travelInfo.destination?.match(/\(([^)]+)\)/)?.[1] ?? travelInfo.destination;
 
   const FlightSearchFn = useCallback(async () => {
     setFlightLoading(true);
     try {
-      // Get the raw API response
+  
       const apiResponse = await getData<ApiFlightSearchResponse>(
         `${ENDPOINTS_API_PATH.flight_search}/amadeus?` +
         `originLocationCode=${originCode}&destinationLocationCode=${destinationCode}` +
@@ -126,27 +127,6 @@ export const useFlightSearch = () => {
   return { FlightSearchFn, flightResults, flightLoading };
 };
 
-
-export const useRoutes = () => {
-  const [RouteData, setRouteData] = useState<Route[]>([])
-  const [loading, setLoading] = useState(false);
-  const { getData } = useApi();
-
-  const fetchRoutes = useCallback(async () => {
-    setLoading(true);
-    try {
-      const data = await getData<Route[]>(`${ENDPOINTS_API_PATH.route}?airlineCode=AA&max=20`)
-      setRouteData(data ?? [])
-    }
-    catch (error) {
-      console.error("Error fetching routes:", error);
-    } finally {
-      setLoading(false);
-    }
-
-  }, [getData])
-  return { fetchRoutes, RouteData, loading };
-};
 
 export const useUserPreferences = () => {
   const { accountInfo, isAuthenticated, isLoading: authLoading, isInitialized } = useAuthInfo();

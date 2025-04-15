@@ -1,8 +1,8 @@
 import {Img as ReactImage} from 'react-image'
 import { Text } from "../ui/TextComp";
 
-const LoadingScreen = ({ message }: { message: string }) => (
-    <div className="flex flex-col gap-8 items-center justify-center w-screen h-screen bg-background">
+const LoadingScreen = ({message, dimension='w-screen h-screen',background = 'bg-background'}: {message: string, dimension:'w-screen h-screen' | 'w-full h-full', background:string}) => (
+    <div className={`flex flex-col gap-8 items-center justify-center ${dimension} ${background}`}>
         <ReactImage
             src="/Globe.png"
             alt="Globe"

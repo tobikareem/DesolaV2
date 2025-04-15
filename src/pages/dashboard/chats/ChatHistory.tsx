@@ -36,7 +36,7 @@ const ChatHistory: React.FC<ChatHistoryProps> = ({ chatLog, botLoader, isLoading
     return (
         <div
             ref={chatContainerRef}
-            className="relative flex flex-col flex-1 bg-background space-y-6 p-5 lg:pl-20 overflow-y-auto"
+            className="relative flex flex-col flex-1 bg-background space-y-6 p-5 pb-16 lg:pl-20 overflow-y-auto"
         >
             {chatLog.map((chat, index) => {
                 const isUser = chat.sender === 'user';
