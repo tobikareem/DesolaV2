@@ -7,6 +7,7 @@ interface TextProps {
   size?: "2xs" | "xs" |"sm" | "base" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "6xl";
   weight?: "light" | "normal" | "medium" | "semibold" | "bold" | "extrabold";
   color?: string;
+  fontStyle?: string;
 }
 
 export const Text = ({
@@ -16,6 +17,7 @@ export const Text = ({
   size = "base",
   weight = "normal",
   color = "text-neutral-900",
+  fontStyle = 'font-work'
 }: TextProps) => {
   
   const font = {
@@ -43,7 +45,7 @@ export const Text = ({
   }
 
   return (
-    <Tag className={`${textSize[size]} ${font[weight]} ${color} ${className}`}>
+    <Tag className={`${textSize[size]} ${font[weight]} ${color} ${fontStyle} ${className}`}>
       {children}
     </Tag>
   );

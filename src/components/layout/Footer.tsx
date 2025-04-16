@@ -2,14 +2,15 @@ import React from 'react';
 import { Text } from '../ui/TextComp';
 import { FaInstagram, FaTwitter, FaLinkedin } from 'react-icons/fa';
 import { Link, useLocation } from 'react-router-dom';
-
 import { Img as ReactImage } from 'react-image';
 import usePageContent from '../../hooks/usePageContent';
 import { WEB_PAGES } from '../../utils/constants';
 import { ENDPOINTS_API_PATH } from '../../utils/endpoints';
+import { useSmoothScroll } from '../../hooks/useSmoothScroll';
 
 const Footer: React.FC = () => {
   const { content: faqData } = usePageContent(`/${ENDPOINTS_API_PATH.page}`, `${WEB_PAGES.contact}`, "PhoneAndEmail");
+  const smoothScroll = useSmoothScroll()
 
   const phoneNumber = faqData?.RowValue?.split(";")[0];
   const emailAddr = faqData?.RowValue?.split(";")[1];
@@ -17,8 +18,14 @@ const Footer: React.FC = () => {
   const location = useLocation();
   const router = location.pathname;
 
+  const routes = [
+    { name: 'Home', path: 'home' },
+    { name: 'Services', path: 'why-choose-us' },
+    { name: 'Contact', path: 'contact' },
+  ]
+
   return (
-    <footer className={` ${router !== '/' ? 'hidden' : ''} bg-[url('/Landscape.svg')] bg-center bg-cover`}>
+    <footer className={` ${router !== '/' ? 'hidden' : ''} bg-neutral-500`} style={{ backgroundImage: 'url("/Landscape.svg")',backgroundSize: 'cover',backgroundPosition: 'center' }}>
       <div className="w-full h-full py-8 mt-8 bg-black/30 text-white">
         <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
           <ReactImage
@@ -47,15 +54,15 @@ const Footer: React.FC = () => {
                 Page
               </Text>
               <ul className="space-y-2 ml-1">
-                {['Home', 'Services', 'Contact'].map((item) => {
-                  const route = `#${item.toLowerCase()}`
+                {routes.map((item, idx) => {
+                  const route = `#${item?.path.toLowerCase()}`
                   return (
-                    <li key={item} >
-                      <Link to={route}>
+                    <li key={idx} >
+                      <div onClick={() => smoothScroll(route)} >
                         <Text as="p" size="sm" className="text-white hover:font-bold">
-                          {item}
+                          {item?.name}
                         </Text>
-                      </Link>
+                      </div>
                     </li>
                   )
                 })
@@ -104,7 +111,6 @@ const Footer: React.FC = () => {
                 <Link to="">
                   <FaLinkedin className="text-xl text-white cursor-pointer hover:scale-110 transition-transform duration-300 ease-in-out" />
                 </Link>
-
               </div>
             </div>
           </div>

@@ -14,9 +14,8 @@ function isAirport(text: string): boolean {
 }
 
 function isDate(text: string): boolean {
-    return text.includes('/') && (
-        // Simple validation for MM/DD/YYYY format
-        /^\d{1,2}\/\d{1,2}\/\d{4}$/.test(text.trim())
+    return text.includes('-') && (
+        /^\d{4}-\d{2}-\d{2}$/.test(text.trim())
     );
 }
 

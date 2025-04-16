@@ -14,7 +14,7 @@ const HomeScreen = () => {
       <Hero />
       <HowItWorks />
       <WhyChooseUs />
-      <section className="w-full bg-[url('/flying-sunset.svg')] bg-cover bg-center bg-no-repeat">
+      <section className="w-full bg-[url('/flying-sunset.webp')] bg-cover bg-center bg-no-repeat">
         <div className="flex flex-col bg-primary-700/85 w-full justify-center items-center px-4 py-18 gap-4 isolate">
           <Text as="h1" weight="bold" size="4xl" color="text-white" className="font-grotesk font-bold text-4xl lg:text-[40px]">
             Join {VITE_APP_NAME.toUpperCase()} today

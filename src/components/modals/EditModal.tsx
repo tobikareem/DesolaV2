@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useRef} from 'react';
 import { IoMdCloseCircleOutline } from 'react-icons/io';
 import { useAirports, useDashboardInfo } from '../../hooks/useDashboardInfo';
 import { useScroll } from '../../hooks/useSmoothScroll';
-import { getPromptColor } from '../../pages/dashboard/chats/RecentPromptsBar';
+import { getPromptColor } from '../../pages/dashboard/chats/PromptColor';
 import { useEdit } from '../../hooks/useEdit';
 import SuggestionPanel from '../../pages/dashboard/chats/SuggestionPanel';
 import { useModals } from '../../hooks/useModals';
@@ -17,6 +17,7 @@ import Calendar from './Calendar';
 import { DateSelectArg } from '@fullcalendar/core/index.js';
 import { toast } from 'react-toastify';
 import { useInput } from '../../hooks/useInput';
+
 
 interface EditModalProps {
   prompts: string[] | undefined;
@@ -85,7 +86,7 @@ const EditModal: React.FC<EditModalProps> = ({
       }
     }
 
-    if (lowerCaseAnalysis.includes('/')) {
+    if (lowerCaseAnalysis.includes('-') || lowerCaseAnalysis.includes('/')) {
       setShowCalendar(true);
       return; 
     }
@@ -146,7 +147,7 @@ const EditModal: React.FC<EditModalProps> = ({
     <div className="relative flex flex-col w-full h-full bg-white justify-between rounded-2xl">
       <IoMdCloseCircleOutline
         onClick={close}
-        className="text-2xl text-black self-end mt-2 mr-2 cursor-pointer"
+        className="text-2xl text-black self-end mt-2 mr-2 cursor-pointer hover:scale-105 transition-transform duration-200 ease-in-out"
       />
       <div
         ref={scrollContainerRef}

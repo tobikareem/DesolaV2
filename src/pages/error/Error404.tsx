@@ -15,7 +15,7 @@ const Error404Page =()=> {
           Oops! Nothing to see here.
         </Text>
         <ReactImage
-          src="/404.svg"
+          src="/404.webp"
           alt="404 Error"
         />
         <Link to='/' className="font-poppins flex items-center gap-2 hover:font-semibold text-2xl text-black border-b-[2px] border-black">
