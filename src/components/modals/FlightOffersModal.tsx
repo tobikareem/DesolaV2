@@ -36,6 +36,8 @@ const FlightOffersModal: React.FC<Props> = ({ onClose }) => {
     }));
   };
 
+  console.log('offers', flightResults?.offers)
+
 
   return (
     <div className="size-full rounded-2xl overflow-hidden w-full bg-neutral-100">
@@ -74,7 +76,7 @@ const FlightOffersModal: React.FC<Props> = ({ onClose }) => {
                     <img
                       src={offer.airlineLogo}
                       alt="Airline Logo"
-                      className="size-10 rounded-sm"
+                      className="size-10 rounded-md bg-primary-300 overflow-hidden border-[0.5px] border-neutral-300"
                     />
                     <div className='space-y-1'>
                       <Text as='p' size='sm' weight="medium" color='text-Neutral' className='lg:text-base'>

@@ -118,7 +118,6 @@ export const useFlightSearch = () => {
       setFlightResults(uiResponse);
     } catch (error: unknown) {
       console.error(error);
-      toast.error(`Error searching flights: ${error instanceof Error ? error.message : 'Unknown error'}`);
     } finally {
       setFlightLoading(false);
     }
