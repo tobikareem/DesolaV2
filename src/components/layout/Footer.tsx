@@ -25,7 +25,7 @@ const Footer: React.FC = () => {
   ]
 
   return (
-    <footer className={` ${router !== '/' ? 'hidden' : ''} bg-[url('/Landscape.svg')] bg-center bg-cover`}>
+    <footer className={` ${router !== '/' ? 'hidden' : ''} bg-neutral-500`} style={{ backgroundImage: 'url("/Landscape.svg")',backgroundSize: 'cover',backgroundPosition: 'center' }}>
       <div className="w-full h-full py-8 mt-8 bg-black/30 text-white">
         <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
           <ReactImage

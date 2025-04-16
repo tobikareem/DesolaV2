@@ -14,7 +14,7 @@ export const EmptyState =({position = 'start', content}:{position:'center' | 'st
   return(
     <div className={`flex w-full h-full flex-col ${justify[position]}  p-10 items-center gap-4 bg-transparent`}>
       <ReactImage
-        src="/empty-icon.svg"
+        src="/empty-icon.webp"
         alt="empty"
         className="w-[100px]"
       />
