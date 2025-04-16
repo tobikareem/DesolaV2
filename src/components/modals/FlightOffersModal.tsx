@@ -18,7 +18,7 @@ type Props = {
 
 const FlightOffersModal: React.FC<Props> = ({ onClose }) => {
 
-  const {flightLoading, flightResults, FlightSearchFn } = useFlightSearch()
+  const {flightLoading, flightResults, FlightSearchFn, error } = useFlightSearch()
   const {showFlightModal} = useContext(UIContext)
   const [expandedOffers, setExpandedOffers] = React.useState<{ [key: string]: boolean }>({});
   console.log('flightResults', flightResults)
@@ -53,12 +53,12 @@ const FlightOffersModal: React.FC<Props> = ({ onClose }) => {
 
       <div className="py-4 overflow-hidden h-[87%]">
       {flightLoading ? (
-          <div className='block pt-30'>
+          <div className='block pt-40'>
             <LoadingScreen background='bg-transparent' dimension={'w-full h-full'} message={'Loading flight offers...'} />
           </div>
-        ) : flightResults?.offers.length === 0 && !flightLoading ? (
-          <div className='block pt-30'>
-            <EmptyState position={'center'} content={'No flight result, try again later...'} />
+        ) : !flightLoading && (error || flightResults?.offers.length === 0) ? (
+          <div className='block pt-40'>
+            <EmptyState position={'center'} content={error ?? 'No flight result, try again later...'} />
           </div>
         ) : (
         <div className="p-2 md:p-4 lg:p-8 space-y-4 overflow-y-auto h-full border-b-2 border-neutral-300">

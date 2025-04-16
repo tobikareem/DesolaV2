@@ -12,7 +12,7 @@ export const Hero = () => {
   return (
     <section
       id="home"
-      className="relative flex flex-col justify-between items-center px-4 md:px-8 lg:px-28 w-full bg-primary-100 min-h-[80svh]  lg:min-h-[100svh] "
+      className="relative flex flex-col justify-between items-center px-4 md:px-8 lg:px-28 w-full bg-primary-300 min-h-[80svh]  lg:min-h-[100svh] "
       style={{ backgroundImage: 'url("/Hero-bg.webp")',backgroundSize: 'cover',backgroundPosition: 'center', backgroundRepeat: 'no-repeat' }}
     >
       <div className="relative flex flex-col items-center mt-24 xs:mt-30 md:mt-34 lg:mt-48 text-center">
