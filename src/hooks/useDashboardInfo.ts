@@ -15,16 +15,6 @@ export interface Airport {
   airportType: string;
 }
 
-export interface Route {
-  Type: string;
-  Subtype: string;
-  Name: string;
-  IataCode: string;
-  GeoCode: { Latitude: number; Longitude: number },
-  Address: { CountryName: string; CountryCode: string; StateCode: string; RegionCode: string; }
-  TimeZone: string;
-}
-
 export interface UserPreferences {
   originAirport: string;
   destinationAirport: string;
@@ -92,6 +82,7 @@ export const useFlightSearch = () => {
   const { travelInfo } = useContext(ChatContext);
   const [flightResults, setFlightResults] = useState<FlightSearchResponse | null>(null);
   const [flightLoading, setFlightLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
 
   const originCode = travelInfo.departure?.match(/\(([^)]+)\)/)?.[1] ?? travelInfo.departure;
@@ -110,7 +101,7 @@ export const useFlightSearch = () => {
       );
 
       if (!apiResponse) {
-        throw new Error("No flight search results found");
+        throw new Error("No flight search results found for your destination");
       }
 
       // Transform the API response into UI-friendly format
@@ -118,13 +109,13 @@ export const useFlightSearch = () => {
       setFlightResults(uiResponse);
     } catch (error: unknown) {
       console.error(error);
-      toast.error(`Error searching flights: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      setError(`${error instanceof Error ? error.message : 'Unknown error'}`);
     } finally {
       setFlightLoading(false);
     }
   }, [getData, travelInfo, originCode, destinationCode]);
 
-  return { FlightSearchFn, flightResults, flightLoading };
+  return { FlightSearchFn, flightResults, flightLoading, error};
 };
 
 

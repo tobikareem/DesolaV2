@@ -1,7 +1,7 @@
 import { AuthenticatedTemplate } from '@azure/msal-react';
 import { JSX, useEffect, useState } from 'react';
 import { Route, Routes, useLocation } from 'react-router-dom';
-import { ToastContainer } from 'react-toastify';
+import { Flip, ToastContainer } from 'react-toastify';
 import './App.css';
 import AuthEventListener from './auth/auth-event-listener';
 import Callback from './auth/Callback';
@@ -113,7 +113,9 @@ function App() {
       <Preloader visibility={showPreloader} />
       <Navbar />
       <main>
-        <ToastContainer position='top-right' closeOnClick />
+        <ToastContainer position='top-right' closeOnClick theme='colored' 
+          pauseOnHover newestOnTop autoClose={3000} transition={Flip}
+         />
         <Routes>
           {publicRoutes.map((route) => (
             <Route key={route.name} path={route.path} element={route.element} />

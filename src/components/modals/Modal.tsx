@@ -12,7 +12,6 @@ interface ModalProps {
 
 export const Modal:React.FC<ModalProps> = ({display = false, yAxis = 'top-0', xAxis='left-0', children, close, position = 'fixed', className})=> {
 
-
   return(
     <div 
       onClick={close}

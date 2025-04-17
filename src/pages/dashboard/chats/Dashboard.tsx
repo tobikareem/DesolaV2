@@ -47,7 +47,6 @@ const Dashboard: React.FC = () => {
   // Context hooks
   const { chatLog, setChatLog, recentPrompts, setRecentPrompts } = useContext(ChatContext);
   const { toggleModal } = useContext(UIContext);
-
   // Custom hooks
   const { showEditModal, setShowEditModal, showCalendar, setShowCalendar, showPopData, setShowPopData, setSearchParam, searchParam } = useModals();
   const {inputValue, setInputValue, dateSelect, setDateSelect, setDate, date} = useInput();
@@ -55,7 +54,6 @@ const Dashboard: React.FC = () => {
   const { preferences, loadPreferences } = useDashboardInfo();
   const {FlightSearchFn} = useFlightSearch();
   const debounce = useDebounce();
-
   // Local UI state
   const [botLoader, setBotLoader] = useState(false);
   const [chatLoading] = useState(false);
@@ -212,6 +210,8 @@ const Dashboard: React.FC = () => {
     setChatLog(updatedChatLog);
   };
 
+  const isOneWay = chatLog.some(msg => msg.message.toLowerCase().includes('one way'));
+
   return (
     <div className="flex">
       <div className="relative flex flex-col bg-background border border-neutral-300 w-full lg:w-[60%] h-screen">
@@ -223,7 +223,7 @@ const Dashboard: React.FC = () => {
 
         <ChatHistory chatLog={chatLog} botLoader={botLoader} isLoading={chatLoading}/>
 
-        {Array.isArray(recentPrompts) && recentPrompts.length >= 5 && (
+        {Array.isArray(recentPrompts) && (isOneWay ? recentPrompts.length >= 5 : recentPrompts.length >= 6) && (
           <Btn
             onClick={() => {
               toggleModal('flight');

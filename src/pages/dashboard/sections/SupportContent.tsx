@@ -27,7 +27,7 @@ export const SupportContent: React.FC = () => {
             </Text>
             <Text as="p" size="xs" weight="light" className="font-grotesk">
               Have a question or feed back we are here to help. Send us a
-              message, and we’ll response in 24 hours
+              message, and we’ll respond in 24 hours
             </Text>
             <form className="mt-6 flex flex-col flex-grow w-full h-full gap-4">
               <div className="w-full">
