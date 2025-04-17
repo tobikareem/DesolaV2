@@ -18,10 +18,9 @@ type Props = {
 
 const FlightOffersModal: React.FC<Props> = ({ onClose }) => {
 
-  const {flightLoading, flightResults, FlightSearchFn } = useFlightSearch()
+  const {flightLoading, flightResults, FlightSearchFn, error } = useFlightSearch()
   const {showFlightModal} = useContext(UIContext)
   const [expandedOffers, setExpandedOffers] = React.useState<{ [key: string]: boolean }>({});
-  console.log('flightResults', flightResults)
 
   useEffect(() => {
     if (showFlightModal === true) {
@@ -51,12 +50,12 @@ const FlightOffersModal: React.FC<Props> = ({ onClose }) => {
 
       <div className="py-4 overflow-hidden h-[87%]">
       {flightLoading ? (
-          <div className='block pt-30'>
+          <div className='block pt-40'>
             <LoadingScreen background='bg-transparent' dimension={'w-full h-full'} message={'Loading flight offers...'} />
           </div>
-        ) : flightResults?.offers.length === 0 && !flightLoading ? (
-          <div className='block pt-30'>
-            <EmptyState position={'center'} content={'No flight result, try again later...'} />
+        ) : !flightLoading && (error || flightResults?.offers.length === 0) ? (
+          <div className='block pt-40'>
+            <EmptyState position={'center'} content={error ?? 'No flight result, try again later...'} />
           </div>
         ) : (
         <div className="p-2 md:p-4 lg:p-8 space-y-4 overflow-y-auto h-full border-b-2 border-neutral-300">
@@ -67,14 +66,15 @@ const FlightOffersModal: React.FC<Props> = ({ onClose }) => {
               <div
                 onClick={() => !isExpanded && toggleExpand(offer.id)}
                 key={offer.id}
-                className={` bg-neutral-100 flex flex-col w-full gap-8 ${isExpanded ? 'h-fit':'h-14 lg:h-22'} p-4 lg:p-8 border hover:border-2 hover:border-primary-100 focus-within:border-primary-100 border-neutral-300 rounded-lg transition overflow-hidden box-border`}
+                className={` bg-neutral-100 flex flex-col w-full gap-8 ${isExpanded ? 'h-fit':'h-14 lg:h-22'} p-4 lg:p-8 border hover:border-2
+                 hover:border-primary-100 focus-within:border-primary-100 border-neutral-300 rounded-lg transition overflow-hidden box-border`}
               >
                 <div className={`flex w-full justify-between items-center z-[2] -mt-[7px] lg:-mt-2.5 gap-3`}>
                   <div className='flex items-center gap-4'>
                     <img
                       src={offer.airlineLogo}
                       alt="Airline Logo"
-                      className="size-10 rounded-sm"
+                      className="size-10 rounded-md bg-primary-300 overflow-hidden border-[0.5px] border-neutral-300"
                     />
                     <div className='space-y-1'>
                       <Text as='p' size='sm' weight="medium" color='text-Neutral' className='lg:text-base'>

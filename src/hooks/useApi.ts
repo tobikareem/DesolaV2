@@ -1,6 +1,5 @@
 
 import { useCallback } from 'react';
-import { toast } from 'react-toastify';
 import apiClient from '../services/apiClient';
 
 interface ApiHookResult {
@@ -19,7 +18,6 @@ const useApi = (): ApiHookResult => {
       return response.data;
     } catch (err) {
       console.log('get api:', err);
-      toast.error('Failed to fetch data from the server');
       return undefined;
     }
   }, []);
@@ -30,7 +28,6 @@ const useApi = (): ApiHookResult => {
       return response.data;
     } catch (err) {
       console.log('post api:', err);
-      toast.error('Failed to send data to the server');
       return undefined;
     }
   }, []);
@@ -40,7 +37,6 @@ const useApi = (): ApiHookResult => {
       const response = await apiClient.put<R>(link, update);
       return response.data;
     } catch (err) {
-      toast.error('Failed to update data on the server');
       console.error('put api:', err);
       return undefined;
     }
@@ -51,7 +47,6 @@ const useApi = (): ApiHookResult => {
       const response = await apiClient.patch<R>(link, patch);
       return response.data;
     } catch (err) {
-      toast.error('Failed to update data on the server');
       console.error('patch api:', err);
       return undefined;
     }
@@ -63,7 +58,6 @@ const useApi = (): ApiHookResult => {
       const response = await apiClient.delete<R>(url);
       return response.data;
     } catch (err) {
-      toast.error('Failed to delete data on the server');
       console.error('delete api:', err);
       return undefined;
     }
