@@ -21,7 +21,6 @@ const FlightOffersModal: React.FC<Props> = ({ onClose }) => {
   const {flightLoading, flightResults, FlightSearchFn, error } = useFlightSearch()
   const {showFlightModal} = useContext(UIContext)
   const [expandedOffers, setExpandedOffers] = React.useState<{ [key: string]: boolean }>({});
-  console.log('flightResults', flightResults)
 
   useEffect(() => {
     if (showFlightModal === true) {
@@ -35,8 +34,6 @@ const FlightOffersModal: React.FC<Props> = ({ onClose }) => {
       [offerId]: !prev[offerId]
     }));
   };
-
-  console.log('offers', flightResults?.offers)
 
 
   return (
@@ -69,7 +66,8 @@ const FlightOffersModal: React.FC<Props> = ({ onClose }) => {
               <div
                 onClick={() => !isExpanded && toggleExpand(offer.id)}
                 key={offer.id}
-                className={` bg-neutral-100 flex flex-col w-full gap-8 ${isExpanded ? 'h-fit':'h-14 lg:h-22'} p-4 lg:p-8 border hover:border-2 hover:border-primary-100 focus-within:border-primary-100 border-neutral-300 rounded-lg transition overflow-hidden box-border`}
+                className={` bg-neutral-100 flex flex-col w-full gap-8 ${isExpanded ? 'h-fit':'h-14 lg:h-22'} p-4 lg:p-8 border hover:border-2
+                 hover:border-primary-100 focus-within:border-primary-100 border-neutral-300 rounded-lg transition overflow-hidden box-border`}
               >
                 <div className={`flex w-full justify-between items-center z-[2] -mt-[7px] lg:-mt-2.5 gap-3`}>
                   <div className='flex items-center gap-4'>
