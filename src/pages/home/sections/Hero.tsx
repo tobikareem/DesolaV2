@@ -70,14 +70,7 @@ export const Hero = () => {
           alt="Desola-logo"
           width={1200}
           height={1000}
-          className="hidden xl:block"
-        />
-         <ReactImage
-          src="/Aero.png"
-          alt="Desola-logo"
-          width={600}
-          height={600}
-          className="w-full object-fill object-center xl:hidden"
+          className="object-cover object-center"
         />
       </div>
     </section>

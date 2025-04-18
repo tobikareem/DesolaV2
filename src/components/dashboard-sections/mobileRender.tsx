@@ -49,11 +49,17 @@ const MobileRender: React.FC = () => {
   };
 
   return (
-    <div className={`absolute ${mobileTab !== '' ? 'block' : 'hidden'} bg-white lg:hidden w-screen h-screen py-8`}>
-      <div className="w-full h-full pt-10 px-6">
-        {RenderPage()}
-      </div>
-    </div>
+    <>
+      { mobileTab !== '' ? 
+        <div className={`absolute block bg-white lg:hidden w-screen h-screen py-8`}>
+          <div className="w-full h-full pt-10 px-6">
+            {RenderPage()}
+          </div>
+        </div>
+        : null
+      }
+    </>
+    
   )
 }
 
