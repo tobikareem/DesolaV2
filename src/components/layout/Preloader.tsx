@@ -12,9 +12,9 @@ export const Preloader =({visibility}:{visibility:string | undefined})=> {
       { router.pathname === '/dashboard' ? 
         <div className='bg-background w-full h-full flex flex-col items-center justify-center p-8'>
           <ReactImage
-            src={'/Globe.png'}
+            src={'/Globe.gif'}
             alt='globe'
-            className='size-[180px]'
+            className='size-[120px] '
           />
         </div>  
         :
