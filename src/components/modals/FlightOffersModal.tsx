@@ -64,12 +64,13 @@ const FlightOffersModal: React.FC<Props> = ({ onClose }) => {
 
             return (
               <div
-                onClick={() => !isExpanded && toggleExpand(offer.id)}
+                onClick={()=> {if(!isExpanded) toggleExpand(offer.id)}}
                 key={offer.id}
                 className={` bg-neutral-100 flex flex-col w-full gap-8 ${isExpanded ? 'h-fit':'h-14 lg:h-22'} p-4 lg:p-8 border hover:border-2
                  hover:border-primary-100 focus-within:border-primary-100 border-neutral-300 rounded-lg transition overflow-hidden box-border`}
               >
-                <div className={`flex w-full justify-between items-center z-[2] -mt-[7px] lg:-mt-2.5 gap-3`}>
+                <div 
+                  className={`flex w-full justify-between items-center z-[2] -mt-[7px] lg:-mt-2.5 gap-3`}>
                   <div className='flex items-center gap-4'>
                     <img
                       src={offer.airlineLogo}
@@ -122,7 +123,10 @@ const FlightOffersModal: React.FC<Props> = ({ onClose }) => {
                     </Text>
                   </div>
                   <IoIosArrowDown
-                    onClick={() => toggleExpand(offer.id)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleExpand(offer.id);
+                    }}
                     className={`${isExpanded ? 'rotate-0' : '-rotate-90'} duration-300 ease-in-out cursor-pointer`}
                   />
                 </div>

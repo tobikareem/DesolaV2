@@ -4,7 +4,7 @@ import { Text } from "../ui/TextComp";
 const LoadingScreen = ({message, dimension='w-screen h-screen',background = 'bg-background'}: {message: string, dimension:'w-screen h-screen' | 'w-full h-full', background:string}) => (
     <div className={`flex flex-col gap-8 items-center justify-center ${dimension} ${background}`}>
         <ReactImage
-            src="/Globe.png"
+            src="/Globe.gif"
             alt="Globe"
             className="w-[120px]"
         />

@@ -23,7 +23,7 @@ export const ProfileSection = () => {
                     onClick={async () => await authService.editUserProfile()}
                     className="mt-4 bg-primary-500 text-white px-6 py-2"
                 >
-                    Edit Profile in Azure B2C
+                    Edit Profile
                 </Btn>
             </div>
         </div >
