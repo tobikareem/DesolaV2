@@ -23,7 +23,6 @@ export interface UserPreferences {
   userId: string;
 }
 
-
 export const useAirports = () => {
   const [airportSuggestions, setAirportSuggestions] = useState<Airport[]>([]);
   const [loading, setLoading] = useState(false);
@@ -262,5 +261,3 @@ export const useDashboardInfo = () => {
     loadPreferences
   };
 };
-
-
