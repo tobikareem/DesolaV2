@@ -87,34 +87,27 @@ const Dashboard: React.FC = () => {
 
     const analysis = analyzeLastMessage(lastBotMessage);
 
+    let finalInputValue = '';
+
     if (analysis.mentionFlyingFrom && preferences?.originAirport) {
       const airport = airportSuggestions.find(airport => airport.code === preferences.originAirport);
-
       if (airport) {
-        setTimeout(() => {
-          setInputValue(`${airport.name} (${airport.code})`);
-        }, 0);
+        finalInputValue = `${airport.name} (${airport.code})`;
       }
     }
 
     if (analysis.mentionFlyingTo && preferences?.destinationAirport) {
       const airport = airportSuggestions.find(airport => airport.code === preferences.destinationAirport);
-
       if (airport) {
-        setTimeout(() => {
-          setInputValue(`${airport.name} (${airport.code})`);
-        }, 0);
+        finalInputValue = `${airport.name} (${airport.code})`;
       }
     }
 
     if (analysis.needsClass && preferences?.travelClass) {
-
-      setTimeout(() => {
-        setInputValue(`${preferences.travelClass}`);
-      }, 0);
-
+      finalInputValue = `${preferences.travelClass}`;
     }
 
+    setInputValue(finalInputValue);
   }, [chatLog, preferences, airportSuggestions, setInputValue]);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
