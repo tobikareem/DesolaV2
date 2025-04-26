@@ -39,7 +39,9 @@ const analyzeLastMessage = (message?: string) => {
       lowerMessage.includes('from') ||
       lowerMessage.includes('to'),
     needsClass: lowerMessage.includes('class'),
-    needsRoute: lowerMessage.includes('route') || lowerMessage.includes('way')
+    needsRoute: lowerMessage.includes('route') || lowerMessage.includes('way'),
+    mentionFlyingFrom: lowerMessage.includes('flying from'),
+    mentionFlyingTo: lowerMessage.includes('destination'),
   };
 };
 
@@ -49,10 +51,10 @@ const Dashboard: React.FC = () => {
   const { toggleModal } = useContext(UIContext);
   // Custom hooks
   const { showEditModal, setShowEditModal, showCalendar, setShowCalendar, showPopData, setShowPopData, setSearchParam, searchParam } = useModals();
-  const {inputValue, setInputValue, dateSelect, setDateSelect, setDate, date} = useInput();
+  const { inputValue, setInputValue, dateSelect, setDateSelect, setDate, date } = useInput();
   const { fetchAirports, airportSuggestions } = useAirports();
-  const { preferences, loadPreferences } = useDashboardInfo();
-  const {FlightSearchFn} = useFlightSearch();
+  const { loadPreferences, preferences } = useDashboardInfo();
+  const { FlightSearchFn } = useFlightSearch();
   const debounce = useDebounce();
   // Local UI state
   const [botLoader, setBotLoader] = useState(false);
@@ -74,6 +76,46 @@ const Dashboard: React.FC = () => {
     }
 
   }, [fetchAirports, loadPreferences, isAuthenticated]);
+
+  useEffect(() => {
+
+    if (chatLog.length === 0) return;
+
+    const lastBotMessage = [...chatLog].reverse().find(msg => msg.sender === 'bot')?.message;
+
+    setInputValue('');
+
+    const analysis = analyzeLastMessage(lastBotMessage);
+
+    if (analysis.mentionFlyingFrom && preferences?.originAirport) {
+      const airport = airportSuggestions.find(airport => airport.code === preferences.originAirport);
+
+      if (airport) {
+        setTimeout(() => {
+          setInputValue(`${airport.name} (${airport.code})`);
+        }, 0);
+      }
+    }
+
+    if (analysis.mentionFlyingTo && preferences?.destinationAirport) {
+      const airport = airportSuggestions.find(airport => airport.code === preferences.destinationAirport);
+
+      if (airport) {
+        setTimeout(() => {
+          setInputValue(`${airport.name} (${airport.code})`);
+        }, 0);
+      }
+    }
+
+    if (analysis.needsClass && preferences?.travelClass) {
+
+      setTimeout(() => {
+        setInputValue(`${preferences.travelClass}`);
+      }, 0);
+
+    }
+
+  }, [chatLog, preferences, airportSuggestions, setInputValue]);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -136,7 +178,7 @@ const Dashboard: React.FC = () => {
   const handleCloseCalendar = () => setShowCalendar(false);
 
   const handleDateSelect = (arg: DateSelectArg) => {
-    const formattedDate = arg.start?.toISOString().split('T')[0]; 
+    const formattedDate = arg.start?.toISOString().split('T')[0];
     setInputValue(formattedDate || '');
     setDate(arg.start);
   };
@@ -144,7 +186,6 @@ const Dashboard: React.FC = () => {
   const updateDateSelect = () => {
     setDateSelect(date);
   };
-
 
   const handleSubmitDate = () => {
     if (inputValue.length !== 0) {
@@ -155,8 +196,6 @@ const Dashboard: React.FC = () => {
       toast.error('Pick a date');
     }
   };
-
-
 
   const handleSelectSuggestion = (value: string) => {
     setInputValue(value);
@@ -171,21 +210,6 @@ const Dashboard: React.FC = () => {
     if (!lastBotMessage) return;
 
     const analysis = analyzeLastMessage(lastBotMessage);
-
-    if (lastBotMessage.toLowerCase().includes('flying from') && preferences?.originAirport) {
-      const airport = airportSuggestions.find(airport => airport.code === preferences.originAirport);
-      if (airport) {
-        // setInputValue(`${airport?.name} (${airport?.code})`);
-      }
-    } else if (lastBotMessage.toLowerCase().includes('destination') && preferences?.destinationAirport) {
-      const airport = airportSuggestions.find(airport => airport.code === preferences.destinationAirport);
-      if (airport) {
-        // setInputValue(`${airport?.name} (${airport?.code})`);
-      }
-    } else if (analysis.needsClass && lastBotMessage.toLowerCase().includes('class') && preferences?.travelClass) {
-      // setInputValue(preferences.travelClass);
-    }
-
 
     if (analysis.needsDate) {
       setShowCalendar(true);
@@ -218,10 +242,10 @@ const Dashboard: React.FC = () => {
         <RecentPromptsBar prompts={recentPrompts} onEditClick={toggleEditModal} />
 
         <div className={`flex lg:hidden w-full mt-14 justify-end items-center px-5`}>
-          <PenLine onClick={toggleEditModal} className={`${recentPrompts?.length != 0 ? '':'hidden'} text-primary-500 text-4xl`} />
+          <PenLine onClick={toggleEditModal} className={`${recentPrompts?.length != 0 ? '' : 'hidden'} text-primary-500 text-4xl`} />
         </div>
 
-        <ChatHistory chatLog={chatLog} botLoader={botLoader} isLoading={chatLoading}/>
+        <ChatHistory chatLog={chatLog} botLoader={botLoader} isLoading={chatLoading} />
 
         {Array.isArray(recentPrompts) && (isOneWay ? recentPrompts.length >= 5 : recentPrompts.length >= 6) && (
           <Btn
