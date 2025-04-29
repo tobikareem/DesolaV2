@@ -1,0 +1,54 @@
+@baseUrl = {{$dotenv VITE_API_BASE_URL}}
+@apiToken = {{$dotenv VITE_API_TOKEN}}
+@contentType = application/json
+
+## API Calls requests
+@faq  = FAQ
+@monthlyYearlyPrice = MonthlyYearlyPrice
+@priceDetails = PriceDetails
+@phoneDetails = PhoneAndEmail
+@userId = 78af2b87-6e98-4eec-91ba-2d12d36e71c3
+@airportName = IAH
+@airlineCode = AA
+
+### Fetch FAQ from Home Page
+#@name pageContent
+GET {{baseUrl}}/page/Home/{{priceDetails}}
+X-Functions-Key: {{apiToken}}
+Content-Type: {{contentType}} 
+
+### Fetch MonthlyYearly Price from Home Page
+#@name pageContent
+GET {{baseUrl}}/page/Contact/{{phoneDetails}}
+X-Functions-Key: {{apiToken}}
+Content-Type: {{contentType}}
+
+### Fetch all airports
+#@name airports
+GET {{baseUrl}}/airports
+X-Functions-Key: {{apiToken}}
+Content-Type: {{contentType}}
+
+### Fetch airport autocomplete
+#@name airportAutocomplete
+GET {{baseUrl}}/airports/autocomplete?name={{airportName}}
+X-Functions-Key: {{apiToken}}
+Content-Type: {{contentType}}
+
+### Fetch all airline
+#@name airlineDetails
+GET {{baseUrl}}/airline/all
+X-Functions-Key: {{apiToken}}
+Content-Type: {{contentType}}
+
+# ### Fecth a particular airline route
+# #@name airlineDetails
+# GET {{baseUrl}}/airline/route?airlineCode={{airlineCode}}&max=20&countryCode=US
+# X-Functions-Key: {{apiToken}}
+# Content-Type: {{contentType}}
+
+### Fetch Travel Preference for User
+#@name travelPreference
+GET {{baseUrl}}/user/preferences/{{userId}}
+X-Functions-Key: {{apiToken}}
+Content-Type: {{contentType}}
