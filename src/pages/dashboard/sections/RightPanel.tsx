@@ -171,7 +171,7 @@ export const RightPanel: React.FC = () => {
             {/* Search Button */}
             <div className="h-30 border-t items-center flex p-7">
               <Btn
-                className={`${selectedTab !== 'home' ? 'hidden' : ''} p-1 w-full max-w-[385px] ${isSearchEnabled()
+                className={`p-1 w-full max-w-[385px] ${isSearchEnabled()
                   ? 'bg-gradient-to-b from-[#FF9040] to-[#FF6B00] text-white'
                   : 'bg-neutral-300 text-neutral-500 cursor-not-allowed opacity-50'
                   }`}

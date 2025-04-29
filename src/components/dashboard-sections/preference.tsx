@@ -97,12 +97,12 @@ export const PreferencesSection = ({
                     Preferred Class of Travel
                 </label>
                 <Listbox
-                        name="travelClass"
-                        value={preferences.travelClass}
-                        onChange={(value) => {
-                            onChange({ target: { name: 'travelClass', value } } as React.ChangeEvent<HTMLSelectElement>)
-                        }}
-                    >
+                    name="travelClass"
+                    value={preferences.travelClass}
+                    onChange={(value) => {
+                        onChange({ target: { name: 'travelClass', value } } as React.ChangeEvent<HTMLSelectElement>)
+                    }}
+                >
                     <ListboxButton className="font-work flex items-center w-full border px-4 py-2 rounded-[10px] justify-between hover:bg-neutral-300 text-Neutral font-medium">
                         <span>
                             {preferences.travelClass}

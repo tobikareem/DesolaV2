@@ -39,9 +39,9 @@ export const MobileFlightExtDetails:React.FC<FlightDetails> =({duration, route, 
             {airCodeII}
           </Text> 
         </div>
-        <Link to={source ?? '#'} className='font-work flex items-center rounded-lg bg-primary-100 px-2.5 py-1.5 text-xs'>
+        {/* <Link to={source ?? '#'} className='font-work flex items-center rounded-lg bg-primary-100 px-2.5 py-1.5 text-xs'>
           Website Link
-        </Link>
+        </Link> */}
         <div className='space-y-1'>
           <Text as='p'size='sm'color='text-success' weight="medium" className='lg:text-base'>
             ${price}
