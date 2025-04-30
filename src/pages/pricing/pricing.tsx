@@ -8,17 +8,24 @@ import { Input } from "../../components/ui/InputField";
 import { Text } from "../../components/ui/TextComp";
 import { Listbox, ListboxButton, ListboxOption, ListboxOptions } from '@headlessui/react'
 import { MdKeyboardArrowDown } from "react-icons/md";
+import { WEB_PAGES } from "../../utils/constants";
+import { ENDPOINTS_API_PATH } from "../../utils/endpoints";
+import usePageContent from "../../hooks/usePageContent";
 
 
 
 const Pricing =()=> {
-  const price='' 
-  const period=''
+  const { content: monthlyYearly } = usePageContent(`${ENDPOINTS_API_PATH.page}`, `${WEB_PAGES.home}`, "MonthlyYearlyPrice");
+  const monthlyPrice = monthlyYearly?.RowValue?.split(";")[0] ?? '2.59';
+  const yearlyPrice = monthlyYearly?.RowValue?.split(";")[1] ?? '30.59';
   const plans = ['Yearly','Monthly']
   const [selectedPlan, setSelectedPlan] = useState<string>(plans[0])
   const [selectRegion, setSelectRegion] = useState<string>('Select Country');
   const [selectMode, setSelectMode] = useState<string>('')
   const modeOfPayment = ['Debit/Credit Card','Paypal']
+
+  const price = selectedPlan == 'Yearly' ? yearlyPrice : monthlyPrice
+  const period = ''
 
   const Regions = [
     'United State of America', 'United Kingdom', 'Nigeria'
@@ -49,7 +56,7 @@ const Pricing =()=> {
                     </Label>
                     <div className={`flex items-center font-medium text-sm ${plan == 'Monthly' ? 'text-primary-500':'text-Neutral'} gap-1`}>
                       {plan == 'Yearly' && <div className="bg-primary-500/5 text-primary-500 px-1 rounded ">Save10%</div>}
-                      <span className="">${}/{plan}</span>
+                      <span className="">${price}/{plan}</span>
                     </div>
                   </div>
                 </Field>
@@ -191,7 +198,7 @@ const Pricing =()=> {
           <Btn onClick={()=> {}}
             weight="semibold" fontStyle="work" radius="48px"
             className="mt-[68px] bg-gradient-to-b text-nowrap from-[#FF9040] to-[#FF6B00] w-full h-9 text-base text-neutral-100">
-            Pay Now ${''}/{selectedPlan}
+            Pay Now ${price}/{selectedPlan}
           </Btn>
         </div>
       </div>
