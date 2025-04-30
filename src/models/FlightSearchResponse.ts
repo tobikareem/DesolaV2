@@ -32,7 +32,7 @@ export function transformApiToUiResponse(apiResponse: ApiFlightSearchResponse): 
                 ...offer,  // Keep all the original offer properties
 
                 // Add UI-specific fields
-                airlineLogo: firstSegment.airLineLogo, // Placeholder URL for airline logo
+                airlineLogo: firstSegment.airlineLogo,
                 departureTime: firstSegment.departure.formattedDateTime,
                 duration: firstItinerary.formattedDuration,
                 classType: firstSegment.cabinClass || 'Economy',

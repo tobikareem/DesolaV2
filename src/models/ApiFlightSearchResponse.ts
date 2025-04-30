@@ -57,7 +57,7 @@ export interface ApiFlightOffer {
             flightNumber: string;
             aircraftType: string;
             cabinClass: string | null;
-            airLineLogo: string;
+            airlineLogo: string;
             baggageAllowance: {
                 checkedBags: number;
                 weightKg: number | null;
