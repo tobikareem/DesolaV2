@@ -191,7 +191,7 @@ const FlightOffersModal: React.FC<Props> = ({ onClose }) => {
                           Baggage Allowance
                         </Text>
                         <Text as='p' size='xs' weight="normal" color='text-neutral-500' className='truncate'>
-                          {offer.baggageAllowance.description || `Checked bags: ${offer.baggageAllowance.checkedBags}`}
+                          {offer.baggageAllowance?.description || `Checked bags: ${offer.baggageAllowance?.checkedBags}`}
                         </Text>
                       </div>
                       <Link
