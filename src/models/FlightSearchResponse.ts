@@ -20,11 +20,6 @@ export interface FlightOffer extends ApiFlightOffer {
 
 export function transformApiToUiResponse(apiResponse: ApiFlightSearchResponse): FlightSearchResponse {
     // mapping of airline codes to logo URLs
-    const airlineLogoMap: Record<string, string> = {
-        'F9': 'https://example.com/logos/frontier.png',
-        'NK': 'https://example.com/logos/spirit.png',
-        'UA': 'https://example.com/logos/united.png',
-    };
 
     return {
         ...apiResponse,  // let us keep all original API response properties
@@ -32,16 +27,12 @@ export function transformApiToUiResponse(apiResponse: ApiFlightSearchResponse): 
             const firstItinerary = offer.itineraries[0];
             const firstSegment = firstItinerary.segments[0];
             const lastSegment = firstItinerary.segments[firstItinerary.segments.length - 1];
-
-            // Extract airline code from validatingCarrier field (e.g., "UA - United Airlines" -> "UA")
-            const airlineCode = offer.validatingCarrier.split(' ')[0];
-
             // Return the original offer plus the UI-specific fields
             return {
                 ...offer,  // Keep all the original offer properties
 
                 // Add UI-specific fields
-                airlineLogo: airlineLogoMap[airlineCode] || 'https://example.com/logos/default.png',
+                airlineLogo: firstSegment.airlineLogo,
                 departureTime: firstSegment.departure.formattedDateTime,
                 duration: firstItinerary.formattedDuration,
                 classType: firstSegment.cabinClass || 'Economy',
