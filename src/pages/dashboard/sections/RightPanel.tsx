@@ -1,10 +1,9 @@
-// src/features/dashboard/sections/RightPanel.tsx
+
 import { Headset, House, LogOut, Trash2, User } from 'lucide-react';
 import React, { useContext, useEffect, useState } from 'react';
 import { PiHeadsetFill, PiRoadHorizonBold, PiRoadHorizonFill, PiTrashFill } from 'react-icons/pi';
 import { RiHome5Fill, RiUserFill } from 'react-icons/ri';
 import { useNavigate } from 'react-router';
-
 import { SidebarLogout } from '../../../components/dashboard-sections/sidebar/SidebarLogout';
 import { SidebarTab } from '../../../components/dashboard-sections/sidebar/SidebarTab';
 import { ClearChat } from '../../../components/modals/ClearChat';
@@ -16,7 +15,6 @@ import { ChatContext } from '../../../contexts/ChatContext';
 import { NavigationContext } from '../../../contexts/NavigationContext';
 import { NavItem } from '../../../contexts/types';
 import { UIContext } from '../../../contexts/UIContext';
-import { useFlightSearch } from '../../../hooks/useDashboardInfo';
 import authService from '../../../services/authService';
 import { CustomStorage } from '../../../utils/customStorage';
 import { HomeContent } from './HomeContent';
@@ -24,6 +22,8 @@ import { PathContent } from './PathContent';
 import { SupportContent } from './SupportContent';
 import { TrashContent } from './TrashContent';
 import { UserContent } from './UserContent';
+import { SubscriptionContent } from './SubscriptionContent';
+import { TbCreditCard, TbCreditCardFilled } from 'react-icons/tb';
 
 const storageService = new CustomStorage();
 
@@ -33,7 +33,6 @@ export const RightPanel: React.FC = () => {
   const { setNavigationData } = useContext(NavigationContext);
   const { showLogoutModal, showDeleteModal, showFlightModal, toggleModal } = useContext(UIContext);
   const { travelInfo } = useContext(ChatContext);
-  const { FlightSearchFn } = useFlightSearch();
 
   const getRequiredFields = (route: string) => {
     const isOneWay = route?.toLowerCase().startsWith('one way');
@@ -66,13 +65,13 @@ export const RightPanel: React.FC = () => {
     { id: 'road', icon: <PiRoadHorizonBold size={24} />, icon2: <PiRoadHorizonFill />, label: 'Trips' },
     { id: 'trash', icon: <Trash2 size={24} />, icon2: <PiTrashFill />, label: 'Clear Chat' },
     { id: 'user', icon: <User size={24} />, icon2: <RiUserFill />, label: 'Profile' },
+    {id: 'subscription', icon: <TbCreditCard />, icon2: <TbCreditCardFilled />, label: 'Subscription'},
     { id: 'support', icon: <Headset size={24} />, icon2: <PiHeadsetFill />, label: 'Support' },
   ];
 
   useEffect(() => {
     setNavigationData(sidebarOptions);
   }, []);
-
 
   const handleTabClick = (tabId: string) => {
     setSelectedTab(tabId);
@@ -113,6 +112,7 @@ export const RightPanel: React.FC = () => {
     road: React.FC<PathContentProps>;
     trash: React.FC<NoProps>;
     user: React.FC<NoProps>;
+    subscription: React.FC<NoProps>;
     support: React.FC<NoProps>;
   };
 
@@ -121,6 +121,7 @@ export const RightPanel: React.FC = () => {
     road: PathContent,
     trash: TrashContent,
     user: UserContent,
+    subscription: SubscriptionContent,
     support: SupportContent,
   };
 
@@ -132,7 +133,7 @@ export const RightPanel: React.FC = () => {
     }
 
     // For components that don't need props
-    const Component = TAB_COMPONENTS[selectedTab as 'road' | 'trash' | 'user' | 'support'];
+    const Component = TAB_COMPONENTS[selectedTab as 'road' | 'trash' | 'user' | 'subscription' | 'support'];
     return Component ? <Component departure={''} destination={''} departureDate={''} returnDate={''} travelRoute={''} flightClass={''} /> : null;
   };
 
@@ -178,7 +179,6 @@ export const RightPanel: React.FC = () => {
                 onClick={() => {
                   if (isSearchEnabled()) {
                     toggleModal('flight');
-                    FlightSearchFn();
                   }
                 }}
               >

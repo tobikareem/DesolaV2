@@ -6,7 +6,7 @@ interface PricingCardProps {
   children?: ReactNode;
 }
 
-export const PricingTitle =({title}:{title?:string;})=> <Text as='h4' weight='medium' color='text-Neutral' fontStyle='grotesk' size='lg' className="sm:!text-xl" >
+export const PricingTitle =({title}:{title?:string;})=> <Text as='h4' weight='medium' color='text-Neutral' fontStyle='font-grotesk' size='lg' className="sm:!text-xl" >
   {title}
 </Text>
 

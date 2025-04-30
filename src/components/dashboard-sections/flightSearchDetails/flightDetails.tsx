@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom"
+
 import { Text } from "../../ui/TextComp"
 
 export type FlightDetails = {
@@ -12,7 +12,7 @@ export type FlightDetails = {
   price?:number
 }
 
-export const MobileFlightExtDetails:React.FC<FlightDetails> =({duration, route, price, airCodeII, airCraft, flightClass, stops,source})=> {
+export const MobileFlightExtDetails:React.FC<FlightDetails> =({duration, route, price, airCodeII, airCraft, flightClass, stops})=> {
   return (
       <div className='flex-wrap flex lg:hidden w-full gap-2 justify-between items-center'>
         <div className='space-y-1'>

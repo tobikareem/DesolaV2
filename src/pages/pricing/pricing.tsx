@@ -1,32 +1,21 @@
 import { useState } from "react";
 import { PricingCard, PricingTitle } from "./PricingCard";
-import { Field, Label, Radio, RadioGroup } from '@headlessui/react'
 import { Logo } from "../../components/layout/Logo";
 import { Btn } from "../../components/ui/Button";
-import {Img as ReactImage} from "react-image";
 import { Input } from "../../components/ui/InputField";
 import { Text } from "../../components/ui/TextComp";
 import { Listbox, ListboxButton, ListboxOption, ListboxOptions } from '@headlessui/react'
 import { MdKeyboardArrowDown } from "react-icons/md";
-import { WEB_PAGES } from "../../utils/constants";
-import { ENDPOINTS_API_PATH } from "../../utils/endpoints";
-import usePageContent from "../../hooks/usePageContent";
+import { BillFrequency } from "./BillFrequency";
+import { useSubscription } from "../../hooks/useSubscription";
+import { PaymentMethod } from "./PaymentMethod";
 
 
 
 const Pricing =()=> {
-  const { content: monthlyYearly } = usePageContent(`${ENDPOINTS_API_PATH.page}`, `${WEB_PAGES.home}`, "MonthlyYearlyPrice");
-  const monthlyPrice = monthlyYearly?.RowValue?.split(";")[0] ?? '2.59';
-  const yearlyPrice = monthlyYearly?.RowValue?.split(";")[1] ?? '30.59';
-  const plans = ['Yearly','Monthly']
-  const [selectedPlan, setSelectedPlan] = useState<string>(plans[0])
+  const {selectedPlan, setSelectedPlan, monthlyPrice, yearlyPrice, plans, price} = useSubscription();
   const [selectRegion, setSelectRegion] = useState<string>('Select Country');
-  const [selectMode, setSelectMode] = useState<string>('')
-  const modeOfPayment = ['Debit/Credit Card','Paypal']
-
-  const price = selectedPlan == 'Yearly' ? yearlyPrice : monthlyPrice
   const period = ''
-
   const Regions = [
     'United State of America', 'United Kingdom', 'Nigeria'
   ]
@@ -36,58 +25,14 @@ const Pricing =()=> {
       <div className="mx-auto w-fit"><Logo/></div>
       <div className='relative flex flex-col lg:flex-row w-full p-4 md:p-8 lg:pb-16 lg:px-28 gap-8 lg:gap-12'>
         <div className='flex flex-col w-full max-w-3xl gap-8'>
-          <PricingCard title="BILL FREQUENCY">
-            <RadioGroup value={selectedPlan} 
-              onChange={setSelectedPlan} 
-              aria-label="Payment Plan" className='w-full space-y-4'
-            >
-              {plans.map((plan) => (
-                <Field key={plan}
-                  className="group flex items-center gap-3 w-full cursor-pointer">
-                  <Radio
-                    value={plan}
-                    className={`flex size-4 md:size-6 items-center justify-center rounded-full border-2 border-modal bg-transparent group-data-[checked]:border-primary-500`}
-                  >
-                    <span className={`size-2 md:size-4 rounded-full bg-modal group-data-[checked]:bg-primary-500`} />
-                  </Radio>
-                  <div className={`flex items-center w-full h-12 lg:h-[52px] justify-between p-2 md:p-2.5 rounded-[10px] border border-modal group-data-[checked]:border-primary-500`}>
-                    <Label className="font-work font-medium text-base text-Neutral">
-                      {plan}
-                    </Label>
-                    <div className={`flex items-center font-medium text-sm ${plan == 'Monthly' ? 'text-primary-500':'text-Neutral'} gap-1`}>
-                      {plan == 'Yearly' && <div className="bg-primary-500/5 text-primary-500 px-1 rounded ">Save10%</div>}
-                      <span className="">${price}/{plan}</span>
-                    </div>
-                  </div>
-                </Field>
-              ))}
-            </RadioGroup>
-          </PricingCard>
-          <PricingCard title="SELECT PAYMENT METHOD">
-            <div className='space-y-4'>
-              { modeOfPayment?.map((mode)=>(
-                <Btn key={mode}
-                  type="button" weight="medium"
-                  value={mode}
-                  onClick={()=> setSelectMode(mode)}
-                  className={`flex items-center w-full h-12 lg:h-[52px] justify-between !p-2 !md:p-2.5 !text-left !rounded-[10px] border ${selectMode == mode ? 'border-primary-300' : 'border-modal'}`}>
-                  <div className="flex items-center gap-1">
-                    <label className="font-work font-medium text-base text-Neutral">
-                      {mode}
-                    </label>
-                    {mode == 'Paypal' && <ReactImage src={'/PayPal.webp'} alt='' width={26} height={18} loading={'lazy'}/>}
-                  </div>
-                  <div className='flex items-center gap-1'>
-                    {mode != 'Paypal' && 
-                      ['Visa','Mastercard','Amex','Discover'].map((item)=>(
-                        <ReactImage key={item} src={`/${item}.webp`} alt='' width={26} height={18} loading={'lazy'}/>
-                      ))
-                    }
-                  </div>
-                </Btn>
-              ))}
-            </div>
-          </PricingCard>
+          <BillFrequency 
+            plans={plans}
+            selectedPlan={selectedPlan}
+            setSelectedPlan={setSelectedPlan}
+            MonthlyPrice={monthlyPrice}
+            YearlyPrice={yearlyPrice}
+          />
+          <PaymentMethod/>
           <PricingCard>
             <div className="space-y-4">
               <Input 
