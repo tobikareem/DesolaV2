@@ -1,3 +1,4 @@
+import { Listbox, ListboxOption} from '@headlessui/react'
 
 type Airport = {
     code: string;
@@ -20,24 +21,24 @@ export const AirportSuggestions = ({
     if (!isVisible || suggestions.length === 0) return null;
 
     return (
-        <select
-            name="airportSuggestions"
-            title="airportSuggestions"
-            id={id}
-            className="absolute bg-white border shadow-lg rounded-lg w-full max-h-48 overflow-y-auto"
-            size={Math.min(suggestions.length, 5)}
-            onChange={(e) => onSelect(e.target.value)}
-            onBlur={() => { }}
-        >
-            <option value="" disabled>Select an airport</option>
-            {suggestions.map((airport) => (
-                <option
+        <div className="absolute z-10 bg-neutral-200 border shadow-lg rounded-lg w-full max-h-48 overflow-y-auto">
+            <Listbox
+                name="airportSuggestions"
+                onChange={(value) => onSelect(value)}
+            >
+            <ListboxOption value="" disabled className={'font-work border-b border-neutral-100 w-full px-4 py-2 hover:bg-primary-600 hover:text-white text-Neutral text-xs font-medium cursor-pointer'}>
+                Select an airport
+            </ListboxOption>
+            {suggestions.slice(0,5)?.map((airport) => (
+                <ListboxOption
                     key={airport.code}
                     value={airport.code}
+                    className="font-work border-b border-neutral-100 w-full px-4 py-2 hover:bg-primary-600 hover:text-white text-Neutral text-xs font-medium cursor-pointer"
                 >
                     {airport.name} ({airport.code}) - {airport.city}
-                </option>
+                </ListboxOption>
             ))}
-        </select>
+            </Listbox>
+        </div>
     );
 };

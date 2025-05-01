@@ -28,7 +28,7 @@ export const HomeContent: React.FC<homeProps> = ({
   const isOneWay = travelRoute.toLowerCase().includes('one way');
 
   return (
-    <div className="flex-1 overflow-y-auto">
+    <div className="flex-1">
       <Text
         as="h1"
         size="2xl"
