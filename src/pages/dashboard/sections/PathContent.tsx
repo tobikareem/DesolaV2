@@ -1,6 +1,7 @@
 import { SlidersHorizontal, PlaneTakeoff, CalendarCheck, PlaneLanding, Plane, Route } from "lucide-react";
 import { Text } from "../../../components/ui/TextComp"
 import { Btn } from "../../../components/ui/Button";
+import { useState } from "react";
 
 interface PathContentProps {
   departure: string;
@@ -26,6 +27,8 @@ export const PathContent: React.FC<PathContentProps> = ({
     year: 'numeric'
   });
 
+  const [selectPeriod, setSelectPeriod] = useState<string>('Today');
+
   return (
     <div className=" flex-1 overflow-y-auto">
       <Text
@@ -37,19 +40,18 @@ export const PathContent: React.FC<PathContentProps> = ({
         My Trips
       </Text>
       <div className="flex items-center h-['100px'] mb-2 pb-3 gap-3 bg-white w-full">
-        <Btn className="bg-primary-100 cursor-pointer" size="sm">
-          Today
-        </Btn>
-        <Btn className="cursor-pointer" size="sm">
-          Yesterday
-        </Btn>
-        <Btn size="sm" className="cursor-pointer">
-          1 Week ago
-        </Btn>
-        <Btn className="flex items-center cursor-pointer gap-2" size="sm">
-          <Text className="">Filter</Text>
-          <SlidersHorizontal className="mt-0.5" size={14} />
-        </Btn>
+        {
+          ['Today','Yesterday','1 Week ago', 'Filter'].map((period)=>(
+            <Btn key={period}
+              onClick={()=> setSelectPeriod(period)}
+              type="submit"
+              className={`flex items-center cursor-pointer gap-2  ${selectPeriod == period ? 'bg-primary-100':''}`} size="sm">
+              <Text className="">{period}</Text>
+              {period == 'Filter' && <SlidersHorizontal className="mt-0.5" size={14} />}
+            </Btn>
+          ))
+
+        }
       </div>
       {
         <div className="flex flex-col gap-4 py-4 border-t border-t-neutral-300">
