@@ -59,7 +59,10 @@ export const CardDetails =()=> {
         <span className="text-xl mr-2">+</span> Add new card
       </Btn>
       <Modal display={showDeleteModal} close={()=> setShowDeleteModal(false)}>
-        <ClearChat Action={()=> setShowDeleteModal(!showDeleteModal)} ConfirmAction={() => handleCardDeletion()} Message={`Are you sure you want to delete card with number ${selectedCardId}?`}/>
+        <ClearChat Action={()=> setShowDeleteModal(!showDeleteModal)} 
+          ConfirmAction={handleCardDeletion} 
+          Message={`Are you sure you want to delete card with number ${selectedCardId}?`}
+        />
       </Modal>
     </PricingCard>
   )
