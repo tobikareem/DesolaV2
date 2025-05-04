@@ -18,7 +18,7 @@ import { UIContext } from '../../../contexts/UIContext';
 import authService from '../../../services/authService';
 import { CustomStorage } from '../../../utils/customStorage';
 import { HomeContent } from './HomeContent';
-import { PathContent } from './PathContent';
+import { TripHistoryContent } from './TripHistoryContent';
 import { SupportContent } from './SupportContent';
 import { TrashContent } from './TrashContent';
 import { UserContent } from './UserContent';
@@ -118,7 +118,7 @@ export const RightPanel: React.FC = () => {
 
   const TAB_COMPONENTS: TabComponentMap = {
     home: HomeContent,
-    road: PathContent,
+    road: TripHistoryContent,
     trash: TrashContent,
     user: UserContent,
     subscription: SubscriptionContent,
