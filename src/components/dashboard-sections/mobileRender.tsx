@@ -1,7 +1,7 @@
 
 import React, { useContext } from "react";
 import { ChatContext } from "../../contexts/ChatContext";
-import { PathContent } from "../../pages/dashboard/sections/PathContent";
+import { TripHistoryContent } from "../../pages/dashboard/sections/TripHistoryContent";
 import { SupportContent } from "../../pages/dashboard/sections/SupportContent";
 import { TrashContent } from "../../pages/dashboard/sections/TrashContent";
 import { UserContent } from "../../pages/dashboard/sections/UserContent";
@@ -18,7 +18,7 @@ const MobileRender: React.FC = () => {
     switch (mobileTab) {
       case 'road':
         return (
-          <PathContent
+          <TripHistoryContent
             departure={travelInfo.departure}
             destination={travelInfo.destination}
             departureDate={travelInfo.departureDate}
