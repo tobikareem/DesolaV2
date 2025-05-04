@@ -192,8 +192,7 @@ export const RightPanel: React.FC = () => {
       <Modal display={showDeleteModal} close={() => toggleModal('delete')}>
         <ClearChat
           Action={() => toggleModal('delete')}
-          ConfirmAction={handleConfirmDelete}
-          Message={""}
+          ConfirmAction={handleConfirmDelete} Message={null}
         />
       </Modal>
 
