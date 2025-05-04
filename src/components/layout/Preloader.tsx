@@ -14,7 +14,7 @@ export const Preloader =({visibility}:{visibility:string | undefined})=> {
           <ReactImage
             src={'/Globe.gif'}
             alt='globe'
-            className='size-[120px] '
+            className='size-[120px]'
           />
         </div>  
         :

@@ -32,7 +32,7 @@ export function transformApiToUiResponse(apiResponse: ApiFlightSearchResponse): 
                 ...offer,  // Keep all the original offer properties
 
                 // Add UI-specific fields
-                airlineLogo: firstSegment.airlineLogo,
+                airlineLogo: firstSegment.airlineLogo ?? `https://logos.skyscnr.com/images/airlines/favicon/${firstSegment.marketingAirline}`,
                 departureTime: firstSegment.departure.formattedDateTime,
                 duration: firstItinerary.formattedDuration,
                 classType: firstSegment.cabinClass || 'Economy',

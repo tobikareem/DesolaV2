@@ -1,24 +1,26 @@
+import './App.css';
 import { AuthenticatedTemplate } from '@azure/msal-react';
-import { JSX, useEffect, useState } from 'react';
+import { JSX, useEffect, useState, Suspense, lazy } from 'react';
 import { Route, Routes, useLocation } from 'react-router-dom';
 import { Flip, ToastContainer } from 'react-toastify';
-import './App.css';
 import AuthEventListener from './auth/auth-event-listener';
-import Callback from './auth/Callback';
-import Footer from './components/layout/Footer';
 import { Navbar } from './components/layout/Navbar';
 import { Preloader } from './components/layout/Preloader';
 import { AppProvider } from './providers/AppProvider';
-import ForgetPassword from './pages/auth/ForgetPassword';
-import RedirectToLogin from './pages/auth/RedirectToLogin';
-import Verify from './pages/auth/verify';
-import Dashboard from './pages/dashboard/chats/Dashboard';
-import Error404Page from './pages/error/Error404';
-import HomeScreen from './pages/home/home';
-import PrivacyPolicy from './pages/legal/PrivacyPolicy';
-import TermsAndConditions from './pages/legal/TermsAndConditions';
 import authService from './services/authService';
 import { CustomStorage } from './utils/customStorage';
+import LoadingScreen from './components/layout/LoadingScreen';
+const Footer = lazy(() => import('./components/layout/Footer'));
+const ForgetPassword = lazy(() => import('./pages/auth/ForgetPassword'));
+const RedirectToLogin = lazy(() => import('./pages/auth/RedirectToLogin'));
+const Verify = lazy(() => import('./pages/auth/verify'));
+const Dashboard = lazy(() => import('./pages/dashboard/chats/Dashboard'));
+const Error404Page = lazy(() => import('./pages/error/Error404'));
+const HomeScreen = lazy(() => import('./pages/home/home'));
+const PrivacyPolicy = lazy(() => import('./pages/legal/PrivacyPolicy'));
+const TermsAndConditions = lazy(() => import('./pages/legal/TermsAndConditions'));
+const Callback = lazy(() => import('./auth/Callback'));
+const Pricing = lazy(() => import('./pages/pricing/pricing'));
 
 
 const storage = new CustomStorage();
@@ -44,6 +46,7 @@ function App() {
     { path: '/terms', element: <TermsAndConditions />, name: 'Terms' },
     { path: '/callback', element: <Callback />, name: 'Callback' },
     { path: '*', element: <Error404Page />, name: 'Error404' },
+    { path: '/pricing', element: <Pricing/>}
   ];
   const privateRoutes: RouteType[] = [
     { path: '/dashboard', element: <Dashboard />, name: 'Dashboard' },
@@ -116,27 +119,31 @@ function App() {
         <ToastContainer position='top-right' closeOnClick theme='colored' 
           pauseOnHover newestOnTop autoClose={3000} transition={Flip}
          />
-        <Routes>
-          {publicRoutes.map((route) => (
-            <Route key={route.name} path={route.path} element={route.element} />
-          ))}
+        <Suspense fallback={<LoadingScreen message='Loading...' dimension={undefined} background={undefined}/>}>
+          <Routes>
+            {publicRoutes.map((route) => (
+              <Route key={route.name} path={route.path} element={route.element} />
+            ))}
 
-          {privateRoutes.map((route) => (
-            <Route
-              key={route.name}
-              path={route.path}
-              element={
-                activeAccount ? (
-                  <AuthenticatedTemplate>{route.element}</AuthenticatedTemplate>
-                ) : (
-                  <RedirectToLogin />
-                )
-              }
-            />
-          ))}
-        </Routes>
+            {privateRoutes.map((route) => (
+              <Route
+                key={route.name}
+                path={route.path}
+                element={
+                  activeAccount ? (
+                    <AuthenticatedTemplate>{route.element}</AuthenticatedTemplate>
+                  ) : (
+                    <RedirectToLogin />
+                  )
+                }
+              />
+            ))}
+          </Routes>
+        </Suspense>
       </main>
-      <Footer />
+      <Suspense fallback={<div> ... </div>}>
+        <Footer/>
+      </Suspense>
     </AppProvider>
   );
 }

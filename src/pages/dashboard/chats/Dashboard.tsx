@@ -9,7 +9,7 @@ import { Btn } from "../../../components/ui/Button";
 import { ChatContext } from "../../../contexts/ChatContext";
 import { UIContext } from "../../../contexts/UIContext";
 import { useAuthInfo } from "../../../hooks/useAuthInfo";
-import { useAirports, useDashboardInfo, useFlightSearch } from "../../../hooks/useDashboardInfo";
+import { useAirports, useDashboardInfo} from "../../../hooks/useDashboardInfo";
 import { useDebounce } from "../../../hooks/useDebounce";
 import { ChatBotResponseHandler, resetChatBot } from "../../../utils/ChatBotHandler";
 import { RightPanel } from "../sections/RightPanel";
@@ -54,7 +54,6 @@ const Dashboard: React.FC = () => {
   const { inputValue, setInputValue, dateSelect, setDateSelect, setDate, date } = useInput();
   const { fetchAirports, airportSuggestions } = useAirports();
   const { loadPreferences, preferences } = useDashboardInfo();
-  const { FlightSearchFn } = useFlightSearch();
   const debounce = useDebounce();
   // Local UI state
   const [botLoader, setBotLoader] = useState(false);
@@ -244,7 +243,6 @@ const Dashboard: React.FC = () => {
           <Btn
             onClick={() => {
               toggleModal('flight');
-              FlightSearchFn();
             }}
             className="fixed lg:hidden px-6 py-1 w-fit bg-secondary-500 text-neutral-100 self-end bottom-[130px] right-4"
           >

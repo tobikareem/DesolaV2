@@ -2,16 +2,15 @@
 import { SubscriptionCard } from "../../../components/layout/SubscriptionCard";
 import { Text } from "../../../components/ui/TextComp";
 import usePageContent from "../../../hooks/usePageContent";
+import { useSubscription } from "../../../hooks/useSubscription";
 import { WEB_PAGES } from "../../../utils/constants";
 import { ENDPOINTS_API_PATH } from "../../../utils/endpoints";
 
 const SubscriptionPlan = () => {
 
     const { content: faqData, loading, error } = usePageContent(`${ENDPOINTS_API_PATH.page}`, `${WEB_PAGES.home}`, "PriceDetails");
-    const { content: monthlyYearly } = usePageContent(`${ENDPOINTS_API_PATH.page}`, `${WEB_PAGES.home}`, "MonthlyYearlyPrice");
     const benefitLists = faqData?.RowValue?.split(";");
-    const monthlyPrice = monthlyYearly?.RowValue?.split(";")[0] ?? '2.59';
-    const yearlyPrice = monthlyYearly?.RowValue?.split(";")[1] ?? '30.59';
+    const {monthlyPrice, yearlyPrice} = useSubscription();
 
     return (
         <section id="subscription"
