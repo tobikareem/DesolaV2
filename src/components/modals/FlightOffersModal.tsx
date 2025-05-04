@@ -216,7 +216,7 @@ const FlightOffersModal: React.FC<Props> = ({ onClose }) => {
                       </div>
                       <Link
                         onClick={() => handleBookNowClick(offer)}
-                        to={offer.websiteLink} target='_blank'
+                        to={offer.websiteLink} target='_blank' rel='noopener noreferrer'
                         className='font-work flex items-center rounded-lg bg-secondary-500 text-white px-4 py-2 hover:scale-105 transition-transform duration-200 ease-in-out'
                       >
                         Book Now
