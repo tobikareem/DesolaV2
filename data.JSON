@@ -1,0 +1,195 @@
+{
+  "userId": "c48c6648-5d7c-4e86-ba2c-07f4ec26a425",
+  "unifiedFlightOffer": {
+      "id": "2",
+      "provider": "Amadeus",
+      "flightSource": "GDS",
+      "totalPrice": 280.96,
+      "formattedPrice": "USD 280.96",
+      "itineraries": [
+          {
+              "direction": "Outbound",
+              "duration": "13:49:00",
+              "formattedDuration": "13h 49m",
+              "stops": 1,
+              "segments": [
+                  {
+                      "id": "37",
+                      "departure": {
+                          "airportCode": "SFO",
+                          "airportName": null,
+                          "terminal": "I",
+                          "cityCode": null,
+                          "cityName": null,
+                          "country": null,
+                          "dateTime": "2025-05-14T23:50:00",
+                          "formattedDateTime": "May 14, 11:50 PM"
+                      },
+
+                      //  response?.unifiedFlightOffer?.itineraries[0]?.segments[0]?.departure?.airportCode
+                      //  response?.unifiedFlightOffer?.itineraries[0]?.segments[0]?.arrival?.airportCode
+                      // response?.unfiedFlightOffer?.itineraries[0]?.segments[0]?.departure?.formattedDateTime
+                      // response?.unifiedFlightOffer?.itineraries[0]?.segments[0]?.arrival?.formattedDateTime
+                      // response?.unifiedFlightOffer?.itineraries[0]?.segments[0]?
+                      "arrival": {
+                          "airportCode": "ATL",
+                          "airportName": null,
+                          "terminal": "N",
+                          "cityCode": null,
+                          "cityName": null,
+                          "country": null,
+                          "dateTime": "2025-05-15T07:43:00",
+                          "formattedDateTime": "May 15, 7:43 AM"
+                      },
+                      "duration": "04:53:00",
+                      "formattedDuration": "4h 53m",
+                      "marketingAirline": "F9",
+                      "operatingAirline": "F9",
+                      "flightNumber": "1448",
+                      "aircraftType": "321",
+                      "cabinClass": null,
+                      "baggageAllowance": {
+                          "checkedBags": 0,
+                          "weightKg": null,
+                          "description": null
+                      },
+                      "airlineLogo": null
+                  },
+                  {
+                      "id": "38",
+                      "departure": {
+                          "airportCode": "ATL",
+                          "airportName": null,
+                          "terminal": "N",
+                          "cityCode": null,
+                          "cityName": null,
+                          "country": null,
+                          "dateTime": "2025-05-15T14:12:00",
+                          "formattedDateTime": "May 15, 2:12 PM"
+                      },
+                      "arrival": {
+                          "airportCode": "IAH",
+                          "airportName": null,
+                          "terminal": "A",
+                          "cityCode": null,
+                          "cityName": null,
+                          "country": null,
+                          "dateTime": "2025-05-15T15:39:00",
+                          "formattedDateTime": "May 15, 3:39 PM"
+                      },
+                      "duration": "02:27:00",
+                      "formattedDuration": "2h 27m",
+                      "marketingAirline": "F9",
+                      "operatingAirline": "F9",
+                      "flightNumber": "4075",
+                      "aircraftType": "321",
+                      "cabinClass": null,
+                      "baggageAllowance": {
+                          "checkedBags": 0,
+                          "weightKg": null,
+                          "description": null
+                      },
+                      "airlineLogo": null
+                  }
+              ]
+          },
+          {
+              "direction": "Return",
+              "duration": "06:32:00",
+              "formattedDuration": "6h 32m",
+              "stops": 1,
+              "segments": [
+                  {
+                      "id": "61",
+                      "departure": {
+                          "airportCode": "IAH",
+                          "airportName": null,
+                          "terminal": "A",
+                          "cityCode": null,
+                          "cityName": null,
+                          "country": null,
+                          "dateTime": "2025-06-21T20:01:00",
+                          "formattedDateTime": "Jun 21, 8:01 PM"
+                      },
+                      "arrival": {
+                          "airportCode": "DEN",
+                          "airportName": null,
+                          "terminal": null,
+                          "cityCode": null,
+                          "cityName": null,
+                          "country": null,
+                          "dateTime": "2025-06-21T21:53:00",
+                          "formattedDateTime": "Jun 21, 9:53 PM"
+                      },
+                      "duration": "02:52:00",
+                      "formattedDuration": "2h 52m",
+                      "marketingAirline": "F9",
+                      "operatingAirline": "F9",
+                      "flightNumber": "3227",
+                      "aircraftType": "32N",
+                      "cabinClass": null,
+                      "baggageAllowance": {
+                          "checkedBags": 0,
+                          "weightKg": null,
+                          "description": null
+                      },
+                      "airlineLogo": null
+                  },
+                  {
+                      "id": "62",
+                      "departure": {
+                          "airportCode": "DEN",
+                          "airportName": null,
+                          "terminal": null,
+                          "cityCode": null,
+                          "cityName": null,
+                          "country": null,
+                          "dateTime": "2025-06-21T22:38:00",
+                          "formattedDateTime": "Jun 21, 10:38 PM"
+                      },
+                      "arrival": {
+                          "airportCode": "SFO",
+                          "airportName": null,
+                          "terminal": "I",
+                          "cityCode": null,
+                          "cityName": null,
+                          "country": null,
+                          "dateTime": "2025-06-22T00:33:00",
+                          "formattedDateTime": "Jun 22, 12:33 AM"
+                      },
+                      "duration": "02:55:00",
+                      "formattedDuration": "2h 55m",
+                      "marketingAirline": "F9",
+                      "operatingAirline": "F9",
+                      "flightNumber": "3439",
+                      "aircraftType": "32N",
+                      "cabinClass": null,
+                      "baggageAllowance": {
+                          "checkedBags": 0,
+                          "weightKg": null,
+                          "description": null
+                      },
+                      "airlineLogo": null
+                  }
+              ]
+          }
+      ],
+      "baggageAllowance": {
+          "checkedBags": 0,
+          "weightKg": null,
+          "description": "No checked baggage included"
+      },
+      "isRefundable": false,
+      "lastTicketingDate": "2025-05-04T00:00:00",
+      "validatingCarrier": "F9 - Frontier Airlines",
+      "validatingCarrierAirlineName": null,
+      "operatingCarrierAirlineCode": null,
+      "operatingCarrierAirlineName": null,
+      "availableSeats": 3,
+      "fareConditions": [
+          "Non-refundable",
+          "No checked baggage included"
+      ]
+  },
+  "clickedAt": "2025-05-04T17:27:11.193Z"
+}

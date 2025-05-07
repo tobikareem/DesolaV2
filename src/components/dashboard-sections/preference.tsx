@@ -24,15 +24,24 @@ export const PreferencesSection = ({
     onAirportSelect: (code: string, field: string) => void;
 }) => {
     const [activeField, setActiveField] = useState<string | null>(null);
+    const [filteredSuggestions, setFilteredSuggestions] = useState<Airport[]>(airportSuggestions);
 
+    const handleAirportInputChange = (value: string) => {
+        const filtered = airportSuggestions.filter(
+            (airport) =>
+            airport.name.toLowerCase().includes(value.toLowerCase()) ||
+            airport.city.toLowerCase().includes(value.toLowerCase()) ||
+            airport.code.toLowerCase().includes(value.toLowerCase())
+        );
+        setFilteredSuggestions(filtered);
+    };
+    
     
     return (
         <div>
             <Text as="h2" size="xl" weight="bold" className="text-primary-500 mb-3">
                 Travel Preferences
             </Text>
-
-
             {/* Origin Airport */}
             <div className="mb-4">
                 <label htmlFor="originAirportInput" className="block text-sm font-medium text-gray-700 mb-1">
@@ -48,6 +57,7 @@ export const PreferencesSection = ({
                             onChange(e);
                             onAirportInputChange(e.target.value);
                             setActiveField("originAirport");
+                            handleAirportInputChange(e.target.value);
                         }}
                         className="w-full px-4 py-2 border rounded-[10px]"
                         onBlur={() => setTimeout(() => setActiveField(null), 200)}
@@ -55,7 +65,7 @@ export const PreferencesSection = ({
                     />
                     <AirportSuggestions
                         id="origin-airport-suggestions"
-                        suggestions={airportSuggestions}
+                        suggestions={filteredSuggestions}
                         onSelect={(code) => onAirportSelect(code, "originAirport")}
                         isVisible={activeField === "originAirport"}
                     />
@@ -77,6 +87,7 @@ export const PreferencesSection = ({
                             onChange(e);
                             onAirportInputChange(e.target.value);
                             setActiveField("destinationAirport");
+                            handleAirportInputChange(e.target.value);
                         }}
                         className="w-full px-4 py-2 border rounded-[10px]"
                         onBlur={() => setTimeout(() => setActiveField(null), 200)}
@@ -84,7 +95,7 @@ export const PreferencesSection = ({
                     />
                     <AirportSuggestions
                         id="destination-airport-suggestions"
-                        suggestions={airportSuggestions}
+                        suggestions={filteredSuggestions}
                         onSelect={(code) => onAirportSelect(code, "destinationAirport")}
                         isVisible={activeField === "destinationAirport"}
                     />

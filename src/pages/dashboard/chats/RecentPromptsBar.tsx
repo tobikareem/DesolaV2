@@ -2,6 +2,7 @@ import { PenLine } from 'lucide-react';
 import React from 'react';
 import { useScroll } from '../../../hooks/useSmoothScroll';
 import { getPromptColor } from './PromptColor';
+import { useEdit } from '../../../hooks/useEdit';
 
 export interface RecentPromptsBarProps {
     prompts: string[];
@@ -13,6 +14,7 @@ export interface RecentPromptsBarProps {
 const RecentPromptsBar: React.FC<RecentPromptsBarProps> = ({ prompts, onEditClick }) => {
 
     const {scrollContainerRef, handleScroll} = useScroll()
+    const {handleEditClick} = useEdit();
     
 
     return (
@@ -29,7 +31,8 @@ const RecentPromptsBar: React.FC<RecentPromptsBarProps> = ({ prompts, onEditClic
                     <span className="text-sm text-neutral rounded-lg max-w-[200px] truncate">
                         {item}
                     </span>
-                    <PenLine onClick={onEditClick} className="cursor-pointer" size={16} />
+                    <PenLine onClick={()=> {onEditClick(); handleEditClick(idx, item)}} 
+                        className="cursor-pointer" size={16} />
                 </div>
             ))}
         </div>

@@ -1,5 +1,5 @@
 
-import React, { useContext, useEffect, useRef} from 'react';
+import React, { useEffect} from 'react';
 import { IoMdCloseCircleOutline } from 'react-icons/io';
 import { useAirports, useDashboardInfo } from '../../hooks/useDashboardInfo';
 import { useScroll } from '../../hooks/useSmoothScroll';
@@ -7,9 +7,6 @@ import { getPromptColor } from '../../pages/dashboard/chats/PromptColor';
 import { useEdit } from '../../hooks/useEdit';
 import SuggestionPanel from '../../pages/dashboard/chats/SuggestionPanel';
 import { useModals } from '../../hooks/useModals';
-import { ChatContext } from '../../contexts/ChatContext';
-import ChatHistory from '../../pages/dashboard/chats/ChatHistory';
-import { useChatInteractions } from '../../hooks/useChatInteractions';
 import { Input } from '../ui/InputField';
 import { IoSend } from 'react-icons/io5';
 import { Modal } from './Modal';
@@ -17,6 +14,8 @@ import Calendar from './Calendar';
 import { DateSelectArg } from '@fullcalendar/core/index.js';
 import { toast } from 'react-toastify';
 import { useInput } from '../../hooks/useInput';
+import { PenLine } from 'lucide-react';
+import { EditData } from '../dashboard-sections/edit';
 
 
 interface EditModalProps {
@@ -32,23 +31,13 @@ const EditModal: React.FC<EditModalProps> = ({
 }) => {
 
   const {scrollContainerRef, handleScroll} = useScroll();
-  const {handleEditClick, setPromptIndex, editedValue, setEditedValue, promptIndex} = useEdit();
+  const {handleEditClick, setPromptIndex, editedValue, setEditedValue, promptIndex, editQuestion} = useEdit();
   const {date, setDate, setDateSelect} = useInput();
   const { preferences} = useDashboardInfo();
   const {showCalendar, setShowCalendar} = useModals()
   const { fetchAirports,airportSuggestions } = useAirports();
   const {showPopData, setShowPopData, searchParam, setSearchParam } = useModals();
-  const {chatLog} = useContext(ChatContext)
-  const {botLoader} = useChatInteractions()
-  const chatLoading = false;
-
-  const chatContainerRef = useRef<HTMLDivElement>(null);
-  
-  useEffect(() => {
-      if (chatContainerRef.current) {
-          chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
-      }
-  }, [chatLog]);
+ 
 
   useEffect(()=> { fetchAirports()},[fetchAirports])
 
@@ -140,6 +129,7 @@ const EditModal: React.FC<EditModalProps> = ({
         setPromptIndex(null);
         setShowPopData(false);
         setEditedValue('');
+        close();
       }
     };
 
@@ -156,20 +146,19 @@ const EditModal: React.FC<EditModalProps> = ({
       >
         {prompts?.map((item, idx) => (
             <div
-                key={idx}
-                onClick={() => handleEditClick(idx,item)}
-                className={`flex items-center space-x-2 ${getPromptColor(idx)} py-2 px-4 lg:px-5 rounded-full cursor-pointer`}
+              key={idx}
+              onClick={() => handleEditClick(idx,item)}
+              className={`flex items-center space-x-2 ${getPromptColor(idx)} py-2 px-4 lg:px-5 rounded-full cursor-pointer`}
             >
-                <span className="text-sm text-neutral rounded-lg max-w-[200px] truncate">
-                    {item}
-                </span>
+              <span className="text-sm text-neutral rounded-lg max-w-[200px] truncate">
+                  {item}
+              </span>
+              <PenLine className="cursor-pointer" size={16} />
             </div>
         ))}
       </div>
-      <div ref={chatContainerRef}
-        className='flex flex-col flex-1 overflow-y-auto'>
-        <ChatHistory chatLog={chatLog} botLoader={botLoader} isLoading={chatLoading}/>
-      </div>
+
+      <EditData message={editQuestion} />
       
       <div className="relative w-full p-2 flex items-center justify-center bg-white border-t h-30">
         <div className="items-center max-w-[678px] w-full rounded-2xl py-4 px-4 lg:px-8 flex message bg-tint">
@@ -205,8 +194,6 @@ const EditModal: React.FC<EditModalProps> = ({
         <Modal position="absolute" close={()=>setShowCalendar(false)} display={showCalendar} className='backdrop-blur-md'>
           <Calendar Click={handleDateSelect} selectedDate={null} Close={handleSubmitDate}  />
         </Modal>
-        
-        
     </div>
   );
 };
