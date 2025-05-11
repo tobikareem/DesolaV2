@@ -73,7 +73,7 @@ export const useAirports = () => {
     }
   }, [cacheExpiryTime, getData]);
 
-  return { airportSuggestions, fetchAirports, loading };
+  return { airportSuggestions, setAirportSuggestions, fetchAirports, loading };
 };
 
 export const useFlightSearch = () => {

@@ -8,7 +8,7 @@ export const ClearChat
     <div className="flex p-6 bg-white rounded-lg flex-col items-center justify-center flex-1 w-full max-w-[522px] h-fit">
       <FaRegBell className="text-4xl text-warning"/>
         <Text as='h3' size='xl' weight='medium' className="!font-grotesk text-center !text-Neutral mt-4">
-          {Message ?? 'Are you sure you want to clear your chat with us?'}
+          {Message ?? 'Are you sure you want to clear your conversation with us?'}
         </Text>
         <div className="flex flex-col md:flex-row justify-center mt-6 gap-6">
           <Btn

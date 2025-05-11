@@ -1,18 +1,16 @@
-import { useState } from "react"
+import { useContext} from "react"
+import { EditContext } from "../contexts/EditContext";
 
 
 export const useEdit =()=> {
-  const [promptIndex, setPromptIndex] = useState<number | null>(null)
-  const [ editedValue, setEditedValue] = useState<string>("")
-
+  const {promptIndex, setPromptIndex, editedValue, setEditedValue, editQuestion, setEditQuestion} = useContext(EditContext);
+  
+  
   const handleEditClick =(index:number, currentValue:string)=> {
     setPromptIndex(index);
     setEditedValue(currentValue);
+    setEditQuestion(currentValue);
   }
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEditedValue(e.target.value);
-  };
-
-  return {handleEditClick, promptIndex, setPromptIndex, editedValue, setEditedValue, handleInputChange}
+ 
+  return {handleEditClick, promptIndex, setPromptIndex, editedValue, setEditedValue, editQuestion, setEditQuestion}
 }
