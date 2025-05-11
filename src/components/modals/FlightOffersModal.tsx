@@ -64,7 +64,7 @@ const FlightOffersModal: React.FC<Props> = ({ onClose }) => {
         </Text>
         <IoMdCloseCircleOutline
           onClick={onClose}
-          className={`text-2xl text-black hover:scale-125 transition-transform duration-200 ease-in-out`}
+          className={`text-3xl text-black hover:scale-125 transition-transform duration-200 ease-in-out`}
         />
       </div>
 
@@ -86,19 +86,18 @@ const FlightOffersModal: React.FC<Props> = ({ onClose }) => {
                 <div
                   onClick={() => { if (!isExpanded) toggleExpand(offer.id) }}
                   key={offer.id}
-                  className={` bg-neutral-100 flex flex-col w-full gap-8 ${isExpanded ? 'h-fit' : 'h-14 lg:h-22'} p-4 lg:p-8 border hover:border-2
+                  className={` bg-neutral-100 flex flex-col w-full gap-8 ${isExpanded ? 'h-fit' : 'h-14 lg:h-22'} p-3 lg:p-8 border hover:border-2
                  hover:border-primary-100 focus-within:border-primary-100 border-neutral-300 rounded-lg transition overflow-hidden box-border`}
                 >
-                  <div
-                    className={`flex w-full justify-between items-center z-[2] -mt-[7px] lg:-mt-2.5 gap-3`}>
-                    <div className='flex items-center gap-4'>
+                  <div className={`flex w-full justify-between items-center z-[2] -mt-[7px] lg:-mt-2.5 gap-2`}>
+                    <div className='flex items-center gap-2.5 sm:gap-4'>
                       <img
                         src={offer.airlineLogo}
                         alt="Airline Logo"
                         className="size-10 rounded-md bg-primary-300 overflow-hidden border-[0.5px] border-neutral-300"
                       />
                       <div className='space-y-1'>
-                        <Text as='p' size='sm' weight="medium" color='text-Neutral' className='lg:text-base'>
+                        <Text as='p' size='xs' weight="medium" color='text-Neutral' className='sm:text-sm lg:text-base truncate text-nowrap'>
                           Departure • {offer.departureTime}
                         </Text>
                         <Text as='p' size='xs' weight="normal" color='text-neutral-500' className='truncate'>

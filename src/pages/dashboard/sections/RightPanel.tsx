@@ -1,4 +1,3 @@
-
 import { Headset, House, LogOut, Trash2, User } from 'lucide-react';
 import React, { useContext, useEffect, useState } from 'react';
 import { PiHeadsetFill, PiRoadHorizonBold, PiRoadHorizonFill, PiTrashFill } from 'react-icons/pi';
@@ -37,11 +36,9 @@ export const RightPanel: React.FC = () => {
   const getRequiredFields = (route: string) => {
     const isOneWay = route?.toLowerCase().startsWith('one way');
     const requiredFields = ['departure', 'destination', 'departureDate', 'flightClass'];
-
     if (!isOneWay) {
       requiredFields.push('returnDate');
     }
-
     return requiredFields;
   };
 
@@ -49,10 +46,8 @@ export const RightPanel: React.FC = () => {
     if (!travelInfo || typeof travelInfo !== 'object') {
       return false;
     }
-
     const { travelRoute } = travelInfo;
     const requiredFields = getRequiredFields(travelRoute);
-
     // Check that all required fields have values
     return requiredFields.every((field: string) => {
       const value = travelInfo[field as keyof typeof travelInfo];
@@ -65,7 +60,7 @@ export const RightPanel: React.FC = () => {
     { id: 'road', icon: <PiRoadHorizonBold size={24} />, icon2: <PiRoadHorizonFill />, label: 'Trips' },
     { id: 'trash', icon: <Trash2 size={24} />, icon2: <PiTrashFill />, label: 'Clear Chat' },
     { id: 'user', icon: <User size={24} />, icon2: <RiUserFill />, label: 'Profile' },
-    {id: 'subscription', icon: <TbCreditCard />, icon2: <TbCreditCardFilled />, label: 'Subscription'},
+    { id: 'subscription', icon: <TbCreditCard />, icon2: <TbCreditCardFilled />, label: 'Subscription'},
     { id: 'support', icon: <Headset size={24} />, icon2: <PiHeadsetFill />, label: 'Support' },
   ];
 
@@ -103,7 +98,6 @@ export const RightPanel: React.FC = () => {
   };
 
   type PathContentProps = HomeContentProps;
-
   // eslint-disable-next-line @typescript-eslint/no-empty-object-type
   type NoProps = {};
 
@@ -125,19 +119,15 @@ export const RightPanel: React.FC = () => {
     support: SupportContent,
   };
 
-
   const renderContent = () => {
     if (selectedTab === 'home') {
       const Component = TAB_COMPONENTS[selectedTab as 'home'];
       return <Component {...travelInfo} />;
     }
-
     // For components that don't need props
     const Component = TAB_COMPONENTS[selectedTab as 'road' | 'trash' | 'user' | 'subscription' | 'support'];
     return Component ? <Component departure={''} destination={''} departureDate={''} returnDate={''} travelRoute={''} flightClass={''} /> : null;
   };
-
-
 
   return (
     <>
@@ -161,53 +151,35 @@ export const RightPanel: React.FC = () => {
             onClick={() => toggleModal('logout')}
           />
         </div>
-
         {/* Content Area */}
         <div className="bg-white w-full shadow-md">
           <div className="flex flex-col h-full justify-between pt-12">
             <div className="max-w-[480px] overflow-y-auto px-8">
               {renderContent()}
             </div>
-
             {/* Search Button */}
             <div className="h-30 border-t items-center flex p-7">
-              <Btn
-                className={`p-1 w-full max-w-[385px] ${isSearchEnabled()
+              <Btn className={`p-1 w-full max-w-[385px] ${(selectedTab == 'home' || selectedTab == 'road' || selectedTab == 'user') && isSearchEnabled()
                   ? 'bg-gradient-to-b from-[#FF9040] to-[#FF6B00] text-white'
-                  : 'bg-neutral-300 text-neutral-500 cursor-not-allowed opacity-50'
-                  }`}
-                onClick={() => {
-                  if (isSearchEnabled()) {
-                    toggleModal('flight');
-                  }
-                }}
-              >
+                  : 'bg-neutral-300 text-neutral-500 cursor-not-allowed opacity-50'}`} 
+                  onClick={() => {if (isSearchEnabled()) {
+                    toggleModal('flight');}}}>
                 Search
               </Btn>
             </div>
           </div>
         </div>
       </div>
-
-      <Modal display={showDeleteModal} close={() => toggleModal('delete')}>
+      <Modal display={showDeleteModal} close={() => {toggleModal('delete')}}>
         <ClearChat
           Action={() => toggleModal('delete')}
           ConfirmAction={handleConfirmDelete} Message={null}
         />
       </Modal>
-
       <Modal display={showLogoutModal} close={() => toggleModal('logout')}>
-        <ReturnContent
-          Action={() => toggleModal('logout')}
-          ConfirmAction={handleConfirmLogout}
-        />
+        <ReturnContent Action={() => toggleModal('logout')} ConfirmAction={handleConfirmLogout}/>
       </Modal>
-
-      <Modal
-        position="absolute"
-        close={() => toggleModal('flight')}
-        display={showFlightModal}
-      >
+      <Modal position="absolute" close={() => toggleModal('flight')} display={showFlightModal}>
         <FlightOffersModal onClose={() => toggleModal('flight')} />
       </Modal>
     </>

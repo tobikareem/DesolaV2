@@ -233,7 +233,7 @@ const Dashboard: React.FC = () => {
       <div className="relative flex flex-col bg-background border border-neutral-300 w-full lg:w-[60%] h-screen">
         <RecentPromptsBar prompts={recentPrompts} onEditClick={toggleEditModal} />
 
-        <div className={`flex lg:hidden w-full mt-14 justify-end items-center px-5`}>
+        <div className={`flex lg:hidden w-full mt-16 justify-end items-center py-1.5 px-5`}>
           <PenLine onClick={toggleEditModal} className={`${recentPrompts?.length != 0 ? '' : 'hidden'} text-primary-500 text-4xl`} />
         </div>
 
