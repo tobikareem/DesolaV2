@@ -3,30 +3,75 @@
 export interface ClickTrackingPayload {
     userId: string;
     clickedAt: string; 
-    unifiedFlightOffer: FlightOffer;
+    unitedFlightOffer: ClickTrackingProps
+}
+
+export interface ClickTrackingProps {
+  id: string;
+  provider: string;
+  flightSource: "GDS";
+  totalPrice: number;
+  formattedPrice: string;
+  itineraries: Array<{
+    direction: "Outbound" | "Return";
+    duration: string;
+    formattedDuration: string;
+    stops: number;
+    segments: Array<{
+      id: string;
+      departure: {
+        airportCode: string;
+        airportName: string | null;
+        terminal: string | null;
+        cityCode: string | null;
+        cityName: string | null;
+        country: string | null;
+        dateTime: string;
+        formattedDateTime: string;
+      };
+      arrival: {
+        airportCode: string;
+        airportName: string | null;
+        terminal: string | null;
+        cityCode: string | null;
+        cityName: string | null;
+        country: string | null;
+        dateTime: string;
+        formattedDateTime: string;
+      };
+      duration: string;
+      formattedDuration: string;
+      marketingAirline: string;
+      operatingAirline: string;
+      flightNumber: string;
+      aircraftType: string;
+      cabinClass: string | null;
+      baggageAllowance: {
+        checkedBags: number;
+        weightKg: number | null;
+        description: string | null;
+      };
+      airlineLogo: string | null;
+    }>;
+  }>;
+  baggageAllowance: {
+    checkedBags: number;
+    weightKg: number | null;
+    description: string;
+  };
+  isRefundable: boolean;
+  lastTicketingDate: string;
+  validatingCarrier: string;
+  validatingCarrierAirlineName: string | null;
+  operatingCarrierAirlineCode: string | null;
+  operatingCarrierAirlineName: string | null;
+  availableSeats: number;
+  fareConditions: string[];
 }
 
 
 
-export function transformApiToUiResponse(apiResponse: FlightOffer): ClickTrackingPayload {
-    // mapping of airline codes to logo URLs
 
-    return {
-        ...apiResponse,  // let us keep all original API response properties
-        response: apiResponse.unifiedFlightOffer.itineraries[0]?.map(log: => {
-            const outbound = log?.segments[0];
-            
-            return {
-                ...history,  
-                // Add UI-specific fields
-                Departure: outbound?.departure?.airportCode,
-                Destination: outbound?.arrival?.airportCode,
-                departureDate: outbound?.departure?.formattedDateTime,
-                returnDate: outbound?.arrival?.formattedDateTime,
-                stops: log.stops === 0 ? 'Non-stop' : `${log.stops} stop${log.stops > 1 ? 'Two-way/Multi-city' : ''}`,
-                flight: `${firstSegment.departure.airportCode}-${lastSegment.arrival.airportCode}`,
-            };
-        })
-    };
-}
+
+
   
