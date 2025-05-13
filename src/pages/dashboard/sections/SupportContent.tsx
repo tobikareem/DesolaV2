@@ -24,6 +24,7 @@ export const SupportContent: React.FC = () => {
      lastname: formData.lastname,
      email: formData.email,
      phone: formData.phone,
+     message: formData.message,
    });
 
    if (!isValid) return;
