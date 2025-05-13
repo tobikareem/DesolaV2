@@ -9,6 +9,7 @@ export const validateFormData = (data: {
   phone: string;
   firstname: string;
   lastname: string;
+  message: string;
 }): boolean => {
   if (!data.firstname || /^\s*$/.test(data.firstname)) {
     toast.error('First name cannot be empty.');
@@ -22,6 +23,10 @@ export const validateFormData = (data: {
 
   if (!data.lastname || /^\s*$/.test(data.lastname)) {
     toast.error('Last name cannot be empty.');
+    return false;
+  }
+  if (!data.message || /^\s*$/.test(data.message)) {
+    toast.error('Message box cannot be empty.');
     return false;
   }
 
