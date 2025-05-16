@@ -3,7 +3,7 @@
 export interface ClickTrackingPayload {
     userId: string;
     clickedAt: string; 
-    unitedFlightOffer: ClickTrackingProps
+    unifiedFlightOffer: ClickTrackingProps
 }
 
 export interface ClickTrackingProps {

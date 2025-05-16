@@ -1,6 +1,5 @@
 import { LogOut } from "lucide-react";
 import React, { useContext, useEffect, useState } from "react";
-import { AiOutlineCloseCircle } from "react-icons/ai";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { NavLink, useLocation } from "react-router-dom";
 import { NavigationContext } from "../../contexts/NavigationContext";
@@ -9,11 +8,13 @@ import { useAuthInfo } from "../../hooks/useAuthInfo";
 import authService from "../../services/authService";
 import { Logo } from "./Logo";
 import { useSmoothScroll } from "../../hooks/useSmoothScroll";
+import { Close } from "../ui/Close";
+import { useIsDesktop } from "../../hooks/useDesktopSize";
 
 export const Navbar = () => {
     const [slider, setSlider] = useState<boolean>(false);
-    const [isDesktop, setIsDesktop] = useState<boolean>(false);
     const { userName, isAuthenticated, logout } = useAuthInfo();
+    const isDesktop = useIsDesktop();
 
     const { navigationData, mobileTab, setMobileTab } = useContext(NavigationContext);
     const { toggleModal } = useContext(UIContext);
@@ -37,29 +38,12 @@ export const Navbar = () => {
     const [activeSection, setActiveSection] = useState<string>('');
 
     useEffect(() => {
-
         const path = location.pathname;
         const sectionId = path.replace('/', '');
         setActiveSection(`#${sectionId}`)
     }, [location])
 
-    useEffect(() => {
-        const handleResize = () => {
-            if (window.innerWidth >= 1024) {
-                setIsDesktop(true);
-            } else {
-                setIsDesktop(false);
-            }
-        };
-
-        window.addEventListener('resize', handleResize);
-        handleResize();
-
-        return () => {
-            window.removeEventListener('resize', handleResize);
-        };
-
-    }, [])
+    
 
     
 
@@ -68,7 +52,6 @@ export const Navbar = () => {
         <div className={`fixed ${router !== '/' ? 'hidden' : 'flex'} ${!isDesktop && (router === '/dashboard') ? '!flex' : ''}  items-center w-screen z-40 bg-transparent  left-0 backdrop-blur-[2px] `}>
             <div className="flex w-full justify-between items-center px-4 md:px-8 lg:px-14 xl:px-28 py-4 bg-background">
                 {/* Logo */}
-
                 <div className="block ">
                     <Logo />
                 </div>
@@ -115,16 +98,15 @@ export const Navbar = () => {
                     </button>
                 )}
                 {/* Mobile Nav */}
-                {
+                { !isDesktop &&
                     <div
-                        className={`block lg:hidden w-screen h-screen ${slider ? 'translate-x-0  bg-black/60' : 'translate-x-[-100%] bg-transparent'} transition-all duration-200 ease-in fixed top-0 left-0 z-50`} >
+                        className={`block lg:hidden w-screen h-screen ${slider ? 'translate-x-0  bg-black/60' : 'translate-x-[-110%] bg-transparent'} transition-all duration-200 ease-in fixed top-0 left-0 z-50`} >
                         <div className="w-full h-full py-6 bg-white border border-neutral-300">
                             <div className="w-full flex justify-between px-4">
                                 <Logo />
-                                <AiOutlineCloseCircle onClick={handleDrawer}
-                                    className="text-2xl cursor-pointer"
-                                />
+                                <Close Action={handleDrawer}/>
                             </div>
+                            
                             <div id="drawer"
                                 className={`flex flex-col justify-between items-center px-4 py-10  w-full h-full `}>
                                 <nav className={`flex flex-col w-full py-1 px-1.5 gap-6 `}>
@@ -185,7 +167,7 @@ export const Navbar = () => {
                                         handleDrawer(e);
                                         authService.signIn();
                                     }}
-                                    className={`${isAuthenticated || router != '/' ? 'hidden' : 'flex'} lg:hidden items-center justify-center h-16 w-full bg-gradient-to-b from-[#FF9040] to-[#FF6B00] text-2xl text-white font-medium rounded-[48px] hover:scale-105 transition-transform duration-300 ease-in-out`}>
+                                    className={`${isAuthenticated || router != '/' ? 'hidden' : 'flex'} lg:hidden items-center justify-center h-12 w-full bg-gradient-to-b from-[#FF9040] to-[#FF6B00] text-xl text-white font-medium rounded-[48px] hover:scale-105 transition-transform duration-300 ease-in-out`}>
                                     Sign In
                                 </button>
                             </div>

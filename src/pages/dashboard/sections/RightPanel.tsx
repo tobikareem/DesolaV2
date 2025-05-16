@@ -14,7 +14,6 @@ import { ChatContext } from '../../../contexts/ChatContext';
 import { NavigationContext } from '../../../contexts/NavigationContext';
 import { NavItem } from '../../../contexts/types';
 import { UIContext } from '../../../contexts/UIContext';
-import authService from '../../../services/authService';
 import { CustomStorage } from '../../../utils/customStorage';
 import { HomeContent } from './HomeContent';
 import { TripHistoryContent } from './TripHistoryContent';
@@ -23,31 +22,35 @@ import { TrashContent } from './TrashContent';
 import { UserContent } from './UserContent';
 import { SubscriptionContent } from './SubscriptionContent';
 import { TbCreditCard, TbCreditCardFilled } from 'react-icons/tb';
+import { useAuthInfo } from '../../../hooks/useAuthInfo';
 
 const storageService = new CustomStorage();
 
+export const GetRequiredFields = (route: string) => {
+  const isOneWay = route?.toLowerCase().startsWith('one way');
+  const requiredFields = ['departure', 'destination', 'departureDate', 'flightClass'];
+  if (!isOneWay) {
+    requiredFields.push('returnDate');
+  }
+  return requiredFields;
+};
+
 export const RightPanel: React.FC = () => {
   const navigate = useNavigate();
+  const {chatLog} = useContext(ChatContext);
   const [selectedTab, setSelectedTab] = useState<string>('home');
   const { setNavigationData } = useContext(NavigationContext);
   const { showLogoutModal, showDeleteModal, showFlightModal, toggleModal } = useContext(UIContext);
   const { travelInfo } = useContext(ChatContext);
+  const { logout } = useAuthInfo();
 
-  const getRequiredFields = (route: string) => {
-    const isOneWay = route?.toLowerCase().startsWith('one way');
-    const requiredFields = ['departure', 'destination', 'departureDate', 'flightClass'];
-    if (!isOneWay) {
-      requiredFields.push('returnDate');
-    }
-    return requiredFields;
-  };
 
   const isSearchEnabled = () => {
     if (!travelInfo || typeof travelInfo !== 'object') {
       return false;
     }
     const { travelRoute } = travelInfo;
-    const requiredFields = getRequiredFields(travelRoute);
+    const requiredFields = GetRequiredFields(travelRoute);
     // Check that all required fields have values
     return requiredFields.every((field: string) => {
       const value = travelInfo[field as keyof typeof travelInfo];
@@ -77,7 +80,9 @@ export const RightPanel: React.FC = () => {
 
   const handleConfirmLogout = () => {
     toggleModal('logout');
-    authService.signOut();
+    logout();
+    storageService.removeItem('RecentPrompts');
+    storageService.removeItem('chatLog');
     navigate('/');
   };
 
@@ -128,6 +133,7 @@ export const RightPanel: React.FC = () => {
     const Component = TAB_COMPONENTS[selectedTab as 'road' | 'trash' | 'user' | 'subscription' | 'support'];
     return Component ? <Component departure={''} destination={''} departureDate={''} returnDate={''} travelRoute={''} flightClass={''} /> : null;
   };
+  const isLastMessage = chatLog.length > 0 && chatLog[chatLog.length - 1].message.toLowerCase().includes('click the search button')
 
   return (
     <>
@@ -159,7 +165,7 @@ export const RightPanel: React.FC = () => {
             </div>
             {/* Search Button */}
             <div className="h-30 border-t items-center flex p-7">
-              <Btn className={`p-1 w-full max-w-[385px] ${(selectedTab == 'home' || selectedTab == 'road' || selectedTab == 'user') && isSearchEnabled()
+              <Btn className={`p-1 w-full max-w-[385px] ${(selectedTab == 'home' || selectedTab == 'road' ) && isLastMessage && isSearchEnabled()
                   ? 'bg-gradient-to-b from-[#FF9040] to-[#FF6B00] text-white'
                   : 'bg-neutral-300 text-neutral-500 cursor-not-allowed opacity-50'}`} 
                   onClick={() => {if (isSearchEnabled()) {
@@ -170,18 +176,24 @@ export const RightPanel: React.FC = () => {
           </div>
         </div>
       </div>
-      <Modal display={showDeleteModal} close={() => {toggleModal('delete')}}>
-        <ClearChat
-          Action={() => toggleModal('delete')}
-          ConfirmAction={handleConfirmDelete} Message={null}
-        />
-      </Modal>
-      <Modal display={showLogoutModal} close={() => toggleModal('logout')}>
-        <ReturnContent Action={() => toggleModal('logout')} ConfirmAction={handleConfirmLogout}/>
-      </Modal>
-      <Modal position="absolute" close={() => toggleModal('flight')} display={showFlightModal}>
-        <FlightOffersModal onClose={() => toggleModal('flight')} />
-      </Modal>
+      {showDeleteModal && (
+        <Modal display={showDeleteModal} close={() => {toggleModal('delete')}}>
+          <ClearChat
+            Action={() => toggleModal('delete')}
+            ConfirmAction={handleConfirmDelete} Message={null}
+          />
+        </Modal>
+      )}
+      {showLogoutModal && (
+        <Modal display={showLogoutModal} close={() => toggleModal('logout')}>
+          <ReturnContent Action={() => toggleModal('logout')} ConfirmAction={handleConfirmLogout}/>
+        </Modal>
+      )}
+      {showFlightModal &&(
+        <Modal position="absolute" close={() => toggleModal('flight')} display={showFlightModal}>
+          <FlightOffersModal onClose={() => toggleModal('flight')} />
+        </Modal>
+      )}
     </>
   );
 };

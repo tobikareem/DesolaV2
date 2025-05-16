@@ -3,8 +3,8 @@ import { Input } from '../../../components/ui/InputField';
 import { TextArea } from '../../../components/ui/TextAreaField';
 import { Btn } from '../../../components/ui/Button';
 import { Text } from '../../../components/ui/TextComp';
-import { validateFormData } from '../../../hooks/Validate';
 import { toast } from 'react-toastify';
+import { useValidate} from '../../../hooks/useValidate';
 
 export const SupportContent: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -15,22 +15,23 @@ export const SupportContent: React.FC = () => {
     message: '',
   });
 
-   
+  const {errors, isValid} = useValidate({
+    firstname: formData.firstname,
+    lastname: formData.lastname,
+    email: formData.email,
+    phone: formData.phone,
+    message: formData.message,
+  });
+  
+
  const handleSubmit = (e: React.FormEvent) => {
    e.preventDefault();
-
-   const isValid = validateFormData({
-     firstname: formData.firstname,
-     lastname: formData.lastname,
-     email: formData.email,
-     phone: formData.phone,
-     message: formData.message,
-   });
 
    if (!isValid) return;
 
    toast.success('Message submitted successfully!');
  };
+
   return (
     <div className="flex-1 overflow-y-auto">
       <Text
@@ -57,6 +58,7 @@ export const SupportContent: React.FC = () => {
             <Input
               label="First Name"
               type="text"
+              error={errors.firstname}
               value={formData.firstname}
               onChange={(e) =>
                 setFormData({ ...formData, firstname: e.target.value })
@@ -69,6 +71,7 @@ export const SupportContent: React.FC = () => {
             <Input
               label="Last Name"
               value={formData.lastname}
+              error={errors.lastname}
               onChange={(e) =>
                 setFormData({ ...formData, lastname: e.target.value })
               }
@@ -77,11 +80,11 @@ export const SupportContent: React.FC = () => {
               className="bg-[#F3F3F3] h-8 !round-md placeholder:text-[#B7B7B7] placeholder:"
             />
           </div>
-
           <Input
             label="Email Address"
             type="email"
             value={formData.email}
+            error={errors.email}
             onChange={(e) =>
               setFormData({ ...formData, email: e.target.value })
             }
@@ -92,6 +95,7 @@ export const SupportContent: React.FC = () => {
             label="Phone Number"
             type="text"
             value={formData.phone}
+            error={errors.phone}
             onChange={(e) =>
               setFormData({ ...formData, phone: e.target.value })
             }
@@ -102,6 +106,7 @@ export const SupportContent: React.FC = () => {
             <TextArea
               label="Message"
               value={formData.message}
+              error={errors.message}
               onChange={(e) =>
                 setFormData({ ...formData, message: e.target.value })
               }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { IoCallOutline } from 'react-icons/io5';
 import { MdOutlineEmail } from 'react-icons/md';
 import { Img as ReactImage } from 'react-image';
@@ -9,8 +9,9 @@ import { WEB_PAGES } from '../../../utils/constants';
 import { ENDPOINTS_API_PATH } from '../../../utils/endpoints';
 import usePageContent from '../../../hooks/usePageContent';
 import { TextArea } from '../../../components/ui/TextAreaField';
-import { validateFormData } from '../../../hooks/Validate';
+
 import { toast } from 'react-toastify';
+import { useValidate } from '../../../hooks/useValidate';
 
 const Contact = () => {
   const {
@@ -28,30 +29,25 @@ const Contact = () => {
     { icon: <MdOutlineEmail /> },
   ];
 
-  const [formData, setFormData] = useState({
-    firstname: '',
-    lastname: '',
+  const {formData, setFormData, isValid, errors, setTouched} = useValidate({
     email: '',
     phone: '',
-    message: '',
-  });
+    firstname: '',
+    lastname: '',
+    message: ''
+  })
 
    
  const handleSubmit = (e: React.FormEvent) => {
    e.preventDefault();
 
-   const isValid = validateFormData({
-     firstname: formData.firstname,
-     lastname: formData.lastname,
-     email: formData.email,
-     phone: formData.phone,
-     message: formData.message,
-   });
-
-   if (!isValid) return;
+   if (!isValid) return toast.error('please fill all fields correctly');
 
    toast.success('Message submitted successfully!');
  };
+ const handleBlur = (field: string) => {
+  setTouched((prev) => ({ ...prev, [field]: true }));
+};
 
   return (
     <section
@@ -96,11 +92,13 @@ const Contact = () => {
                   label="First Name"
                   type="text"
                   value={formData.firstname}
+                  error={errors.firstname}
                   onChange={(e) =>
                     setFormData({ ...formData, firstname: e.target.value })
                   }
                   placeholder="First Name"
                   className="bg-[#F3F3F3] w-full h-13 rounded-sm placeholder:text-[#B7B7B7] placeholder:"
+                  onBlur={()=> handleBlur('firstname')}
                 />
               </div>
               <div className="w-full">
@@ -108,11 +106,13 @@ const Contact = () => {
                   label="Last Name"
                   type="text"
                   value={formData.lastname}
+                  error={errors.lastname}
                   onChange={(e) =>
                     setFormData({ ...formData, lastname: e.target.value })
                   }
                   placeholder="Last Name"
                   className="bg-[#F3F3F3] w-full h-13 rounded-sm placeholder:text-[#B7B7B7] placeholder:"
+                  onBlur={()=> handleBlur('lastname')}
                 />
               </div>
             </div>
@@ -120,34 +120,37 @@ const Contact = () => {
               label="Email Address"
               type="email"
               value={formData.email}
-              onChange={(e) =>
-                setFormData({ ...formData, email: e.target.value })
-              }
+              error={errors.email}
+              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
               placeholder="email"
               className="bg-[#F3F3F3] w-full h-13 rounded-sm placeholder:text-[#B7B7B7] placeholder:"
+              onBlur={()=> handleBlur('email')}
             />
             <Input
               label="Phone Number"
               type="text"
               value={formData.phone}
+              error={errors.phone}
               onChange={(e) =>
                 setFormData({ ...formData, phone: e.target.value })
               }
               placeholder="Phone Number"
               className="bg-[#F3F3F3] w-full h-13 rounded-sm placeholder:text-[#B7B7B7] placeholder:"
+              onBlur={()=> handleBlur('phone')}
             />
             <div className="flex flex-col flex-grow h-full">
               <TextArea
                 label="Message"
                 value={formData.message}
+                error={errors.message}
                 onChange={(e) =>
                   setFormData({ ...formData, message: e.target.value })
                 }
                 placeholder="Leave us a message..."
                 className=" bg-[#F3F3F3]  flex h-[250px]  rounded-sm placeholder:text-[#B7B7B7] placeholder:"
+                onBlur={()=> handleBlur('message')}
               />
             </div>
-
             <Btn
               type="submit"
               className="bg-gradient-to-b text-nowrap py-3 from-[#FF9040] to-[#FF6B00] w-full text-base text-white"

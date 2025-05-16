@@ -1,6 +1,5 @@
 
-import React, { useEffect} from 'react';
-import { IoMdCloseCircleOutline } from 'react-icons/io';
+import React, { useEffect, useState} from 'react';
 import { useAirports, useDashboardInfo } from '../../hooks/useDashboardInfo';
 import { useScroll } from '../../hooks/useSmoothScroll';
 import { getPromptColor } from '../../pages/dashboard/chats/PromptColor';
@@ -16,29 +15,39 @@ import { toast } from 'react-toastify';
 import { useInput } from '../../hooks/useInput';
 import { PenLine } from 'lucide-react';
 import { EditData } from '../dashboard-sections/edit';
+import { Close } from '../ui/Close';
 
 
 interface EditModalProps {
   prompts: string[] | undefined;
   close: () => void;
   onUpdatePrompt: (index: number, value: string) => void;
+  onUpdateReturnDate: (date:string) => void;
 }
 
 const EditModal: React.FC<EditModalProps> = ({
   prompts,
   close,
   onUpdatePrompt,
+  onUpdateReturnDate
 }) => {
 
   const {scrollContainerRef, handleScroll} = useScroll();
-  const {handleEditClick, setPromptIndex, editedValue, setEditedValue, promptIndex, editQuestion} = useEdit();
+  const {handleEditClick, setPromptIndex, editedValue, setEditedValue, promptIndex, editQuestion, fieldString, setFieldString} = useEdit();
   const {date, setDate, setDateSelect} = useInput();
-  const { preferences} = useDashboardInfo();
+  const {preferences} = useDashboardInfo();
   const {showCalendar, setShowCalendar} = useModals()
-  const { fetchAirports,airportSuggestions } = useAirports();
+  const {fetchAirports, airportSuggestions} = useAirports();
   const {showPopData, setShowPopData, searchParam, setSearchParam } = useModals();
- 
 
+  const [selectedReturnDate, setSelectedReturnDate] = useState<string | null>(null);
+
+
+  const fields = ['one way', 'round trip', 'multi city'];
+  const isChangeFields = fields?.some(field => editQuestion?.toLowerCase().includes(field))  
+  const isMultiLegTrip = fieldString?.toLowerCase() === 'round trip' || fieldString?.toLowerCase() === 'multi city';
+
+ 
   useEffect(()=> { fetchAirports()},[fetchAirports])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -46,9 +55,9 @@ const EditModal: React.FC<EditModalProps> = ({
     setEditedValue(value);
     setSearchParam(value);
 
-    if (value.toLowerCase().includes('airport')) {
+    if (value.toLowerCase().includes('airport') && editQuestion?.toLowerCase().includes('airport')) {
       setShowPopData(true);
-    } else if (value.toLowerCase().includes('/')) {
+    } else if (value.toLowerCase().includes('-') || value.toLowerCase().includes('/')) {
       setShowCalendar(true);
     } else if (value.toLowerCase().includes('economy') || value.toLowerCase().includes('business') || value.toLowerCase().includes('first')) {
       setShowPopData(true);
@@ -61,25 +70,27 @@ const EditModal: React.FC<EditModalProps> = ({
   const analysis = editedValue;
 
   const handleInputFocus = () => {
-    if (editedValue.trim().length === 0) return;
+    if (editedValue.trim().length === 0) return null;
   
     const lowerCaseAnalysis = analysis.toLowerCase();
   
-    if (lowerCaseAnalysis.includes('airport')) {
-      const airport = airportSuggestions.find(
-        airport => airport.code === preferences?.originAirport
-      );
-      if (airport && lowerCaseAnalysis.includes(airport.code.toLowerCase())) {
-        setShowPopData(true);
-        return;
-      }
+    if (
+      ( editQuestion && lowerCaseAnalysis.includes('airport')) &&
+      airportSuggestions.some(
+        airport =>
+          airport.code === preferences?.originAirport &&
+          lowerCaseAnalysis.includes(airport.code.toLowerCase())
+      )
+    ) {
+      setShowPopData(true);
+      return;
     }
 
-    if (lowerCaseAnalysis.includes('-') || lowerCaseAnalysis.includes('/')) {
+    if (['-', '/'].some((char) => lowerCaseAnalysis.includes(char))) {
       setShowCalendar(true);
-      return; 
+      return;
     }
-  
+
     const keywords = [
       'economy',
       'business class',
@@ -88,57 +99,89 @@ const EditModal: React.FC<EditModalProps> = ({
       'one way',
       'trip',
       'city',
+      'round trip',
+      'multi city',
     ];
-  
-    if (keywords.some(keyword => lowerCaseAnalysis.includes(keyword))) {
+
+    if (editQuestion && keywords.some(keyword => editQuestion.toLowerCase().includes(keyword) && lowerCaseAnalysis.includes(keyword))) {
       setShowPopData(true);
     }
   };
 
   const handleDateSelect = (arg: DateSelectArg) => {
-      const formattedDate = arg.start?.toLocaleDateString('en-US', {
-        month: '2-digit',
-        day: '2-digit',
-        year: 'numeric',
-      });
-      setEditedValue(formattedDate || '');
-      setDate(arg.start);
-    };
-  
-    const updateDateSelect = (date: Date | null) => {
-      setDateSelect(date);
-    };
-  
-    const handleSubmitDate = () => {
-      if (editedValue.length !== 0 && promptIndex !== null) {
-        handleSave(promptIndex);
-        updateDateSelect(date);
-        setShowCalendar(false);
-      } else {
-        toast.warning('Pick a date');
-      }
-    };
+    if(!arg.start) return;
 
-    const handleSave = (index: number) => {
-      if (!editedValue.trim()) {
-        toast.warning('Input cannot be empty');
-        return;
-      }
-      if (prompts) {
-        onUpdatePrompt(index, editedValue); 
-        setPromptIndex(null);
-        setShowPopData(false);
-        setEditedValue('');
+    const formattedDate =arg.start ? `${arg.start.getFullYear()}-${String(arg.start.getMonth() + 1).padStart(2, '0')}-${String(arg.start.getDate()).padStart(2, '0')}`
+    : '';
+
+    
+    console.log('Date Selection Debug:', {
+      formattedDate,
+      isMultiLegTrip,
+      fieldString,
+      editedValue
+    });
+
+    setEditedValue(formattedDate || '');
+    setDate(arg.start);
+     if (isMultiLegTrip) {
+      console.log('Setting return date:', formattedDate);
+      setSelectedReturnDate(formattedDate);
+    }
+  };
+  
+
+  const updateDateSelect = (date: Date | null) => {
+    setDateSelect(date);
+  };
+
+  const handleSubmitDate = () => {
+    if (editedValue.length === 0) {
+      toast.warning('Pick a date');
+      return;
+    }
+
+    if (isMultiLegTrip && selectedReturnDate) {
+      console.log('Updating return date:', selectedReturnDate);
+      onUpdateReturnDate(selectedReturnDate);
+      close();
+      return;
+    }
+
+    if (promptIndex !== null) {
+      handleSave(promptIndex);
+    }
+    updateDateSelect(date);
+    setShowCalendar(false);
+  };
+
+  const handleSave = (index: number) => {
+    if (!editedValue.trim()) {
+      toast.warning('Input cannot be empty');
+      return;
+    }
+    if (prompts) {
+      onUpdatePrompt(index, editedValue); 
+      setPromptIndex(null);
+      setShowPopData(false);
+      setEditedValue('');
+      if (
+        isChangeFields &&
+        editedValue.toLowerCase() !== 'one way' &&
+        (editedValue.toLowerCase() === 'round trip' || editedValue.toLowerCase() === 'multi city')
+      ) {
+        setFieldString(editedValue);
+        setShowCalendar(true);
+      } else {
         close();
       }
-    };
+    }
+  };
+  
 
   return (
     <div className="relative flex flex-col w-full h-full bg-white justify-between rounded-2xl">
-      <IoMdCloseCircleOutline
-        onClick={close}
-        className="text-4xl text-black self-end mt-2 mr-2 cursor-pointer hover:scale-105 transition-transform duration-200 ease-in-out"
-      />
+      <Close Action={() => {close(); setFieldString(null)}} />
       <div
         ref={scrollContainerRef}
         onWheel={handleScroll}
@@ -158,27 +201,27 @@ const EditModal: React.FC<EditModalProps> = ({
         ))}
       </div>
 
-      <EditData message={editQuestion} />
+      <EditData message={editQuestion} field={fieldString} />
       
       <div className="relative w-full p-2 flex items-center justify-center bg-white border-t h-30">
         <div className="items-center max-w-[678px] w-full rounded-2xl py-4 px-4 lg:px-8 flex message bg-tint">
           <Input
-              value={editedValue}
-              onChange={handleInputChange}
-              onKeyDown={(e)=> {if(e.key === 'Enter' && promptIndex !== null) handleSave(promptIndex)}}
-              onFocus={handleInputFocus}
-              type="text"
-              placeholder="Please Enter Your Message"
-              className="text-xs md:text-sm lg:text-xl flex-grow bg-transparent focus:bg-transparent border-0 rounded-lg outline-0"
+            value={editedValue}
+            onChange={handleInputChange}
+            onKeyDown={(e)=> {if(e.key === 'Enter' && promptIndex !== null) handleSave(promptIndex)}}
+            onFocus={handleInputFocus}
+            type="text"
+            placeholder="Please Enter Your Message"
+            className="text-xs md:text-sm lg:text-xl flex-grow bg-transparent focus:bg-transparent border-0 rounded-lg outline-0"
           />
           <IoSend
-              onClick={() => promptIndex !== null && handleSave(promptIndex)}
-              className={`${editedValue.length >= 4 ? 'text-primary-600' : 'text-neutral-400'} cursor-pointer`}
-              size={24}
+            onClick={() => promptIndex !== null && handleSave(promptIndex)}
+            className={`${editedValue.length >= 4 ? 'text-primary-600' : 'text-neutral-400'} cursor-pointer`}
+            size={24}
           />
         </div>
       </div>
-
+      { showPopData &&
         <SuggestionPanel
           visible={showPopData}
           position="bottom-30 lg:left-[12%]"
@@ -191,9 +234,12 @@ const EditModal: React.FC<EditModalProps> = ({
           setShowPopData(false);
         }}
         />
-        <Modal position="absolute" close={()=>setShowCalendar(false)} display={showCalendar} className='backdrop-blur-md'>
+      }
+      { showCalendar &&
+        <Modal position="absolute" close={()=>setShowCalendar(false)} display={showCalendar} className=''>
           <Calendar Click={handleDateSelect} selectedDate={null} Close={handleSubmitDate}  />
         </Modal>
+      }
     </div>
   );
 };

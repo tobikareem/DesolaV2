@@ -21,6 +21,7 @@ import { useModals } from "../../../hooks/useModals";
 import { useInput } from "../../../hooks/useInput";
 import { DateSelectArg } from "@fullcalendar/core/index.js";
 import { PenLine } from "lucide-react";
+import { useIsDesktop } from "../../../hooks/useDesktopSize";
 
 const analyzeLastMessage = (message?: string) => {
   if (!message) return {
@@ -54,6 +55,7 @@ const Dashboard: React.FC = () => {
   const { inputValue, setInputValue, dateSelect, setDateSelect, setDate, date } = useInput();
   const { fetchAirports, airportSuggestions } = useAirports();
   const { loadPreferences, preferences } = useDashboardInfo();
+  const isDesktop = useIsDesktop();
   const debounce = useDebounce();
   // Local UI state
   const [botLoader, setBotLoader] = useState(false);
@@ -105,7 +107,6 @@ const Dashboard: React.FC = () => {
     if (analysis.needsClass && preferences?.travelClass) {
       finalInputValue = `${preferences.travelClass}`;
     }
-
     setInputValue(finalInputValue);
   }, [chatLog, preferences, airportSuggestions, setInputValue]);
 
@@ -227,6 +228,7 @@ const Dashboard: React.FC = () => {
   };
 
   const isOneWay = chatLog.some(msg => msg.message.toLowerCase().includes('one way'));
+  const isLastMessage = chatLog.length > 0 && chatLog[chatLog.length - 1].message.toLowerCase().includes('click the search button')
 
   return (
     <div className="flex">
@@ -239,11 +241,8 @@ const Dashboard: React.FC = () => {
 
         <ChatHistory chatLog={chatLog} botLoader={botLoader} isLoading={chatLoading} />
 
-        {Array.isArray(recentPrompts) && (isOneWay ? recentPrompts.length >= 5 : recentPrompts.length >= 6) && (
-          <Btn
-            onClick={() => {
-              toggleModal('flight');
-            }}
+        {isLastMessage && Array.isArray(recentPrompts) && (isOneWay ? recentPrompts.length >= 5 : recentPrompts.length >= 6) && (
+          <Btn onClick={() => {toggleModal('flight');}}
             className="fixed lg:hidden px-6 py-1 w-fit bg-secondary-500 text-neutral-100 self-end bottom-[130px] right-4"
           >
             Search
@@ -259,26 +258,55 @@ const Dashboard: React.FC = () => {
           suggestionsVisible={showPopData}
           setSuggestionsVisible={setShowPopData}
         />
-
-        <SuggestionPanel
-          visible={showPopData}
-          position="bottom-30 left-4 lg:left-[12%]"
-          lastMessage={chatLog[chatLog.length - 1]?.message || ''}
-          airportSuggestions={airportSuggestions}
-          searchParam={searchParam}
-          onSelect={handleSelectSuggestion}
-        />
-
-        <Modal close={toggleEditModal} display={showEditModal}>
-          <EditModal prompts={recentPrompts} close={toggleEditModal} onUpdatePrompt={handleUpdatePrompt}
+        { showPopData &&
+          <SuggestionPanel
+            visible={showPopData}
+            position="bottom-30 left-4 lg:left-[12%]"
+            lastMessage={chatLog[chatLog.length - 1]?.message || ''}
+            airportSuggestions={airportSuggestions}
+            searchParam={searchParam}
+            onSelect={handleSelectSuggestion}
           />
-        </Modal>
+        }
+        { showEditModal &&
+          <Modal close={toggleEditModal} display={showEditModal}>
+            <EditModal prompts={recentPrompts} 
+              close={toggleEditModal} 
+              onUpdatePrompt={handleUpdatePrompt}
+              onUpdateReturnDate={(date) => setRecentPrompts(prev => {
+                const newPrompts = [...prev];
+                // Find all date strings in prompts
+                const dateIndices = newPrompts
+                  .map((item, idx) => ({ item, idx }))
+                  .filter(({ item }) => /^\d{4}-\d{2}-\d{2}$/.test(item));
 
+                if (dateIndices.length === 0) {
+                  // No dates yet, add as departure (shouldn't happen in your flow)
+                  newPrompts.push(date);
+                } else if (dateIndices.length === 1) {
+                  // Only departure exists, insert return date after it
+                  newPrompts.splice(dateIndices[0].idx + 1, 0, date);
+                } else {
+                  // Replace the second date (return date) to always be after departure
+                  // Remove any existing return date not in the right place
+                  if (dateIndices[1].idx !== dateIndices[0].idx + 1) {
+                    newPrompts.splice(dateIndices[1].idx, 1);
+                    newPrompts.splice(dateIndices[0].idx + 1, 0, date);
+                  } else {
+                    newPrompts[dateIndices[1].idx] = date;
+                  }
+                }
+
+                console.log('Updated recentPrompts:', newPrompts);
+                return newPrompts;
+              })}
+            />
+          </Modal>
+        }
         <Modal position="absolute" close={handleCloseCalendar} display={showCalendar}>
           <Calendar Click={handleDateSelect} selectedDate={dateSelect} Close={handleSubmitDate} />
         </Modal>
-
-        <MobileRender />
+        {!isDesktop && <MobileRender />}
       </div>
 
       <RightPanel />
