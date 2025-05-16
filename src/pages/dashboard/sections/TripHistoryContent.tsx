@@ -17,7 +17,7 @@ export const TripHistoryContent = () => {
   const [nextPageToken, setNextPageToken] = useState<string | null>(null);
   const [hasMoreResults, setHasMoreResults] = useState(false);
 
-  const [selectedPeriod, setSelectedPeriod] = useState<string>('Today');
+  const [selectedPeriod, setSelectedPeriod] = useState<string>('today');
   const [filterVisible, setFilterVisible] = useState(false);
   const [originFilter, setOriginFilter] = useState('');
   const [destinationFilter, setDestinationFilter] = useState('');
