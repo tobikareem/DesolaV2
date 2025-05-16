@@ -53,7 +53,7 @@ export const TripHistoryContent = () => {
     } finally {
       setLoading(false);
     }
-  }, [userId, selectedPeriod, originFilter, destinationFilter, nextPageToken, getClickHistory]);
+  }, [userId, selectedPeriod, originFilter, destinationFilter, getClickHistory]);
 
   useEffect(() => {
 
