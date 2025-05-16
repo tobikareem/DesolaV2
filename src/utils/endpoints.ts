@@ -8,5 +8,6 @@ export const ENDPOINTS_API_PATH ={
     route: "airline/route",
     user_preferences: "user/preferences",
     flight_search: 'flight/search',
-    track: 'track'
+    track: 'track',
+    flight_trackHistory: 'flight/trackHistory',
 }

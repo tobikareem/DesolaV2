@@ -46,7 +46,8 @@ const FlightOffersModal: React.FC<Props> = ({ onClose }) => {
     const payload: ClickTrackingPayload = {
       userId: storage.getItem(SESSION_VALUES.azure_b2c_userId) ?? '',
       unifiedFlightOffer: offer,
-      clickedAt: new Date().toISOString()
+      clickedAt: new Date().toISOString(),
+      userFriendlyName: storage.getItem(SESSION_VALUES.azure_user_name) ?? '',
     };
 
     console.log('Book Now clicked:', offer);
