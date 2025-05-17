@@ -2,7 +2,6 @@ import { Headset, House, LogOut, Trash2, User } from 'lucide-react';
 import React, { useContext, useEffect, useState } from 'react';
 import { PiHeadsetFill, PiRoadHorizonBold, PiRoadHorizonFill, PiTrashFill } from 'react-icons/pi';
 import { RiHome5Fill, RiUserFill } from 'react-icons/ri';
-import { useNavigate } from 'react-router';
 import { SidebarLogout } from '../../../components/dashboard-sections/sidebar/SidebarLogout';
 import { SidebarTab } from '../../../components/dashboard-sections/sidebar/SidebarTab';
 import { ClearChat } from '../../../components/modals/ClearChat';
