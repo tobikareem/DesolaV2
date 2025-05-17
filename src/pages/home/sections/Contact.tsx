@@ -119,7 +119,7 @@ const handleSubmit = (e: React.FormEvent) => {
                 type="text"
                 name="lastname"
                 value={formData.lastname}
-                error={formData.lastname}
+                error={errors.lastname}
                 onChange={handleChange}
                 placeholder="Last Name"
                 className="bg-[#F3F3F3] w-full h-13 rounded-sm placeholder:text-[#B7B7B7] placeholder:"
@@ -140,6 +140,7 @@ const handleSubmit = (e: React.FormEvent) => {
               type="text"
               name="phone"
               value={formData.phone}
+              error={errors.phone}
               onChange={handleChange}
               placeholder="Phone Number"
               className="bg-[#F3F3F3] w-full h-13 rounded-sm placeholder:text-[#B7B7B7] placeholder:"
