@@ -36,7 +36,7 @@ export const GetRequiredFields = (route: string) => {
 };
 
 export const RightPanel: React.FC = () => {
-  const navigate = useNavigate();
+
   const {chatLog} = useContext(ChatContext);
   const [selectedTab, setSelectedTab] = useState<string>('home');
   const { setNavigationData } = useContext(NavigationContext);
@@ -83,7 +83,6 @@ export const RightPanel: React.FC = () => {
     logout();
     storageService.removeItem('RecentPrompts');
     storageService.removeItem('chatLog');
-    navigate('/');
   };
 
   const handleConfirmDelete = () => {

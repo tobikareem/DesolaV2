@@ -45,7 +45,7 @@ class ChatBotState {
   }
 
   private detectClass(message: string): boolean {
-    const classTerms = ['business class', 'economy', 'premium economy', 'first class'];
+    const classTerms = ['business class', 'economy', 'premium economy', 'first class', 'business'];
     return classTerms.some(term => message.includes(term));
   }
 

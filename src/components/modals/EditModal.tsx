@@ -137,6 +137,7 @@ const EditModal: React.FC<EditModalProps> = ({
     if (isMultiLegTrip && selectedReturnDate) {
       onUpdateReturnDate(selectedReturnDate);
       setFieldString(null);
+      toast.success('Return date updated');
       close();
       return;
     }
