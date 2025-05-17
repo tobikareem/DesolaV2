@@ -34,8 +34,6 @@ export const useChatInteractions = (
     const sendUserMessage = (message: string): void => {
         if (!message.trim()) return;
 
-
-        
         setChatLog((prev) => [
             ...prev,
             { message, sender: 'user' },

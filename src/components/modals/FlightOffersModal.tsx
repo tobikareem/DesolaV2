@@ -1,6 +1,6 @@
 
 import React, { useContext, useEffect } from 'react';
-import { IoIosArrowDown, IoMdCloseCircleOutline } from 'react-icons/io';
+import { IoIosArrowDown} from 'react-icons/io';
 import { Link } from 'react-router-dom';
 import { useFlightSearch } from '../../hooks/useDashboardInfo';
 import { FlightOffer } from '../../models/FlightSearchResponse';
@@ -13,6 +13,7 @@ import { useClickTracking } from '../../hooks/useClickTracking';
 import { ClickTrackingPayload } from '../../models/ClickTrackingPayload';
 import { CustomStorage } from '../../utils/customStorage';
 import { SESSION_VALUES } from '../../utils/constants';
+import { Close } from '../ui/Close';
 
 
 type Props = {
@@ -46,7 +47,8 @@ const FlightOffersModal: React.FC<Props> = ({ onClose }) => {
     const payload: ClickTrackingPayload = {
       userId: storage.getItem(SESSION_VALUES.azure_b2c_userId) ?? '',
       unifiedFlightOffer: offer,
-      clickedAt: new Date().toISOString()
+      clickedAt: new Date().toISOString(),
+      userFriendlyName: storage.getItem(SESSION_VALUES.azure_user_name) ?? '',
     };
 
     console.log('Book Now clicked:', offer);
@@ -62,10 +64,7 @@ const FlightOffersModal: React.FC<Props> = ({ onClose }) => {
         <Text as='h3' weight="bold" color='text-primary-600' className='font-grotesk w-full text-center'>
           Best Offers
         </Text>
-        <IoMdCloseCircleOutline
-          onClick={onClose}
-          className={`text-3xl text-black hover:scale-125 transition-transform duration-200 ease-in-out`}
-        />
+        <Close Action={onClose} />
       </div>
 
       <div className="py-4 overflow-hidden h-[87%]">

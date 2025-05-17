@@ -127,7 +127,7 @@ class ChatBotState {
       return this.stages.class_selected;
     }
 
-    return 'Please respond to the last prompt.';
+    return 'Chat Timeout.. Which airport will you be flying from?';
   }
 
   public reset(): void {

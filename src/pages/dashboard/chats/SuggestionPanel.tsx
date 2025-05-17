@@ -97,16 +97,16 @@ const SuggestionPanel: React.FC<SuggestionPanelProps> = ({
     };
 
     const editSuggestionContent = () => {
-        const classKeywords = ['first class', 'economy', 'business class', 'premium economy'];
-        const routeKeywords = ['one way trip', 'round trip', 'multi city'];
+        const classKeywords = ['First class', 'Economy', 'Business class', 'Premium economy'];
+        const routeKeywords = ['One way trip', 'Round trip', 'Multi city'];
     
-        if (classKeywords.some(keyword => entryMessage?.toLowerCase().includes(keyword))) {
+        if (classKeywords.some(keyword => entryMessage?.toLowerCase().includes(keyword.toLowerCase()))) {
             return classKeywords.map((item, idx) => (
                 <SuggestionButton key={idx} text={item} onClick={() => onSelect(item)} />
             ));
         }
     
-        if (routeKeywords.some(keyword => entryMessage?.toLowerCase().includes(keyword))) {
+        if (routeKeywords.some(keyword => entryMessage?.toLowerCase().includes(keyword.toLowerCase()))) {
             return routeKeywords.map((route, idx) => (
                 <SuggestionButton key={idx} text={route} onClick={() => onSelect(route)} />
             ));

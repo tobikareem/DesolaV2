@@ -21,6 +21,7 @@ import { useModals } from "../../../hooks/useModals";
 import { useInput } from "../../../hooks/useInput";
 import { DateSelectArg } from "@fullcalendar/core/index.js";
 import { PenLine } from "lucide-react";
+import { useIsDesktop } from "../../../hooks/useDesktopSize";
 
 const analyzeLastMessage = (message?: string) => {
   if (!message) return {
@@ -54,6 +55,7 @@ const Dashboard: React.FC = () => {
   const { inputValue, setInputValue, dateSelect, setDateSelect, setDate, date } = useInput();
   const { fetchAirports, airportSuggestions } = useAirports();
   const { loadPreferences, preferences } = useDashboardInfo();
+  const isDesktop = useIsDesktop();
   const debounce = useDebounce();
   // Local UI state
   const [botLoader, setBotLoader] = useState(false);
@@ -105,7 +107,6 @@ const Dashboard: React.FC = () => {
     if (analysis.needsClass && preferences?.travelClass) {
       finalInputValue = `${preferences.travelClass}`;
     }
-
     setInputValue(finalInputValue);
   }, [chatLog, preferences, airportSuggestions, setInputValue]);
 
@@ -227,23 +228,35 @@ const Dashboard: React.FC = () => {
   };
 
   const isOneWay = chatLog.some(msg => msg.message.toLowerCase().includes('one way'));
+  const isLastMessage = chatLog.length > 0 && chatLog[chatLog.length - 1].message.toLowerCase().includes('click the search button')
+
+  const removeReturnDate = () => {
+    setRecentPrompts(prev => {
+      const newPrompts = [...prev];
+      const dateIndices = newPrompts
+        .map((item, idx) => ({ item, idx }))
+        .filter(({ item }) => /^\d{4}-\d{2}-\d{2}$/.test(item));
+      if (dateIndices.length >= 2) {
+        newPrompts.splice(dateIndices[1].idx, 1);
+        console.log('Removed return date. Updated recentPrompts:', newPrompts);
+      }
+      return newPrompts;
+    });
+  };
 
   return (
     <div className="flex">
       <div className="relative flex flex-col bg-background border border-neutral-300 w-full lg:w-[60%] h-screen">
         <RecentPromptsBar prompts={recentPrompts} onEditClick={toggleEditModal} />
-
+        
         <div className={`flex lg:hidden w-full mt-16 justify-end items-center py-1.5 px-5`}>
           <PenLine onClick={toggleEditModal} className={`${recentPrompts?.length != 0 ? '' : 'hidden'} text-primary-500 text-4xl`} />
         </div>
 
         <ChatHistory chatLog={chatLog} botLoader={botLoader} isLoading={chatLoading} />
 
-        {Array.isArray(recentPrompts) && (isOneWay ? recentPrompts.length >= 5 : recentPrompts.length >= 6) && (
-          <Btn
-            onClick={() => {
-              toggleModal('flight');
-            }}
+        {isLastMessage && Array.isArray(recentPrompts) && (isOneWay ? recentPrompts.length >= 5 : recentPrompts.length >= 6) && (
+          <Btn onClick={() => {toggleModal('flight');}}
             className="fixed lg:hidden px-6 py-1 w-fit bg-secondary-500 text-neutral-100 self-end bottom-[130px] right-4"
           >
             Search
@@ -259,28 +272,49 @@ const Dashboard: React.FC = () => {
           suggestionsVisible={showPopData}
           setSuggestionsVisible={setShowPopData}
         />
-
-        <SuggestionPanel
-          visible={showPopData}
-          position="bottom-30 left-4 lg:left-[12%]"
-          lastMessage={chatLog[chatLog.length - 1]?.message || ''}
-          airportSuggestions={airportSuggestions}
-          searchParam={searchParam}
-          onSelect={handleSelectSuggestion}
-        />
-
-        <Modal close={toggleEditModal} display={showEditModal}>
-          <EditModal prompts={recentPrompts} close={toggleEditModal} onUpdatePrompt={handleUpdatePrompt}
+        { showPopData &&
+          <SuggestionPanel
+            visible={showPopData}
+            position="bottom-30 left-4 lg:left-[12%]"
+            lastMessage={chatLog[chatLog.length - 1]?.message || ''}
+            airportSuggestions={airportSuggestions}
+            searchParam={searchParam}
+            onSelect={handleSelectSuggestion}
           />
-        </Modal>
-
+        }
+        { showEditModal &&
+          <Modal close={toggleEditModal} display={showEditModal}>
+            <EditModal prompts={recentPrompts} 
+              close={toggleEditModal} 
+              onUpdatePrompt={handleUpdatePrompt}
+              onUpdateReturnDate={(date) => setRecentPrompts(prev => {
+                const newPrompts = [...prev];
+                const dateIndices = newPrompts
+                  .map((item, idx) => ({ item, idx }))
+                  .filter(({ item }) => /^\d{4}-\d{2}-\d{2}$/.test(item));
+                if (dateIndices.length === 0) {
+                  newPrompts.push(date);
+                } else if (dateIndices.length === 1) {
+                  newPrompts.splice(dateIndices[0].idx + 1, 0, date);
+                } else {
+                  if (dateIndices[1].idx !== dateIndices[0].idx + 1) {
+                    newPrompts.splice(dateIndices[1].idx, 1);
+                    newPrompts.splice(dateIndices[0].idx + 1, 0, date);
+                  } else {
+                    newPrompts[dateIndices[1].idx] = date;
+                  }
+                }
+                return newPrompts;
+              })}
+              onChangeToOneWay={removeReturnDate}
+            />
+          </Modal>
+        }
         <Modal position="absolute" close={handleCloseCalendar} display={showCalendar}>
           <Calendar Click={handleDateSelect} selectedDate={dateSelect} Close={handleSubmitDate} />
         </Modal>
-
-        <MobileRender />
+        {!isDesktop && <MobileRender />}
       </div>
-
       <RightPanel />
     </div>
   );

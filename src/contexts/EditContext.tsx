@@ -7,6 +7,8 @@ export interface EditContextType {
   setPromptIndex: (index: number | null) => void;
   editQuestion: string | null;
   setEditQuestion: (question: string | null) => void;
+  fieldString: string | null;
+  setFieldString: (field: string | null) => void;
 }
 
 export const EditContext = createContext<EditContextType>({
@@ -16,6 +18,8 @@ export const EditContext = createContext<EditContextType>({
   setPromptIndex: () => { },
   editQuestion: '',
   setEditQuestion: () => { },
+  fieldString: '',
+  setFieldString: () => { },
 });
 
 
