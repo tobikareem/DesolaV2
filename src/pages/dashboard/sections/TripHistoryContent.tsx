@@ -1,11 +1,12 @@
 import { SlidersHorizontal } from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Btn } from "../../../components/ui/Button";
 import { Text } from "../../../components/ui/TextComp";
 import { useClickTracking } from "../../../hooks/useClickTracking";
 import { ClickHistoryItem, ClickHistoryQueryParams } from "../../../models/ClickTrackingPayload";
 import { SESSION_VALUES } from "../../../utils/constants";
 import { CustomStorage } from "../../../utils/customStorage";
+import { Input } from "../../../components/ui/InputField";
 
 const storage = new CustomStorage();
 
@@ -24,7 +25,7 @@ export const TripHistoryContent = () => {
 
   const userId = storage.getItem(SESSION_VALUES.azure_b2c_userId) ?? "";
 
-  const fetchClickHistory = useCallback(async (reset = true) => {
+  const fetchClickHistory = async (reset = true) => {
     if (!userId) return;
 
     try {
@@ -53,12 +54,11 @@ export const TripHistoryContent = () => {
     } finally {
       setLoading(false);
     }
-  }, [userId, selectedPeriod, originFilter, destinationFilter, getClickHistory]);
+  };
 
   useEffect(() => {
-
     fetchClickHistory();
-  }, [fetchClickHistory]);
+  }, [userId, selectedPeriod, originFilter, destinationFilter, nextPageToken]);
 
   const handlePeriodChange = (period: string) => {
     setSelectedPeriod(period);
@@ -85,7 +85,7 @@ export const TripHistoryContent = () => {
         My Trips
       </Text>
 
-      <div className="flex items-center h-['100px'] mb-2 pb-4 gap-3 bg-white w-full border-b border-neutral-300">
+      <div className="flex flex-wrap items-center h-['100px'] mb-2 pb-4 gap-3 bg-white w-full border-b border-neutral-300">
         {['Today', 'Yesterday', 'Last Week', 'Last Month', 'Filter'].map((period) => (
           <Btn
             key={period}
@@ -98,7 +98,8 @@ export const TripHistoryContent = () => {
               }
             }}
             type="button"
-            className={`flex items-center cursor-pointer gap-2 ${selectedPeriod === period.toLowerCase().replace(' ', '') ? 'bg-primary-100' : ''}`}
+            className={`flex items-center cursor-pointer gap-2 text-nowrap
+                ${selectedPeriod === period.toLowerCase().replace(' ', '') ? 'bg-primary-100' : ''}`}
             size="sm"
           >
             <Text>{period}</Text>
@@ -112,7 +113,7 @@ export const TripHistoryContent = () => {
           <div className="grid grid-cols-2 gap-4 mb-4">
             <div>
               <label className="block text-sm font-medium mb-1">Origin</label>
-              <input
+              <Input
                 type="text"
                 value={originFilter}
                 onChange={(e) => setOriginFilter(e.target.value)}
@@ -122,7 +123,7 @@ export const TripHistoryContent = () => {
             </div>
             <div>
               <label className="block text-sm font-medium mb-1">Destination</label>
-              <input
+              <Input
                 type="text"
                 value={destinationFilter}
                 onChange={(e) => setDestinationFilter(e.target.value)}
@@ -140,16 +141,16 @@ export const TripHistoryContent = () => {
       {loading && historyData.length === 0 ? (
         <div className="text-center py-8">
           <div className="spinner"></div>
-          <p className="mt-2">Loading your trip history...</p>
+          <Text className="mt-2">Loading your trip history...</Text>
         </div>
       ) : error ? (
         <div className="text-center py-8 text-red-500">
-          <p>{error}</p>
+          <Text>{error}</Text>
           <Btn onClick={() => fetchClickHistory()} className="mt-2" size="sm">Retry</Btn>
         </div>
       ) : historyData.length === 0 ? (
         <div className="text-center py-8">
-          <p className="text-neutral-500">No trip history found for the selected filters.</p>
+          <Text className="text-neutral-500">No trip history found for the selected filters.</Text>
         </div>
       ) : (
         <div className="space-y-4">

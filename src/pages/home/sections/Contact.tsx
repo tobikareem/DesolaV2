@@ -9,8 +9,8 @@ import { WEB_PAGES } from '../../../utils/constants';
 import { ENDPOINTS_API_PATH } from '../../../utils/endpoints';
 import usePageContent from '../../../hooks/usePageContent';
 import { TextArea } from '../../../components/ui/TextAreaField';
-import { validateFormData } from '../../../hooks/useValidate';
 import { toast } from 'react-toastify';
+import { UseValidate } from '../../../hooks/useValidation';
 
 const Contact = () => {
   const {
@@ -51,20 +51,20 @@ const handleChange = (
 };
 
 
-
- const handleSubmit = (e: React.FormEvent) => {
+const handleSubmit = (e: React.FormEvent) => {
    e.preventDefault();
-   const validationErrors = validateFormData(formData);
+   const validationErrors = UseValidate(formData);
 
    if (Object.keys(validationErrors).length > 0) {
      setErrors(validationErrors);
+     toast.error('Please, fill the forms appropriately');
    } else {
      setErrors({});
      toast.success('Message sent successfully!');
 
      setFormData({ firstname: "", lastname: "", email: "", phone: "", message: "" });
    }
- };
+};
 
   return (
     <section
@@ -104,84 +104,57 @@ const handleChange = (
             className="mt-5 flex flex-col flex-grow w-full h-full gap-4"
           >
             <div className="flex w-full gap-4 lg:gap-6">
-              <div className="w-full">
-                <Input
-                  label="First Name"
-                  type="text"
-                  name="firstname"
-                  value={formData.firstname}
-                  onChange={handleChange}
-                  placeholder="First Name"
-                  className="bg-[#F3F3F3] w-full h-13 rounded-sm placeholder:text-[#B7B7B7] placeholder:"
-                />
-                {errors.firstname && (
-                  <span className="text-red-500 m-0 text-sm">
-                    {errors.firstname}
-                  </span>
-                )}
-              </div>
-              <div className="w-full">
-                <Input
-                  label="Last Name"
-                  type="text"
-                  name="lastname"
-                  value={formData.lastname}
-                  onChange={handleChange}
-                  placeholder="Last Name"
-                  className="bg-[#F3F3F3] w-full h-13 rounded-sm placeholder:text-[#B7B7B7] placeholder:"
-                />
-                {errors.lastname && (
-                  <span className="text-red-500 text-sm">
-                    {errors.lastname}
-                  </span>
-                )}
-              </div>
-            </div>
-
-            <div>
               <Input
-                label="Email Address"
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                placeholder="email"
-                className="bg-[#F3F3F3] w-full h-13 rounded-sm placeholder:text-[#B7B7B7] placeholder:"
-              />
-              {errors.email && (
-                <span className="text-red-500 text-sm">{errors.email}</span>
-              )}
-            </div>
-
-            <div>
-              <Input
-                label="Phone Number"
+                label="First Name"
                 type="text"
-                name="phone"
-                value={formData.phone}
+                name="firstname"
+                value={formData.firstname}
+                error={errors.firstname}
                 onChange={handleChange}
-                placeholder="Phone Number"
+                placeholder="First Name"
                 className="bg-[#F3F3F3] w-full h-13 rounded-sm placeholder:text-[#B7B7B7] placeholder:"
               />
-              {errors.phone && (
-                <span className="text-red-500 text-sm">{errors.phone}</span>
-              )}
+              <Input
+                label="Last Name"
+                type="text"
+                name="lastname"
+                value={formData.lastname}
+                error={formData.lastname}
+                onChange={handleChange}
+                placeholder="Last Name"
+                className="bg-[#F3F3F3] w-full h-13 rounded-sm placeholder:text-[#B7B7B7] placeholder:"
+              />
             </div>
-
+            <Input
+              label="Email Address"
+              type="email"
+              name="email"
+              value={formData.email}
+              error={errors.email}
+              onChange={handleChange}
+              placeholder="email"
+              className="bg-[#F3F3F3] w-full h-13 rounded-sm placeholder:text-[#B7B7B7] placeholder:"
+            />
+            <Input
+              label="Phone Number"
+              type="text"
+              name="phone"
+              value={formData.phone}
+              onChange={handleChange}
+              placeholder="Phone Number"
+              className="bg-[#F3F3F3] w-full h-13 rounded-sm placeholder:text-[#B7B7B7] placeholder:"
+            />
             <div className="flex flex-col flex-grow h-full">
               <TextArea
                 label="Message"
                 name="message"
                 value={formData.message}
+                error={errors.message}
                 onChange={handleChange}
                 placeholder="Leave us a message..."
                 className=" bg-[#F3F3F3]  flex h-[245px]  rounded-sm placeholder:text-[#B7B7B7] placeholder:"
               />
-              {errors.message && (
-                <span className="text-red-500 text-sm">{errors.message}</span>
-              )}
             </div>
-
             <Btn
               type="submit"
               className="bg-gradient-to-b text-nowrap py-3 from-[#FF9040] to-[#FF6B00] w-full text-base text-white"
@@ -202,7 +175,7 @@ const handleChange = (
 
           {loading && <p>Loading Contact...</p>}
           {error && <p>Error fetching Contact: {error}</p>}
-
+          
           <div className=" bg-white w-full h-[28%] rounded-2xl px-4 py-6 lg:px-8 lg:py-8 ">
             <div className="flex flex-col w-full gap-4">
               {faqData?.RowValue?.split(';').map(

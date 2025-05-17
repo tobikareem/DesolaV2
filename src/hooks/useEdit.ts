@@ -3,7 +3,7 @@ import { EditContext } from "../contexts/EditContext";
 
 
 export const useEdit =()=> {
-  const {promptIndex, setPromptIndex, editedValue, setEditedValue, editQuestion, setEditQuestion} = useContext(EditContext);
+  const {promptIndex, setPromptIndex, editedValue, setEditedValue, editQuestion, setEditQuestion, fieldString, setFieldString} = useContext(EditContext);
   
   
   const handleEditClick =(index:number, currentValue:string)=> {
@@ -12,5 +12,5 @@ export const useEdit =()=> {
     setEditQuestion(currentValue);
   }
  
-  return {handleEditClick, promptIndex, setPromptIndex, editedValue, setEditedValue, editQuestion, setEditQuestion}
+  return {handleEditClick, promptIndex, setPromptIndex, editedValue, setEditedValue, editQuestion, setEditQuestion, fieldString, setFieldString}
 }

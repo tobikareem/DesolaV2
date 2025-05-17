@@ -133,7 +133,7 @@ const extractTravelInfo = (recentPrompts: string[], chatLog: ChatMessage[]): Tra
 };
 
 export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
-
+   
     const [chatLog, setChatLog] = useState<ChatMessage[]>(() =>
         storageService.getDefaultItem<ChatMessage[]>('chatLog', [
             {
@@ -166,7 +166,7 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
             setChatLog,
             recentPrompts,
             setRecentPrompts,
-            travelInfo
+            travelInfo, 
         }}>
             {children}
         </ChatContext.Provider>

@@ -1,4 +1,6 @@
-export const validateFormData = (data: {
+
+
+export const UseValidate = (data: {
   email: string;
   phone: string;
   firstname: string;
@@ -41,3 +43,4 @@ export const validateFormData = (data: {
 
   return errors;
 };
+

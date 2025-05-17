@@ -33,7 +33,7 @@ const ChatInput: React.FC<ChatInputProps> = ({
                 />
                 <IoSend
                     onClick={onSend}
-                    className={`${value.length >= 4 ? 'text-primary-600' : 'text-neutral-400'} cursor-pointer`}
+                    className={`${value.length >= 4 ? 'text-primary-600 cursor-pointer' : 'text-neutral-400 cursor-not-allowed'}`}
                     size={24}
                 />
             </div>

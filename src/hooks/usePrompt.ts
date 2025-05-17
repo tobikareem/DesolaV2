@@ -7,7 +7,7 @@ export const usePrompts = (): {
 } => {
     const [recentPrompts, setRecentPrompts] = useState<string[]>([]);
 
-    // Load prompts from session storage on initial mount
+
     useEffect(() => {
         try {
             const storedPrompts = sessionStorage.getItem('RecentPrompts');

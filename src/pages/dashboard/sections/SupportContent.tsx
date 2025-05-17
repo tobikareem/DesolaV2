@@ -3,8 +3,8 @@ import { Input } from '../../../components/ui/InputField';
 import { TextArea } from '../../../components/ui/TextAreaField';
 import { Btn } from '../../../components/ui/Button';
 import { Text } from '../../../components/ui/TextComp';
-import { validateFormData } from '../../../hooks/useValidate';
 import { toast } from 'react-toastify';
+import { UseValidate } from '../../../hooks/useValidation';
 
 export const SupportContent: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -28,19 +28,17 @@ export const SupportContent: React.FC = () => {
       setErrors((prev) => ({ ...prev, [name]: '' }));
     }
   };
-  
-  
-  
+
    const handleSubmit = (e: React.FormEvent) => {
      e.preventDefault();
-     const validationErrors = validateFormData(formData);
+     const validationErrors = UseValidate(formData);
   
      if (Object.keys(validationErrors).length > 0) {
        setErrors(validationErrors);
+       toast.error('Please, fill the forms appropriately');
      } else {
        setErrors({});
        toast.success('Message sent successfully!');
-  
        setFormData({ firstname: "", lastname: "", email: "", phone: "", message: "" });
      }
    };
@@ -71,75 +69,57 @@ export const SupportContent: React.FC = () => {
             <Input
               label="First Name"
               type="text"
+              error={errors.firstname}
               onChange={handleChange}
               value={formData.firstname}
               name="firstname"
               placeholder="First Name"
               className="bg-[#F3F3F3] w-full h-8 !round-md placeholder:text-[#B7B7B7] placeholder:"
             />
-            {errors.firstname && (
-              <span className="text-red-500 m-0 text-sm">
-                {errors.firstname}
-              </span>
-            )}
           </div>
           <div className="w-full">
             <Input
               label="Last Name"
               value={formData.lastname}
+              error={errors.lastname}
               onChange={handleChange}
               name="lastname"
               type="text"
               placeholder="Last Name"
               className="bg-[#F3F3F3] h-8 !round-md placeholder:text-[#B7B7B7] placeholder:"
             />
-            {errors.lastname && (
-              <span className="text-red-500 text-sm">{errors.lastname}</span>
-            )}
           </div>
-
-          <div>
-            <Input
-              label="Email Address"
-              type="email"
-              onChange={handleChange}
-              name="email"
-              value={formData.email}
-              placeholder="email"
-              className="bg-[#F3F3F3] w-full h-8 rounded-md placeholder:text-[#B7B7B7] placeholder:"
-            />
-            {errors.email && (
-              <span className="text-red-500 text-sm">{errors.email}</span>
-            )}
-          </div>
-
-          <div>
-            <Input
-              label="Phone Number"
-              type="text"
-              value={formData.phone}
-              onChange={handleChange}
-              name="phone"
-              placeholder="Phone number"
-              className="bg-[#F3F3F3] w-full h-8 rounded-md placeholder:text-[#B7B7B7] placeholder:"
-            />
-            {errors.phone && (
-              <span className="text-red-500 text-sm">{errors.phone}</span>
-            )}
-          </div>
-
+          <Input
+            label="Email Address"
+            type="email"
+            onChange={handleChange}
+            name="email"
+            value={formData.email}
+            error={errors.email}
+            placeholder="email"
+            className="bg-[#F3F3F3] w-full h-8 rounded-md placeholder:text-[#B7B7B7] placeholder:"
+          />
+          <Input
+            label="Phone Number"
+            type="text"
+            value={formData.phone}
+            error={errors.phone}
+            onChange={handleChange}
+            name="phone"
+            placeholder="Phone number"
+            className="bg-[#F3F3F3] w-full h-8 rounded-md placeholder:text-[#B7B7B7] placeholder:"
+          />
           <div className="flex flex-col flex-grow h-full">
             <TextArea
               label="Message"
               value={formData.message}
+              error={errors.message}
               onChange={handleChange}
               name="message"
               placeholder="Leave us a message..."
               className=" bg-[#F3F3F3]  flex h-[145px]  rounded-md placeholder:text-[#B7B7B7] placeholder:"
             />
-            {errors.message && (
-              <span className="text-red-500 text-sm">{errors.message}</span>
-            )}
+           
           </div>
 
           <Btn
