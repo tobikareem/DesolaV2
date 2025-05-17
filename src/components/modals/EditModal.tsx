@@ -23,13 +23,15 @@ interface EditModalProps {
   close: () => void;
   onUpdatePrompt: (index: number, value: string) => void;
   onUpdateReturnDate: (date:string) => void;
+  onChangeToOneWay: () => void;
 }
 
 const EditModal: React.FC<EditModalProps> = ({
   prompts,
   close,
   onUpdatePrompt,
-  onUpdateReturnDate
+  onUpdateReturnDate,
+  onChangeToOneWay
 }) => {
 
   const {scrollContainerRef, handleScroll} = useScroll();
@@ -114,18 +116,9 @@ const EditModal: React.FC<EditModalProps> = ({
     const formattedDate =arg.start ? `${arg.start.getFullYear()}-${String(arg.start.getMonth() + 1).padStart(2, '0')}-${String(arg.start.getDate()).padStart(2, '0')}`
     : '';
 
-    
-    console.log('Date Selection Debug:', {
-      formattedDate,
-      isMultiLegTrip,
-      fieldString,
-      editedValue
-    });
-
     setEditedValue(formattedDate || '');
     setDate(arg.start);
      if (isMultiLegTrip) {
-      console.log('Setting return date:', formattedDate);
       setSelectedReturnDate(formattedDate);
     }
   };
@@ -142,8 +135,8 @@ const EditModal: React.FC<EditModalProps> = ({
     }
 
     if (isMultiLegTrip && selectedReturnDate) {
-      console.log('Updating return date:', selectedReturnDate);
       onUpdateReturnDate(selectedReturnDate);
+      setFieldString(null);
       close();
       return;
     }
@@ -173,6 +166,7 @@ const EditModal: React.FC<EditModalProps> = ({
         setFieldString(editedValue);
         setShowCalendar(true);
       } else {
+        onChangeToOneWay()
         close();
       }
     }

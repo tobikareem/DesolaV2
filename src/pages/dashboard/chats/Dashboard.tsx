@@ -230,11 +230,25 @@ const Dashboard: React.FC = () => {
   const isOneWay = chatLog.some(msg => msg.message.toLowerCase().includes('one way'));
   const isLastMessage = chatLog.length > 0 && chatLog[chatLog.length - 1].message.toLowerCase().includes('click the search button')
 
+  const removeReturnDate = () => {
+    setRecentPrompts(prev => {
+      const newPrompts = [...prev];
+      const dateIndices = newPrompts
+        .map((item, idx) => ({ item, idx }))
+        .filter(({ item }) => /^\d{4}-\d{2}-\d{2}$/.test(item));
+      if (dateIndices.length >= 2) {
+        newPrompts.splice(dateIndices[1].idx, 1);
+        console.log('Removed return date. Updated recentPrompts:', newPrompts);
+      }
+      return newPrompts;
+    });
+  };
+
   return (
     <div className="flex">
       <div className="relative flex flex-col bg-background border border-neutral-300 w-full lg:w-[60%] h-screen">
         <RecentPromptsBar prompts={recentPrompts} onEditClick={toggleEditModal} />
-
+        
         <div className={`flex lg:hidden w-full mt-16 justify-end items-center py-1.5 px-5`}>
           <PenLine onClick={toggleEditModal} className={`${recentPrompts?.length != 0 ? '' : 'hidden'} text-primary-500 text-4xl`} />
         </div>
@@ -275,20 +289,14 @@ const Dashboard: React.FC = () => {
               onUpdatePrompt={handleUpdatePrompt}
               onUpdateReturnDate={(date) => setRecentPrompts(prev => {
                 const newPrompts = [...prev];
-                // Find all date strings in prompts
                 const dateIndices = newPrompts
                   .map((item, idx) => ({ item, idx }))
                   .filter(({ item }) => /^\d{4}-\d{2}-\d{2}$/.test(item));
-
                 if (dateIndices.length === 0) {
-                  // No dates yet, add as departure (shouldn't happen in your flow)
                   newPrompts.push(date);
                 } else if (dateIndices.length === 1) {
-                  // Only departure exists, insert return date after it
                   newPrompts.splice(dateIndices[0].idx + 1, 0, date);
                 } else {
-                  // Replace the second date (return date) to always be after departure
-                  // Remove any existing return date not in the right place
                   if (dateIndices[1].idx !== dateIndices[0].idx + 1) {
                     newPrompts.splice(dateIndices[1].idx, 1);
                     newPrompts.splice(dateIndices[0].idx + 1, 0, date);
@@ -296,10 +304,9 @@ const Dashboard: React.FC = () => {
                     newPrompts[dateIndices[1].idx] = date;
                   }
                 }
-
-                console.log('Updated recentPrompts:', newPrompts);
                 return newPrompts;
               })}
+              onChangeToOneWay={removeReturnDate}
             />
           </Modal>
         }
@@ -308,7 +315,6 @@ const Dashboard: React.FC = () => {
         </Modal>
         {!isDesktop && <MobileRender />}
       </div>
-
       <RightPanel />
     </div>
   );

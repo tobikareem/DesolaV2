@@ -4,7 +4,7 @@ import { TextArea } from '../../../components/ui/TextAreaField';
 import { Btn } from '../../../components/ui/Button';
 import { Text } from '../../../components/ui/TextComp';
 import { toast } from 'react-toastify';
-import { useValidate} from '../../../hooks/useValidate';
+import { UseValidate } from '../../../hooks/useValidation';
 
 export const SupportContent: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -15,22 +15,33 @@ export const SupportContent: React.FC = () => {
     message: '',
   });
 
-  const {errors, isValid} = useValidate({
-    firstname: formData.firstname,
-    lastname: formData.lastname,
-    email: formData.email,
-    phone: formData.phone,
-    message: formData.message,
-  });
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
   
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  
+  
+    if (errors[name]) {
+      setErrors((prev) => ({ ...prev, [name]: '' }));
+    }
+  };
 
- const handleSubmit = (e: React.FormEvent) => {
-   e.preventDefault();
-
-   if (!isValid) return;
-
-   toast.success('Message submitted successfully!');
- };
+   const handleSubmit = (e: React.FormEvent) => {
+     e.preventDefault();
+     const validationErrors = UseValidate(formData);
+  
+     if (Object.keys(validationErrors).length > 0) {
+       setErrors(validationErrors);
+       toast.error('Please, fill the forms appropriately');
+     } else {
+       setErrors({});
+       toast.success('Message sent successfully!');
+       setFormData({ firstname: "", lastname: "", email: "", phone: "", message: "" });
+     }
+   };
 
   return (
     <div className="flex-1 overflow-y-auto">
@@ -59,10 +70,9 @@ export const SupportContent: React.FC = () => {
               label="First Name"
               type="text"
               error={errors.firstname}
+              onChange={handleChange}
               value={formData.firstname}
-              onChange={(e) =>
-                setFormData({ ...formData, firstname: e.target.value })
-              }
+              name="firstname"
               placeholder="First Name"
               className="bg-[#F3F3F3] w-full h-8 !round-md placeholder:text-[#B7B7B7] placeholder:"
             />
@@ -72,9 +82,8 @@ export const SupportContent: React.FC = () => {
               label="Last Name"
               value={formData.lastname}
               error={errors.lastname}
-              onChange={(e) =>
-                setFormData({ ...formData, lastname: e.target.value })
-              }
+              onChange={handleChange}
+              name="lastname"
               type="text"
               placeholder="Last Name"
               className="bg-[#F3F3F3] h-8 !round-md placeholder:text-[#B7B7B7] placeholder:"
@@ -83,11 +92,10 @@ export const SupportContent: React.FC = () => {
           <Input
             label="Email Address"
             type="email"
+            onChange={handleChange}
+            name="email"
             value={formData.email}
             error={errors.email}
-            onChange={(e) =>
-              setFormData({ ...formData, email: e.target.value })
-            }
             placeholder="email"
             className="bg-[#F3F3F3] w-full h-8 rounded-md placeholder:text-[#B7B7B7] placeholder:"
           />
@@ -96,9 +104,8 @@ export const SupportContent: React.FC = () => {
             type="text"
             value={formData.phone}
             error={errors.phone}
-            onChange={(e) =>
-              setFormData({ ...formData, phone: e.target.value })
-            }
+            onChange={handleChange}
+            name="phone"
             placeholder="Phone number"
             className="bg-[#F3F3F3] w-full h-8 rounded-md placeholder:text-[#B7B7B7] placeholder:"
           />
@@ -107,12 +114,12 @@ export const SupportContent: React.FC = () => {
               label="Message"
               value={formData.message}
               error={errors.message}
-              onChange={(e) =>
-                setFormData({ ...formData, message: e.target.value })
-              }
+              onChange={handleChange}
+              name="message"
               placeholder="Leave us a message..."
               className=" bg-[#F3F3F3]  flex h-[145px]  rounded-md placeholder:text-[#B7B7B7] placeholder:"
             />
+           
           </div>
 
           <Btn
