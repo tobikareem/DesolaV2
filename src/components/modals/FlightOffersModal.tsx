@@ -14,6 +14,7 @@ import { ClickTrackingPayload } from '../../models/ClickTrackingPayload';
 import { CustomStorage } from '../../utils/customStorage';
 import { SESSION_VALUES } from '../../utils/constants';
 import { Close } from '../ui/Close';
+import { useIsDesktop } from '../../hooks/useDesktopSize';
 
 
 type Props = {
@@ -29,6 +30,7 @@ const FlightOffersModal: React.FC<Props> = ({ onClose }) => {
   const { showFlightModal } = useContext(UIContext)
   const [expandedOffers, setExpandedOffers] = React.useState<{ [key: string]: boolean }>({});
   const { trackClick } = useClickTracking();
+  const isDesktop = useIsDesktop()
 
   useEffect(() => {
     if (showFlightModal === true) {
@@ -54,7 +56,6 @@ const FlightOffersModal: React.FC<Props> = ({ onClose }) => {
     console.log('Book Now clicked:', offer);
 
     await trackClick(payload);
-    onClose();
   };
 
 
@@ -93,7 +94,7 @@ const FlightOffersModal: React.FC<Props> = ({ onClose }) => {
                       <img
                         src={offer.airlineLogo}
                         alt="Airline Logo"
-                        className="size-10 rounded-md bg-primary-300 overflow-hidden border-[0.5px] border-neutral-300"
+                        className="size-10 rounded-md bg-primary-100/20 overflow-hidden border-[0.5px] border-neutral-300"
                       />
                       <div className='space-y-1'>
                         <Text as='p' size='xs' weight="medium" color='text-Neutral' className='sm:text-sm lg:text-base truncate text-nowrap'>
@@ -129,9 +130,9 @@ const FlightOffersModal: React.FC<Props> = ({ onClose }) => {
                         {offer.route}
                       </Text>
                     </div>
-                    <Link to={offer.websiteLink} className='hidden lg:flex items-center rounded-lg bg-primary-100 px-2.5 py-1.5 hover:scale-105 transition-transform duration-200 ease-in-out'>
+                    {/* <Link to={offer.websiteLink} className='hidden lg:flex items-center rounded-lg bg-primary-100 px-2.5 py-1.5 hover:scale-105 transition-transform duration-200 ease-in-out'>
                       Website Link
-                    </Link>
+                    </Link> */}
                     <div className='space-y-1 hidden lg:block'>
                       <Text as='p' size='sm' weight="medium" color='text-success' className='font-grotesk lg:text-base'>
                         ${offer.totalPrice}
@@ -150,16 +151,18 @@ const FlightOffersModal: React.FC<Props> = ({ onClose }) => {
                   </div>
 
                   <div className={`flex w-full flex-col gap-4 ${isExpanded ? '-translate-y-0' : 'h-0 -translate-y-[500%]'}  transition-transform duration-300 delay-200 ease-in-out`}>
-                    <MobileFlightExtDetails
-                      duration={offer.duration}
-                      route={offer.route}
-                      airCodeII={offer.route}
-                      airCraft={offer.aircraft}
-                      flightClass={offer.classType}
-                      stops={offer.stops}
-                      source={offer.websiteLink}
-                      price={offer.totalPrice}
-                    />
+                    { !isDesktop &&
+                      <MobileFlightExtDetails
+                        duration={offer.duration}
+                        route={offer.route}
+                        airCodeII={offer.route}
+                        airCraft={offer.aircraft}
+                        flightClass={offer.classType}
+                        stops={offer.stops}
+                        source={offer.websiteLink}
+                        price={offer.totalPrice}
+                      />
+                    }
                     <Text as='p' weight='medium' size='sm' color='text-primary-300' className="font-work lg:text-base">Flight Details</Text>
 
                     <div className="grid grid-cols-1 lg:grid-cols-2 w-full gap-8">
@@ -215,7 +218,7 @@ const FlightOffersModal: React.FC<Props> = ({ onClose }) => {
                       <Link
                         onClick={() => handleBookNowClick(offer)}
                         to={offer.websiteLink} target='_blank' rel='noopener noreferrer'
-                        className='font-work flex items-center rounded-lg bg-secondary-500 text-white px-4 py-2 hover:scale-105 transition-transform duration-200 ease-in-out'
+                        className='font-work flex items-center rounded-[48px] bg-secondary-500 text-white px-4 py-2 hover:scale-105 transition-transform duration-200 ease-in-out'
                       >
                         Book Now
                       </Link>
