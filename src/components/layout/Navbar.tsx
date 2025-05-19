@@ -15,7 +15,6 @@ export const Navbar = () => {
     const [slider, setSlider] = useState<boolean>(false);
     const { userName, isAuthenticated, logout } = useAuthInfo();
     const isDesktop = useIsDesktop();
-
     const { navigationData, mobileTab, setMobileTab } = useContext(NavigationContext);
     const { toggleModal } = useContext(UIContext);
 
@@ -29,7 +28,6 @@ export const Navbar = () => {
         { href: '#why-choose-us', path: 'Why Choose Us' },
         { href: '#support', path: 'FAQ/Support' }
     ];
-
 
     const location = useLocation();
     const smoothScroll = useSmoothScroll();
@@ -100,7 +98,7 @@ export const Navbar = () => {
                 {/* Mobile Nav */}
                 { !isDesktop &&
                     <div
-                        className={`block lg:hidden w-screen h-screen ${slider ? 'translate-x-0  bg-black/60' : 'translate-x-[-110%] bg-transparent'} transition-all duration-200 ease-in fixed top-0 left-0 z-50`} >
+                        className={`block lg:hidden w-screen h-svh ${slider ? 'translate-x-0  bg-black/60' : 'translate-x-[-110%] bg-transparent'} transition-all duration-200 ease-in fixed top-0 left-0 z-50`} >
                         <div className="w-full h-full py-6 bg-white border border-neutral-300">
                             <div className="w-full flex justify-between px-4">
                                 <Logo />

@@ -238,15 +238,14 @@ const Dashboard: React.FC = () => {
         .filter(({ item }) => /^\d{4}-\d{2}-\d{2}$/.test(item));
       if (dateIndices.length >= 2) {
         newPrompts.splice(dateIndices[1].idx, 1);
-        console.log('Removed return date. Updated recentPrompts:', newPrompts);
       }
       return newPrompts;
     });
   };
 
   return (
-    <div className="flex">
-      <div className="relative flex flex-col bg-background border border-neutral-300 w-full lg:w-[60%] h-screen">
+    <div className="">
+      <div className="relative flex flex-col bg-background border border-neutral-300 w-full lg:w-[60%] h-svh">
         <RecentPromptsBar prompts={recentPrompts} onEditClick={toggleEditModal} />
         
         <div className={`flex lg:hidden w-full mt-16 justify-end items-center py-1.5 px-5`}>
@@ -315,7 +314,7 @@ const Dashboard: React.FC = () => {
         </Modal>
         {!isDesktop && <MobileRender />}
       </div>
-      <RightPanel />
+      { isDesktop && <RightPanel />}
     </div>
   );
 };
