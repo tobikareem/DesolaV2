@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState} from 'react';
+import React, { useContext, useEffect, useState} from 'react';
 import { useAirports, useDashboardInfo } from '../../hooks/useDashboardInfo';
 import { useScroll } from '../../hooks/useSmoothScroll';
 import { getPromptColor } from '../../pages/dashboard/chats/PromptColor';
@@ -16,6 +16,7 @@ import { useInput } from '../../hooks/useInput';
 import { PenLine } from 'lucide-react';
 import { EditData } from '../dashboard-sections/edit';
 import { Close } from '../ui/Close';
+import { ChatContext } from '../../contexts/ChatContext';
 
 
 interface EditModalProps {
@@ -24,6 +25,7 @@ interface EditModalProps {
   onUpdatePrompt: (index: number, value: string) => void;
   onUpdateReturnDate: (date:string) => void;
   onChangeToOneWay: () => void;
+  onUpdateSelectedDate: Date | null;
 }
 
 const EditModal: React.FC<EditModalProps> = ({
@@ -31,23 +33,27 @@ const EditModal: React.FC<EditModalProps> = ({
   close,
   onUpdatePrompt,
   onUpdateReturnDate,
-  onChangeToOneWay
+  onChangeToOneWay,
+  onUpdateSelectedDate,
 }) => {
 
   const {scrollContainerRef, handleScroll} = useScroll();
-  const {handleEditClick, setPromptIndex, editedValue, setEditedValue, promptIndex, editQuestion, fieldString, setFieldString} = useEdit();
+  const { chatLog } = useContext(ChatContext);
+  const {handleEditClick, setPromptIndex, editedValue, 
+    setEditedValue, promptIndex, editQuestion, fieldString, setFieldString, setMultiLegValue
+  } = useEdit();
   const {date, setDate, setDateSelect} = useInput();
   const {preferences} = useDashboardInfo();
   const {showCalendar, setShowCalendar} = useModals()
   const {fetchAirports, airportSuggestions} = useAirports();
   const {showPopData, setShowPopData, searchParam, setSearchParam } = useModals();
-
   const [selectedReturnDate, setSelectedReturnDate] = useState<string | null>(null);
 
 
   const fields = ['one way', 'round trip', 'multi city'];
   const isChangeFields = fields?.some(field => editQuestion?.toLowerCase().includes(field))  
   const isMultiLegTrip = fieldString?.toLowerCase() === 'round trip' || fieldString?.toLowerCase() === 'multi city';
+  const isLastMessageWithDate = chatLog.length > 0 && chatLog[chatLog.length - 1].message.includes('What is your departure date?');
 
  
   useEffect(()=> { fetchAirports()},[fetchAirports])
@@ -112,10 +118,8 @@ const EditModal: React.FC<EditModalProps> = ({
 
   const handleDateSelect = (arg: DateSelectArg) => {
     if(!arg.start) return;
-
     const formattedDate =arg.start ? `${arg.start.getFullYear()}-${String(arg.start.getMonth() + 1).padStart(2, '0')}-${String(arg.start.getDate()).padStart(2, '0')}`
     : '';
-
     setEditedValue(formattedDate || '');
     setDate(arg.start);
      if (isMultiLegTrip) {
@@ -123,7 +127,6 @@ const EditModal: React.FC<EditModalProps> = ({
     }
   };
   
-
   const updateDateSelect = (date: Date | null) => {
     setDateSelect(date);
   };
@@ -133,8 +136,16 @@ const EditModal: React.FC<EditModalProps> = ({
       toast.warning('Pick a date');
       return;
     }
-
-    if (isMultiLegTrip && selectedReturnDate) {
+    
+    if (isMultiLegTrip && selectedReturnDate && onUpdateSelectedDate) {
+      const returnDate = new Date(selectedReturnDate)
+      returnDate.setHours(0, 0, 0, 0);
+      const departureDate = new Date(onUpdateSelectedDate)
+      departureDate.setHours(0, 0, 0, 0);
+      if (departureDate.getTime() >= returnDate.getTime()) {
+        toast.error('Return date should be after departure date');
+        return;
+      }
       onUpdateReturnDate(selectedReturnDate);
       setFieldString(null);
       toast.success('Return date updated');
@@ -160,19 +171,20 @@ const EditModal: React.FC<EditModalProps> = ({
       setShowPopData(false);
       setEditedValue('');
       if (
-        isChangeFields &&
+        isChangeFields && !isLastMessageWithDate &&
         editedValue.toLowerCase() !== 'one way' &&
         (editedValue.toLowerCase() === 'round trip' || editedValue.toLowerCase() === 'multi city')
       ) {
         setFieldString(editedValue);
+        setMultiLegValue(editedValue);
         setShowCalendar(true);
       } else {
         onChangeToOneWay()
+        setMultiLegValue(editedValue);
         close();
       }
     }
   };
-  
 
   return (
     <div className="relative flex flex-col w-full h-full bg-white justify-between rounded-2xl">
@@ -225,9 +237,7 @@ const EditModal: React.FC<EditModalProps> = ({
           editContent={true}
           airportSuggestions={airportSuggestions}
           searchParam={searchParam}
-          onSelect={(value:string)=>{setEditedValue(value);
-          setShowPopData(false);
-        }}
+          onSelect={(value:string)=>{setEditedValue(value); setShowPopData(false);}}
         />
       }
       { showCalendar &&

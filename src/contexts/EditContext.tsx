@@ -9,6 +9,8 @@ export interface EditContextType {
   setEditQuestion: (question: string | null) => void;
   fieldString: string | null;
   setFieldString: (field: string | null) => void;
+  multiLegValue: string;
+  setMultiLegValue: (value: string) => void;
 }
 
 export const EditContext = createContext<EditContextType>({
@@ -20,6 +22,8 @@ export const EditContext = createContext<EditContextType>({
   setEditQuestion: () => { },
   fieldString: '',
   setFieldString: () => { },
+  multiLegValue: '',
+  setMultiLegValue: () => { },
 });
 
 

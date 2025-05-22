@@ -159,7 +159,6 @@ export const RightPanel: React.FC = () => {
         <div className="bg-white w-full shadow-md">
           <div className="flex flex-col h-full justify-between pt-12">
             <div className="max-w-[600px] overflow-y-auto px-8">
-
               {renderContent()}
             </div>
             {/* Search Button */}
