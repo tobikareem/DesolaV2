@@ -5,6 +5,7 @@ import { CustomStorage } from '../utils/customStorage';
 
 const storageService = new CustomStorage();
 
+
 interface ChatProviderProps {
     children: ReactNode;
 }
@@ -38,7 +39,6 @@ const extractTravelInfo = (recentPrompts: string[], chatLog: ChatMessage[]): Tra
         travelRoute: '',
         flightClass: ''
     };
-
     // First find the travel route to determine if it's a one-way trip
     const routeCandidate = recentPrompts.find(isTravelRoute);
     if (routeCandidate) {
@@ -47,6 +47,7 @@ const extractTravelInfo = (recentPrompts: string[], chatLog: ChatMessage[]): Tra
 
     // Check if this is a one-way trip
     const isOneWay = info.travelRoute.toLowerCase().includes('one way');
+
 
     // Get airports
     if (recentPrompts.length >= 1 && isAirport(recentPrompts[0])) {
@@ -83,7 +84,7 @@ const extractTravelInfo = (recentPrompts: string[], chatLog: ChatMessage[]): Tra
     }
 
     // Only set return date if not a one-way trip
-    if (!isOneWay && !info.returnDate && dateCandidates.length >= 2) {
+    if (!isOneWay && !info.returnDate && dateCandidates.length >= 2){
         info.returnDate = dateCandidates[1];
     }
 
