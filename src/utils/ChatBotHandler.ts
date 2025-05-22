@@ -1,3 +1,4 @@
+
 export interface ChatMessage {
   message: string;
   sender: 'user' | 'bot';
@@ -15,6 +16,7 @@ type ChatStage =
 class ChatBotState {
   private stage: ChatStage = 'initial';
   private isOneWayTrip: boolean = false;
+  private isMultiLegValue: string | null = null;
 
   private stages: Record<ChatStage, string> = {
     initial: 'What is your destination?',
@@ -49,6 +51,14 @@ class ChatBotState {
     return classTerms.some(term => message.includes(term));
   }
 
+
+  public setMultiLegValue(value: string | null): void {
+    this.isMultiLegValue = value;
+    if (value === 'one way') {
+      this.isOneWayTrip = !(['one way', 'round trip'].includes(value.toLowerCase()));
+    }
+  }
+
   public processMessage(message: string): string {
     const lowerMessage = message.toLowerCase();
 
@@ -72,6 +82,10 @@ class ChatBotState {
 
       if (this.isOneWayTrip) {
         return this.stages.return_date_selected; 
+      }
+      if (this.isMultiLegValue && 
+          ['round trip', 'multi city'].includes(this.isMultiLegValue.toLowerCase())) {
+        return this.stages.departure_date_selected; 
       }
 
       return this.stages.departure_date_selected;
@@ -109,7 +123,7 @@ class ChatBotState {
         this.stage = 'departure_date_selected';
 
         // If one-way trip, skip return date question
-        if (this.isOneWayTrip) {
+        if (this.isOneWayTrip ) {
           return this.stages.return_date_selected; // Skip to class selection
         }
 
@@ -127,6 +141,7 @@ class ChatBotState {
       return this.stages.class_selected;
     }
 
+    // Default fallback message
     return 'Chat Timeout.. Which airport will you be flying from?';
   }
 

@@ -171,7 +171,9 @@ const Dashboard: React.FC = () => {
   const handleCloseCalendar = () => setShowCalendar(false);
 
   const handleDateSelect = (arg: DateSelectArg) => {
-    const formattedDate = arg.start?.toISOString().split('T')[0];
+    const formattedDate =arg.start ? `${arg.start.getFullYear()}-${String(arg.start.getMonth() + 1).padStart(2, '0')}-${String(arg.start.getDate()).padStart(2, '0')}`
+    : '';
+    if (!arg.start) return;
     setInputValue(formattedDate || '');
     setDate(arg.start);
   };
@@ -243,8 +245,9 @@ const Dashboard: React.FC = () => {
     });
   };
 
+
   return (
-    <div className="">
+    <div className="flex">
       <div className="relative flex flex-col bg-background border border-neutral-300 w-full lg:w-[60%] h-svh">
         <RecentPromptsBar prompts={recentPrompts} onEditClick={toggleEditModal} />
         
@@ -256,7 +259,7 @@ const Dashboard: React.FC = () => {
 
         {isLastMessage && Array.isArray(recentPrompts) && (isOneWay ? recentPrompts.length >= 5 : recentPrompts.length >= 6) && (
           <Btn onClick={() => {toggleModal('flight');}}
-            className="fixed lg:hidden px-6 py-1 w-fit bg-secondary-500 text-neutral-100 self-end bottom-[130px] right-4"
+            className="fixed lg:hidden px-6 py-1 w-40 h-9 md:h-12 bg-secondary-500 text-neutral-100 self-end bottom-[130px] right-4"
           >
             Search
           </Btn>
@@ -306,6 +309,7 @@ const Dashboard: React.FC = () => {
                 return newPrompts;
               })}
               onChangeToOneWay={removeReturnDate}
+              onUpdateSelectedDate={dateSelect}
             />
           </Modal>
         }
@@ -314,7 +318,7 @@ const Dashboard: React.FC = () => {
         </Modal>
         {!isDesktop && <MobileRender />}
       </div>
-      { isDesktop && <RightPanel />}
+      <RightPanel/>
     </div>
   );
 };
