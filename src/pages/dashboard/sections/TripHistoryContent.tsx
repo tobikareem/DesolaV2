@@ -1,5 +1,5 @@
 import { SlidersHorizontal } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Btn } from "../../../components/ui/Button";
 import { Text } from "../../../components/ui/TextComp";
 import { useClickTracking } from "../../../hooks/useClickTracking";
@@ -7,6 +7,8 @@ import { ClickHistoryItem, ClickHistoryQueryParams } from "../../../models/Click
 import { SESSION_VALUES } from "../../../utils/constants";
 import { CustomStorage } from "../../../utils/customStorage";
 import { Input } from "../../../components/ui/InputField";
+import { ImSpinner } from "react-icons/im";
+import { debounce } from "lodash";
 
 const storage = new CustomStorage();
 
@@ -17,16 +19,25 @@ export const TripHistoryContent = () => {
   const [error, setError] = useState<string | null>(null);
   const [nextPageToken, setNextPageToken] = useState<string | null>(null);
   const [hasMoreResults, setHasMoreResults] = useState(false);
-
   const [selectedPeriod, setSelectedPeriod] = useState<string>('today');
   const [filterVisible, setFilterVisible] = useState(false);
   const [originFilter, setOriginFilter] = useState('');
   const [destinationFilter, setDestinationFilter] = useState('');
+  const [pendingOrigin, setPendingOrigin] = useState('');
+  const [pendingDestination, setPendingDestination] = useState('');
+  const [isApplying, setIsApplying] = useState(false);
 
   const userId = storage.getItem(SESSION_VALUES.azure_b2c_userId) ?? "";
 
+   const debouncedFetch = useCallback(
+    debounce((reset: boolean) => {
+      fetchClickHistory(reset);
+    }, 500),
+    [userId, selectedPeriod, originFilter, destinationFilter]
+  );
+  
   const fetchClickHistory = async (reset = true) => {
-    if (!userId) return;
+    if (!userId || loading) return;
 
     try {
       setLoading(true);
@@ -56,11 +67,23 @@ export const TripHistoryContent = () => {
     }
   };
 
+
+
   useEffect(() => {
-    fetchClickHistory();
-  }, [userId, selectedPeriod, originFilter, destinationFilter, nextPageToken]);
+    if (userId) {
+      fetchClickHistory(true);
+    }
+  }, [userId]);
+
+  useEffect(()=>{
+    if(selectedPeriod !== 'filter') {
+      debouncedFetch(true);
+    }
+  },[selectedPeriod])
+
 
   const handlePeriodChange = (period: string) => {
+    if (period === selectedPeriod) return; 
     setSelectedPeriod(period);
   };
 
@@ -70,9 +93,34 @@ export const TripHistoryContent = () => {
     }
   };
 
-  const handleFilterApply = () => {
+  const handleFilterApply = async () => {
+    if (isApplying) return;
+    
+    setIsApplying(true);
+    setOriginFilter(pendingOrigin);
+    setDestinationFilter(pendingDestination);
+    setSelectedPeriod('filter');
     setFilterVisible(false);
+    await fetchClickHistory(true);
+    setIsApplying(false);
   };
+
+  const handleFilterChange = () => {
+    if (!isApplying) {
+      fetchClickHistory(true);
+    }
+  };
+
+  const handleFilterReset = useCallback(() => {
+    if (isApplying) return;
+
+    setPendingOrigin('');
+    setPendingDestination('');
+    setOriginFilter('');
+    setDestinationFilter('');
+    setSelectedPeriod('today');
+    debouncedFetch(true);
+  }, [isApplying, debouncedFetch]);
 
   return (
     <div className="flex-1">
@@ -115,7 +163,7 @@ export const TripHistoryContent = () => {
               <label className="block text-sm font-medium mb-1">Origin</label>
               <Input
                 type="text"
-                value={originFilter}
+                value={pendingOrigin}
                 onChange={(e) => setOriginFilter(e.target.value)}
                 className="w-full p-2 border border-neutral-300 rounded-md"
                 placeholder="e.g. SFO"
@@ -132,8 +180,27 @@ export const TripHistoryContent = () => {
               />
             </div>
           </div>
-          <div className="flex justify-end">
-            <Btn onClick={handleFilterApply} size="sm">Apply Filters</Btn>
+          <div className="flex justify-end gap-2">
+            <Btn 
+              onClick={handleFilterReset} 
+              size="sm" 
+              disabled={isApplying}
+            >
+              Reset
+            </Btn>
+            <Btn 
+              onClick={handleFilterApply} 
+              size="sm"
+              disabled={isApplying || (!pendingOrigin && !pendingDestination)}
+              className="min-w-[100px]"
+            >
+              {isApplying ? (
+                <>
+                  <span className="animate-spin mr-2"><ImSpinner /></span>
+                  Applying...
+                </>
+              ) : 'Apply Filters'}
+            </Btn>
           </div>
         </div>
       )}
@@ -165,8 +232,14 @@ export const TripHistoryContent = () => {
                 disabled={loading}
                 size="sm"
                 className="mx-auto"
+                
               >
-                {loading ? 'Loading...' : 'Load More'}
+                {loading ? (
+                  <>
+                    <span className="animate-spin mr-2"><ImSpinner /></span>
+                    Loading...
+                  </>
+                ) : 'View More'}
               </Btn>
             </div>
           )}
@@ -191,36 +264,34 @@ const FlightHistoryItem = ({ item }: { item: ClickHistoryItem }) => {
   });
 
   return (
-    <div className="p-4 border border-neutral-300 rounded-md bg-white hover:shadow-md transition-shadow">
-      <div className="flex justify-between mb-2">
-        <Text weight="bold" className="text-primary-500">
+    <div className="p-4 space-y-4 border border-neutral-300 hover:border-primary-100 rounded-md bg-transparent hover:shadow-md transition-shadow ease-in-out">
+      <div className="flex justify-between gap-4">
+        <Text as="h3" weight="bold" className="text-primary-500">
           {item.flightOrigin} : {item.flightDestination}
         </Text>
-        <Text size="sm" className="text-neutral-500">
+        <Text size="xs" className="sm:text-sm text-neutral-500">
           Viewed on {clickDate}
         </Text>
       </div>
 
       {flightDetails ? (
-        <div className="mt-2">
-          <div className="grid grid-cols-3 gap-2 text-sm">
-            <div>
-              <div className="font-medium">Airline</div>
-              <div>{flightDetails.airline || 'Unknown'}</div>
+          <div className="flex flex-wrap gap-2 text-xl text-Neutral">
+            <div className="flex-1">
+              <Text as="h5" fontStyle="grotesk" color="text-Neutral">Airline</Text>
+              <Text size='xs' color="text-neutral-500">{flightDetails.airline || 'Unknown'}</Text>
             </div>
-            <div>
-              <div className="font-medium">Price</div>
-              <div>{flightDetails.price || 'Not available'}</div>
+            <div className="flex-1 ">
+              <Text as="h5" fontStyle="grotesk" color="text-Neutral">Price</Text>
+              <Text size='xs' color="text-neutral-500">{flightDetails.price || 'Not available'}</Text>
             </div>
-            <div>
-              <div className="font-medium">Flight Date</div>
-              <div>{flightDetails.date || 'Not available'}</div>
+            <div className="flex-1">
+              <Text as="h5" fontStyle="grotesk" color="text-Neutral">Flight Date</Text>
+              <Text size='xs' color="text-neutral-500">{flightDetails.date || 'Not available'}</Text>
             </div>
           </div>
-        </div>
       ) : (
         <div className="mt-2 text-sm">
-          <Text>Flight details viewed at {new Date(item.timestamp || item.clickedAt).toLocaleTimeString()}</Text>
+          <Text color="text-neutral-500">Flight details viewed at {new Date(item.timestamp || item.clickedAt).toLocaleTimeString()}</Text>
         </div>
       )}
     </div>

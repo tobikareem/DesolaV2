@@ -27,7 +27,7 @@ const FaqSupport = () => {
             </div>
 
             {/* Show loading and error states */}
-            {loading && <p>Loading FAQs...</p>}
+            {loading && <div className="w-full h-10 rounded-[48px] bg-neutral-800 animate-pulse duration-500 ease-in-out transition-opacity"></div>}
             {error && <p>Error fetching FAQs: {error}</p>}
 
             <div className="flex flex-col w-full lg:w-[800px] gap-4">
@@ -49,7 +49,7 @@ const FaqSupport = () => {
                                     </div>
                                 </div>
                                 <div className={`${open[index] ? 'h-fit' : 'h-0'} transition-all duration-500 delay-300 ease-linear  pl-2 overflow-hidden`}>
-                                    <Text weight="normal" size='base' color="text-neutral-500" className="tracking-tight">
+                                    <Text weight="normal" size='base' color="text-neutral-500" className={`${open[index] ? 'opacity-100':'opacity-0'} ease-in transition-opacity duration-200 delay-1000 tracking-tight `}>
                                         {answer}
                                     </Text>
                                 </div>
