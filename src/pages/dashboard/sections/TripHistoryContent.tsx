@@ -105,12 +105,6 @@ export const TripHistoryContent = () => {
     setIsApplying(false);
   };
 
-  const handleFilterChange = () => {
-    if (!isApplying) {
-      fetchClickHistory(true);
-    }
-  };
-
   const handleFilterReset = useCallback(() => {
     if (isApplying) return;
 
