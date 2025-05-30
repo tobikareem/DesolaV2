@@ -95,7 +95,6 @@ export const TripHistoryContent = () => {
 
   const handleFilterApply = async () => {
     if (isApplying) return;
-    
     setIsApplying(true);
     setOriginFilter(pendingOrigin);
     setDestinationFilter(pendingDestination);
@@ -117,87 +116,89 @@ export const TripHistoryContent = () => {
   }, [isApplying, debouncedFetch]);
 
   return (
-    <div className="flex-1">
-      <Text
-        as="h1"
-        size="2xl"
-        weight="bold"
-        className="font-grotesk text-primary-500 mb-5"
-      >
-        My Trips
-      </Text>
+    <div className="flex-1 relative">
+      <div className='sticky top-0 z-10 bg-white '>
+        <Text
+          as="h1"
+          size="2xl"
+          weight="bold"
+          className="font-grotesk text-primary-500 mb-5"
+        >
+          My Trips
+        </Text>
 
-      <div className="flex flex-wrap items-center h-['100px'] mb-2 pb-4 gap-3 bg-white w-full border-b border-neutral-300">
-        {['Today', 'Yesterday', 'Last Week', 'Last Month', 'Filter'].map((period) => (
-          <Btn
-            key={period}
-            onClick={() => {
-              if (period === 'Filter') {
-                setFilterVisible(!filterVisible);
-              } else {
-                const periodValue = (period === 'Last Week' ? 'lastweek' : period === 'Last Month' ? 'lastmonth' : period.toLowerCase());
-                handlePeriodChange(periodValue);
-              }
-            }}
-            type="button"
-            className={`flex items-center cursor-pointer gap-2 text-nowrap
-                ${selectedPeriod === period.toLowerCase().replace(' ', '') ? 'bg-primary-100' : ''}`}
-            size="sm"
-          >
-            <Text>{period}</Text>
-            {period === 'Filter' && <SlidersHorizontal className="mt-0.5" size={14} />}
-          </Btn>
-        ))}
-      </div>
-
-      {filterVisible && (
-        <div className="mb-4 p-4 border border-neutral-300 rounded-md bg-white">
-          <div className="grid grid-cols-2 gap-4 mb-4">
-            <div>
-              <label className="block text-sm font-medium mb-1">Origin</label>
+        <div className="flex flex-wrap items-center h-['100px'] mb-2 pb-4 gap-3 bg-white w-full border-b border-neutral-300">
+          {['Today', 'Yesterday', 'Last Week', 'Last Month', 'Filter'].map((period) => (
+            <Btn
+              key={period}
+              onClick={() => {
+                if (period === 'Filter') {
+                  setFilterVisible(!filterVisible);
+                } else {
+                  const periodValue = (period === 'Last Week' ? 'lastweek' : period === 'Last Month' ? 'lastmonth' : period.toLowerCase());
+                  handlePeriodChange(periodValue);
+                }
+              }}
+              type="button"
+              className={`flex items-center cursor-pointer gap-2 text-nowrap
+                  ${selectedPeriod === period.toLowerCase().replace(' ', '') ? 'bg-primary-100' : ''}`}
+              size="sm"
+            >
+              <Text>{period}</Text>
+              {period === 'Filter' && <SlidersHorizontal className="mt-0.5" size={14} />}
+            </Btn>
+          ))}
+        </div>
+        {!filterVisible && (
+          <div className="mb-4 p-3 border border-neutral-300 rounded-md bg-white">
+            <div className="grid grid-cols-2 gap-3 mb-4">
               <Input
                 type="text"
                 value={pendingOrigin}
-                onChange={(e) => setOriginFilter(e.target.value)}
-                className="w-full p-2 border border-neutral-300 rounded-md"
+                onChange={(e) => setPendingOrigin(e.target.value)}
+                className="w-full p-2 border border-neutral-300 rounded-md text-sm"
                 placeholder="e.g. SFO"
+                label="Origin"
+                labelClassName="font-grotesk font-semibold text-lg"
               />
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-1">Destination</label>
               <Input
                 type="text"
-                value={destinationFilter}
-                onChange={(e) => setDestinationFilter(e.target.value)}
-                className="w-full p-2 border border-neutral-300 rounded-md"
+                value={pendingDestination}
+                onChange={(e) => setPendingDestination(e.target.value)}
+                className="w-full p-2 border border-neutral-300 rounded-md text-sm"
                 placeholder="e.g. JFK"
+                label="Destination"
+                labelClassName="font-grotesk font-semibold text-lg"
               />
             </div>
+            <div className="flex justify-end gap-2">
+              <Btn 
+                onClick={handleFilterReset} 
+                size="sm" 
+                disabled={isApplying}
+                className="bg-error text-white"
+              >
+                Reset
+              </Btn>
+              <Btn 
+                onClick={handleFilterApply} 
+                size="sm"
+                disabled={isApplying || (!pendingOrigin && !pendingDestination)}
+                className="min-w-[100px] bg-primary-500 text-white"
+              >
+                {isApplying ? (
+                  <>
+                    <span className="animate-spin mr-2"><ImSpinner /></span>
+                    Applying...
+                  </>
+                ) : 'Apply Filters'}
+              </Btn>
+            </div>
           </div>
-          <div className="flex justify-end gap-2">
-            <Btn 
-              onClick={handleFilterReset} 
-              size="sm" 
-              disabled={isApplying}
-            >
-              Reset
-            </Btn>
-            <Btn 
-              onClick={handleFilterApply} 
-              size="sm"
-              disabled={isApplying || (!pendingOrigin && !pendingDestination)}
-              className="min-w-[100px]"
-            >
-              {isApplying ? (
-                <>
-                  <span className="animate-spin mr-2"><ImSpinner /></span>
-                  Applying...
-                </>
-              ) : 'Apply Filters'}
-            </Btn>
-          </div>
-        </div>
-      )}
+        )}
+      </div>
+
+ 
 
       {loading && historyData.length === 0 ? (
         <div className="text-center py-8">
