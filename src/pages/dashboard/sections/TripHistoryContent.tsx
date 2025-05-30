@@ -149,7 +149,7 @@ export const TripHistoryContent = () => {
             </Btn>
           ))}
         </div>
-        {!filterVisible && (
+        {filterVisible && (
           <div className="mb-4 p-3 border border-neutral-300 rounded-md bg-white">
             <div className="grid grid-cols-2 gap-3 mb-4">
               <Input
