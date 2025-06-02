@@ -168,7 +168,7 @@ export const TripHistoryContent = () => {
   const currentError = cacheError?.message || error;
 
   return (
-    <div className="flex-1">
+    <div className="flex-1 h-full">
       <div className='h-full overflow-hidden'>
         <div className="relative bg-white">
           <Text
@@ -179,7 +179,7 @@ export const TripHistoryContent = () => {
           >
             My Trips
           </Text>
-          <div className="flex flex-wrap items-center h-['100px'] mb-2 pb-4 gap-3 bg-white w-full border-b border-neutral-300">
+          <div className="z-[2] flex flex-wrap items-center h-['100px'] mb-2 pb-4 gap-3 bg-white w-full border-b border-neutral-300">
             {['Today', 'Yesterday', 'Last Week', 'Last Month', 'Filter'].map((period) => (
               <Btn
                 key={period}
@@ -193,7 +193,7 @@ export const TripHistoryContent = () => {
                 }}
                 type="button"
                 className={`flex items-center cursor-pointer gap-2 text-nowrap
-                    ${selectedPeriod === period.toLowerCase().replace(' ', '') ? 'bg-primary-100' : ''}`}
+                    ${(selectedPeriod === period.toLowerCase().replace(' ', '') || filterVisible) ? 'bg-primary-100' : ''}`}
                 size="sm"
               >
                 <Text>{period}</Text>
@@ -202,7 +202,7 @@ export const TripHistoryContent = () => {
             ))}
           </div>
           {filterVisible && (
-            <div className="absolute z-[2] w-full mb-4 p-3 border-2 border-neutral-300 shadow-md rounded-md bg-white">
+            <div className="absolute z-[1] w-full mb-4 p-3 border-2 border-neutral-300 shadow-md rounded-md bg-white">
               <div className="grid grid-cols-2 gap-3 mb-4">
                 <Input
                   type="text"
