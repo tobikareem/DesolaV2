@@ -168,7 +168,7 @@ export const TripHistoryContent = () => {
   const currentError = cacheError?.message || error;
 
   return (
-    <div className="flex-1 h-full">
+    <div className="flex-1 ">
       <div className='h-full overflow-hidden'>
         <div className="relative bg-white">
           <Text
@@ -193,7 +193,7 @@ export const TripHistoryContent = () => {
                 }}
                 type="button"
                 className={`flex items-center cursor-pointer gap-2 text-nowrap
-                    ${(selectedPeriod === period.toLowerCase().replace(' ', '') || filterVisible) ? 'bg-primary-100' : ''}`}
+                    ${(selectedPeriod === period.toLowerCase().replace(' ', '') || (filterVisible && period == 'Filter')) ? 'bg-primary-100' : ''}`}
                 size="sm"
               >
                 <Text>{period}</Text>
@@ -322,20 +322,20 @@ const FlightHistoryItem = ({ item }: { item: ClickHistoryItem }) => {
       </div>
 
       {flightDetails ? (
-          <div className="flex flex-wrap gap-2 text-xl text-Neutral">
-            <div className="flex-1">
-              <Text as="h5" fontStyle="grotesk" color="text-Neutral">Airline</Text>
-              <Text size='xs' color="text-neutral-500">{flightDetails.airline || 'Unknown'}</Text>
-            </div>
-            <div className="flex-1 ">
-              <Text as="h5" fontStyle="grotesk" color="text-Neutral">Price</Text>
-              <Text size='xs' color="text-neutral-500">{flightDetails.price || 'Not available'}</Text>
-            </div>
-            <div className="flex-1">
-              <Text as="h5" fontStyle="grotesk" color="text-Neutral">Flight Date</Text>
-              <Text size='xs' color="text-neutral-500">{flightDetails.date || 'Not available'}</Text>
-            </div>
+        <div className="flex flex-wrap gap-2 text-xl text-Neutral">
+          <div className="flex-1">
+            <Text as="h5" fontStyle="grotesk" color="text-Neutral">Airline</Text>
+            <Text size='xs' color="text-neutral-500">{flightDetails.airline || 'Unknown'}</Text>
           </div>
+          <div className="flex-1 ">
+            <Text as="h5" fontStyle="grotesk" color="text-Neutral">Price</Text>
+            <Text size='xs' color="text-neutral-500">{flightDetails.price || 'Not available'}</Text>
+          </div>
+          <div className="flex-1">
+            <Text as="h5" fontStyle="grotesk" color="text-Neutral">Flight Date</Text>
+            <Text size='xs' color="text-neutral-500">{flightDetails.date || 'Not available'}</Text>
+          </div>
+        </div>
       ) : (
         <div className="mt-2 text-sm">
           <Text color="text-neutral-500">Flight details viewed at {new Date(item.timestamp || item.clickedAt).toLocaleTimeString()}</Text>
