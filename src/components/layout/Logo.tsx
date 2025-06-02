@@ -10,7 +10,7 @@ export const Logo =()=> {
         alt="Desola-logo"
         width={120}
         height={50}
-        className=""
+        className="bg-transparent"
       />
     </Link>
     

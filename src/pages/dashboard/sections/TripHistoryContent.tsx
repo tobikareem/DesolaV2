@@ -59,6 +59,7 @@ export const TripHistoryContent = () => {
        revalidate();
      }, 500)();
    }, [userId, selectedPeriod, originFilter, destinationFilter, revalidate]);
+
   // const fetchClickHistory = async (reset = true) => {
   //   if (!userId || loading) return;
 
@@ -168,8 +169,8 @@ export const TripHistoryContent = () => {
 
   return (
     <div className="flex-1">
-      <div className='relative'>
-        <div className="sticky top-0 z-5 bg-white">
+      <div className='h-full overflow-hidden'>
+        <div className="relative bg-white">
           <Text
             as="h1"
             size="2xl"
@@ -178,7 +179,6 @@ export const TripHistoryContent = () => {
           >
             My Trips
           </Text>
-
           <div className="flex flex-wrap items-center h-['100px'] mb-2 pb-4 gap-3 bg-white w-full border-b border-neutral-300">
             {['Today', 'Yesterday', 'Last Week', 'Last Month', 'Filter'].map((period) => (
               <Btn
@@ -201,98 +201,97 @@ export const TripHistoryContent = () => {
               </Btn>
             ))}
           </div>
-        </div>
-        {filterVisible && (
-          <div className="w-full mb-4 p-3 border-2 border-neutral-300 shadow-md rounded-md bg-white">
-            <div className="grid grid-cols-2 gap-3 mb-4">
-              <Input
-                type="text"
-                value={pendingOrigin}
-                onChange={(e) => setPendingOrigin(e.target.value)}
-                className="w-full p-2 border border-neutral-300 rounded-md text-sm"
-                placeholder="e.g. SFO"
-                label="Origin"
-                labelClassName="font-grotesk font-semibold text-lg"
-              />
-              <Input
-                type="text"
-                value={pendingDestination}
-                onChange={(e) => setPendingDestination(e.target.value)}
-                className="w-full p-2 border border-neutral-300 rounded-md text-sm"
-                placeholder="e.g. JFK"
-                label="Destination"
-                labelClassName="font-grotesk font-semibold text-lg"
-              />
-            </div>
-            <div className="flex justify-end gap-2">
-              <Btn 
-                onClick={()=>{handleFilterReset(); setFilterVisible(!filterVisible)}} 
-                size="sm" 
-                disabled={isApplying}
-                className="bg-error text-white"
-              >
-                Reset
-              </Btn>
-              <Btn 
-                onClick={()=> {handleFilterApply(); setFilterVisible(!filterVisible)}} 
-                size="sm"
-                disabled={isApplying || (!pendingOrigin && !pendingDestination)}
-                className="min-w-[100px] bg-primary-500 text-white"
-              >
-                {isApplying ? (
-                  <>
-                    <span className="animate-spin mr-2"><ImSpinner /></span>
-                    Applying...
-                  </>
-                ) : 'Apply Filters'}
-              </Btn>
-            </div>
-          </div>
-        )}
-      </div>
-
- 
-
-      {isLoading && historyData.length === 0 ? (
-        <div className="text-center py-8">
-          <div className="spinner"></div>
-          <Text className="mt-2">Loading your trip history...</Text>
-        </div>
-      ) : currentError ? (
-        <div className="text-center py-8 text-red-500">
-          <Text>{currentError}</Text>
-          <Btn onClick={() => getClickHistory({ userId, pageSize: 10 })} className="mt-2" size="sm">Retry</Btn>
-        </div>
-      ) : historyData.length === 0 ? (
-        <div className="text-center py-40 flex flex-col w-full items-center">
-          <Text className="text-neutral-500">No trip history found for the selected filters.</Text>
-        </div>
-      ) : (
-        <div className="space-y-4">
-          {historyData.map((item) => (
-            <FlightHistoryItem key={item.id} item={item} />
-          ))}
-
-          {hasMoreResults && (
-            <div className="text-center py-4">
-              <Btn
-                onClick={handleLoadMore}
-                disabled={loading}
-                size="sm"
-                className="mx-auto"
-                
-              >
-                {loading ? (
-                  <>
-                    <span className="animate-spin mr-2"><ImSpinner /></span>
-                    Loading...
-                  </>
-                ) : 'View More'}
-              </Btn>
+          {filterVisible && (
+            <div className="absolute z-[2] w-full mb-4 p-3 border-2 border-neutral-300 shadow-md rounded-md bg-white">
+              <div className="grid grid-cols-2 gap-3 mb-4">
+                <Input
+                  type="text"
+                  value={pendingOrigin}
+                  onChange={(e) => setPendingOrigin(e.target.value)}
+                  className="w-full p-2 border border-neutral-300 rounded-md text-sm"
+                  placeholder="e.g. SFO"
+                  label="Origin"
+                  labelClassName="font-grotesk font-semibold text-lg"
+                />
+                <Input
+                  type="text"
+                  value={pendingDestination}
+                  onChange={(e) => setPendingDestination(e.target.value)}
+                  className="w-full p-2 border border-neutral-300 rounded-md text-sm"
+                  placeholder="e.g. JFK"
+                  label="Destination"
+                  labelClassName="font-grotesk font-semibold text-lg"
+                />
+              </div>
+              <div className="flex justify-end gap-2">
+                <Btn 
+                  onClick={()=>{handleFilterReset(); setFilterVisible(!filterVisible)}} 
+                  size="sm" 
+                  disabled={isApplying}
+                  className="bg-error text-white"
+                >
+                  Reset
+                </Btn>
+                <Btn 
+                  onClick={()=> {handleFilterApply(); setFilterVisible(!filterVisible)}} 
+                  size="sm"
+                  disabled={isApplying || (!pendingOrigin && !pendingDestination)}
+                  className="min-w-[100px] bg-primary-500 text-white"
+                >
+                  {isApplying ? (
+                    <>
+                      <span className="animate-spin mr-2"><ImSpinner /></span>
+                      Applying...
+                    </>
+                  ) : 'Apply Filters'}
+                </Btn>
+              </div>
             </div>
           )}
         </div>
-      )}
+      </div>
+      <div className="h-full overflow-y-auto">
+        {isLoading && historyData.length === 0 ? (
+          <div className="text-center py-8">
+            <div className="spinner"></div>
+            <Text className="mt-2">Loading your trip history...</Text>
+          </div>
+        ) : currentError ? (
+          <div className="text-center py-8 text-red-500">
+            <Text>{currentError}</Text>
+            <Btn onClick={() => getClickHistory({ userId, pageSize: 10 })} className="mt-2" size="sm">Retry</Btn>
+          </div>
+        ) : historyData.length === 0 ? (
+          <div className="text-center py-40 flex flex-col w-full items-center">
+            <Text className="text-neutral-500">No trip history found for the selected filters.</Text>
+          </div>
+        ) : (
+          <div className="space-y-4">
+            {historyData.map((item) => (
+              <FlightHistoryItem key={item.id} item={item} />
+            ))}
+
+            {hasMoreResults && (
+              <div className="text-center py-4">
+                <Btn
+                  onClick={handleLoadMore}
+                  disabled={loading}
+                  size="sm"
+                  className="mx-auto"
+                  
+                >
+                  {loading ? (
+                    <>
+                      <span className="animate-spin mr-2"><ImSpinner /></span>
+                      Loading...
+                    </>
+                  ) : 'View More'}
+                </Btn>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
     </div>
   );
 };

@@ -34,7 +34,7 @@ export const GetRequiredFields = (route: string) => {
   return requiredFields;
 };
 
-export const RightPanel: React.FC = () => {
+export const RightPanel: React.FC =()=> {
 
   const {chatLog} = useContext(ChatContext);
   const [selectedTab, setSelectedTab] = useState<string>('home');
@@ -135,7 +135,7 @@ export const RightPanel: React.FC = () => {
 
   return (
     <>
-      <div className="hidden lg:flex w-[40%] h-screen">
+      <div className="hidden lg:flex w-[40%] h-svh">
         {/* Sidebar */}
         <div className="w-[10%] items-center px-10 py-[60px] border gap-6 flex flex-col">
           {sidebarOptions.map((option) => (
@@ -149,20 +149,19 @@ export const RightPanel: React.FC = () => {
               onClick={handleTabClick}
             />
           ))}
-
           <SidebarLogout
             icon={<LogOut size={24} />}
-            onClick={() => toggleModal('logout')}
+            onClick={()=> toggleModal('logout')}
           />
         </div>
         {/* Content Area */}
         <div className="bg-white w-full shadow-md">
           <div className="flex flex-col h-full justify-between pt-12">
-            <div className="max-w-[600px] overflow-y-auto px-8">
+            <div className="max-w-[600px] h-full lg:px-4 xl:px-8 overflow-hidden">
               {renderContent()}
             </div>
             {/* Search Button */}
-            <div className="h-30 border-t items-center flex p-7">
+            <div className="border-t items-center h-[120px] flex p-7">
               <Btn className={`p-1 w-full max-w-[385px] ${(selectedTab == 'home' || selectedTab == 'road' ) && isLastMessage && isSearchEnabled()
                   ? 'bg-gradient-to-b from-[#FF9040] to-[#FF6B00] text-white'
                   : 'bg-neutral-300 text-neutral-500 cursor-not-allowed opacity-50'}`} 
