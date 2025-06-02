@@ -20,7 +20,7 @@ const ChatInput: React.FC<ChatInputProps> = ({
     onFocus
 }) => {
     return (
-        <div className="relative w-full p-1 flex items-center justify-center bg-white border-t h-30">
+        <div className="relative w-full p-1 flex items-center justify-center bg-white border-t h-[112px]">
             <div className="items-center max-w-[678px] w-full rounded-2xl py-4 px-6 sm:px-8 flex message bg-tint">
                 <Input
                     value={value}
