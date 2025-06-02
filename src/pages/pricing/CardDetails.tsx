@@ -34,10 +34,10 @@ export const CardDetails =()=> {
               <div key={item?.id} className="flex w-full items-center gap-2 py-3.5">
                 <ReactImage src={`/${item?.icon}`} alt="icon" width={35} height={24}/>
                 <div className="flex items-center w-full justify-between gap-2">
-                  <Text size="sm" color="text-Neutral" className="w-full">
+                  <Text size="sm" color="text-Neutral" className="w-full lg:text-xs xl:text-sm">
                     {item?.cardType} ending in {item?.cardNumber} 
                   </Text>
-                  <Text size="sm" color="text-Neutral">
+                  <Text size="sm" color="text-Neutral" className="lg:text-xs xl:text-sm">
                     {item?.expiryDat} 
                   </Text>
                   <div onClick={()=>{
@@ -45,7 +45,6 @@ export const CardDetails =()=> {
                     setShowDeleteModal(!showDeleteModal);
                   }}
                     className="text-error text-xl cursor-pointer ml-4">
-
                     <RiDeleteBin2Fill />
                   </div>
                 </div>

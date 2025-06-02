@@ -44,7 +44,7 @@ export const SupportContent: React.FC = () => {
    };
 
   return (
-    <div className="flex-1 overflow-y-auto">
+    <div className="flex-1 h-full">
       <Text
         as="h1"
         size="2xl"
@@ -53,42 +53,35 @@ export const SupportContent: React.FC = () => {
       >
         Support
       </Text>
-      <div className="mt-7 w-full">
-        <Text as="h5" size="sm" weight="bold" className="font-grotesk  mb-1">
+      <div className="mt-7 w-full h-full overflow-y-auto">
+        <Text as="h5" size="sm" weight="bold" className="font-grotesk mb-1">
           Lets chat, reach out to us
         </Text>
         <Text as="p" size="xs" weight="light" className="font-grotesk">
           Have a question or feed back we are here to help. Send us a message,
           and we’ll respond in 24 hours
         </Text>
-        <form
-          className="mt-6 flex flex-col flex-grow w-full h-full gap-4"
-          onSubmit={handleSubmit}
-        >
-          <div className="w-full">
-            <Input
-              label="First Name"
-              type="text"
-              error={errors.firstname}
-              onChange={handleChange}
-              value={formData.firstname}
-              name="firstname"
-              placeholder="First Name"
-              className="bg-[#F3F3F3] w-full h-8 !round-md placeholder:text-[#B7B7B7] placeholder:"
-            />
-          </div>
-          <div className="w-full">
-            <Input
-              label="Last Name"
-              value={formData.lastname}
-              error={errors.lastname}
-              onChange={handleChange}
-              name="lastname"
-              type="text"
-              placeholder="Last Name"
-              className="bg-[#F3F3F3] h-8 !round-md placeholder:text-[#B7B7B7] placeholder:"
-            />
-          </div>
+        <form className="mt-6 mb-24 flex flex-col w-full gap-4" onSubmit={handleSubmit}>
+          <Input
+            label="First Name"
+            type="text"
+            error={errors.firstname}
+            onChange={handleChange}
+            value={formData.firstname}
+            name="firstname"
+            placeholder="First Name"
+            className="bg-[#F3F3F3] w-full h-8 !rounded-md placeholder:text-[#B7B7B7]"
+          />
+          <Input
+            label="Last Name"
+            value={formData.lastname}
+            error={errors.lastname}
+            onChange={handleChange}
+            name="lastname"
+            type="text"
+            placeholder="Last Name"
+            className="bg-[#F3F3F3] w-full h-8 !rounded-md placeholder:text-[#B7B7B7]"
+          />
           <Input
             label="Email Address"
             type="email"
@@ -96,8 +89,8 @@ export const SupportContent: React.FC = () => {
             name="email"
             value={formData.email}
             error={errors.email}
-            placeholder="email"
-            className="bg-[#F3F3F3] w-full h-8 rounded-md placeholder:text-[#B7B7B7] placeholder:"
+            placeholder="Email"
+            className="bg-[#F3F3F3] w-full h-8 rounded-md placeholder:text-[#B7B7B7]"
           />
           <Input
             label="Phone Number"
@@ -107,24 +100,19 @@ export const SupportContent: React.FC = () => {
             onChange={handleChange}
             name="phone"
             placeholder="Phone number"
-            className="bg-[#F3F3F3] w-full h-8 rounded-md placeholder:text-[#B7B7B7] placeholder:"
+            className="bg-[#F3F3F3] w-full h-8 rounded-md placeholder:text-[#B7B7B7]"
           />
-          <div className="flex flex-col flex-grow h-full">
-            <TextArea
-              label="Message"
-              value={formData.message}
-              error={errors.message}
-              onChange={handleChange}
-              name="message"
-              placeholder="Leave us a message..."
-              className=" bg-[#F3F3F3]  flex h-[145px]  rounded-md placeholder:text-[#B7B7B7] placeholder:"
-            />
-           
-          </div>
-
-          <Btn
-            type="submit"
-            className=" text-nowrap rounded-xl py-3 bg-primary-700 w-full text-base text-white"
+          <TextArea
+            label="Message"
+            value={formData.message}
+            error={errors.message}
+            onChange={handleChange}
+            name="message"
+            placeholder="Leave us a message..."
+            className=" bg-[#F3F3F3] flex min-h-[145px] rounded-md placeholder:text-[#B7B7B7]"
+          />
+          <Btn type="submit" radius='48px'
+            className="text-nowrap py-3 bg-primary-700 w-full text-base text-white hover:!scale-95 "
           >
             Send Message
           </Btn>
