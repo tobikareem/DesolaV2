@@ -22,6 +22,11 @@ let refreshSubscribers: Array<{
  * Authentication service for handling Azure B2C authentication
  */
 const authService = {
+    setIsSigningIn: null as ((value: boolean) => void) | null,
+
+    initializeSigningState: (setter: (value: boolean) => void) => {
+        authService.setIsSigningIn = setter;
+    },
 
     loginRequest: {
         scopes: ["openid", "profile", "email", "offline_access", AZURE_B2C.APPLICATION_SCOPE]
@@ -212,11 +217,9 @@ const authService = {
             }
 
             // Save current URL for post-login redirect
-            const currentUrl = window.location.pathname + window.location.search;
-            storage.setItem(SESSION_VALUES.postLoginRedirectUrl, currentUrl);
-
             // Start login redirect
             console.log("Redirecting user to sign in...");
+            authService.setIsSigningIn?.(true);
             await msalInstance.loginRedirect(authService.loginRequest);
         } catch (error) {
             // Handle password reset redirect
