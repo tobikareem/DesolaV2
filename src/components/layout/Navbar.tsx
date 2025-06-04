@@ -10,10 +10,11 @@ import { Logo } from "./Logo";
 import { useSmoothScroll } from "../../hooks/useSmoothScroll";
 import { Close } from "../ui/Close";
 import { useIsDesktop } from "../../hooks/useDesktopSize";
+import { ImSpinner } from "react-icons/im";
 
 export const Navbar = () => {
     const [slider, setSlider] = useState<boolean>(false);
-    const { userName, isAuthenticated, logout } = useAuthInfo();
+    const { userName, isAuthenticated, logout, isLoading } = useAuthInfo();
     const isDesktop = useIsDesktop();
     const { navigationData, mobileTab, setMobileTab } = useContext(NavigationContext);
     const { toggleModal } = useContext(UIContext);
@@ -40,6 +41,15 @@ export const Navbar = () => {
         const sectionId = path.replace('/', '');
         setActiveSection(`#${sectionId}`)
     }, [location])
+
+    const [isSigningIn, setIsSigningIn] = useState(false);
+
+    useEffect(() => {
+        authService.initializeSigningState(setIsSigningIn);
+        return () => {
+        authService.setIsSigningIn = null;
+        };
+    }, []);
 
     
 
@@ -90,9 +100,10 @@ export const Navbar = () => {
                             handleDrawer(e);
                             authService.signIn();
                         }}
+                        disabled={isSigningIn}
                         className="hidden lg:flex items-center justify-center h-12 w-[137px] bg-gradient-to-b from-[#FF9040] to-[#FF6B00] text-base text-white font-medium rounded-[48px] hover:scale-105 transition-transform duration-300 ease-in-out"
                     >
-                        Sign In
+                        { isSigningIn ? <span className="">Signing in... <ImSpinner className="animate-spin duration-300"/></span> : 'Sign In'}
                     </button>
                 )}
                 {/* Mobile Nav */}

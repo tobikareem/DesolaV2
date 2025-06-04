@@ -193,7 +193,8 @@ export const TripHistoryContent = () => {
                 }}
                 type="button"
                 className={`flex items-center cursor-pointer gap-2 text-nowrap
-                    ${(selectedPeriod === period.toLowerCase().replace(' ', '') || (filterVisible && period == 'Filter')) ? 'bg-primary-100' : ''}`}
+                    ${(selectedPeriod === period.toLowerCase().replace(' ', ''))  ? 'bg-primary-100' : ''}
+                    ${(filterVisible && period == 'Filter') ? 'bg-primary-100' : ''}`}
                 size="sm"
               >
                 <Text>{period}</Text>
@@ -252,17 +253,17 @@ export const TripHistoryContent = () => {
       </div>
       <div className="h-full overflow-y-auto">
         {isLoading && historyData.length === 0 ? (
-          <div className="text-center py-8">
-            <div className="spinner"></div>
-            <Text className="mt-2">Loading your trip history...</Text>
+          <div className="flex flex-1 flex-col gap-4 items-center text-center">
+            <ImSpinner className="animate-spin"/>
+            <Text className="">Loading your trip history...</Text>
           </div>
         ) : currentError ? (
-          <div className="text-center py-8 text-red-500">
+          <div className="flex flex-1 flex-col text-center py-8 text-red-500">
             <Text>{currentError}</Text>
-            <Btn onClick={() => getClickHistory({ userId, pageSize: 10 })} className="mt-2" size="sm">Retry</Btn>
+            <Btn onClick={() => getClickHistory({ userId, pageSize: 10 })} className="mt-2" size="sm" >Retry</Btn>
           </div>
         ) : historyData.length === 0 ? (
-          <div className="text-center py-40 flex flex-col w-full items-center">
+          <div className="text-center flex-1 h-full flex flex-col w-full items-center">
             <Text className="text-neutral-500">No trip history found for the selected filters.</Text>
           </div>
         ) : (
