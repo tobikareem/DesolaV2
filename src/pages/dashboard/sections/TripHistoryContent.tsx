@@ -162,6 +162,7 @@ export const TripHistoryContent = () => {
                 type="button"
                 className={`flex items-center cursor-pointer gap-2 text-nowrap
                     ${(selectedPeriod === period.toLowerCase().replace(' ', '') || (filterVisible && period.toLowerCase() == 'Filter' )) ? 'bg-primary-100' : ''}`}
+
                 size="sm"
               >
                 <Text>{period}</Text>
