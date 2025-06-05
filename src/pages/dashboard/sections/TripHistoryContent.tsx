@@ -136,7 +136,7 @@ export const TripHistoryContent = () => {
   const currentError = cacheError?.message || error;
 
   return (
-    <div className="flex-1 ">
+    <div className="h-full overflow-hidden">
       <div className=''>
         <div className="relative bg-white">
           <Text
@@ -219,49 +219,47 @@ export const TripHistoryContent = () => {
           )}
         </div>
       </div>
-      <div>
-        <div className="h-full overflow-y-auto">
-          {isLoading && historyData.length === 0 ? (
-            <div className="flex flex-1 flex-col gap-4 items-center text-center">
-              <ImSpinner className="animate-spin"/>
-              <Text className="">Loading your trip history...</Text>
-            </div>
-          ) : currentError ? (
-            <div className="flex flex-1 flex-col text-center py-8 text-red-500">
-              <Text>{currentError}</Text>
-              <Btn onClick={() => getClickHistory({ userId, pageSize: 10 })} className="mt-2" size="sm" >Retry</Btn>
-            </div>
-          ) : historyData.length === 0 ? (
-            <div className="text-center flex-1 h-full flex flex-col w-full items-center">
-              <Text className="text-neutral-500">No trip history found for the selected filters.</Text>
-            </div>
-          ) : (
-            <div className="space-y-4">
-              {historyData.map((item) => (
-                <FlightHistoryItem key={item.id} item={item} />
-              ))}
+      <div className="h-full">
+        {isLoading && historyData.length === 0 ? (
+          <div className="flex flex-col gap-8 items-center justify-center text-center h-full w-full">
+            <ImSpinner className="animate-spin"/>
+            <Text className="">Loading your trip history...</Text>
+          </div>
+        ) : currentError ? (
+          <div className="flex flex-col text-center py-8 text-red-500 size-full gap-8">
+            <Text>{currentError}</Text>
+            <Btn onClick={() => getClickHistory({ userId, pageSize: 10 })} className="mt-2" size="sm" >Retry</Btn>
+          </div>
+        ) : historyData.length === 0 ? (
+          <div className="text-center h-full flex flex-col w-full items-center justify-center">
+            <Text className="text-neutral-500">No trip history found for the selected filters.</Text>
+          </div>
+        ) : (
+          <div className="space-y-4 h-full overflow-y-auto">
+            {historyData.map((item) => (
+              <FlightHistoryItem key={item.id} item={item} />
+            ))}
 
-              {hasMoreResults && (
-                <div className="text-center py-4">
-                  <Btn
-                    onClick={handleLoadMore}
-                    disabled={loading}
-                    size="sm"
-                    className="mx-auto"
-                    
-                  >
-                    {loading ? (
-                      <>
-                        <span className="animate-spin mr-2"><ImSpinner /></span>
-                        Loading...
-                      </>
-                    ) : 'View More'}
-                  </Btn>
-                </div>
-              )}
-            </div>
-          )}
-        </div>
+            {hasMoreResults && (
+              <div className="text-center py-4">
+                <Btn
+                  onClick={handleLoadMore}
+                  disabled={loading}
+                  size="sm"
+                  className="mx-auto"
+                  
+                >
+                  {loading ? (
+                    <>
+                      <span className="animate-spin mr-2"><ImSpinner /></span>
+                      Loading...
+                    </>
+                  ) : 'View More'}
+                </Btn>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
