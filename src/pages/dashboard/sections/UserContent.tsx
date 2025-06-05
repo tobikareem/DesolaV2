@@ -52,7 +52,8 @@ export const UserContent: React.FC = () => {
 
 
   return (
-    <div className="flex flex-col max-w-2xl lg:py-6 bg-white rounded-lg">
+    <div className="flex flex-col w-full h-full lg:py-6 bg-white gap-4">
+      
       <ProfileSection />
 
       {preferencesLoading ? (

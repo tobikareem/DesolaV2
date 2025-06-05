@@ -34,7 +34,7 @@ export const TripHistoryContent = () => {
     return `trip_history_${userId}_${selectedPeriod}_${originFilter}_${destinationFilter}`;
   }, [userId, selectedPeriod, originFilter, destinationFilter]);
   
-   const {
+  const {
     data: cachedHistory,
     loading: cacheLoading,
     error: cacheError,
@@ -54,43 +54,11 @@ export const TripHistoryContent = () => {
     10 * 60 * 1000 // 5 minutes cache
   );
 
-   const debouncedFetch = useCallback(() => {
-     debounce(() => {
-       revalidate();
-     }, 500)();
-   }, [userId, selectedPeriod, originFilter, destinationFilter, revalidate]);
-
-  // const fetchClickHistory = async (reset = true) => {
-  //   if (!userId || loading) return;
-
-  //   try {
-  //     setLoading(true);
-  //     setError(null);
-
-  //     const params: ClickHistoryQueryParams = {
-  //       userId,
-  //       period: selectedPeriod !== 'Filter' ? selectedPeriod.toLowerCase() : undefined,
-  //       origin: originFilter || undefined,
-  //       destination: destinationFilter || undefined,
-  //       pageToken: reset ? undefined : nextPageToken || undefined,
-  //       pageSize: 10
-  //     };
-
-  //     const response = await getClickHistory(params);
-
-  //     if (response) {
-  //       setHistoryData(prev => reset ? response.results : [...prev, ...response.results]);
-  //       setNextPageToken(response.nextPageToken);
-  //       setHasMoreResults(response.hasMoreResults);
-  //     }
-  //   } catch (err) {
-  //     setError('Failed to load click history. Please try again.');
-  //     console.error('Error fetching click history:', err);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
+  const debouncedFetch = useCallback(() => {
+    debounce(() => {
+      revalidate();
+    }, 500)();
+  }, [userId, selectedPeriod, originFilter, destinationFilter, revalidate]);
 
 
   useEffect(() => {
@@ -169,7 +137,7 @@ export const TripHistoryContent = () => {
 
   return (
     <div className="flex-1 ">
-      <div className='h-full overflow-hidden'>
+      <div className=''>
         <div className="relative bg-white">
           <Text
             as="h1"
@@ -193,8 +161,8 @@ export const TripHistoryContent = () => {
                 }}
                 type="button"
                 className={`flex items-center cursor-pointer gap-2 text-nowrap
-                    ${(selectedPeriod === period.toLowerCase().replace(' ', ''))  ? 'bg-primary-100' : ''}
-                    ${(filterVisible && period == 'Filter') ? 'bg-primary-100' : ''}`}
+                    ${(selectedPeriod === period.toLowerCase().replace(' ', '') || (filterVisible && period.toLowerCase() == 'Filter' )) ? 'bg-primary-100' : ''}`}
+
                 size="sm"
               >
                 <Text>{period}</Text>
@@ -251,47 +219,49 @@ export const TripHistoryContent = () => {
           )}
         </div>
       </div>
-      <div className="h-full overflow-y-auto">
-        {isLoading && historyData.length === 0 ? (
-          <div className="flex flex-1 flex-col gap-4 items-center text-center">
-            <ImSpinner className="animate-spin"/>
-            <Text className="">Loading your trip history...</Text>
-          </div>
-        ) : currentError ? (
-          <div className="flex flex-1 flex-col text-center py-8 text-red-500">
-            <Text>{currentError}</Text>
-            <Btn onClick={() => getClickHistory({ userId, pageSize: 10 })} className="mt-2" size="sm" >Retry</Btn>
-          </div>
-        ) : historyData.length === 0 ? (
-          <div className="text-center flex-1 h-full flex flex-col w-full items-center">
-            <Text className="text-neutral-500">No trip history found for the selected filters.</Text>
-          </div>
-        ) : (
-          <div className="space-y-4">
-            {historyData.map((item) => (
-              <FlightHistoryItem key={item.id} item={item} />
-            ))}
+      <div>
+        <div className="h-full overflow-y-auto">
+          {isLoading && historyData.length === 0 ? (
+            <div className="flex flex-1 flex-col gap-4 items-center text-center">
+              <ImSpinner className="animate-spin"/>
+              <Text className="">Loading your trip history...</Text>
+            </div>
+          ) : currentError ? (
+            <div className="flex flex-1 flex-col text-center py-8 text-red-500">
+              <Text>{currentError}</Text>
+              <Btn onClick={() => getClickHistory({ userId, pageSize: 10 })} className="mt-2" size="sm" >Retry</Btn>
+            </div>
+          ) : historyData.length === 0 ? (
+            <div className="text-center flex-1 h-full flex flex-col w-full items-center">
+              <Text className="text-neutral-500">No trip history found for the selected filters.</Text>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {historyData.map((item) => (
+                <FlightHistoryItem key={item.id} item={item} />
+              ))}
 
-            {hasMoreResults && (
-              <div className="text-center py-4">
-                <Btn
-                  onClick={handleLoadMore}
-                  disabled={loading}
-                  size="sm"
-                  className="mx-auto"
-                  
-                >
-                  {loading ? (
-                    <>
-                      <span className="animate-spin mr-2"><ImSpinner /></span>
-                      Loading...
-                    </>
-                  ) : 'View More'}
-                </Btn>
-              </div>
-            )}
-          </div>
-        )}
+              {hasMoreResults && (
+                <div className="text-center py-4">
+                  <Btn
+                    onClick={handleLoadMore}
+                    disabled={loading}
+                    size="sm"
+                    className="mx-auto"
+                    
+                  >
+                    {loading ? (
+                      <>
+                        <span className="animate-spin mr-2"><ImSpinner /></span>
+                        Loading...
+                      </>
+                    ) : 'View More'}
+                  </Btn>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

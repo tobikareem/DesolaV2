@@ -10,8 +10,8 @@ export const ProfileSection = () => {
     const { accountInfo } = useAuthInfo();
 
     return (
-        <div className="mb-8">
-            <Text as="h1" size="2xl" weight="bold" className="text-primary-500 mb-5">
+        <div className="space-y-5">
+            <Text as="h1" size="2xl" weight="bold" className="text-primary-500">
                 Profile
             </Text>
             <div className="flex flex-col items-center">
