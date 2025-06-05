@@ -14,7 +14,7 @@ import { ImSpinner } from "react-icons/im";
 
 export const Navbar = () => {
     const [slider, setSlider] = useState<boolean>(false);
-    const { userName, isAuthenticated, logout, isLoading } = useAuthInfo();
+    const { userName, isAuthenticated, logout} = useAuthInfo();
     const isDesktop = useIsDesktop();
     const { navigationData, mobileTab, setMobileTab } = useContext(NavigationContext);
     const { toggleModal } = useContext(UIContext);
@@ -101,9 +101,9 @@ export const Navbar = () => {
                             authService.signIn();
                         }}
                         disabled={isSigningIn}
-                        className="hidden lg:flex items-center justify-center h-12 w-[137px] bg-gradient-to-b from-[#FF9040] to-[#FF6B00] text-base text-white font-medium rounded-[48px] hover:scale-105 transition-transform duration-300 ease-in-out"
+                        className={`hidden lg:flex items-center justify-center h-12 ${isSigningIn ? 'w-fit text-nowrap':'w-[140px]'} bg-gradient-to-b from-[#FF9040] to-[#FF6B00] text-base text-white font-medium rounded-[48px] hover:scale-105 transition-transform duration-300 ease-in-out`}
                     >
-                        { isSigningIn ? <span className="">Signing in... <ImSpinner className="animate-spin duration-300"/></span> : 'Sign In'}
+                        { isSigningIn ? <span className="text">Signing in... <ImSpinner className="animate-spin duration-300"/></span> : 'Sign In'}
                     </button>
                 )}
                 {/* Mobile Nav */}

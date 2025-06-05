@@ -52,24 +52,25 @@ export const UserContent: React.FC = () => {
 
 
   return (
-    <div className="flex flex-col w-full h-full lg:py-6 bg-white gap-4">
-      
-      <ProfileSection />
+    <div className="w-full h-full lg:py-6 bg-white ">
+      <div className="flex flex-col gap-4 overflow-y-auto h-full">
+        <ProfileSection />
 
-      {preferencesLoading ? (
-        <div className="py-8 flex justify-center">
-          <span>Loading your preferences...</span>
-        </div>
-      ) : (
-        <PreferencesSection
-          preferences={preferences}
-          onChange={handlePreferenceChange}
-          onSave={savePreferences}
-          onAirportInputChange={fetchAirports}
-          airportSuggestions={airportSuggestions}
-          onAirportSelect={handleAirportSelect}
-        />
-      )}
+        {preferencesLoading ? (
+          <div className="py-8 flex justify-center">
+            <span>Loading your preferences...</span>
+          </div>
+        ) : (
+          <PreferencesSection
+            preferences={preferences}
+            onChange={handlePreferenceChange}
+            onSave={savePreferences}
+            onAirportInputChange={fetchAirports}
+            airportSuggestions={airportSuggestions}
+            onAirportSelect={handleAirportSelect}
+          />
+        )}
+      </div>
     </div>
   );
 };

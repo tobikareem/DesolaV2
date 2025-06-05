@@ -43,7 +43,7 @@ export const PreferencesSection = ({
                 Travel Preferences
             </Text>
             {/* Origin Airport */}
-            <div className="h-full overflow-y-auto">
+            <div className="h-full">
                 <div className="mb-4">
                     <label htmlFor="originAirportInput" className="block text-sm font-medium text-gray-700 mb-1">
                         Preferred Origin Airport
@@ -173,7 +173,7 @@ export const PreferencesSection = ({
                     </Listbox>
                 </div>
 
-                <Btn onClick={onSave} className="w-full bg-success text-white px-6 py-2 ">
+                <Btn onClick={onSave} className="w-full bg-success text-white px-6 py-2 mb-8 ">
                     Save Preferences
                 </Btn>
             </div>
