@@ -24,7 +24,7 @@ export const TextArea = ({
   const inputId = id ?? `input-${generatedId}`;
 
   return (
-    <div className="flex flex-col gap-1 font-work ">
+    <div className="flex flex-col gap-1 font-work w-full ">
       {label && (
         <label htmlFor={inputId} className={clsx("text-sm font-medium text-neutral-700", labelClassName)}>
           {label}
