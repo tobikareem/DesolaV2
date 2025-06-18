@@ -1,7 +1,7 @@
 import { Headset, House, LogOut, Trash2, User } from 'lucide-react';
 import React, { useContext, useEffect, useState } from 'react';
 import { PiHeadsetFill, PiRoadHorizonBold, PiRoadHorizonFill, PiTrashFill } from 'react-icons/pi';
-import { RiHome5Fill, RiUserFill } from 'react-icons/ri';
+import { RiHome5Fill, RiRobot2Fill, RiRobot2Line, RiUserFill } from 'react-icons/ri';
 import { SidebarLogout } from '../../../components/dashboard-sections/sidebar/SidebarLogout';
 import { SidebarTab } from '../../../components/dashboard-sections/sidebar/SidebarTab';
 import { ClearChat } from '../../../components/modals/ClearChat';
@@ -21,7 +21,9 @@ import { TrashContent } from './TrashContent';
 import { UserContent } from './UserContent';
 import { SubscriptionContent } from './SubscriptionContent';
 import { TbCreditCard, TbCreditCardFilled } from 'react-icons/tb';
+import { DesolaAI } from './DesolaAI';
 import { useAuthInfo } from '../../../hooks/useAuthInfo';
+
 
 const storageService = new CustomStorage();
 
@@ -59,6 +61,7 @@ export const RightPanel: React.FC =()=> {
 
   const sidebarOptions: NavItem[] = [
     { id: 'home', icon: <House size={24} />, icon2: <RiHome5Fill />, label: 'Home' },
+    { id: 'AI', icon:   <RiRobot2Line size={24} />, icon2: <RiRobot2Fill size={24} />, label: 'AI Assistant' },
     { id: 'road', icon: <PiRoadHorizonBold size={24} />, icon2: <PiRoadHorizonFill />, label: 'Trips' },
     { id: 'trash', icon: <Trash2 size={24} />, icon2: <PiTrashFill />, label: 'Clear Chat' },
     { id: 'user', icon: <User size={24} />, icon2: <RiUserFill />, label: 'Profile' },
@@ -87,6 +90,7 @@ export const RightPanel: React.FC =()=> {
   const handleConfirmDelete = () => {
     storageService.removeItem('RecentPrompts');
     storageService.removeItem('chatLog');
+    storageService.removeItem('AIMessageLog');
     toggleModal('delete');
     window.location.reload();
   };
@@ -106,6 +110,7 @@ export const RightPanel: React.FC =()=> {
 
   type TabComponentMap = {
     home: React.FC<HomeContentProps>;
+    AI: React.FC<NoProps>;
     road: React.FC<PathContentProps>;
     trash: React.FC<NoProps>;
     user: React.FC<NoProps>;
@@ -115,6 +120,7 @@ export const RightPanel: React.FC =()=> {
 
   const TAB_COMPONENTS: TabComponentMap = {
     home: HomeContent,
+    AI: DesolaAI,
     road: TripHistoryContent,
     trash: TrashContent,
     user: UserContent,
@@ -128,7 +134,7 @@ export const RightPanel: React.FC =()=> {
       return <Component {...travelInfo} />;
     }
     // For components that don't need props
-    const Component = TAB_COMPONENTS[selectedTab as 'road' | 'trash' | 'user' | 'subscription' | 'support'];
+    const Component = TAB_COMPONENTS[selectedTab as 'AI' | 'road' | 'trash' | 'user' | 'subscription' | 'support'];
     return Component ? <Component departure={''} destination={''} departureDate={''} returnDate={''} travelRoute={''} flightClass={''} /> : null;
   };
   const isLastMessage = chatLog.length > 0 && chatLog[chatLog.length - 1].message.toLowerCase().includes('click the search button')
