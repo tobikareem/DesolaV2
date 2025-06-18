@@ -212,11 +212,12 @@ const authService = {
     signIn: async (): Promise<void> => {
         try {
             if (authService.getCurrentAccount()) {
-                console.log("User already signed in");
+                toast.isActive("User already signed in");
                 return;
             }
 
-            // Save current URL for post-login redirect
+            const currentUrl = window.location.pathname + window.location.search;
+            storage.setItem(SESSION_VALUES.postLoginRedirectUrl, currentUrl);
             // Start login redirect
             console.log("Redirecting user to sign in...");
             authService.setIsSigningIn?.(true);
@@ -250,7 +251,6 @@ const authService = {
             };
 
             const response = await msalInstance.loginPopup(signUpRequest);
-
             if (response.account) {
                 msalInstance.setActiveAccount(response.account);
                 storage.setItem(SESSION_VALUES.azure_b2c_idToken, response.idToken ?? "");

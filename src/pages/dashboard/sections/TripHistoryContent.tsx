@@ -147,7 +147,7 @@ export const TripHistoryContent = () => {
           >
             My Trips
           </Text>
-          <div className="z-[2] flex flex-wrap items-center h-['100px'] mb-2 pb-4 gap-3 bg-white w-full border-b border-neutral-300">
+          <div className="flex flex-wrap items-center h-['100px'] mb-2 pb-4 gap-3 bg-white w-full border-b border-neutral-300">
             {['Today', 'Yesterday', 'Last Week', 'Last Month', 'Filter'].map((period) => (
               <Btn
                 key={period}
@@ -161,7 +161,7 @@ export const TripHistoryContent = () => {
                 }}
                 type="button"
                 className={`flex items-center cursor-pointer gap-2 text-nowrap
-                    ${(selectedPeriod === period.toLowerCase().replace(' ', '') || (filterVisible && period.toLowerCase() == 'Filter' )) ? 'bg-primary-100' : ''}`}
+                    ${(selectedPeriod === period.toLowerCase().replace(' ', '') || (filterVisible && period == 'Filter' )) ? 'active:bg-primary-100 ' : ''}`}
                 size="sm"
               >
                 <Text>{period}</Text>
