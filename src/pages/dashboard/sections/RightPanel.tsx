@@ -90,7 +90,7 @@ export const RightPanel: React.FC =()=> {
   const handleConfirmDelete = () => {
     storageService.removeItem('RecentPrompts');
     storageService.removeItem('chatLog');
-    storageService.removeItem('AIMessageLog');
+    storageService.removeItem('AiMessageLog');
     toggleModal('delete');
     window.location.reload();
   };
