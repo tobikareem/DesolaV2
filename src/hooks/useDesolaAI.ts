@@ -15,10 +15,6 @@ export interface DesolaAILog {
   message: string;
   role: 'user' | 'assistant' | string;
 }
-interface StoredData {
-  messages: DesolaAILog[];
-  timestamp: number;
-}
 
 export const useDesolaAI = () => {
   const {postData} = useApi();
@@ -26,25 +22,16 @@ export const useDesolaAI = () => {
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null);
   const storageService = new CustomStorage();
-
-  const getInitialMessages = ():DesolaAILog[] => {
-    const storedData = storageService.getItem('AIMessageLog');
-    const EXPIRY_TIME = 5 * 60 * 1000;
-
-    if (storedData) {
-    const { messages, timestamp }: StoredData = JSON.parse(storedData);
-    const now = Date.now();
-    if (now - timestamp < EXPIRY_TIME) {
-      return messages;
-    }
-    storageService.removeItem('AIMessageLog');
-  }
-    return [{
-      message: "I am your Assistant. How can I help you today?",
-      role: 'assistant' as const
-    }];
-  }
-  const [AIMessageLog, setAIMessageLog] = useState<DesolaAILog[]>(getInitialMessages);
+  
+  const [AIMessageLog, setAIMessageLog] = useState<DesolaAILog[]>(() => {
+    const stored = storageService.getItem('AiMessageLog');
+    return stored ? JSON.parse(stored) : [
+      {
+         message: "I am your Assistant. How can I help you today?",
+         role: 'assistant'
+      }
+    ];
+  });
 
   const updateAIChatLog = (message: string, role: 'user' | 'assistant') => {
     setAIMessageLog((prevLog) => [

@@ -28,7 +28,7 @@ export const DesolaAI = () => {
   },[AIMessageLog])
 
   return (
-    <div className="flex flex-col justify-between h-full overflow-hidden">
+    <div className="flex flex-col justify-between h-full gap-2 overflow-hidden">
       <div className="relative space-y-2">
         <Text
           as="h1"
@@ -44,7 +44,7 @@ export const DesolaAI = () => {
       </div>
 
       <div ref={chatContainerRef} 
-        className={`${loading ? 'border-2':'border'} border-primary-300 flex-1 space-y-2 overflow-y-auto py-6 px-2`}>
+        className={`${loading ? 'border-2 border-primary-100':'border'} border-neutral-300 rounded-lg flex-1 space-y-2 overflow-y-auto py-6 px-2`}>
         { 
           AIMessageLog?.map((message:DesolaAILog, index) => {
             const isUser = message.role == 'user'
