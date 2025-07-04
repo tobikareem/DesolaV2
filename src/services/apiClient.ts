@@ -69,7 +69,7 @@ apiClient.interceptors.response.use(
             const { status } = error.response;
             switch (status) {
                 case 404:
-                    toast.warn("Resource not found");
+                    // toast.warn("Resource not found");
                     break;
                 case 500:
                     toast.error("Internal server error. Please contact support");

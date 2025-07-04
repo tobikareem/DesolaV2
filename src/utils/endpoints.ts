@@ -16,5 +16,12 @@ export const ENDPOINTS_API_PATH ={
     paymentIntent:'payment/intent/create',
     subscriptionCreate:'subscription/create',
     confirmSubscription:'payment/intent/confirm',
-    cancelSubscription:'subscription/cancel'
+    cancelSubscription:'subscription/cancel',
+    stripe_getCustomer: 'customer',
+    stripe_createCustomer: 'customer/signup',
+    stripe_updateCustomer: 'customer/update',
+    stripe_createPaymentIntent: 'subscription/paymentIntent/create',
+    stripe_getPaymentIntent: 'subscription/paymentIntent',
+    stripe_createSubscription: 'subscription/create-direct',
+    stripe_cancelSubscription: 'subscription/cancel',
 }
