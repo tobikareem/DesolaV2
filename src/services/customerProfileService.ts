@@ -6,9 +6,9 @@ import { CustomStorage } from "../utils/customStorage";
 
 class CustomerProfileService {
     private storage = new CustomStorage();
-    private readonly CUSTOMER_PROFILE_KEY = "customer_profile";
-    private readonly ADDRESS_KEY = "customer_address";
-    private readonly PREFERENCES_KEY = "customer_preferences";
+    private readonly CUSTOMER_PROFILE_KEY = SESSION_VALUES.customer_profile;
+    private readonly ADDRESS_KEY = SESSION_VALUES.customer_address;
+    private readonly PREFERENCES_KEY = SESSION_VALUES.customer_preferences;
 
     
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

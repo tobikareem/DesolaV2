@@ -14,7 +14,9 @@ export class IdToken {
     @Expose({ name: "given_name" }) firstName?: string;
     @Expose({ name: "family_name" }) lastName?: string;
     @Expose({ name: "name" }) fullName?: string;
-    @Expose({ name: "email" }) @Transform(({ value }) => Array.isArray(value) ? value[0] : value)emailAddress?: string;
+    @Expose({ name: "email" }) 
+    @Transform(({ value }) => Array.isArray(value) ? value[0] : value)
+    emailAddress?: string;
     @Expose({ name: "emails" }) emailList?: string[];
 
     // Azure B2C specific identifiers

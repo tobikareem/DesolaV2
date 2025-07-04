@@ -13,7 +13,7 @@ import { STRIPE } from "../../../utils/constants"
 import { StripePaymentForm } from "../../payment/StripePaymentForm"
 import { BillFrequency } from "../../pricing/BillFrequency"
 
-const stripePromise = loadStripe(STRIPE.PUBLISHABLE_KEY || '');
+const stripePromise = loadStripe(STRIPE.PUBLISHABLE_KEY);
 
 export const SubscriptionContent = () => {
   
