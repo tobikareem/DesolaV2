@@ -10,4 +10,11 @@ export const ENDPOINTS_API_PATH ={
     flight_search: 'flight/search',
     track: 'track',
     flight_trackHistory: 'flight/trackHistory',
+    desolaAI: 'api/ask/',
+    customerSignupPaymentRequest:'customer/signup',
+    customerUpdatePaymentRequest: 'customer/update',
+    paymentIntent:'payment/intent/create',
+    subscriptionCreate:'subscription/create',
+    confirmSubscription:'payment/intent/confirm',
+    cancelSubscription:'subscription/cancel'
 }
