@@ -10,4 +10,10 @@ export const ENDPOINTS_API_PATH ={
     flight_search: 'flight/search',
     track: 'track',
     flight_trackHistory: 'flight/trackHistory',
+    stripe_getCustomer: 'customer',
+    stripe_createCustomer: 'customer/signup',
+    stripe_updateCustomer: 'customer/update',
+    stripe_createPaymentIntent: 'subscription/paymentIntent/create',
+    stripe_getPaymentIntent: 'subscription/paymentIntent',
+    stripe_createSubscription: 'subscription/create-direct',
 }
