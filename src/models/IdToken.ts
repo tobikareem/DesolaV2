@@ -1,10 +1,10 @@
-import { Expose } from "class-transformer";
+import { Expose, Transform } from "class-transformer";
 import "reflect-metadata";
 
 export class IdToken {
     @Expose({ name: "iss" }) issuer?: string;  // Issuer
     @Expose({ name: "sub" }) subject?: string; // Subject
-    @Expose({ name: "aud" }) audience?: string | string[];
+    @Expose({ name: "aud" }) audience?: string;
     @Expose({ name: "exp" }) expirationTime?: number;
     @Expose({ name: "nbf" }) notBefore?: number;
     @Expose({ name: "iat" }) issuedAt?: number;
@@ -14,7 +14,9 @@ export class IdToken {
     @Expose({ name: "given_name" }) firstName?: string;
     @Expose({ name: "family_name" }) lastName?: string;
     @Expose({ name: "name" }) fullName?: string;
-    @Expose({ name: "email" }) emailAddress?: string;
+    @Expose({ name: "email" }) 
+    @Transform(({ value }) => Array.isArray(value) ? value[0] : value)
+    emailAddress?: string;
     @Expose({ name: "emails" }) emailList?: string[];
 
     // Azure B2C specific identifiers

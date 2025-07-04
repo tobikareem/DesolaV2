@@ -43,6 +43,8 @@
     "@fullcalendar/react": "^6.1.17",
     "@fullcalendar/timegrid": "^6.1.17",
     "@headlessui/react": "^2.2.0",
+    "@stripe/react-stripe-js": "^3.7.0",
+    "@stripe/stripe-js": "^7.4.0",
     "@types/lodash": "^4.17.17",
     "class-transformer": "^0.5.1",
     "clsx": "^2.1.1",
