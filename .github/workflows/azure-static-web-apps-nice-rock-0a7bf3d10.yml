@@ -33,6 +33,9 @@ jobs:
           echo "VITE_B2C_REDIRECT_URI=${{ secrets.VITE_B2C_REDIRECT_URI }}" >> $GITHUB_ENV 
           echo "VITE_B2C_APPLICATION_SCOPE=${{ secrets.VITE_B2C_APPLICATION_SCOPE }}" >> $GITHUB_ENV 
           echo "VITE_B2C_EDIT_USERPROFILE_POLICY=${{ secrets.VITE_B2C_EDIT_USERPROFILE_POLICY }}" >> $GITHUB_ENV 
+          echo "VITE_STRIPE_PUBLISHABLE_KEY=${{ secrets.VITE_STRIPE_PUBLISHABLE_KEY }}" >> $GITHUB_ENV
+          echo "VITE_STRIPE_MONTHLY_PRICE_ID=${{ secrets.VITE_STRIPE_MONTHLY_PRICE_ID }}" >> $GITHUB_ENV
+          echo "VITE_STRIPE_YEARLY_PRICE_ID=${{ secrets.VITE_STRIPE_YEARLY_PRICE_ID }}" >> $GITHUB_ENV
       - name: Install Dependencies
         run: npm install
         

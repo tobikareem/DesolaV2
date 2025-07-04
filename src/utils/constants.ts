@@ -15,6 +15,13 @@ export const AZURE_B2C = {
     EDIT_USERPROFILE_POLICY: import.meta.env.VITE_B2C_EDIT_USERPROFILE_POLICY,
 };
 
+// Stripe Configuration
+export const STRIPE = {
+    PUBLISHABLE_KEY: import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY,
+    MONTHLY_PRICE_ID: import.meta.env.VITE_STRIPE_MONTHLY_PRICE_ID,
+    YEARLY_PRICE_ID: import.meta.env.VITE_STRIPE_YEARLY_PRICE_ID,
+};
+
 // **Session Storage Keys**
 export const SESSION_VALUES = {
     api_function_key: "api_function_key_token",
@@ -32,11 +39,18 @@ export const SESSION_VALUES = {
     azure_user_name: "azure_name",
     azure_isAuthenticated: "azure_is_authenticated",
     azure_msal_token_keys: `msal.token.keys.${AZURE_B2C.CLIENT_ID}`,
-    postLoginRedirectUrl: "post_login_redirect_url"
+    postLoginRedirectUrl: "post_login_redirect_url",
+
+    // Customer Profile Storage Keys
+    customer_profile: "customer_profile",
+    customer_address: "customer_address",
+    customer_preferences: "customer_preferences",
+    customer_profile_last_sync: "customer_profile_last_sync",
 };
 
 export const LOCAL_STORAGE_VALUES = {
     usa_airports: "usa_airports",
+    customer_profile_backup: "customer_profile_backup"
 };
 
 
