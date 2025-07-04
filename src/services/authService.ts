@@ -6,6 +6,8 @@ import { msalInstance } from "../auth/msalConfig";
 import { IdToken } from "../models/IdToken";
 import { AZURE_B2C, ERROR_MESSAGES, SESSION_VALUES } from "../utils/constants";
 import { CustomStorage } from "../utils/customStorage";
+import { CustomerProfile } from "../models/UserProfile/CustomerProfile";
+import { customerProfileService } from "./customerProfileService";
 
 const REFRESH_TIMEOUT = 15000; // 15 seconds timeout for token refresh
 
@@ -385,6 +387,43 @@ const authService = {
             throw error;
         }
     },
+
+    updateCustomerPreferences: (preferences: Partial<CustomerProfile['preferences']>) => {
+        customerProfileService.updatePreferences(preferences);
+    },
+    updateCustomerAddress: (address: Partial<CustomerProfile['address']>) => {
+        customerProfileService.updateAddress(address);
+    },
+    getCustomerAddress: () => {
+        return customerProfileService.getAddress();
+    },
+    getCustomerProfile: () => {
+        return customerProfileService.getProfile();
+    },
+
+    /**
+     * Extract customer profile from token claims and save to storage
+     */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    extractAndSaveCustomerProfile: (tokenClaims: any): void => {
+        try {
+            const profile = customerProfileService.extractProfileFromToken(tokenClaims);
+            if (profile) {
+                customerProfileService.saveProfile(profile);
+                
+                window.dispatchEvent(new CustomEvent('customer:profile-updated', { 
+                    detail: profile 
+                }));
+
+            
+            } else {
+                console.warn("Failed to extract customer profile from token claims");
+            }
+        } catch (error) {
+            console.error("Error extracting customer profile:", error);
+        }
+    },
+
 };
 
 export default authService;
