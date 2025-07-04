@@ -63,6 +63,7 @@ export const CardDetails =()=> {
           Message={`Are you sure you want to delete card with number ${selectedCardId}?`}
         />
       </Modal>
+      
     </PricingCard>
   )
 }
