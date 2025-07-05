@@ -68,15 +68,17 @@ const CardSubscriptionModal: React.FC<CardSubscriptionModalProps> = ({
 
           <div className="w-full mt-6 space-y-4">
             <Input
+            label="Cardholder's Name"
               type="text"
               name="name"
               placeholder="Cardholder's Name"
               value={card.name}
               onChange={handleChange}
-              className="w-full border border-neutral-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-600"
+               className="flex items-center w-full h-12 lg:h-[52px] justify-between p-2 md:p-2.5 !rounded-[10px] border !border-modal placeholder:text-neutral-300"
             />
 
             <Input
+            label="Card Number"
               type="text"
               name="number"
               placeholder="Card Number"
@@ -88,7 +90,7 @@ const CardSubscriptionModal: React.FC<CardSubscriptionModalProps> = ({
                 setCard({ ...card, number: formatted });
               }}
               maxLength={19}
-              className="w-full border border-neutral-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-600"
+               className="flex items-center w-full h-12 lg:h-[52px] justify-between p-2 md:p-2.5 !rounded-[10px] border !border-modal placeholder:text-neutral-300"
             />
 
             <div className="flex items-center gap-4 mt-1 ml-1">
@@ -101,23 +103,27 @@ const CardSubscriptionModal: React.FC<CardSubscriptionModalProps> = ({
               />
             </div>
 
-            <Input
+
+            <div className="flex items-center justify-center gap-2">
+                       <Input
+                       label="Expiry Date"
               type="text"
               name="expiry"
               placeholder="MM/YY"
               value={card.expiry}
               onChange={(e) => {
-                let val = e.target.value.replace(/\D/g, '').slice(0, 4); // max 4 digits
+                let val = e.target.value.replace(/\D/g, '').slice(0, 4);
                 if (val.length >= 3) {
                   val = `${val.slice(0, 2)}/${val.slice(2)}`;
                 }
                 setCard({ ...card, expiry: val });
               }}
               maxLength={5}
-              className="w-full border border-neutral-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-600"
+ className="flex items-center w-full h-12 lg:h-[52px] justify-between p-2 md:p-2.5 !rounded-[10px] border !border-modal placeholder:text-neutral-300"
             />
 
-            <Input
+              <Input
+              label="CVV"
               type="text"
               name="cvv"
               placeholder="CVV"
@@ -127,8 +133,14 @@ const CardSubscriptionModal: React.FC<CardSubscriptionModalProps> = ({
                 setCard({ ...card, cvv: val });
               }}
               maxLength={4}
-              className="w-full border border-neutral-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-600"
+               className="flex items-center w-full h-12 lg:h-[52px] justify-between p-2 md:p-2.5 !rounded-[10px] border !border-modal placeholder:text-neutral-300"
             />
+
+
+            </div>
+   
+
+         
           </div>
 
           <div className="flex flex-col md:flex-row justify-center mt-6 gap-4 w-full">
