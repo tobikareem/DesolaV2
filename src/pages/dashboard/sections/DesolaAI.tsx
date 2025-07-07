@@ -49,7 +49,7 @@ export const DesolaAI = () => {
           AIMessageLog?.map((message:DesolaAILog, index) => {
             const isUser = message.role == 'user'
           return(
-              <div className={`flex flex-col ${isUser ? 'pl-[20%] items-end' : 'pr-[20%] items-start'} w-full h-fit`} key={index}>
+              <div className={`flex flex-col ${isUser ? 'pl-[20%] items-end' : 'pr-[10%] items-start'} w-full h-fit`} key={index}>
                 <div className={`${!isUser ? 'bg-primary-300/95' : 'bg-secondary-200/95'} w-fit rounded-lg p-2 space-y-1.5`}>
                   <Text size="sm" color={``} className={``} >
                     <ReactMarkdown>{message.message}</ReactMarkdown>

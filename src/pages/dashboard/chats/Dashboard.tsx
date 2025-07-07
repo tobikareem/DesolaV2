@@ -51,10 +51,12 @@ const Dashboard: React.FC = () => {
   const { chatLog, setChatLog, recentPrompts, setRecentPrompts } = useContext(ChatContext);
   const { toggleModal } = useContext(UIContext);
   // Custom hooks
-  const { showEditModal, setShowEditModal, showCalendar, setShowCalendar, showPopData, setShowPopData, setSearchParam, searchParam } = useModals();
+  const { showEditModal, setShowEditModal, showCalendar, setShowCalendar, showPopData,
+     setShowPopData, setSearchParam, searchParam} = useModals();
   const { inputValue, setInputValue, dateSelect, setDateSelect, setDate, date } = useInput();
   const { fetchAirports, airportSuggestions } = useAirports();
   const { loadPreferences, preferences } = useDashboardInfo();
+  // Utility hooks
   const isDesktop = useIsDesktop();
   const debounce = useDebounce();
   // Local UI state
@@ -77,6 +79,7 @@ const Dashboard: React.FC = () => {
     }
 
   }, [fetchAirports, loadPreferences, isAuthenticated]);
+
 
   useEffect(() => {
 
@@ -249,15 +252,11 @@ const Dashboard: React.FC = () => {
   return (
     <div className="flex">
       <div className="relative flex flex-col bg-background border border-neutral-300 w-full lg:w-[60%] h-svh">
-
         <RecentPromptsBar prompts={recentPrompts} onEditClick={toggleEditModal} />
-    
         <div className={`flex lg:hidden w-full mt-16 justify-end items-center py-1.5 px-5`}>
           <PenLine onClick={toggleEditModal} className={`${recentPrompts?.length != 0 ? '' : 'hidden'} text-primary-500 text-4xl`} />
         </div>
-
         <ChatHistory chatLog={chatLog} botLoader={botLoader} isLoading={chatLoading} />
-
         {isLastMessage && Array.isArray(recentPrompts) && (isOneWay ? recentPrompts.length >= 5 : recentPrompts.length >= 6) && (
           <Btn onClick={() => {toggleModal('flight');}}
             className="fixed lg:hidden px-6 py-1 w-40 h-9 md:h-12 bg-secondary-500 text-neutral-100 self-end bottom-[130px] right-4"

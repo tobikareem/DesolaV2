@@ -1,6 +1,5 @@
 
 import React, { useContext } from "react";
-import { ChatContext } from "../../contexts/ChatContext";
 import { TripHistoryContent } from "../../pages/dashboard/sections/TripHistoryContent";
 import { SupportContent } from "../../pages/dashboard/sections/SupportContent";
 import { TrashContent } from "../../pages/dashboard/sections/TrashContent";
@@ -12,20 +11,12 @@ import { NavigationContext } from "../../contexts/NavigationContext";
 const MobileRender: React.FC = () => {
 
   const { mobileTab } = useContext(NavigationContext);
-  const { travelInfo } = useContext(ChatContext);
 
   const RenderPage = () => {
     switch (mobileTab) {
       case 'road':
         return (
-          <TripHistoryContent
-            departure={travelInfo.departure}
-            destination={travelInfo.destination}
-            departureDate={travelInfo.departureDate}
-            returnDate={travelInfo.returnDate}
-            travelRoute={travelInfo.travelRoute}
-            flightClass={travelInfo.flightClass}
-          />
+          <TripHistoryContent/>
         );
 
       case 'trash':

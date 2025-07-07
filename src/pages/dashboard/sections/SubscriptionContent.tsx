@@ -29,7 +29,7 @@ export const SubscriptionContent = () => {
       fullName: customerProfile?.fullName || '',
       phone: customerProfile?.phone || '+1234567890',
       preferredCurrency: customerProfile?.preferences.currency || 'USD',
-      defaultOriginAirport: preferences.originAirport || 'SFO',
+      defaultOriginAirport: preferences.originAirport || 'ATL',
       metadata: {
         userId: customerProfile?.id || '',
         accountType: 'premium',

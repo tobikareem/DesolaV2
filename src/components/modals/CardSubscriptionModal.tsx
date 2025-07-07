@@ -3,10 +3,11 @@ import { Text } from '../ui/TextComp';
 import { Btn } from '../ui/Button';
 import {Input} from "../ui/InputField";
 import { FaCreditCard } from 'react-icons/fa';
-import visa from '../../assets/visa.png';
-import mastercard from '../../assets/mastercard.png';
-import american from '../../assets/american-expresss.png';
-import cards from '../../assets/cards.jpg';
+import Visa from '/Visa.webp';
+import Mastercard from '/Mastercard.webp';
+import Amex from '/Amex.webp';
+import Express from '/Express.webp';
+import Subscription from '/Subscription.jpg';
 import {toast} from 'react-toastify';
 
 interface CardSubscriptionModalProps {
@@ -43,17 +44,16 @@ const CardSubscriptionModal: React.FC<CardSubscriptionModalProps> = ({
   };
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 items-center bg-white rounded-lg overflow-hidden shadow-lg w-full max-w-4xl">
+    <div className="grid grid-cols-1 md:grid-cols-2 items-center bg-white rounded-2xl overflow-hidden shadow-lg w-full max-w-4xl">
 
-      <div className="hidden  md:items-center md:justify-center md:block">
+      <div className="hidden md:items-center md:justify-center md:block">
         <img
-          src={cards}
-          alt="Credit Card"
+          src={Subscription}
+          alt="Subscription"
           className="w-full h-full   object-cover"
         />
       </div>
 
-   
       <div className="flex items-center justify-center p-6">
         <div className="flex bg-white flex-col p-6 rounded-lg items-center justify-center w-full max-w-[400px] h-fit ">
           <FaCreditCard className="text-4xl text-primary-600" />
@@ -93,34 +93,30 @@ const CardSubscriptionModal: React.FC<CardSubscriptionModalProps> = ({
                className="flex items-center w-full h-12 lg:h-[52px] justify-between p-2 md:p-2.5 !rounded-[10px] border !border-modal placeholder:text-neutral-300"
             />
 
-            <div className="flex items-center gap-4 mt-1 ml-1">
-              <img src={visa} alt="Visa" className="h-3 w-auto" />
-              <img src={mastercard} alt="MasterCard" className="h-3 w-auto" />
-              <img
-                src={american}
-                alt="americanExpress"
-                className="h-3 w-auto"
-              />
+            <div className="flex items-center gap-1 mt-1 ml-1">
+              { [Visa, Mastercard, Express, Amex, ]?.map((index) => (
+                <img src={index} alt={index} className="h-3.5 w-auto" />
+              ))}
             </div>
 
 
             <div className="flex items-center justify-center gap-2">
-                       <Input
-                       label="Expiry Date"
-              type="text"
-              name="expiry"
-              placeholder="MM/YY"
-              value={card.expiry}
-              onChange={(e) => {
-                let val = e.target.value.replace(/\D/g, '').slice(0, 4);
-                if (val.length >= 3) {
-                  val = `${val.slice(0, 2)}/${val.slice(2)}`;
-                }
-                setCard({ ...card, expiry: val });
-              }}
-              maxLength={5}
- className="flex items-center w-full h-12 lg:h-[52px] justify-between p-2 md:p-2.5 !rounded-[10px] border !border-modal placeholder:text-neutral-300"
-            />
+              <Input
+                label="Expiry Date"
+                type="text"
+                name="expiry"
+                placeholder="MM/YY"
+                value={card.expiry}
+                onChange={(e) => {
+                  let val = e.target.value.replace(/\D/g, '').slice(0, 4);
+                  if (val.length >= 3) {
+                    val = `${val.slice(0, 2)}/${val.slice(2)}`;
+                  }
+                  setCard({ ...card, expiry: val });
+                }}
+                maxLength={5}
+                className="flex items-center w-full h-12 lg:h-[52px] justify-between p-2 md:p-2.5 !rounded-[10px] border !border-modal placeholder:text-neutral-300"
+              />
 
               <Input
               label="CVV"
@@ -135,12 +131,7 @@ const CardSubscriptionModal: React.FC<CardSubscriptionModalProps> = ({
               maxLength={4}
                className="flex items-center w-full h-12 lg:h-[52px] justify-between p-2 md:p-2.5 !rounded-[10px] border !border-modal placeholder:text-neutral-300"
             />
-
-
             </div>
-   
-
-         
           </div>
 
           <div className="flex flex-col md:flex-row justify-center mt-6 gap-4 w-full">
