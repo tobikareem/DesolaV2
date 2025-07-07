@@ -99,7 +99,7 @@ export const useAuthInfo = () => {
         }, 5 * 60 * 1000);
 
         return () => {
-             window.removeEventListener("userSignedIn", handleUserSignedIn);
+            window.removeEventListener("userSignedIn", handleUserSignedIn);
             window.removeEventListener("auth:interactive-required", handleAuthRequired);
             window.removeEventListener("customer:profile-updated", handleProfileUpdated as EventListener);
             clearInterval(intervalId);

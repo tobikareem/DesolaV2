@@ -7,7 +7,7 @@ import Visa from '/Visa.webp';
 import Mastercard from '/Mastercard.webp';
 import Amex from '/Amex.webp';
 import Express from '/Express.webp';
-import Subscription from '/Subscription.webp';
+import Subscription from '/Subscription.jpg';
 import {toast} from 'react-toastify';
 
 interface CardSubscriptionModalProps {
@@ -54,7 +54,6 @@ const CardSubscriptionModal: React.FC<CardSubscriptionModalProps> = ({
         />
       </div>
 
-   
       <div className="flex items-center justify-center p-6">
         <div className="flex bg-white flex-col p-6 rounded-lg items-center justify-center w-full max-w-[400px] h-fit ">
           <FaCreditCard className="text-4xl text-primary-600" />
@@ -102,22 +101,22 @@ const CardSubscriptionModal: React.FC<CardSubscriptionModalProps> = ({
 
 
             <div className="flex items-center justify-center gap-2">
-                       <Input
-                       label="Expiry Date"
-              type="text"
-              name="expiry"
-              placeholder="MM/YY"
-              value={card.expiry}
-              onChange={(e) => {
-                let val = e.target.value.replace(/\D/g, '').slice(0, 4);
-                if (val.length >= 3) {
-                  val = `${val.slice(0, 2)}/${val.slice(2)}`;
-                }
-                setCard({ ...card, expiry: val });
-              }}
-              maxLength={5}
- className="flex items-center w-full h-12 lg:h-[52px] justify-between p-2 md:p-2.5 !rounded-[10px] border !border-modal placeholder:text-neutral-300"
-            />
+              <Input
+                label="Expiry Date"
+                type="text"
+                name="expiry"
+                placeholder="MM/YY"
+                value={card.expiry}
+                onChange={(e) => {
+                  let val = e.target.value.replace(/\D/g, '').slice(0, 4);
+                  if (val.length >= 3) {
+                    val = `${val.slice(0, 2)}/${val.slice(2)}`;
+                  }
+                  setCard({ ...card, expiry: val });
+                }}
+                maxLength={5}
+                className="flex items-center w-full h-12 lg:h-[52px] justify-between p-2 md:p-2.5 !rounded-[10px] border !border-modal placeholder:text-neutral-300"
+              />
 
               <Input
               label="CVV"
@@ -132,12 +131,7 @@ const CardSubscriptionModal: React.FC<CardSubscriptionModalProps> = ({
               maxLength={4}
                className="flex items-center w-full h-12 lg:h-[52px] justify-between p-2 md:p-2.5 !rounded-[10px] border !border-modal placeholder:text-neutral-300"
             />
-
-
             </div>
-   
-
-         
           </div>
 
           <div className="flex flex-col md:flex-row justify-center mt-6 gap-4 w-full">

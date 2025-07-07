@@ -1,7 +1,7 @@
 import { Text } from "../ui/TextComp";
 import { Btn } from "../ui/Button";
 import { Img as ReactImage } from 'react-image';
-import Subcription from '/Subscription.webp';
+import Subcription from '/Subscription.jpg';
 
 interface SubscriptionModalProps {
   Action: () => void;

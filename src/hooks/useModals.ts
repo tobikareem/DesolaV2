@@ -17,8 +17,8 @@ export const useModals = (): {
     const [showCalendar, setShowCalendar] = useState<boolean>(false);
     const [showPopData, setShowPopData] = useState<boolean>(false);
     const [searchParam, setSearchParam] = useState<string>('');
-    const [showSubscriptionModal, setShowSubscriptionModal] = useState<boolean>(true);
-    const toggleSubscriptionModal = () => setShowSubscriptionModal(!showSubscriptionModal);
+    const [showSubscriptionModal, setShowSubscriptionModal] = useState<boolean>(false);
+    const toggleSubscriptionModal =()=> setShowSubscriptionModal(!showSubscriptionModal);
 
     return { showEditModal, setShowEditModal, showCalendar, setShowCalendar, 
         showPopData, setShowPopData, searchParam, setSearchParam, showSubscriptionModal, setShowSubscriptionModal, toggleSubscriptionModal };

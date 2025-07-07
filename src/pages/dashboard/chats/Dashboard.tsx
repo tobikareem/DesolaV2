@@ -22,8 +22,6 @@ import { useInput } from "../../../hooks/useInput";
 import { DateSelectArg } from "@fullcalendar/core/index.js";
 import { PenLine } from "lucide-react";
 import { useIsDesktop } from "../../../hooks/useDesktopSize";
-import { SubscriptionFlowModal } from "../../../components/modals/SubscriptionFlow";
-import { useSubscription } from "../../../hooks/useSubscription";
 
 const analyzeLastMessage = (message?: string) => {
   if (!message) return {
@@ -53,7 +51,8 @@ const Dashboard: React.FC = () => {
   const { chatLog, setChatLog, recentPrompts, setRecentPrompts } = useContext(ChatContext);
   const { toggleModal } = useContext(UIContext);
   // Custom hooks
-  const { showEditModal, setShowEditModal, showCalendar, setShowCalendar, showPopData, setShowPopData, setSearchParam, searchParam, showSubscriptionModal } = useModals();
+  const { showEditModal, setShowEditModal, showCalendar, setShowCalendar, showPopData,
+     setShowPopData, setSearchParam, searchParam} = useModals();
   const { inputValue, setInputValue, dateSelect, setDateSelect, setDate, date } = useInput();
   const { fetchAirports, airportSuggestions } = useAirports();
   const { loadPreferences, preferences } = useDashboardInfo();
@@ -80,6 +79,7 @@ const Dashboard: React.FC = () => {
     }
 
   }, [fetchAirports, loadPreferences, isAuthenticated]);
+
 
   useEffect(() => {
 
@@ -312,9 +312,6 @@ const Dashboard: React.FC = () => {
               onUpdateSelectedDate={dateSelect}
             />
           </Modal>
-        }
-        { showSubscriptionModal &&
-          <SubscriptionFlowModal display={showSubscriptionModal} />
         }
         <Modal position="absolute" close={handleCloseCalendar} display={showCalendar}>
           <Calendar Click={handleDateSelect} selectedDate={dateSelect} Close={handleSubmitDate} />
