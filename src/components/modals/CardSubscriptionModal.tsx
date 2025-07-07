@@ -3,10 +3,11 @@ import { Text } from '../ui/TextComp';
 import { Btn } from '../ui/Button';
 import {Input} from "../ui/InputField";
 import { FaCreditCard } from 'react-icons/fa';
-import visa from '../../assets/visa.png';
-import mastercard from '../../assets/mastercard.png';
-import american from '../../assets/american-expresss.png';
-import cards from '../../assets/cards.jpg';
+import Visa from '/Visa.webp';
+import Mastercard from '/Mastercard.webp';
+import Amex from '/Amex.webp';
+import Express from '/Express.webp';
+import Subscription from '/Subscription.webp';
 import {toast} from 'react-toastify';
 
 interface CardSubscriptionModalProps {
@@ -43,12 +44,12 @@ const CardSubscriptionModal: React.FC<CardSubscriptionModalProps> = ({
   };
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 items-center bg-white rounded-lg overflow-hidden shadow-lg w-full max-w-4xl">
+    <div className="grid grid-cols-1 md:grid-cols-2 items-center bg-white rounded-2xl overflow-hidden shadow-lg w-full max-w-4xl">
 
-      <div className="hidden  md:items-center md:justify-center md:block">
+      <div className="hidden md:items-center md:justify-center md:block">
         <img
-          src={cards}
-          alt="Credit Card"
+          src={Subscription}
+          alt="Subscription"
           className="w-full h-full   object-cover"
         />
       </div>
@@ -91,14 +92,10 @@ const CardSubscriptionModal: React.FC<CardSubscriptionModalProps> = ({
               className="w-full border border-neutral-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-600"
             />
 
-            <div className="flex items-center gap-4 mt-1 ml-1">
-              <img src={visa} alt="Visa" className="h-3 w-auto" />
-              <img src={mastercard} alt="MasterCard" className="h-3 w-auto" />
-              <img
-                src={american}
-                alt="americanExpress"
-                className="h-3 w-auto"
-              />
+            <div className="flex items-center gap-1 mt-1 ml-1">
+              { [Visa, Mastercard, Express, Amex, ]?.map((index) => (
+                <img src={index} alt={index} className="h-3.5 w-auto" />
+              ))}
             </div>
 
             <Input
