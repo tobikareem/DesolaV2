@@ -299,7 +299,7 @@ export const StripePaymentForm = ({
             {paymentState.isProcessing && (
                 <div className="absolute inset-0 bg-white bg-opacity-90 flex items-center justify-center z-50 rounded-lg">
                     <div className="text-center">
-                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 mx-auto mb-4"></div>
+                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 mx-auto mb-4"/>
                         <Text size="base" color="text-neutral-600" weight="medium">
                             Creating your subscription...
                         </Text>
@@ -311,14 +311,14 @@ export const StripePaymentForm = ({
             )}
 
             <div className="mb-6">
-                <button onClick={onBack} className="text-primary-500 hover:text-primary-600 hover:font-medium transition-all ease-in-out mb-4">
+                <button onClick={onBack} className="text-primary-500 hover:text-primary-600 hover:font-semibold transition-all ease-in-out mb-4">
                     ← Back to plan selection
                 </button>
                 <Text as="h1" size="2xl" weight="bold" className="!font-grotesk text-primary-500">
                     Complete Your Subscription
                 </Text>
             </div>
-            <div className="h-full overflow-y-auto p-1.5 pt-2 pb-30">
+            <div className="h-full lg:overflow-y-auto p-1.5 pt-2 pb-28">
                 <div className="flex flex-col justify-between gap-6">
                     <div className="space-y-6">
                         {paymentState.isLoadingCustomer && (
