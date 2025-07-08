@@ -12,7 +12,7 @@ import { useAuthInfo } from "../../hooks/useAuthInfo";
 export const SubscriptionFlowModal =({Action}:{Action:()=>void})=> {
   const { isAuthenticated, isProfileComplete } = useAuthInfo();
   const {stage} = useSubscription();
-  const {toggleSubscriptionModal, showSubscriptionModal, setShowSubscriptionModal} = useModals();
+  const {toggleSubscriptionModal, showSubscriptionModal} = useModals();
   const storage = new CustomStorage();
 
 
@@ -30,10 +30,10 @@ export const SubscriptionFlowModal =({Action}:{Action:()=>void})=> {
 
   useEffect(() => {
     const firstTimeLoad = storage.getItem('Subscription') === 'true';
-    if(!firstTimeLoad) {
-      setShowSubscriptionModal(true);
+    if(!firstTimeLoad && !isProfileComplete && isAuthenticated) {
+      toggleSubscriptionModal();
       storage.setItem('Subscription', 'true');
-      toast.info('Please subscribe to access all features.');
+      toast.info('Please subscribe to our service to access all features.');
       return;
     }
 

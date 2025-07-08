@@ -173,7 +173,7 @@ export const PreferencesSection = ({
                     </Listbox>
                 </div>
 
-                <Btn onClick={onSave} className="w-full bg-success text-white px-6 py-2 mb-8 ">
+                <Btn onClick={onSave} className="!hover:scale-95 w-full bg-success text-white px-6 py-2 mb-4 lg:mb-8 ">
                     Save Preferences
                 </Btn>
             </div>

@@ -57,7 +57,7 @@ export const Navbar = () => {
 
 
     return (
-        <div className={`fixed ${router !== '/' ? 'hidden' : 'flex'} ${!isDesktop && (router === '/dashboard') ? '!flex' : ''}  items-center w-screen z-40 bg-transparent  left-0 backdrop-blur-[2px] `}>
+        <div className={`fixed ${router !== '/' ? 'hidden' : 'flex'} ${!isDesktop && (router === '/dashboard' || router === '/Test') ? '!flex' : ''}  items-center w-screen z-40 bg-transparent  left-0 backdrop-blur-[2px] `}>
             <div className="flex w-full justify-between items-center px-4 md:px-8 lg:px-14 xl:px-28 py-4 bg-background">
                 {/* Logo */}
                 <div className="block ">
@@ -119,7 +119,7 @@ export const Navbar = () => {
                             <div id="drawer"
                                 className={`flex flex-col justify-between items-center px-4 py-10  w-full h-full `}>
                                 <nav className={`flex flex-col w-full py-1 px-1.5 gap-6 `}>
-                                    {router === '/dashboard' ?
+                                    {router === '/dashboard' || router === '/Test' ?
                                         navigationData?.map((option) => (
                                             <>
                                                 <div
@@ -140,7 +140,7 @@ export const Navbar = () => {
                                                     <div className={`text-2xl text-primary-300`} >
                                                         {mobileTab === option?.id ? option?.icon2 : option?.icon}
                                                     </div>
-                                                    <div className="">
+                                                    <div className={`${mobileTab == option?.id ? 'font-bold':''} ${mobileTab == 'home' ? 'font-bold' : ''}`}>
                                                         {option?.label}
                                                     </div>
                                                 </div>
