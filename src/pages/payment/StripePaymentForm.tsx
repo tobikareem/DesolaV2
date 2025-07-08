@@ -61,9 +61,7 @@ export const StripePaymentForm = ({
                 setPaymentState(prev => ({ ...prev, step: 'ready' }));
                 return;
             }
-
             setPaymentState(prev => ({ ...prev, isLoadingCustomer: true }));
-
             try {
                 const customer = await getData<CustomerSignupResponse>(
                     `${ENDPOINTS_API_PATH.stripe_getCustomer}?email=${encodeURIComponent(customerProfileInfo.email)}`
@@ -313,150 +311,150 @@ export const StripePaymentForm = ({
             )}
 
             <div className="mb-6">
-                <button onClick={onBack} className="text-primary-500 hover:text-primary-600 mb-4">
+                <button onClick={onBack} className="text-primary-500 hover:text-primary-600 hover:font-medium transition-all ease-in-out mb-4">
                     ← Back to plan selection
                 </button>
-                <Text as="h1" size="2xl" weight="bold" className="font-grotesk text-primary-500">
+                <Text as="h1" size="2xl" weight="bold" className="!font-grotesk text-primary-500">
                     Complete Your Subscription
                 </Text>
             </div>
+            <div className="h-full overflow-y-auto p-1.5 pt-2 pb-30">
+                <div className="flex flex-col justify-between gap-6">
+                    <div className="space-y-6">
+                        {paymentState.isLoadingCustomer && (
+                            <div className="bg-blue-50 border border-blue-200 rounded-md p-3">
+                                <div className="flex items-center">
+                                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 mr-2"></div>
+                                    <Text className="text-blue-800 text-sm">Loading customer information...</Text>
+                                </div>
+                            </div>
+                        )}
 
-            <div className="flex flex-col justify-between h-full overflow-y-auto gap-6">
-                <div className="space-y-6">
-                    {paymentState.isLoadingCustomer && (
+                        {paymentState.customerData && !paymentState.isLoadingCustomer && (
+                            <div className="bg-green-50 border border-green-200 rounded-md p-3">
+                                <Text className="text-green-800 text-sm font-medium">✓ Welcome back!</Text>
+                                <Text className="text-green-700 text-sm">
+                                    Account found: {paymentState.customerData.fullName}
+                                </Text>
+                                {paymentState.customerData.hasActiveSubscription && (
+                                    <div className="mt-2 p-2 bg-amber-100 rounded text-amber-800 text-xs">
+                                        <strong>Note:</strong> You already have an active subscription. This will replace it.
+                                    </div>
+                                )}
+                            </div>
+                        )}
+
                         <div className="bg-blue-50 border border-blue-200 rounded-md p-3">
-                            <div className="flex items-center">
-                                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 mr-2"></div>
-                                <p className="text-blue-800 text-sm">Loading customer information...</p>
-                            </div>
-                        </div>
-                    )}
-
-                    {paymentState.customerData && !paymentState.isLoadingCustomer && (
-                        <div className="bg-green-50 border border-green-200 rounded-md p-3">
-                            <p className="text-green-800 text-sm font-medium">✓ Welcome back!</p>
-                            <p className="text-green-700 text-sm">
-                                Account found: {paymentState.customerData.fullName}
-                            </p>
-                            {paymentState.customerData.hasActiveSubscription && (
-                                <div className="mt-2 p-2 bg-amber-100 rounded text-amber-800 text-xs">
-                                    <strong>Note:</strong> You already have an active subscription. This will replace it.
-                                </div>
-                            )}
-                        </div>
-                    )}
-
-                    <div className="bg-blue-50 border border-blue-200 rounded-md p-3">
-                        <p className="text-blue-800 text-sm font-medium">One-Step Subscription</p>
-                        <p className="text-blue-700 text-xs mt-1">
-                            Your subscription will be created immediately with a 7-day free trial.
-                        </p>
-                    </div>
-
-                    <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-4 rounded-lg border border-blue-200">
-                        <Text size="sm" color="text-neutral-600" className="mb-2">
-                            Selected Plan:
-                        </Text>
-                        <div className="flex justify-between items-center mb-2">
-                            <Text size="lg" weight="bold">
-                                {selectedPlan} Subscription
-                            </Text>
-                            <Text size="xl" weight="bold" className="text-primary-500">
-                                ${planPrice}
+                            <Text className="text-blue-800 text-sm font-medium">One-Step Subscription</Text>
+                            <Text className="text-blue-700 text-xs mt-1">
+                                Your subscription will be created immediately with a 7-day free trial.
                             </Text>
                         </div>
 
-                        <div className="space-y-1 text-xs text-gray-600">
-                            <div className="flex justify-between">
-                                <span>Billing:</span>
-                                <span>{selectedPlan.toLowerCase()}</span>
+                        <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-4 rounded-lg border border-blue-200">
+                            <Text size="sm" color="text-neutral-600" className="mb-2">
+                                Selected Plan:
+                            </Text>
+                            <div className="flex justify-between items-center mb-2">
+                                <Text size="lg" fontStyle='font-grotesk' weight="bold">
+                                    {selectedPlan} Subscription
+                                </Text>
+                                <Text size="xl" weight="bold" className="text-primary-500">
+                                    ${planPrice}
+                                </Text>
                             </div>
-                            <div className="flex justify-between">
-                                <span>Free Trial:</span>
-                                <span className="text-green-600 font-medium">7 days</span>
-                            </div>
-                            {selectedPlan === 'Yearly' && (
-                                <div className="flex justify-between text-green-600">
-                                    <span>Annual Savings:</span>
-                                    <span className="font-medium">15% OFF ($5.38)</span>
+                            <div className="space-y-1 text-xs text-gray-600">
+                                <div className="flex justify-between">
+                                    <span>Billing:</span>
+                                    <span>{selectedPlan.toLowerCase()}</span>
                                 </div>
+                                <div className="flex justify-between">
+                                    <span>Free Trial:</span>
+                                    <span className="text-green-600 font-medium">7 days</span>
+                                </div>
+                                {selectedPlan === 'Yearly' && (
+                                    <div className="flex justify-between text-green-600">
+                                        <span>Annual Savings:</span>
+                                        <span className="font-medium">15% OFF ($5.38)</span>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+
+                        <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                            <Text size="base" weight='medium' color="text-neutral-600" className="mb-1">
+                                Subscription for:
+                            </Text>
+                            <Text weight="medium">{customerProfileInfo.fullName}</Text>
+                            <Text size="sm" color="text-neutral-600">{customerProfileInfo.email}</Text>
+                            {customerProfileInfo.phone && (
+                                <Text size="sm" color="text-neutral-600">{customerProfileInfo.phone}</Text>
                             )}
                         </div>
-                    </div>
 
-                    <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
-                        <Text size="sm" color="text-neutral-600" className="mb-1">
-                            Subscription for:
-                        </Text>
-                        <Text weight="medium">{customerProfileInfo.fullName}</Text>
-                        <Text size="sm" color="text-neutral-600">{customerProfileInfo.email}</Text>
-                        {customerProfileInfo.phone && (
-                            <Text size="sm" color="text-neutral-600">{customerProfileInfo.phone}</Text>
+                        <div>
+                            <Text size="base" weight="medium" className="mb-3">
+                                Payment Method
+                            </Text>
+                            <div className="border border-gray-300 rounded-lg p-4 bg-white focus-within:border-primary-500 focus-within:ring-2 focus-within:ring-primary-200">
+                                <CardElement options={cardElementOptions} />
+                            </div>
+                            <Text size="xs" color="text-neutral-500" className="mt-2">
+                                Your payment information is secure and encrypted. You won't be charged during the 7-day trial.
+                            </Text>
+                        </div>
+
+                        {paymentState.error && (
+                            <div className="bg-red-50 border border-red-200 rounded-lg p-3">
+                                <div className="flex items-start">
+                                    <svg className="w-4 h-4 text-red-600 mt-0.5 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <Text size="sm" className="text-red-600">{paymentState.error}</Text>
+                                </div>
+                            </div>
                         )}
-                    </div>
 
-                    <div>
-                        <Text size="base" weight="medium" className="mb-3">
-                            Payment Method
-                        </Text>
-                        <div className="border border-gray-300 rounded-lg p-4 bg-white focus-within:border-primary-500 focus-within:ring-2 focus-within:ring-primary-200">
-                            <CardElement options={cardElementOptions} />
+                        <div className="text-xs text-gray-500 bg-gray-50 p-3 rounded border">
+                            By starting your subscription, you agree to our{' '}
+                            <a href="/terms" className="text-primary-600 hover:underline">Terms of Service</a>{' '}
+                            and{' '}
+                            <a href="/privacy" className="text-primary-600 hover:underline">Privacy Policy</a>.
+                            You can cancel anytime during or after your trial period.
                         </div>
-                        <Text size="xs" color="text-neutral-500" className="mt-2">
-                            Your payment information is secure and encrypted. You won't be charged during the 7-day trial.
-                        </Text>
                     </div>
 
-                    {paymentState.error && (
-                        <div className="bg-red-50 border border-red-200 rounded-lg p-3">
-                            <div className="flex items-start">
-                                <svg className="w-4 h-4 text-red-600 mt-0.5 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                </svg>
-                                <Text size="sm" className="text-red-600">{paymentState.error}</Text>
-                            </div>
-                        </div>
-                    )}
+                    <div className="pb-6">
+                        <Btn
+                            onClick={handleSubmit}
+                            disabled={!stripe || paymentState.isProcessing}
+                            weight="semibold"
+                            fontStyle="work"
+                            radius="48px"
+                            className={`w-full h-12 text-base ${paymentState.isProcessing || !stripe
+                                    ? 'bg-gray-400 cursor-not-allowed text-gray-600'
+                                    : 'bg-gradient-to-b from-[#FF9040] to-[#FF6B00] text-neutral-100'
+                                } hover:!scale-95 `}
+                        >
+                            {paymentState.isProcessing ? (
+                                <div className="flex items-center justify-center">
+                                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                                    Creating subscription...
+                                </div>
+                            ) : (
+                                `Start 7-Day Free Trial - $${planPrice}/${selectedPlan.toLowerCase()}`
+                            )}
+                        </Btn>
 
-                    <div className="text-xs text-gray-500 bg-gray-50 p-3 rounded border">
-                        By starting your subscription, you agree to our{' '}
-                        <a href="/terms" className="text-primary-600 hover:underline">Terms of Service</a>{' '}
-                        and{' '}
-                        <a href="/privacy" className="text-primary-600 hover:underline">Privacy Policy</a>.
-                        You can cancel anytime during or after your trial period.
-                    </div>
-                </div>
-
-                <div className="pb-6">
-                    <Btn
-                        onClick={handleSubmit}
-                        disabled={!stripe || paymentState.isProcessing}
-                        weight="semibold"
-                        fontStyle="work"
-                        radius="48px"
-                        className={`w-full h-12 text-base ${paymentState.isProcessing || !stripe
-                                ? 'bg-gray-400 cursor-not-allowed text-gray-600'
-                                : 'bg-gradient-to-b from-[#FF9040] to-[#FF6B00] text-neutral-100 hover:!scale-95'
-                            }`}
-                    >
-                        {paymentState.isProcessing ? (
+                        <div className="text-center text-xs text-gray-400 my-3 space-y-1">
                             <div className="flex items-center justify-center">
-                                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                                Creating subscription...
+                                <svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
+                                </svg>
+                                Secured by Stripe • SSL Encrypted
                             </div>
-                        ) : (
-                            `Start 7-Day Free Trial - $${planPrice}/${selectedPlan.toLowerCase()}`
-                        )}
-                    </Btn>
-
-                    <div className="text-center text-xs text-gray-400 mt-3 space-y-1">
-                        <div className="flex items-center justify-center">
-                            <svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
-                            </svg>
-                            Secured by Stripe • SSL Encrypted
+                            <Text>No charge for 7 days • Cancel anytime</Text>
                         </div>
-                        <p>No charge for 7 days • Cancel anytime</p>
                     </div>
                 </div>
             </div>

@@ -23,6 +23,7 @@ import { SubscriptionContent } from './SubscriptionContent';
 import { TbCreditCard, TbCreditCardFilled } from 'react-icons/tb';
 import { DesolaAI } from './DesolaAI';
 import { useAuthInfo } from '../../../hooks/useAuthInfo';
+import { SubscriptionFlowModal } from '../../../components/modals/SubscriptionFlow';
 
 
 const storageService = new CustomStorage();
@@ -40,7 +41,7 @@ export const RightPanel: React.FC =()=> {
 
   const {chatLog} = useContext(ChatContext);
   const [selectedTab, setSelectedTab] = useState<string>('home');
-  const { setNavigationData } = useContext(NavigationContext);
+  const { setNavigationData, setMobileTab } = useContext(NavigationContext);
   const { showLogoutModal, showDeleteModal, showFlightModal, toggleModal } = useContext(UIContext);
   const { travelInfo } = useContext(ChatContext);
   const { logout } = useAuthInfo();
@@ -179,6 +180,8 @@ export const RightPanel: React.FC =()=> {
           </div>
         </div>
       </div>
+      {<SubscriptionFlowModal Action={()=>{setSelectedTab('subscription'); setMobileTab('subscription')}}/>}
+
       {showDeleteModal && (
         <Modal display={showDeleteModal} close={() => {toggleModal('delete')}}>
           <ClearChat

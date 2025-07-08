@@ -11,8 +11,9 @@ export const useSubscription =()=> {
   const plans = ['Yearly','Monthly']
   const [selectedPlan, setSelectedPlan] = useState<string>(plans[0])
   const [selectMode, setSelectMode] = useState<string>('')
+  const [stage, setStage] = useState<number>(1);  
   const modeOfPayment = ['Debit/Credit Card','Paypal']
   const price = selectedPlan == 'Yearly' ? yearlyPrice : monthlyPrice
 
-  return { monthlyPrice, yearlyPrice,price, plans, selectedPlan, setSelectedPlan, modeOfPayment, selectMode, setSelectMode}
+  return { monthlyPrice, yearlyPrice,price, plans, selectedPlan, setSelectedPlan, modeOfPayment, selectMode, setSelectMode, stage, setStage}
 }
