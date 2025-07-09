@@ -84,7 +84,7 @@ export const SubscriptionContent = () => {
 
 
   return (
-    <div className="flex-1 h-full">
+    <div className="">
       <Text as="h1" size="2xl" weight="bold" className="font-grotesk text-primary-500 mb-5">
         Choose Your Plan
       </Text>
