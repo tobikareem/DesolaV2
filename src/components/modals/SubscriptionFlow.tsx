@@ -34,11 +34,12 @@ export const SubscriptionFlowModal =({Action}:{Action:()=>void})=> {
     const firstTimeLoad = storage.getItem('Subscription') === 'true';
     const email = customerProfile?.email;
     async function checkSubscription() {
-      if (email && !firstTimeLoad) {
+      if (email) {
         try{
           const customer = await getCustomerByEmail(email);
           storage.setItem('Subscription', 'true');
           setIsSubscribed(!!customer?.hasActiveSubscription);
+          console.log(customer)
           if(!isSubscribed){
             toggleSubscriptionModal()
           }

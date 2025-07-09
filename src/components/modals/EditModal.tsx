@@ -166,6 +166,21 @@ const EditModal: React.FC<EditModalProps> = ({
       return;
     }
     if (prompts) {
+
+      const dateIndices = prompts
+        .map((item, idx) => ({ item, idx }))
+        .filter(({ item }) => /^\d{4}-\d{2}-\d{2}$/.test(item));
+
+      if (dateIndices.length >= 2 && index === dateIndices[1].idx) {
+        const newDeparture = new Date(editedValue);
+        const returnDate = new Date(prompts[dateIndices[1].idx]);
+        newDeparture.setHours(0,0,0,0);
+        returnDate.setHours(0,0,0,0);
+        if (newDeparture.getTime() >= returnDate.getTime()) {
+          toast.error('Departure date must be before return date');
+          return;
+        }
+      }
       onUpdatePrompt(index, editedValue); 
       setPromptIndex(null);
       setShowPopData(false);
@@ -248,5 +263,4 @@ const EditModal: React.FC<EditModalProps> = ({
     </div>
   );
 };
-
 export default EditModal;

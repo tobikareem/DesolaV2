@@ -235,18 +235,20 @@ const Dashboard: React.FC = () => {
   const isOneWay = chatLog.some(msg => msg.message.toLowerCase().includes('one way'));
   const isLastMessage = chatLog.length > 0 && chatLog[chatLog.length - 1].message.toLowerCase().includes('click the search button')
 
-  const removeReturnDate = () => {
-    setRecentPrompts(prev => {
-      const newPrompts = [...prev];
-      const dateIndices = newPrompts
-        .map((item, idx) => ({ item, idx }))
-        .filter(({ item }) => /^\d{4}-\d{2}-\d{2}$/.test(item));
-      if (dateIndices.length >= 2) {
-        newPrompts.splice(dateIndices[1].idx, 1);
-      }
-      return newPrompts;
-    });
-  };
+const removeReturnDate = () => {
+  // Only remove return date if the route is now one way and there are at least two dates
+  const isNowOneWay = chatLog.some(msg => msg.message.toLowerCase().includes('one way'));
+  setRecentPrompts(prev => {
+    const newPrompts = [...prev];
+    const dateIndices = newPrompts
+      .map((item, idx) => ({ item, idx }))
+      .filter(({ item }) => /^\d{4}-\d{2}-\d{2}$/.test(item));
+    if (isNowOneWay && dateIndices.length >= 2) {
+      newPrompts.splice(dateIndices[1].idx, 1);
+    }
+    return newPrompts;
+  });
+};
 
 
   return (
