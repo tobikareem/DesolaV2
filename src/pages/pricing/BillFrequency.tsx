@@ -36,8 +36,8 @@ export const BillFrequency =({selectedPlan, setSelectedPlan, plans, YearlyPrice,
                   {plan}
                 </Label>
                 <div className={`flex items-center font-medium text-sm ${plan == 'Monthly' ? 'text-primary-500':'text-Neutral'} gap-1 cursor-pointer`}>
-                  {yearlyPlan && <div className="bg-primary-500/5 text-primary-500 px-1 rounded">Save10%</div>}
-                  <span className="">${yearlyPlan ? YearlyPrice : MonthlyPrice}/{plan}</span>
+                  {yearlyPlan && <div className="bg-primary-500/5 text-primary-500 px-1 rounded font-grotesk">Save10%</div>}
+                  <span className="font-work">${yearlyPlan ? YearlyPrice : MonthlyPrice}/{plan}</span>
                 </div>
               </Label>
             </Field>
