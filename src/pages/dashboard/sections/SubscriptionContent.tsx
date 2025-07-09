@@ -7,7 +7,6 @@ import { Text } from "../../../components/ui/TextComp"
 import { useAuthInfo } from "../../../hooks/useAuthInfo"
 import { useDashboardInfo } from "../../../hooks/useDashboardInfo"
 import { useSubscription } from "../../../hooks/useSubscription"
-import { CustomerSignupRequest } from "../../../models/payment/CustomerSignupRequest"
 import { CreateSubscriptionResult, SubscriptionError } from "../../../models/payment/SubscriptionResult"
 import { STRIPE } from "../../../utils/constants"
 import { StripePaymentForm } from "../../payment/StripePaymentForm"
@@ -16,10 +15,9 @@ import { BillFrequency } from "../../pricing/BillFrequency"
 const stripePromise = loadStripe(STRIPE.PUBLISHABLE_KEY);
 
 export const SubscriptionContent = () => {
-  
-  const { plans, selectedPlan, setSelectedPlan, monthlyPrice, yearlyPrice } = useSubscription();
+
+  const { plans, selectedPlan, setSelectedPlan, monthlyPrice, yearlyPrice, customerData, setCustomerData } = useSubscription();
   const [subscriptionStep, setSubscriptionStep] = useState('plan-selection');
-  const [customerData, setCustomerData] = useState<CustomerSignupRequest>();
   const { preferences } = useDashboardInfo();
   const { customerProfile } = useAuthInfo();
 

@@ -14,7 +14,7 @@ const SubscriptionModal: React.FC<SubscriptionModalProps> = ({ Action, ConfirmAc
       <ReactImage
         src={Subcription}
         alt="Subscription"
-        className="max-w-lg"
+        className="object-center max-w-lg"
       />
       <Text
         as="h3"
@@ -25,15 +25,15 @@ const SubscriptionModal: React.FC<SubscriptionModalProps> = ({ Action, ConfirmAc
         Do you want to subscribe to Desola Flight?
       </Text>
 
-      <div className="flex flex-col md:flex-row justify-center mt-6 gap-6 w-full">
+      <div className="flex flex-col md:flex-row justify-center items-center mt-6 gap-6 w-full">
         <Btn
-          className="px-4 py-2 bg-neutral-300 text-Neutral w-full md:w-auto"
+          className="px-4 py-2 bg-neutral-300 text-Neutral w-full md:w-auto max-w-md"
           onClick={Action}
         >
             No, Cancel
         </Btn>
         <Btn
-          className="px-4 py-2 bg-primary-600 text-white w-full md:w-auto"
+          className="px-4 py-2 bg-primary-600 text-white w-full md:w-auto max-w-md"
           onClick={ConfirmAction}
         >
           Yes, Subscribe
