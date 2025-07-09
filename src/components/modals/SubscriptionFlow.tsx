@@ -45,6 +45,7 @@ export const SubscriptionFlowModal =({Action}:{Action:()=>void})=> {
           }
         } catch (error) {
           toast.error(`Error fetching customer subscription: ${error instanceof Error ? error.message : String(error)}`);
+          console.error(`Error fetching customer subscription: ${error}`);
         }
       }
 
