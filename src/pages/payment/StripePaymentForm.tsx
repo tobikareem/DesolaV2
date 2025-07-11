@@ -76,6 +76,7 @@ export const StripePaymentForm = ({
 
             } catch (error) {
                 console.error('Error fetching customer:', error);
+                
                 setPaymentState(prev => ({
                     ...prev,
                     step: 'ready',
@@ -197,9 +198,9 @@ export const StripePaymentForm = ({
         return (
             <div className="flex-1 h-full">
                 <div className="mb-6">
-                    <button onClick={onBack} className="text-primary-500 hover:text-primary-600">
+                    <Btn onClick={onBack} className="text-primary-500 hover:text-primary-600">
                         ← Back to plan selection
-                    </button>
+                    </Btn>
                 </div>
                 <div className="text-center p-8">
                     <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -385,10 +386,10 @@ export const StripePaymentForm = ({
                             <Text size="base" weight='medium' color="text-neutral-600" className="mb-1">
                                 Subscription for:
                             </Text>
-                            <Text weight="medium">{customerProfileInfo.fullName}</Text>
-                            <Text size="sm" color="text-neutral-600">{customerProfileInfo.email}</Text>
+                            <Text weight="semibold">{customerProfileInfo.fullName}</Text>
+                            <Text size="sm" weight='medium' color="text-neutral-600">{customerProfileInfo.email}</Text>
                             {customerProfileInfo.phone && (
-                                <Text size="sm" color="text-neutral-600">{customerProfileInfo.phone}</Text>
+                                <Text size="sm" color="text-neutral-600"><span className='font-medium'>Phone:</span> {customerProfileInfo.phone}</Text>
                             )}
                         </div>
 
@@ -424,38 +425,40 @@ export const StripePaymentForm = ({
                         </div>
                     </div>
 
-                    <div className="pb-6">
-                        <Btn
-                            onClick={handleSubmit}
-                            disabled={!stripe || paymentState.isProcessing}
-                            weight="semibold"
-                            fontStyle="work"
-                            radius="48px"
-                            className={`w-full h-12 text-base ${paymentState.isProcessing || !stripe
-                                    ? 'bg-gray-400 cursor-not-allowed text-gray-600'
-                                    : 'bg-gradient-to-b from-[#FF9040] to-[#FF6B00] text-neutral-100'
-                                } hover:!scale-95 `}
-                        >
-                            {paymentState.isProcessing ? (
-                                <div className="flex items-center justify-center">
-                                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                                    Creating subscription...
-                                </div>
-                            ) : (
-                                `Start 7-Day Free Trial - $${planPrice}/${selectedPlan.toLowerCase()}`
-                            )}
-                        </Btn>
+                    {
+                        <div className="pb-6">
+                            <Btn
+                                onClick={handleSubmit}
+                                disabled={!stripe || paymentState.isProcessing}
+                                weight="semibold"
+                                fontStyle="work"
+                                radius="48px"
+                                className={`w-full h-12 text-base ${paymentState.isProcessing || !stripe
+                                        ? 'bg-gray-400 cursor-not-allowed text-gray-600'
+                                        : 'bg-gradient-to-b from-[#FF9040] to-[#FF6B00] text-neutral-100'
+                                    } hover:!scale-95 `}
+                            >
+                                {paymentState.isProcessing ? (
+                                    <div className="flex items-center justify-center">
+                                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                                        Creating subscription...
+                                    </div>
+                                ) : (
+                                    `Start 7-Day Free Trial - $${planPrice}/${selectedPlan.toLowerCase()}`
+                                )}
+                            </Btn>
 
-                        <div className="text-center text-xs text-gray-400 my-3 space-y-1">
-                            <div className="flex items-center justify-center">
-                                <svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
-                                </svg>
-                                Secured by Stripe • SSL Encrypted
+                            <div className="text-center text-xs text-gray-400 my-3 space-y-1">
+                                <div className="flex items-center justify-center">
+                                    <svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
+                                    </svg>
+                                    Secured by Stripe • SSL Encrypted
+                                </div>
+                                <Text>No charge for 7 days • Cancel anytime</Text>
                             </div>
-                            <Text>No charge for 7 days • Cancel anytime</Text>
                         </div>
-                    </div>
+                    }
                 </div>
             </div>
         </div>

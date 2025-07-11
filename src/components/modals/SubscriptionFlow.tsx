@@ -3,26 +3,43 @@ import { useSubscription } from "../../hooks/useSubscription";
 import SubscriptionModal from "./SubscriptionModal";
 import { Modal } from "./Modal"
 import { CustomStorage } from "../../utils/customStorage";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useAuthInfo } from "../../hooks/useAuthInfo";
 import { useCustomerApi } from "../../hooks/useCustomerApi";
-import { toast } from "react-toastify";
+import { CustomerSignupRequest } from "../../models/payment/CustomerSignupRequest";
+import { useDashboardInfo } from "../../hooks/useDashboardInfo";
 
 
 export const SubscriptionFlowModal =({Action}:{Action:()=>void})=> {
-  const {customerProfile} = useAuthInfo();
+  const { customerProfile } = useAuthInfo();
   const {stage} = useSubscription();
   const {toggleSubscriptionModal, showSubscriptionModal} = useModals();
   const storage = new CustomStorage();
   const {getCustomerByEmail} = useCustomerApi();
-  const [isSubscribed, setIsSubscribed] = useState<boolean | null>(null);
+  const { isSubscribed, setIsSubscribed } = useSubscription();
+  const { createCustomer} = useCustomerApi();
+  const { preferences } = useDashboardInfo();
 
+  const customerData: CustomerSignupRequest = {
+    fullName: customerProfile?.fullName || '',
+    email: customerProfile?.email || '',
+    phone: customerProfile?.phone || '',
+    preferredCurrency: 'USD',
+    defaultOriginAirport: preferences?.originAirport || 'ATL' , // the busiest airport
+    metadata: {}
+  }
 
 
   const subscriptionFlowRender =()=> {
     switch (stage){
       case 1: 
-        return <SubscriptionModal Action={toggleSubscriptionModal} ConfirmAction={()=> {Action(); toggleSubscriptionModal();}}/>
+        return <SubscriptionModal Action={toggleSubscriptionModal} ConfirmAction={() => {
+          Action();
+          toggleSubscriptionModal();
+          if (customerProfile) {
+            createCustomer({...customerData })
+          }
+        }}/>
       // case 2: 
         // return <CardSubscriptionModal onCancel={toggleSubscriptionModal} onConfirm={()=> setStage(0)}/>
       default: return null
@@ -32,27 +49,22 @@ export const SubscriptionFlowModal =({Action}:{Action:()=>void})=> {
 
   useEffect(() => {
     const firstTimeLoad = storage.getItem('Subscription') === 'true';
-    const email = customerProfile?.email;
     async function checkSubscription() {
-      if (email) {
+      if (customerProfile?.email) {
         try{
-          const customer = await getCustomerByEmail(email);
+          const customer = await getCustomerByEmail(customerProfile?.email);
           storage.setItem('Subscription', 'true');
           setIsSubscribed(!!customer?.hasActiveSubscription);
-          console.log(customer)
-          if(!isSubscribed){
+          if(!isSubscribed && !firstTimeLoad){
             toggleSubscriptionModal()
           }
         } catch (error) {
-          toast.error(`Error fetching customer subscription: ${error instanceof Error ? error.message : String(error)}`);
           console.error(`Error fetching customer subscription: ${error}`);
         }
       }
-
     }
-
     checkSubscription()
-  },[])
+  },[customerProfile?.email])
 
   return(
     <>

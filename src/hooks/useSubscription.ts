@@ -16,6 +16,7 @@ export const useSubscription =()=> {
   const modeOfPayment = ['Debit/Credit Card','Paypal']
   const price = selectedPlan == 'Yearly' ? yearlyPrice : monthlyPrice
   const [customerData, setCustomerData] = useState<CustomerSignupRequest>();
+  const [isSubscribed, setIsSubscribed] = useState<boolean | null>(null);
 
-  return { monthlyPrice, yearlyPrice,price, plans, selectedPlan, setSelectedPlan, modeOfPayment, selectMode, setSelectMode, stage, setStage, customerData, setCustomerData }
+  return { monthlyPrice, yearlyPrice,price, plans, selectedPlan, setSelectedPlan, modeOfPayment, selectMode, setSelectMode, stage, setStage, customerData, setCustomerData, isSubscribed, setIsSubscribed }
 }

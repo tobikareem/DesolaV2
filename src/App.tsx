@@ -119,7 +119,7 @@ function App() {
         <ToastContainer position='top-right' closeOnClick theme='colored' 
           pauseOnHover newestOnTop autoClose={3000} transition={Flip}
          />
-        <Suspense fallback={<LoadingScreen message='Loading...' dimension={undefined} background={undefined}/>}>
+        <Suspense fallback={<LoadingScreen message='Loading...' dimension={undefined} background={'z-[70]'}/>}>
           <Routes>
             {publicRoutes.map((route) => (
               <Route key={route.name} path={route.path} element={route.element} />

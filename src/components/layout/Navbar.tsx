@@ -11,6 +11,8 @@ import { useSmoothScroll } from "../../hooks/useSmoothScroll";
 import { Close } from "../ui/Close";
 import { useIsDesktop } from "../../hooks/useDesktopSize";
 import { ImSpinner } from "react-icons/im";
+import LoadingScreen from "./LoadingScreen";
+import { Btn } from "../ui/Button";
 
 export const Navbar = () => {
     const [slider, setSlider] = useState<boolean>(false);
@@ -57,7 +59,7 @@ export const Navbar = () => {
 
 
     return (
-        <div className={`fixed ${router !== '/' ? 'hidden' : 'flex'} ${!isDesktop && (router === '/dashboard' || router === '/Test') ? '!flex' : ''}  items-center w-screen z-40 bg-transparent  left-0 backdrop-blur-[2px] `}>
+        <div className={`fixed ${router !== '/' ? 'hidden' : 'flex'} ${!isDesktop && (router === '/dashboard') ? '!flex' : ''}  items-center w-screen z-40 bg-transparent  left-0 backdrop-blur-[2px] `}>
             <div className="flex w-full justify-between items-center px-4 md:px-8 lg:px-14 xl:px-28 py-4 bg-background">
                 {/* Logo */}
                 <div className="block ">
@@ -115,11 +117,13 @@ export const Navbar = () => {
                                 <Logo />
                                 <Close Action={handleDrawer}/>
                             </div>
+
+                            {isSigningIn && <LoadingScreen dimension={undefined} background={undefined} message={"Signing In..."} />}
                             
                             <div id="drawer"
                                 className={`flex flex-col justify-between items-center px-4 py-10  w-full h-full `}>
                                 <nav className={`flex flex-col w-full py-1 px-1.5 gap-6 `}>
-                                    {router === '/dashboard' || router === '/Test' ?
+                                    {router === '/dashboard' ?
                                         navigationData?.map((option) => (
                                             <>
                                                 <div
@@ -140,7 +144,7 @@ export const Navbar = () => {
                                                     <div className={`text-2xl text-primary-300`} >
                                                         {mobileTab === option?.id ? option?.icon2 : option?.icon}
                                                     </div>
-                                                    <div className={`${mobileTab == option?.id ? 'font-bold':''} ${mobileTab == 'home' ? 'font-bold' : ''}`}>
+                                                    <div className={`${mobileTab == option?.id ? 'font-bold':''}`}>
                                                         {option?.label}
                                                     </div>
                                                 </div>
@@ -170,15 +174,24 @@ export const Navbar = () => {
                                         </div>
                                     </div>
                                 </nav>
-
-                                <button
-                                    onClick={(e) => {
-                                        handleDrawer(e);
-                                        authService.signIn();
-                                    }}
-                                    className={`${isAuthenticated || router != '/' ? 'hidden' : 'flex'} lg:hidden items-center justify-center h-12 w-full bg-gradient-to-b from-[#FF9040] to-[#FF6B00] text-xl text-white font-medium rounded-[48px] hover:scale-105 transition-transform duration-300 ease-in-out`}>
-                                    Sign In
-                                </button>
+                                { !isAuthenticated && router == '/' && (
+                                    <Btn
+                                        onClick={(e) => {
+                                            handleDrawer(e);
+                                            authService.signIn();
+                                        }}
+                                        className={`hover:!scale-95 flex lg:hidden items-center justify-center h-12 w-full bg-gradient-to-b from-[#FF9040] to-[#FF6B00] text-xl text-white font-medium rounded-[48px] transition-transform duration-300 ease-in-out`}>
+                                        Sign In
+                                    </Btn>)
+                                }
+                                { isAuthenticated && router == '/' && (
+                                    <Btn
+                                        onClick={logout}
+                                        className="h-12 w-full bg-red-500 text-white hover:!scale-95 font-medium rounded-[48px] transition-transform duration-300 ease-in-out"
+                                    >
+                                        Logout
+                                    </Btn>)
+                                }
                             </div>
                         </div>
                     </div>

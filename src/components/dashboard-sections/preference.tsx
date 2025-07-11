@@ -6,6 +6,9 @@ import { Input } from "../ui/InputField";
 import { AirportSuggestions } from "./airport-suggestions";
 import { Listbox, ListboxButton, ListboxOption, ListboxOptions } from '@headlessui/react'
 import { MdKeyboardArrowDown } from "react-icons/md";
+import useCustomerApi from "../../hooks/useCustomerApi";
+import { useAuthInfo } from "../../hooks/useAuthInfo";
+import { CustomerSignupRequest } from "../../models/payment/CustomerSignupRequest";
 
 // Editable preferences section
 export const PreferencesSection = ({
@@ -23,9 +26,10 @@ export const PreferencesSection = ({
     airportSuggestions: Airport[];
     onAirportSelect: (code: string, field: string) => void;
 }) => {
+    const {customerProfile} = useAuthInfo();
+    const {updateCustomer} = useCustomerApi();
     const [activeField, setActiveField] = useState<string | null>(null);
     const [filteredSuggestions, setFilteredSuggestions] = useState<Airport[]>(airportSuggestions);
-
     const handleAirportInputChange = (value: string) => {
         const filtered = airportSuggestions.filter(
             (airport) =>
@@ -36,7 +40,15 @@ export const PreferencesSection = ({
         setFilteredSuggestions(filtered);
     };
     
-    
+    const customerData: CustomerSignupRequest = {
+        fullName: customerProfile?.fullName || '',
+        email: customerProfile?.email || '',
+        phone: customerProfile?.phone || '',
+        preferredCurrency: 'USD',
+        defaultOriginAirport: preferences?.originAirport,
+        metadata: {}
+    }
+
     return (
         <div className="h-full">
             <Text as="h2" size="xl" weight="bold" className="text-primary-500 mb-3">
@@ -172,8 +184,8 @@ export const PreferencesSection = ({
                         </ListboxOptions>
                     </Listbox>
                 </div>
-
-                <Btn onClick={onSave} className="!hover:scale-95 w-full bg-success text-white px-6 py-2 mb-4 lg:mb-8 ">
+                
+                <Btn onClick={() => {onSave(); updateCustomer({...customerData})}} className="hover:!scale-95 w-full bg-success text-white px-6 py-2 mb-4 lg:mb-8 ">
                     Save Preferences
                 </Btn>
             </div>

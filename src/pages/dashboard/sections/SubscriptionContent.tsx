@@ -16,7 +16,7 @@ const stripePromise = loadStripe(STRIPE.PUBLISHABLE_KEY);
 
 export const SubscriptionContent = () => {
 
-  const { plans, selectedPlan, setSelectedPlan, monthlyPrice, yearlyPrice, customerData, setCustomerData } = useSubscription();
+  const { plans, selectedPlan, setSelectedPlan, monthlyPrice, yearlyPrice, customerData, setCustomerData, isSubscribed } = useSubscription();
   const [subscriptionStep, setSubscriptionStep] = useState('plan-selection');
   const { preferences } = useDashboardInfo();
   const { customerProfile } = useAuthInfo();
@@ -25,7 +25,7 @@ export const SubscriptionContent = () => {
     setCustomerData({
       email: customerProfile?.email || '',
       fullName: customerProfile?.fullName || '',
-      phone: customerProfile?.phone || '+1234567890',
+      phone: customerProfile?.phone || 'N/A',
       preferredCurrency: customerProfile?.preferences.currency || 'USD',
       defaultOriginAirport: preferences.originAirport || 'ATL',
       metadata: {
