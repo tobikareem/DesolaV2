@@ -2,28 +2,28 @@ import { Headset, House, LogOut, Trash2, User } from 'lucide-react';
 import React, { useContext, useEffect, useState } from 'react';
 import { PiHeadsetFill, PiRoadHorizonBold, PiRoadHorizonFill, PiTrashFill } from 'react-icons/pi';
 import { RiHome5Fill, RiRobot2Fill, RiRobot2Line, RiUserFill } from 'react-icons/ri';
+import { TbCreditCard, TbCreditCardFilled } from 'react-icons/tb';
 import { SidebarLogout } from '../../../components/dashboard-sections/sidebar/SidebarLogout';
 import { SidebarTab } from '../../../components/dashboard-sections/sidebar/SidebarTab';
 import { ClearChat } from '../../../components/modals/ClearChat';
 import FlightOffersModal from '../../../components/modals/FlightOffersModal';
 import { ReturnContent } from '../../../components/modals/LogoutModal';
 import { Modal } from '../../../components/modals/Modal';
+import { SubscriptionFlowModal } from '../../../components/modals/SubscriptionFlow';
 import { Btn } from '../../../components/ui/Button';
 import { ChatContext } from '../../../contexts/ChatContext';
 import { NavigationContext } from '../../../contexts/NavigationContext';
 import { NavItem } from '../../../contexts/types';
 import { UIContext } from '../../../contexts/UIContext';
+import { useAuthInfo } from '../../../hooks/useAuthInfo';
 import { CustomStorage } from '../../../utils/customStorage';
+import { DesolaAI } from './DesolaAI';
 import { HomeContent } from './HomeContent';
-import { TripHistoryContent } from './TripHistoryContent';
+import { SubscriptionContent } from './SubscriptionContent';
 import { SupportContent } from './SupportContent';
 import { TrashContent } from './TrashContent';
+import { TripHistoryContent } from './TripHistoryContent';
 import { UserContent } from './UserContent';
-import { SubscriptionContent } from './SubscriptionContent';
-import { TbCreditCard, TbCreditCardFilled } from 'react-icons/tb';
-import { DesolaAI } from './DesolaAI';
-import { useAuthInfo } from '../../../hooks/useAuthInfo';
-import { SubscriptionFlowModal } from '../../../components/modals/SubscriptionFlow';
 
 
 const storageService = new CustomStorage();
@@ -37,9 +37,9 @@ export const GetRequiredFields = (route: string) => {
   return requiredFields;
 };
 
-export const RightPanel: React.FC =()=> {
+export const RightPanel: React.FC = () => {
 
-  const {chatLog} = useContext(ChatContext);
+  const { chatLog } = useContext(ChatContext);
   const [selectedTab, setSelectedTab] = useState<string>('home');
   const { setNavigationData, setMobileTab } = useContext(NavigationContext);
   const { showLogoutModal, showDeleteModal, showFlightModal, toggleModal } = useContext(UIContext);
@@ -62,11 +62,11 @@ export const RightPanel: React.FC =()=> {
 
   const sidebarOptions: NavItem[] = [
     { id: 'home', icon: <House size={24} />, icon2: <RiHome5Fill />, label: 'Home' },
-    { id: 'AI', icon:   <RiRobot2Line size={24} />, icon2: <RiRobot2Fill size={24} />, label: 'AI Assistant' },
+    { id: 'AI', icon: <RiRobot2Line size={24} />, icon2: <RiRobot2Fill size={24} />, label: 'AI Assistant' },
     { id: 'road', icon: <PiRoadHorizonBold size={24} />, icon2: <PiRoadHorizonFill />, label: 'Trips' },
     { id: 'trash', icon: <Trash2 size={24} />, icon2: <PiTrashFill />, label: 'Clear Chat' },
     { id: 'user', icon: <User size={24} />, icon2: <RiUserFill />, label: 'Profile' },
-    { id: 'subscription', icon: <TbCreditCard />, icon2: <TbCreditCardFilled />, label: 'Subscription'},
+    { id: 'subscription', icon: <TbCreditCard />, icon2: <TbCreditCardFilled />, label: 'Subscription' },
     { id: 'support', icon: <Headset size={24} />, icon2: <PiHeadsetFill />, label: 'Support' },
   ];
 
@@ -158,7 +158,7 @@ export const RightPanel: React.FC =()=> {
           ))}
           <SidebarLogout
             icon={<LogOut size={24} />}
-            onClick={()=> toggleModal('logout')}
+            onClick={() => toggleModal('logout')}
           />
         </div>
         {/* Content Area */}
@@ -169,21 +169,24 @@ export const RightPanel: React.FC =()=> {
             </div>
             {/* Search Button */}
             <div className="border-t items-center h-[120px] flex p-7">
-              <Btn className={`p-1 w-full max-w-[385px] ${(selectedTab == 'home' || selectedTab == 'road' ) && isLastMessage && isSearchEnabled()
-                  ? 'bg-gradient-to-b from-[#FF9040] to-[#FF6B00] text-white'
-                  : 'bg-neutral-300 text-neutral-500 cursor-not-allowed opacity-50'}`} 
-                  onClick={() => {if (isSearchEnabled()) {
-                    toggleModal('flight');}}}>
+              <Btn className={`p-1 w-full max-w-[385px] ${(selectedTab == 'home' || selectedTab == 'road') && isLastMessage && isSearchEnabled()
+                ? 'bg-gradient-to-b from-[#FF9040] to-[#FF6B00] text-white'
+                : 'bg-neutral-300 text-neutral-500 cursor-not-allowed opacity-50'}`}
+                onClick={() => {
+                  if (isSearchEnabled()) {
+                    toggleModal('flight');
+                  }
+                }}>
                 Search
               </Btn>
             </div>
           </div>
         </div>
       </div>
-      {<SubscriptionFlowModal Action={()=>{setSelectedTab('subscription'); setMobileTab('subscription')}}/>}
+      {<SubscriptionFlowModal Action={() => { setSelectedTab('subscription'); setMobileTab('subscription') }} />}
 
       {showDeleteModal && (
-        <Modal display={showDeleteModal} close={() => {toggleModal('delete')}}>
+        <Modal display={showDeleteModal} close={() => { toggleModal('delete') }}>
           <ClearChat
             Action={() => toggleModal('delete')}
             ConfirmAction={handleConfirmDelete} Message={null}
@@ -192,10 +195,10 @@ export const RightPanel: React.FC =()=> {
       )}
       {showLogoutModal && (
         <Modal display={showLogoutModal} close={() => toggleModal('logout')}>
-          <ReturnContent Action={() => toggleModal('logout')} ConfirmAction={handleConfirmLogout}/>
+          <ReturnContent Action={() => toggleModal('logout')} ConfirmAction={handleConfirmLogout} />
         </Modal>
       )}
-      {showFlightModal &&(
+      {showFlightModal && (
         <Modal position="absolute" close={() => toggleModal('flight')} display={showFlightModal}>
           <FlightOffersModal onClose={() => toggleModal('flight')} />
         </Modal>

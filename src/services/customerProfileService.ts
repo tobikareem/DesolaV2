@@ -35,7 +35,7 @@ class CustomerProfileService {
                 email: idToken.emailList && idToken.emailList.length > 0 ? idToken.emailList[0] : idToken.emailAddress || "",
                 firstName: idToken.firstName || "",
                 lastName: idToken.lastName || "",
-                fullName: idToken.fullName || `${idToken.firstName || ""} ${idToken.lastName || ""}`.trim(),
+                fullName: `${idToken.firstName || ""} ${idToken.lastName || ""}`.trim(),
                 address,
                 preferences: {
                     locale: idToken.locale,

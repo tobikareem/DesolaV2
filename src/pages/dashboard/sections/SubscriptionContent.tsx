@@ -16,7 +16,7 @@ const stripePromise = loadStripe(STRIPE.PUBLISHABLE_KEY);
 
 export const SubscriptionContent = () => {
 
-  const { plans, selectedPlan, setSelectedPlan, monthlyPrice, yearlyPrice, customerData, setCustomerData, isSubscribed } = useSubscription();
+  const { plans, selectedPlan, setSelectedPlan, monthlyPrice, yearlyPrice, customerData, setCustomerData } = useSubscription();
   const [subscriptionStep, setSubscriptionStep] = useState('plan-selection');
   const { preferences } = useDashboardInfo();
   const { customerProfile } = useAuthInfo();
@@ -34,7 +34,7 @@ export const SubscriptionContent = () => {
         signupSource: 'web'
       }
     });
-  }, [customerProfile?.email, customerProfile?.fullName, customerProfile?.id, customerProfile?.phone, customerProfile?.preferences.currency, preferences.originAirport]);
+  }, [customerProfile?.email, customerProfile?.fullName, customerProfile?.id, customerProfile?.phone, customerProfile?.preferences.currency, preferences.originAirport, setCustomerData]);
 
   const handlePlanSelection = () => {
     if (selectedPlan && customerData) {

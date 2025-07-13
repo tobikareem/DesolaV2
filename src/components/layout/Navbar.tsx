@@ -1,22 +1,22 @@
 import { LogOut } from "lucide-react";
 import React, { useContext, useEffect, useState } from "react";
 import { GiHamburgerMenu } from "react-icons/gi";
+import { ImSpinner } from "react-icons/im";
 import { NavLink, useLocation } from "react-router-dom";
 import { NavigationContext } from "../../contexts/NavigationContext";
 import { UIContext } from "../../contexts/UIContext";
 import { useAuthInfo } from "../../hooks/useAuthInfo";
-import authService from "../../services/authService";
-import { Logo } from "./Logo";
-import { useSmoothScroll } from "../../hooks/useSmoothScroll";
-import { Close } from "../ui/Close";
 import { useIsDesktop } from "../../hooks/useDesktopSize";
-import { ImSpinner } from "react-icons/im";
-import LoadingScreen from "./LoadingScreen";
+import { useSmoothScroll } from "../../hooks/useSmoothScroll";
+import authService from "../../services/authService";
 import { Btn } from "../ui/Button";
+import { Close } from "../ui/Close";
+import LoadingScreen from "./LoadingScreen";
+import { Logo } from "./Logo";
 
 export const Navbar = () => {
     const [slider, setSlider] = useState<boolean>(false);
-    const { userName, isAuthenticated, logout} = useAuthInfo();
+    const { userName, isAuthenticated, logout } = useAuthInfo();
     const isDesktop = useIsDesktop();
     const { navigationData, mobileTab, setMobileTab } = useContext(NavigationContext);
     const { toggleModal } = useContext(UIContext);
@@ -49,13 +49,13 @@ export const Navbar = () => {
     useEffect(() => {
         authService.initializeSigningState(setIsSigningIn);
         return () => {
-        authService.setIsSigningIn = null;
+            authService.setIsSigningIn = null;
         };
     }, []);
 
-    
 
-    
+
+
 
 
     return (
@@ -103,23 +103,23 @@ export const Navbar = () => {
                             authService.signIn();
                         }}
                         disabled={isSigningIn}
-                        className={`hidden lg:flex items-center gap-2 justify-center h-12 ${isSigningIn ? 'w-[180px]':'w-[140px]'} bg-gradient-to-b from-[#FF9040] to-[#FF6B00] text-base text-white font-medium rounded-[48px] hover:scale-105 transition-transform duration-300 ease-in-out`}
+                        className={`hidden lg:flex items-center gap-2 justify-center h-12 ${isSigningIn ? 'w-[180px]' : 'w-[140px]'} bg-gradient-to-b from-[#FF9040] to-[#FF6B00] text-base text-white font-medium rounded-[48px] hover:scale-105 transition-transform duration-300 ease-in-out`}
                     >
-                        { isSigningIn ? (<><span>Signing in...</span><ImSpinner className="animate-spin duration-300 mt-1"/></>) : 'Sign In'}
+                        {isSigningIn ? (<><span>Signing in...</span><ImSpinner className="animate-spin duration-300 mt-1" /></>) : 'Sign In'}
                     </button>
                 )}
                 {/* Mobile Nav */}
-                { !isDesktop &&
+                {!isDesktop &&
                     <div
                         className={`block lg:hidden w-screen h-svh ${slider ? 'translate-x-0  bg-black/60' : 'translate-x-[-110%] bg-transparent'} transition-all duration-200 ease-in fixed top-0 left-0 z-50`} >
                         <div className="w-full h-full py-6 bg-white border border-neutral-300">
                             <div className="w-full flex justify-between px-4">
                                 <Logo />
-                                <Close Action={handleDrawer}/>
+                                <Close Action={handleDrawer} />
                             </div>
 
                             {isSigningIn && <LoadingScreen dimension={undefined} background={undefined} message={"Signing In..."} />}
-                            
+
                             <div id="drawer"
                                 className={`flex flex-col justify-between items-center px-4 py-10  w-full h-full `}>
                                 <nav className={`flex flex-col w-full py-1 px-1.5 gap-6 `}>
@@ -144,7 +144,7 @@ export const Navbar = () => {
                                                     <div className={`text-2xl text-primary-300`} >
                                                         {mobileTab === option?.id ? option?.icon2 : option?.icon}
                                                     </div>
-                                                    <div className={`${mobileTab == option?.id ? 'font-bold':''}`}>
+                                                    <div className={`${mobileTab == option?.id ? 'font-bold' : ''}`}>
                                                         {option?.label}
                                                     </div>
                                                 </div>
@@ -174,7 +174,7 @@ export const Navbar = () => {
                                         </div>
                                     </div>
                                 </nav>
-                                { !isAuthenticated && router == '/' && (
+                                {!isAuthenticated && router == '/' && (
                                     <Btn
                                         onClick={(e) => {
                                             handleDrawer(e);
@@ -184,7 +184,7 @@ export const Navbar = () => {
                                         Sign In
                                     </Btn>)
                                 }
-                                { isAuthenticated && router == '/' && (
+                                {isAuthenticated && router == '/' && (
                                     <Btn
                                         onClick={logout}
                                         className="h-12 w-full bg-red-500 text-white hover:!scale-95 font-medium rounded-[48px] transition-transform duration-300 ease-in-out"
