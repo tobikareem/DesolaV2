@@ -11,15 +11,17 @@ import { CreateSubscriptionResult, SubscriptionError } from "../../../models/pay
 import { STRIPE } from "../../../utils/constants"
 import { StripePaymentForm } from "../../payment/StripePaymentForm"
 import { BillFrequency } from "../../pricing/BillFrequency"
+import useCustomerApi from '../../../hooks/useCustomerApi'
 
 const stripePromise = loadStripe(STRIPE.PUBLISHABLE_KEY);
 
 export const SubscriptionContent = () => {
 
-  const { plans, selectedPlan, setSelectedPlan, monthlyPrice, yearlyPrice, customerData, setCustomerData, isSubscribed } = useSubscription();
+  const { plans, selectedPlan, setSelectedPlan, monthlyPrice, yearlyPrice, customerData, setCustomerData, isSubscribed, isCustomerCreated } = useSubscription();
   const [subscriptionStep, setSubscriptionStep] = useState('plan-selection');
   const { preferences } = useDashboardInfo();
   const { customerProfile } = useAuthInfo();
+  const { createCustomer } = useCustomerApi();
 
   useEffect(() => {
     setCustomerData({
@@ -34,6 +36,8 @@ export const SubscriptionContent = () => {
         signupSource: 'web'
       }
     });
+
+    
   }, [customerProfile?.email, customerProfile?.fullName, customerProfile?.id, customerProfile?.phone, customerProfile?.preferences.currency, preferences.originAirport]);
 
   const handlePlanSelection = () => {
@@ -83,9 +87,43 @@ export const SubscriptionContent = () => {
   }
 
 
+
   return (
     <div className="">
-      <Text as="h1" size="2xl" weight="bold" className="font-grotesk text-primary-500 mb-5">
+      <div className="relative space-y-2 mb-5">
+        <Text as="h1" size="2xl" weight="bold" className="font-grotesk text-primary-500">
+          Subscription Management
+        </Text>
+        <Text size="2xs" className="lg:!text-xs !text-neutral-500 pl-0.5">
+          Manage your subscription to Desola Flights Premium. Choose a plan that suits you and enjoy exclusive benefits.
+        </Text>
+      </div>
+        <div className='space-y-3 mb-5'>
+          <Text as="h2" size="xl" weight="semibold" className="font-grotesk text-primary-500">
+            Subscriber
+          </Text>
+          { customerProfile &&
+            <div className="mb-5 space-y-2 border border-neutral-300 rounded-2xl p-2">
+              <Text size="lg" weight="medium" color="text-primary-600">
+                Name: <span className="text-base font-normal !text-Neutral">{customerProfile?.fullName ?? 'N/A'}</span>
+              </Text>
+              <Text size="lg" weight="medium" color="text-primary-600">
+                Subscription Status: <span className={`text-base font-normal ${isSubscribed ? 'text-success' : 'text-error'}`}>{isSubscribed ? 'Active' : 'Inactive'}</span>
+              </Text>
+              <Text size="lg" weight="medium" color="text-primary-600">
+                Expires: <span className={`text-base font-normal ${isSubscribed ? 'text-notification' : 'text-error'}`}>{isSubscribed ? `${isCustomerCreated?.subscriptionExpiresAt}` : 'Expired'}</span>
+              </Text>
+            </div>
+          }
+          {!customerProfile && !isSubscribed && (
+            <Text size="base" className="">
+              You're not a subscriber...Choose a plan to be a subscriber
+            </Text>
+          )}
+      </div>
+
+
+      <Text as="h2" size="xl" weight="semibold" className="font-grotesk text-primary-500 mb-3">
         Choose Your Plan
       </Text>
       <div className="flex flex-col justify-between h-full overflow-y-auto gap-10">
@@ -100,7 +138,12 @@ export const SubscriptionContent = () => {
         </div>
         <div className="mb-16">
           <Btn
-            onClick={handlePlanSelection}
+            onClick={()=>{
+              handlePlanSelection()
+              if (!isSubscribed && customerData){
+                  createCustomer({...customerData})
+              }
+            }}
             disabled={!selectedPlan}
             weight="semibold"
             fontStyle="work"

@@ -15,9 +15,8 @@ export const SubscriptionFlowModal =({Action}:{Action:()=>void})=> {
   const {stage} = useSubscription();
   const {toggleSubscriptionModal, showSubscriptionModal} = useModals();
   const storage = new CustomStorage();
-  const {getCustomerByEmail} = useCustomerApi();
-  const { isSubscribed, setIsSubscribed } = useSubscription();
-  const { createCustomer} = useCustomerApi();
+  const {getCustomerByEmail, createCustomer} = useCustomerApi();
+  const { isSubscribed, setIsSubscribed, setIsCustomerCreated, isCustomerCreated } = useSubscription();
   const { preferences } = useDashboardInfo();
 
   const customerData: CustomerSignupRequest = {
@@ -36,7 +35,7 @@ export const SubscriptionFlowModal =({Action}:{Action:()=>void})=> {
         return <SubscriptionModal Action={toggleSubscriptionModal} ConfirmAction={() => {
           Action();
           toggleSubscriptionModal();
-          if (customerProfile) {
+          if (customerProfile && !isCustomerCreated) {
             createCustomer({...customerData })
           }
         }}/>
@@ -52,11 +51,22 @@ export const SubscriptionFlowModal =({Action}:{Action:()=>void})=> {
     async function checkSubscription() {
       if (customerProfile?.email) {
         try{
-          const customer = await getCustomerByEmail(customerProfile?.email);
-          storage.setItem('Subscription', 'true');
-          setIsSubscribed(!!customer?.hasActiveSubscription);
-          if(!isSubscribed && !firstTimeLoad){
-            toggleSubscriptionModal()
+          if (!firstTimeLoad) {
+            const customer = await getCustomerByEmail(customerProfile?.email);
+            storage.setItem('Subscription', 'true');
+            storage.setItem('customer', JSON.stringify(customer))
+            setIsSubscribed(!!customer?.hasActiveSubscription);
+            setIsCustomerCreated(customer)
+            console.log('Customer from API:', customer);
+            if(!isSubscribed){
+              toggleSubscriptionModal()
+            }
+          }
+          const storedCustomer = storage.getItem('customer')
+          if (storedCustomer) {
+            const parsedCustomer = JSON.parse(storedCustomer);
+            setIsSubscribed(!!parsedCustomer?.hasActiveSubscription);
+            setIsCustomerCreated(parsedCustomer);
           }
         } catch (error) {
           console.error(`Error fetching customer subscription: ${error}`);
@@ -65,6 +75,8 @@ export const SubscriptionFlowModal =({Action}:{Action:()=>void})=> {
     }
     checkSubscription()
   },[customerProfile?.email])
+
+  
 
   return(
     <>

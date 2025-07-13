@@ -15,6 +15,7 @@ const SubscriptionModal: React.FC<SubscriptionModalProps> = ({ Action, ConfirmAc
         src={Subcription}
         alt="Subscription"
         className="object-center max-w-lg"
+        loading="lazy"
       />
       <Text
         as="h3"

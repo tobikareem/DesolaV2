@@ -38,7 +38,7 @@ export const DesolaAI = () => {
         >
           Desola AI <span><MdOutlineAutoAwesome className={`text-lg ${loading ? 'animate-bounce mt-1' : ''}`} /></span>
         </Text>
-        <Text size="2xs" className="lxl:!text-xs !text-neutral-500 pl-0.5">
+        <Text size="2xs" className="lg:!text-xs !text-neutral-500 pl-0.5">
           Ask Desola AI anything about your travel plans, distance, tourist attractions and general travel information...
         </Text>
       </div>

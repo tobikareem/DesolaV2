@@ -1,5 +1,5 @@
 import { CardElement, CardElementProps, useElements, useStripe } from '@stripe/react-stripe-js';
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import { Btn } from "../../components/ui/Button";
 import { Text } from "../../components/ui/TextComp";
 import useApi from "../../hooks/useApi";
@@ -9,6 +9,9 @@ import { StripePaymentFormProps } from "../../models/payment/StripePaymentFormPr
 import { CreateDirectSubscriptionRequest, CreateSubscriptionResult } from "../../models/payment/SubscriptionResult";
 import { STRIPE } from "../../utils/constants";
 import { ENDPOINTS_API_PATH } from "../../utils/endpoints";
+import { toast } from 'react-toastify';
+import { CancelSubscriptionProps } from '../../models/payment/CancelSubscription';
+
 
 const cardElementOptions: CardElementProps['options'] = {
     style: {
@@ -46,8 +49,9 @@ export const StripePaymentForm = ({
 }: StripePaymentFormProps) => {
     const stripe = useStripe();
     const elements = useElements();
-    const { getData, postData } = useApi();
-    const { monthlyPrice, yearlyPrice } = useSubscription();
+    const { postData } = useApi();
+    const { monthlyPrice, yearlyPrice, isSubscribed, isCustomerCreated } = useSubscription();
+    const [canceling, setIsCanceling] = useState(false);
 
     const [paymentState, setPaymentState] = useState<PaymentState>({
         step: 'loading',
@@ -55,41 +59,40 @@ export const StripePaymentForm = ({
         isProcessing: false
     });
 
-    useEffect(() => {
-        const fetchCustomer = async () => {
-            if (!customerProfileInfo.email) {
-                setPaymentState(prev => ({ ...prev, step: 'ready' }));
-                return;
-            }
-            setPaymentState(prev => ({ ...prev, isLoadingCustomer: true }));
-            try {
-                const customer = await getData<CustomerSignupResponse>(
-                    `${ENDPOINTS_API_PATH.stripe_getCustomer}?email=${encodeURIComponent(customerProfileInfo.email)}`
-                );
+    // useEffect(() => {
+    //     const fetchCustomer = async () => {
+    //         if (!customerProfileInfo.email) {
+    //             setPaymentState(prev => ({ ...prev, step: 'ready' }));
+    //             return;
+    //         }
+    //         setPaymentState(prev => ({ ...prev, isLoadingCustomer: true }));
+    //         try {
+    //             const customer = await getData<CustomerSignupResponse>(
+    //                 `${ENDPOINTS_API_PATH.stripe_getCustomer}?email=${encodeURIComponent(customerProfileInfo.email)}`
+    //             );
 
-                setPaymentState(prev => ({
-                    ...prev,
-                    customerData: customer || undefined,
-                    step: 'ready',
-                    isLoadingCustomer: false
-                }));
+    //             setPaymentState(prev => ({
+    //                 ...prev,
+    //                 customerData: customer || undefined,
+    //                 step: 'ready',
+    //                 isLoadingCustomer: false
+    //             }));
 
-            } catch (error) {
-                console.error('Error fetching customer:', error);
+    //         } catch (error) {
+    //             console.error('Error fetching customer:', error);
                 
-                setPaymentState(prev => ({
-                    ...prev,
-                    step: 'ready',
-                    isLoadingCustomer: false
-                }));
-            }
-        };
+    //             setPaymentState(prev => ({
+    //                 ...prev,
+    //                 step: 'ready',
+    //                 isLoadingCustomer: false
+    //             }));
+    //         }
+    //     };
 
-        fetchCustomer();
-    }, [customerProfileInfo.email, getData]);
+    //     fetchCustomer();
+    // }, [customerProfileInfo.email, getData]);
 
-    const handleSubmit = async (event: React.FormEvent) => {
-        event.preventDefault();
+    const handleSubmit = async () => {
 
         if (!stripe || !elements || !customerProfileInfo) {
             return;
@@ -180,6 +183,26 @@ export const StripePaymentForm = ({
             onError?.({ message: errorMessage });
         }
     };
+
+    const CancelDetails: CancelSubscriptionProps = {
+        stripeCustomerId: isCustomerCreated?.stripeCustomerId || '',
+        CancelAtPeriodEnd: true,
+        CancellationReason: 'User requested cancellation',
+        customerId: isCustomerCreated?.customerId|| '',
+        customerEmail: paymentState.customerData?.email || ''
+    };
+
+    const CancelSubscription = async () => {
+        setIsCanceling(true)
+        try {
+            toast.success('Subscription Canceled successfully')
+        } catch (error) {
+            console.error('Error canceling subscription:', error);
+        } finally {
+            setIsCanceling(false)
+            await postData<CancelSubscriptionProps>(`${ENDPOINTS_API_PATH?.stripe_cancelSubscription}`, CancelDetails)
+        }
+    }
 
     const planPrice = selectedPlan === 'Yearly' ? yearlyPrice : monthlyPrice;
 
@@ -428,8 +451,15 @@ export const StripePaymentForm = ({
                     {
                         <div className="pb-6">
                             <Btn
-                                onClick={handleSubmit}
-                                disabled={!stripe || paymentState.isProcessing}
+                                onClick={()=> {
+                                    if (isSubscribed) {
+                                        CancelSubscription();
+                                    } else {
+                                        handleSubmit();
+                                    }
+                                }}
+                                disabled={!stripe || paymentState.isProcessing || canceling}
+                                loading={canceling || paymentState?.isProcessing}
                                 weight="semibold"
                                 fontStyle="work"
                                 radius="48px"
@@ -444,7 +474,7 @@ export const StripePaymentForm = ({
                                         Creating subscription...
                                     </div>
                                 ) : (
-                                    `Start 7-Day Free Trial - $${planPrice}/${selectedPlan.toLowerCase()}`
+                                    <>{!isSubscribed ? `${canceling ? 'Canceling...' : 'Cancel Subscription'}` : (`Start 7-Day Free Trial - $${planPrice}/${selectedPlan.toLowerCase()}`)}</>
                                 )}
                             </Btn>
 
