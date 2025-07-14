@@ -40,6 +40,9 @@ const SubscriptionModal: React.FC<SubscriptionModalProps> = ({ Action, ConfirmAc
           Yes, Subscribe
         </Btn>
       </div>
+      <Text size="2xs" className="lg:!text-xs !text-neutral-500 text-center">
+        By clicking 'Subscribe', you agree to our subscription terms, including automatic renewal and payment processing. You can cancel your subscription at any time, and cancellation will take effect at the end of the current billing cycle. See our full terms and conditions for details.
+      </Text>
     </div>
   );
 };

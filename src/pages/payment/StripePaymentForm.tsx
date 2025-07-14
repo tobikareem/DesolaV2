@@ -1,5 +1,5 @@
 import { CardElement, CardElementProps, useElements, useStripe } from '@stripe/react-stripe-js';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Btn } from "../../components/ui/Button";
 import { Text } from "../../components/ui/TextComp";
 import useApi from "../../hooks/useApi";
@@ -9,8 +9,6 @@ import { StripePaymentFormProps } from "../../models/payment/StripePaymentFormPr
 import { CreateDirectSubscriptionRequest, CreateSubscriptionResult } from "../../models/payment/SubscriptionResult";
 import { STRIPE } from "../../utils/constants";
 import { ENDPOINTS_API_PATH } from "../../utils/endpoints";
-import { toast } from 'react-toastify';
-import { CancelSubscriptionProps } from '../../models/payment/CancelSubscription';
 
 
 const cardElementOptions: CardElementProps['options'] = {
@@ -49,9 +47,8 @@ export const StripePaymentForm = ({
 }: StripePaymentFormProps) => {
     const stripe = useStripe();
     const elements = useElements();
-    const { postData } = useApi();
-    const { monthlyPrice, yearlyPrice, isSubscribed, isCustomerCreated } = useSubscription();
-    const [canceling, setIsCanceling] = useState(false);
+    const { getData, postData } = useApi();
+    const { monthlyPrice, yearlyPrice } = useSubscription();
 
     const [paymentState, setPaymentState] = useState<PaymentState>({
         step: 'loading',
@@ -59,38 +56,38 @@ export const StripePaymentForm = ({
         isProcessing: false
     });
 
-    // useEffect(() => {
-    //     const fetchCustomer = async () => {
-    //         if (!customerProfileInfo.email) {
-    //             setPaymentState(prev => ({ ...prev, step: 'ready' }));
-    //             return;
-    //         }
-    //         setPaymentState(prev => ({ ...prev, isLoadingCustomer: true }));
-    //         try {
-    //             const customer = await getData<CustomerSignupResponse>(
-    //                 `${ENDPOINTS_API_PATH.stripe_getCustomer}?email=${encodeURIComponent(customerProfileInfo.email)}`
-    //             );
+    useEffect(() => {
+        const fetchCustomer = async () => {
+            if (!customerProfileInfo.email) {
+                setPaymentState(prev => ({ ...prev, step: 'ready' }));
+                return;
+            }
+            setPaymentState(prev => ({ ...prev, isLoadingCustomer: true }));
+            try {
+                const customer = await getData<CustomerSignupResponse>(
+                    `${ENDPOINTS_API_PATH.stripe_getCustomer}?email=${encodeURIComponent(customerProfileInfo.email)}`
+                );
 
-    //             setPaymentState(prev => ({
-    //                 ...prev,
-    //                 customerData: customer || undefined,
-    //                 step: 'ready',
-    //                 isLoadingCustomer: false
-    //             }));
+                setPaymentState(prev => ({
+                    ...prev,
+                    customerData: customer || undefined,
+                    step: 'ready',
+                    isLoadingCustomer: false
+                }));
 
-    //         } catch (error) {
-    //             console.error('Error fetching customer:', error);
+            } catch (error) {
+                console.error('Error fetching customer:', error);
                 
-    //             setPaymentState(prev => ({
-    //                 ...prev,
-    //                 step: 'ready',
-    //                 isLoadingCustomer: false
-    //             }));
-    //         }
-    //     };
+                setPaymentState(prev => ({
+                    ...prev,
+                    step: 'ready',
+                    isLoadingCustomer: false
+                }));
+            }
+        };
 
-    //     fetchCustomer();
-    // }, [customerProfileInfo.email, getData]);
+        fetchCustomer();
+    }, [customerProfileInfo.email, getData]);
 
     const handleSubmit = async () => {
 
@@ -183,26 +180,6 @@ export const StripePaymentForm = ({
             onError?.({ message: errorMessage });
         }
     };
-
-    const CancelDetails: CancelSubscriptionProps = {
-        stripeCustomerId: isCustomerCreated?.stripeCustomerId || '',
-        CancelAtPeriodEnd: true,
-        CancellationReason: 'User requested cancellation',
-        customerId: isCustomerCreated?.customerId|| '',
-        customerEmail: paymentState.customerData?.email || ''
-    };
-
-    const CancelSubscription = async () => {
-        setIsCanceling(true)
-        try {
-            toast.success('Subscription Canceled successfully')
-        } catch (error) {
-            console.error('Error canceling subscription:', error);
-        } finally {
-            setIsCanceling(false)
-            await postData<CancelSubscriptionProps>(`${ENDPOINTS_API_PATH?.stripe_cancelSubscription}`, CancelDetails)
-        }
-    }
 
     const planPrice = selectedPlan === 'Yearly' ? yearlyPrice : monthlyPrice;
 
@@ -447,48 +424,36 @@ export const StripePaymentForm = ({
                             You can cancel anytime during or after your trial period.
                         </div>
                     </div>
-
-                    {
-                        <div className="pb-6">
-                            <Btn
-                                onClick={()=> {
-                                    if (isSubscribed) {
-                                        CancelSubscription();
-                                    } else {
-                                        handleSubmit();
-                                    }
-                                }}
-                                disabled={!stripe || paymentState.isProcessing || canceling}
-                                loading={canceling || paymentState?.isProcessing}
-                                weight="semibold"
-                                fontStyle="work"
-                                radius="48px"
-                                className={`w-full h-12 text-base ${paymentState.isProcessing || !stripe
-                                        ? 'bg-gray-400 cursor-not-allowed text-gray-600'
-                                        : 'bg-gradient-to-b from-[#FF9040] to-[#FF6B00] text-neutral-100'
-                                    } hover:!scale-95 `}
-                            >
-                                {paymentState.isProcessing ? (
-                                    <div className="flex items-center justify-center">
-                                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                                        Creating subscription...
-                                    </div>
-                                ) : (
-                                    <>{!isSubscribed ? `${canceling ? 'Canceling...' : 'Cancel Subscription'}` : (`Start 7-Day Free Trial - $${planPrice}/${selectedPlan.toLowerCase()}`)}</>
-                                )}
-                            </Btn>
-
-                            <div className="text-center text-xs text-gray-400 my-3 space-y-1">
+                    <div className="pb-6">
+                        <Btn onClick={handleSubmit}
+                            disabled={!stripe || paymentState.isProcessing}
+                            loading={paymentState?.isProcessing}
+                            weight="semibold"
+                            fontStyle="work"
+                            radius="48px"
+                            className={`w-full h-12 text-base ${paymentState.isProcessing || !stripe
+                                    ? 'bg-gray-400 cursor-not-allowed text-gray-600'
+                                    : 'bg-gradient-to-b from-[#FF9040] to-[#FF6B00] text-neutral-100'
+                                } hover:!scale-95 `}
+                        >
+                            {paymentState.isProcessing ? (
                                 <div className="flex items-center justify-center">
-                                    <svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
-                                    </svg>
-                                    Secured by Stripe • SSL Encrypted
+                                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                                    Creating subscription...
                                 </div>
-                                <Text>No charge for 7 days • Cancel anytime</Text>
+                            ) : (`Start 7-Day Free Trial - $${planPrice}/${selectedPlan.toLowerCase()}`)}
+                        </Btn>
+
+                        <div className="text-center text-xs text-gray-400 my-3 space-y-1">
+                            <div className="flex items-center justify-center">
+                                <svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
+                                </svg>
+                                Secured by Stripe • SSL Encrypted
                             </div>
+                            <Text>No charge for 7 days • Cancel anytime</Text>
                         </div>
-                    }
+                    </div>
                 </div>
             </div>
         </div>

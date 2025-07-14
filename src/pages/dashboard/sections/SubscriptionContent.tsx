@@ -12,16 +12,25 @@ import { STRIPE } from "../../../utils/constants"
 import { StripePaymentForm } from "../../payment/StripePaymentForm"
 import { BillFrequency } from "../../pricing/BillFrequency"
 import useCustomerApi from '../../../hooks/useCustomerApi'
+import { CancelSubscriptionProps } from '../../../models/payment/CancelSubscription'
+import { toast } from 'react-toastify';
+import { TextArea } from '../../../components/ui/TextAreaField'
+import { ENDPOINTS_API_PATH } from '../../../utils/endpoints'
+import useApi from '../../../hooks/useApi'
 
 const stripePromise = loadStripe(STRIPE.PUBLISHABLE_KEY);
 
 export const SubscriptionContent = () => {
 
+  const {postData} = useApi();
   const { plans, selectedPlan, setSelectedPlan, monthlyPrice, yearlyPrice, customerData, setCustomerData, isSubscribed, isCustomerCreated } = useSubscription();
   const [subscriptionStep, setSubscriptionStep] = useState('plan-selection');
   const { preferences } = useDashboardInfo();
   const { customerProfile } = useAuthInfo();
   const { createCustomer } = useCustomerApi();
+  const [canceling, setIsCanceling] = useState<boolean>(false);
+  const [inputValue, setInputValue] = useState<string>('')
+  const [TextBox, setTextBox] = useState<boolean>(false)
 
   useEffect(() => {
     setCustomerData({
@@ -39,6 +48,28 @@ export const SubscriptionContent = () => {
 
     
   }, [customerProfile?.email, customerProfile?.fullName, customerProfile?.id, customerProfile?.phone, customerProfile?.preferences.currency, preferences.originAirport, setCustomerData]);
+
+
+  const CancelDetails: CancelSubscriptionProps = {
+    stripeCustomerId: isCustomerCreated?.stripeCustomerId || '',
+    CancelAtPeriodEnd: true,
+    CancellationReason: inputValue,
+    customerId: isCustomerCreated?.customerId|| '',
+    customerEmail: customerData?.email || ''
+  };
+
+  const CancelSubscription = async () => {
+    setIsCanceling(true)
+    try {
+        await postData<CancelSubscriptionProps>(`${ENDPOINTS_API_PATH?.stripe_cancelSubscription}`, CancelDetails)
+    } catch (error) {
+        console.error('Error canceling subscription:', error);
+    } finally {
+        setIsCanceling(false)
+        toast.success('Subscription Canceled successfully')
+    }
+  }
+
 
   const handlePlanSelection = () => {
     if (selectedPlan && customerData) {
@@ -111,7 +142,7 @@ export const SubscriptionContent = () => {
                 Subscription Status: <span className={`text-base font-normal ${isSubscribed ? 'text-success' : 'text-error'}`}>{isSubscribed ? 'Active' : 'Inactive'}</span>
               </Text>
               <Text size="lg" weight="medium" color="text-primary-600">
-                Expires: <span className={`text-base font-normal ${isSubscribed ? 'text-notification' : 'text-error'}`}>{isSubscribed ? `${isCustomerCreated?.subscriptionExpiresAt}` : 'Expired'}</span>
+                Expires: <span className={`text-base font-normal ${isSubscribed ? 'text-notification' : 'text-error'}`}>{isSubscribed ? `${isCustomerCreated?.subscriptionExpiresAt?.slice(0,10)}` : 'Expired'}</span>
               </Text>
             </div>
           }
@@ -126,7 +157,7 @@ export const SubscriptionContent = () => {
       <Text as="h2" size="xl" weight="semibold" className="font-grotesk text-primary-500 mb-3">
         Choose Your Plan
       </Text>
-      <div className="flex flex-col justify-between h-full overflow-y-auto gap-10">
+      <div className="flex flex-col justify-between h-full overflow-y-auto">
         <div>
           <BillFrequency
             plans={plans}
@@ -137,24 +168,65 @@ export const SubscriptionContent = () => {
           />
         </div>
         <div className="mb-16">
-          <Btn
-            onClick={()=>{
-              handlePlanSelection()
-              if (!isSubscribed && customerData){
-                  createCustomer({...customerData})
-              }
-            }}
-            disabled={!selectedPlan}
-            weight="semibold"
-            fontStyle="work"
-            radius="48px"
-            className={`w-full h-10 text-base text-neutral-100 ${selectedPlan
-              ? 'bg-gradient-to-b from-[#FF9040] to-[#FF6B00] hover:!scale-95'
-              : 'bg-gray-400 cursor-not-allowed'
-              }`}
-          >
-            Continue to Payment
-          </Btn>
+          {   
+            TextBox &&
+            <div className="px-3">  
+              <Text size="xs" color="text-neutral-500" className="mt-2">
+                Tell us why you want to cancel your subscription so that we can improve on our service...
+              </Text>
+              <TextArea value={inputValue} onChange={(e) => setInputValue(e.target.value)}
+                  placeholder="Enter your message..." required 
+                  className="bg-transparent text-xs min-h-20 max-h-30 h-auto !border-none px-3 py-2 my-2 !bg-tint transition-all duration-200 ease-in-out box-border rounded-lg"  
+              />
+            </div>
+          }
+          <div className='flex flex-col md:flex-row gap-2 mt-6'>
+            <Btn
+              onClick={()=>{
+                handlePlanSelection()
+                if (!isSubscribed){
+                  if(!isCustomerCreated && customerData) {
+                    createCustomer({...customerData})
+                  }
+                }
+              }}
+              disabled={!selectedPlan}
+              weight="semibold"
+              fontStyle="work"
+              radius="48px"
+              className={`w-full lg:text-xs xl:text-sm h-10 text-base text-neutral-100 ${selectedPlan
+                ? 'bg-gradient-to-b from-[#FF9040] to-[#FF6B00] hover:!scale-95'
+                : 'bg-gray-400 cursor-not-allowed'
+                }`}
+            >
+              {isSubscribed ? 'Update Subscription' : 'Continue to Payment'}
+            </Btn>
+            {isSubscribed && (
+              <Btn
+                onClick={()=>{
+                  if(!TextBox) {
+                    setTextBox(true)
+                  } else {
+                    CancelSubscription()
+                    setTextBox(false)
+                    setInputValue('')
+                  }
+                }}
+                disabled={canceling}
+                loading={canceling}
+                weight="semibold"
+                fontStyle="work"
+                radius="48px"
+                className={`w-full lg:text-xs xl:text-sm text-nowrap h-10 text-base text-neutral-100 ${selectedPlan
+                  ? 'bg-gradient-to-b from-[#FF9040] to-[#FF6B00] hover:!scale-95'
+                  : 'bg-gray-400 cursor-not-allowed'
+                  }`}
+              >
+                {!TextBox &&<span>Cancel Subscription</span>}
+                {TextBox && <span>{canceling ? 'Canceling subscription...':'Proceed to Cancel Subscription'}</span>}
+              </Btn>
+            )}
+          </div>
         </div>
       </div>
     </div>
