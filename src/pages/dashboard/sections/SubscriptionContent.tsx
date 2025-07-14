@@ -38,7 +38,7 @@ export const SubscriptionContent = () => {
     });
 
     
-  }, [customerProfile?.email, customerProfile?.fullName, customerProfile?.id, customerProfile?.phone, customerProfile?.preferences.currency, preferences.originAirport]);
+  }, [customerProfile?.email, customerProfile?.fullName, customerProfile?.id, customerProfile?.phone, customerProfile?.preferences.currency, preferences.originAirport, setCustomerData]);
 
   const handlePlanSelection = () => {
     if (selectedPlan && customerData) {

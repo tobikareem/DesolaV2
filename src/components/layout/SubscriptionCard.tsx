@@ -55,7 +55,7 @@ export const SubscriptionCard =({
           }
         </div>
       </div>
-      <Btn onClick={()=> navigate('/signup')} 
+      <Btn onClick={()=> navigate('/dashboard')} 
         fontStyle="work"
         className={`mt-10 bg-white border border-primary-500 text-primary-500 gap-2.5 text-base py-4.5 w-full `}>
         Get Started <MdOutlineArrowOutward />
