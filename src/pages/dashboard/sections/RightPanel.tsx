@@ -162,7 +162,7 @@ export const RightPanel: React.FC = () => {
           />
         </div>
         {/* Content Area */}
-        <div className="bg-white w-full shadow-md">
+        <div className="bg-white w-full">
           <div className="flex flex-col h-full justify-between pt-12">
             <div className="max-w-[600px] h-full lg:px-5 xl:px-8 overflow-hidden">
               {renderContent()}

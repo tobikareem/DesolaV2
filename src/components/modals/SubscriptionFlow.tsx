@@ -57,7 +57,6 @@ export const SubscriptionFlowModal =({Action}:{Action:()=>void})=> {
             storage.setItem('customer', JSON.stringify(customer))
             setIsSubscribed(!!customer?.hasActiveSubscription);
             setIsCustomerCreated(customer)
-            console.log('Customer from API:', customer);
             if(!isSubscribed){
               toggleSubscriptionModal()
             }

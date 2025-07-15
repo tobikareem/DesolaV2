@@ -9,6 +9,8 @@ import { StripePaymentFormProps } from "../../models/payment/StripePaymentFormPr
 import { CreateDirectSubscriptionRequest, CreateSubscriptionResult } from "../../models/payment/SubscriptionResult";
 import { STRIPE } from "../../utils/constants";
 import { ENDPOINTS_API_PATH } from "../../utils/endpoints";
+import { Link } from 'react-router-dom';
+import useCustomerApi from '../../hooks/useCustomerApi';
 
 
 const cardElementOptions: CardElementProps['options'] = {
@@ -29,15 +31,6 @@ const cardElementOptions: CardElementProps['options'] = {
 };
 
 
-interface PaymentState {
-    step: 'loading' | 'ready' | 'success' | 'error';
-    error?: string;
-    customerData?: CustomerSignupResponse;
-    isLoadingCustomer: boolean;
-    isProcessing: boolean;
-    subscriptionResult?: CreateSubscriptionResult;
-}
-
 export const StripePaymentForm = ({
     customerData: customerProfileInfo,
     selectedPlan,
@@ -45,17 +38,13 @@ export const StripePaymentForm = ({
     onError,
     onBack
 }: StripePaymentFormProps) => {
+    const {getCustomerByEmail} = useCustomerApi();
     const stripe = useStripe();
     const elements = useElements();
     const { getData, postData } = useApi();
-    const { monthlyPrice, yearlyPrice } = useSubscription();
-
-    const [paymentState, setPaymentState] = useState<PaymentState>({
-        step: 'loading',
-        isLoadingCustomer: false,
-        isProcessing: false
-    });
-
+    const { monthlyPrice, yearlyPrice, paymentState, setPaymentState, setIsSubscribed, setIsCustomerCreated } = useSubscription();
+    const [cardRequirements, setCardRequirements] = useState<boolean>(false)
+   
     useEffect(() => {
         const fetchCustomer = async () => {
             if (!customerProfileInfo.email) {
@@ -88,6 +77,19 @@ export const StripePaymentForm = ({
 
         fetchCustomer();
     }, [customerProfileInfo.email, getData]);
+
+    useEffect(()=>{
+        const checkSubscription = async()=> {
+            try{
+                const customer = await getCustomerByEmail(customerProfileInfo?.email);
+                setIsSubscribed(!!customer?.hasActiveSubscription);
+                setIsCustomerCreated(customer)
+            } catch (error) {
+                throw new Error(`${error}`)
+            }
+        }
+        checkSubscription()
+    },[paymentState?.step === 'success'])
 
     const handleSubmit = async () => {
 
@@ -142,6 +144,7 @@ export const StripePaymentForm = ({
 
             if (!subscriptionResponse) {
                 throw new Error('Failed to create subscription');
+
             }
 
             // Step 4: Handle additional authentication if required
@@ -185,20 +188,18 @@ export const StripePaymentForm = ({
 
     if (paymentState.step === 'loading') {
         return (
-            <div className="flex-1 h-full flex items-center justify-center">
-                <div className="text-center">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 mx-auto mb-4"></div>
-                    <Text size="base" color="text-neutral-600">Setting up your subscription...</Text>
-                </div>
+            <div className="flex flex-col flex-1 justify-center items-center">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 mx-auto mb-4"/>
+                <Text size="base" color="text-neutral-600">Setting up your subscription...</Text>
             </div>
         );
     }
 
     if (paymentState.step === 'error') {
         return (
-            <div className="flex-1 h-full">
+            <div className="flex flex-col flex-1">
                 <div className="mb-6">
-                    <Btn onClick={onBack} className="text-primary-500 hover:text-primary-600">
+                    <Btn onClick={onBack} className="text-primary-500 hover:text-primary-600 !border-none">
                         ← Back to plan selection
                     </Btn>
                 </div>
@@ -209,7 +210,7 @@ export const StripePaymentForm = ({
                         </svg>
                     </div>
                     <Text as="h2" size="xl" weight="bold" className="text-red-600 mb-2">
-                        Subscription Failed
+                        Subscription Failed...
                     </Text>
                     <Text size="base" color="text-neutral-600" className="mb-6">
                         {paymentState.error}
@@ -217,12 +218,9 @@ export const StripePaymentForm = ({
                     <div className="space-y-3">
                         <Btn
                             onClick={() => setPaymentState(prev => ({ ...prev, step: 'ready', error: undefined, isProcessing: false }))}
-                            className="bg-primary-500 text-white w-full"
+                            className="bg-secondary-500 text-white w-full hover:!scale-95"
                         >
                             Try Again
-                        </Btn>
-                        <Btn onClick={onBack} className="w-full">
-                            Back to Plans
                         </Btn>
                     </div>
                 </div>
@@ -232,7 +230,7 @@ export const StripePaymentForm = ({
 
     if (paymentState.step === 'success') {
         return (
-            <div className="flex-1 h-full flex items-center justify-center">
+            <div className="flex-1 flex flex-col items-center justify-center">
                 <div className="text-center p-8">
                     <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
                         <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -274,28 +272,19 @@ export const StripePaymentForm = ({
                             </div>
                         </div>
                     )}
-
-                    <div className="space-y-3">
-                        <Btn
-                            onClick={() => window.location.href = '/dashboard'}
-                            className="bg-primary-500 text-white w-full"
-                        >
-                            Go to Dashboard
-                        </Btn>
-                        <Btn
-                            onClick={() => window.location.href = '/profile'}
-                            className="w-full"
-                        >
-                            View Subscription
-                        </Btn>
-                    </div>
+                    <Btn
+                        onClick={onBack}
+                        className="w-full !text-white bg-primary-500"
+                    >
+                        View Subscription
+                    </Btn>
                 </div>
             </div>
         );
     }
 
     return (
-        <div className="flex-1 h-full relative">
+        <div className="relative flex flex-col flex-1 h-full">
             {/* Processing Overlay */}
             {paymentState.isProcessing && (
                 <div className="absolute inset-0 bg-white bg-opacity-90 flex items-center justify-center z-50 rounded-lg">
@@ -310,17 +299,16 @@ export const StripePaymentForm = ({
                     </div>
                 </div>
             )}
-
-            <div className="mb-6">
+            <div className="">
                 <button onClick={onBack} className="text-primary-500 hover:text-primary-600 hover:font-semibold transition-all ease-in-out mb-4">
                     ← Back to plan selection
                 </button>
-                <Text as="h1" size="2xl" weight="bold" className="!font-grotesk text-primary-500">
+                <Text as="h1" size="xl" weight="bold" className="!font-grotesk text-primary-500">
                     Complete Your Subscription
                 </Text>
             </div>
-            <div className="h-full lg:overflow-y-auto p-1.5 pt-2 pb-28">
-                <div className="flex flex-col justify-between gap-6">
+            <div className="h-full lg:overflow-y-auto p-1.5 mt-4 mb-20">
+                <div className="space-y-6">
                     <div className="space-y-6">
                         {paymentState.isLoadingCustomer && (
                             <div className="bg-blue-50 border border-blue-200 rounded-md p-3">
@@ -333,12 +321,11 @@ export const StripePaymentForm = ({
 
                         {paymentState.customerData && !paymentState.isLoadingCustomer && (
                             <div className="bg-green-50 border border-green-200 rounded-md p-3">
-                                <Text className="text-green-800 text-sm font-medium">✓ Welcome back!</Text>
                                 <Text className="text-green-700 text-sm">
-                                    Account found: {paymentState.customerData.fullName}
+                                    Customer Name: <strong>{paymentState.customerData.fullName}</strong>
                                 </Text>
                                 {paymentState.customerData.hasActiveSubscription && (
-                                    <div className="mt-2 p-2 bg-amber-100 rounded text-amber-800 text-xs">
+                                    <div className="mt-2 p-2 bg-amber-100 rounded text-secondary-700 text-xs">
                                         <strong>Note:</strong> You already have an active subscription. This will replace it.
                                     </div>
                                 )}
@@ -352,7 +339,7 @@ export const StripePaymentForm = ({
                             </Text>
                         </div>
 
-                        <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-4 rounded-lg border border-blue-200">
+                        <div className="bg-gradient-to-r from-primary-100 to-secondary-100 to-90% p-4 rounded-lg border border-blue-200">
                             <Text size="sm" color="text-neutral-600" className="mb-2">
                                 Selected Plan:
                             </Text>
@@ -398,8 +385,9 @@ export const StripePaymentForm = ({
                                 Payment Method
                             </Text>
                             <div className="border border-gray-300 rounded-lg p-4 bg-white focus-within:border-primary-500 focus-within:ring-2 focus-within:ring-primary-200">
-                                <CardElement options={cardElementOptions} />
+                                <CardElement options={cardElementOptions} onFocus={()=> setCardRequirements(true)} onBlur={()=> setCardRequirements(false)} />
                             </div>
+                            {cardRequirements && <Text size="2xs" className='text-notification mt-1'>All Fields are required...</Text>}
                             <Text size="xs" color="text-neutral-500" className="mt-2">
                                 Your payment information is secure and encrypted. You won't be charged during the 7-day trial.
                             </Text>
@@ -418,9 +406,9 @@ export const StripePaymentForm = ({
 
                         <div className="text-xs text-gray-500 bg-gray-50 p-3 rounded border">
                             By starting your subscription, you agree to our{' '}
-                            <a href="/terms" className="text-primary-600 hover:underline">Terms of Service</a>{' '}
+                            <Link to="/terms" className="text-primary-600 hover:underline"><strong>Terms of Service</strong></Link>{' '}
                             and{' '}
-                            <a href="/privacy" className="text-primary-600 hover:underline">Privacy Policy</a>.
+                            <Link to="/privacy" className="text-primary-600 hover:underline"><strong>Privacy Policy</strong></Link>.
                             You can cancel anytime during or after your trial period.
                         </div>
                     </div>
