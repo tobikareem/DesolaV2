@@ -219,7 +219,7 @@ export const SubscriptionContent = () => {
                 <Btn
                   onClick={() => {
                     handlePlanSelection()
-                    if (!isSubscribed && !isCustomerCreated && customerData) {
+                    if (selectedPlan && !isSubscribed && !isCustomerCreated && customerData) {
                       createCustomer({ ...customerData })
                     }
                   }}
