@@ -18,4 +18,5 @@ export const ENDPOINTS_API_PATH ={
     stripe_getPaymentIntent: 'subscription/paymentIntent',
     stripe_createSubscription: 'subscription/create-direct',
     stripe_cancelSubscription: 'subscription/cancel',
+    stripe_getCustomerSubscriptionDetails: 'customer/subscription',
 }

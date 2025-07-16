@@ -1,16 +1,17 @@
 import { CardElement, CardElementProps, useElements, useStripe } from '@stripe/react-stripe-js';
 import { useEffect, useState } from "react";
+import { Link } from 'react-router-dom';
 import { Btn } from "../../components/ui/Button";
 import { Text } from "../../components/ui/TextComp";
 import useApi from "../../hooks/useApi";
+import useCustomerApi from '../../hooks/useCustomerApi';
 import { useSubscription } from "../../hooks/useSubscription";
 import { CustomerSignupResponse } from "../../models/payment/CustomerSignupResponse";
 import { StripePaymentFormProps } from "../../models/payment/StripePaymentFormProps";
 import { CreateDirectSubscriptionRequest, CreateSubscriptionResult } from "../../models/payment/SubscriptionResult";
 import { STRIPE } from "../../utils/constants";
 import { ENDPOINTS_API_PATH } from "../../utils/endpoints";
-import { Link } from 'react-router-dom';
-import useCustomerApi from '../../hooks/useCustomerApi';
+import { SelectedPlanCard } from '../../components/layout/SubscriptionInfoCard';
 
 
 const cardElementOptions: CardElementProps['options'] = {
@@ -38,13 +39,13 @@ export const StripePaymentForm = ({
     onError,
     onBack
 }: StripePaymentFormProps) => {
-    const {getCustomerByEmail} = useCustomerApi();
+    const { getCustomerByEmail } = useCustomerApi();
     const stripe = useStripe();
     const elements = useElements();
     const { getData, postData } = useApi();
     const { monthlyPrice, yearlyPrice, paymentState, setPaymentState, setIsSubscribed, setIsCustomerCreated } = useSubscription();
     const [cardRequirements, setCardRequirements] = useState<boolean>(false)
-   
+
     useEffect(() => {
         const fetchCustomer = async () => {
             if (!customerProfileInfo.email) {
@@ -66,7 +67,7 @@ export const StripePaymentForm = ({
 
             } catch (error) {
                 console.error('Error fetching customer:', error);
-                
+
                 setPaymentState(prev => ({
                     ...prev,
                     step: 'ready',
@@ -76,11 +77,11 @@ export const StripePaymentForm = ({
         };
 
         fetchCustomer();
-    }, [customerProfileInfo.email, getData]);
+    }, [customerProfileInfo.email, getData, setPaymentState]);
 
-    useEffect(()=>{
-        const checkSubscription = async()=> {
-            try{
+    useEffect(() => {
+        const checkSubscription = async () => {
+            try {
                 const customer = await getCustomerByEmail(customerProfileInfo?.email);
                 setIsSubscribed(!!customer?.hasActiveSubscription);
                 setIsCustomerCreated(customer)
@@ -89,7 +90,7 @@ export const StripePaymentForm = ({
             }
         }
         checkSubscription()
-    },[paymentState?.step === 'success'])
+    }, [customerProfileInfo?.email, getCustomerByEmail, setIsCustomerCreated, setIsSubscribed, paymentState.step])
 
     const handleSubmit = async () => {
 
@@ -189,7 +190,7 @@ export const StripePaymentForm = ({
     if (paymentState.step === 'loading') {
         return (
             <div className="flex flex-col flex-1 justify-center items-center">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 mx-auto mb-4"/>
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 mx-auto mb-4" />
                 <Text size="base" color="text-neutral-600">Setting up your subscription...</Text>
             </div>
         );
@@ -289,7 +290,7 @@ export const StripePaymentForm = ({
             {paymentState.isProcessing && (
                 <div className="absolute inset-0 bg-white bg-opacity-90 flex items-center justify-center z-50 rounded-lg">
                     <div className="text-center">
-                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 mx-auto mb-4"/>
+                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 mx-auto mb-4" />
                         <Text size="base" color="text-neutral-600" weight="medium">
                             Creating your subscription...
                         </Text>
@@ -332,41 +333,17 @@ export const StripePaymentForm = ({
                             </div>
                         )}
 
+                        <SelectedPlanCard
+                            selectedPlan={selectedPlan}
+                            planPrice={planPrice}
+                            showSavings={true}
+                        />
+
                         <div className="bg-blue-50 border border-blue-200 rounded-md p-3">
                             <Text className="text-blue-800 text-sm font-medium">One-Step Subscription</Text>
                             <Text className="text-blue-700 text-xs mt-1">
                                 Your subscription will be created immediately with a 7-day free trial.
                             </Text>
-                        </div>
-
-                        <div className="bg-gradient-to-r from-primary-100 to-secondary-100 to-90% p-4 rounded-lg border border-blue-200">
-                            <Text size="sm" color="text-neutral-600" className="mb-2">
-                                Selected Plan:
-                            </Text>
-                            <div className="flex justify-between items-center mb-2">
-                                <Text size="lg" fontStyle='font-grotesk' weight="bold">
-                                    {selectedPlan} Subscription
-                                </Text>
-                                <Text size="xl" weight="bold" className="text-primary-500">
-                                    ${planPrice}
-                                </Text>
-                            </div>
-                            <div className="space-y-1 text-xs text-gray-600">
-                                <div className="flex justify-between">
-                                    <span>Billing:</span>
-                                    <span>{selectedPlan.toLowerCase()}</span>
-                                </div>
-                                <div className="flex justify-between">
-                                    <span>Free Trial:</span>
-                                    <span className="text-green-600 font-medium">7 days</span>
-                                </div>
-                                {selectedPlan === 'Yearly' && (
-                                    <div className="flex justify-between text-green-600">
-                                        <span>Annual Savings:</span>
-                                        <span className="font-medium">15% OFF ($5.38)</span>
-                                    </div>
-                                )}
-                            </div>
                         </div>
 
                         <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
@@ -385,7 +362,7 @@ export const StripePaymentForm = ({
                                 Payment Method
                             </Text>
                             <div className="border border-gray-300 rounded-lg p-4 bg-white focus-within:border-primary-500 focus-within:ring-2 focus-within:ring-primary-200">
-                                <CardElement options={cardElementOptions} onFocus={()=> setCardRequirements(true)} onBlur={()=> setCardRequirements(false)} />
+                                <CardElement options={cardElementOptions} onFocus={() => setCardRequirements(true)} onBlur={() => setCardRequirements(false)} />
                             </div>
                             {cardRequirements && <Text size="2xs" className='text-notification mt-1'>All Fields are required...</Text>}
                             <Text size="xs" color="text-neutral-500" className="mt-2">
@@ -420,8 +397,8 @@ export const StripePaymentForm = ({
                             fontStyle="work"
                             radius="48px"
                             className={`w-full h-12 text-base ${paymentState.isProcessing || !stripe
-                                    ? 'bg-gray-400 cursor-not-allowed text-gray-600'
-                                    : 'bg-gradient-to-b from-[#FF9040] to-[#FF6B00] text-neutral-100'
+                                ? 'bg-gray-400 cursor-not-allowed text-gray-600'
+                                : 'bg-gradient-to-b from-[#FF9040] to-[#FF6B00] text-neutral-100'
                                 } hover:!scale-95 `}
                         >
                             {paymentState.isProcessing ? (
