@@ -90,7 +90,7 @@ export const StripePaymentForm = ({
             }
         }
         checkSubscription()
-    }, [customerProfileInfo?.email, getCustomerByEmail, setIsCustomerCreated, setIsSubscribed])
+    }, [customerProfileInfo?.email, getCustomerByEmail, setIsCustomerCreated, setIsSubscribed, paymentState.step])
 
     const handleSubmit = async () => {
 
