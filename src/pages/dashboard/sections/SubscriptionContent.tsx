@@ -49,10 +49,10 @@ export const SubscriptionContent = () => {
   }, [customerProfile?.email, customerProfile?.fullName, customerProfile?.id, customerProfile?.phone, customerProfile?.preferences.currency, preferences.originAirport, setCustomerData]);
 
   const CancelDetails: CancelSubscriptionProps = {
-    stripeCustomerId: isCustomerCreated?.stripeCustomerId || '',
+    stripeCustomerId: isCustomerCreated?.customer?.stripeCustomerId || '',
     CancelAtPeriodEnd: true,
     CancellationReason: inputValue,
-    customerId: isCustomerCreated?.customerId || '',
+    customerId: isCustomerCreated?.customer?.customerId || '',
     customerEmail: customerData?.email || ''
   };
 
@@ -94,8 +94,9 @@ export const SubscriptionContent = () => {
               {customerProfile && (
                 <SubscriptionInfoCard
                   customerName={customerProfile?.fullName}
-                  subscriptionStatus={isSubscribed ? 'active' : 'inactive'}
-                  currentPlan={selectedPlan || 'Yearly'}
+                  subscriptionStatus={isCustomerCreated?.status}
+                  currentPlan={isCustomerCreated?.currentPlan}
+                  startDate={isCustomerCreated?.subscriptions[0]?.currentPeriodStart?.slice(0,10)}
                   expirationDate={isCustomerCreated?.subscriptionExpiresAt?.slice(0, 10)}
                   className="mb-1"
                   gradientFrom="from-blue-50"
@@ -114,7 +115,7 @@ export const SubscriptionContent = () => {
 
             <div className="space-y-4">
               {isSubscribed ? (
-                <div className="flex flex-col md:flex-row gap-3">
+                <div className="flex gap-3">
 
                   <Btn
                     onClick={() => setShowCancelForm(true)}
