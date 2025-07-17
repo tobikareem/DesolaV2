@@ -57,7 +57,8 @@ export const UserContent: React.FC = () => {
         <ProfileSection />
 
         {preferencesLoading ? (
-          <div className="py-8 flex justify-center">
+          <div className="py-8 flex justify-center gap-2 items-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500"/>
             <span>Loading your preferences...</span>
           </div>
         ) : (

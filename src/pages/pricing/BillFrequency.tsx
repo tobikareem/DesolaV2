@@ -17,7 +17,7 @@ export const BillFrequency =({selectedPlan, setSelectedPlan, plans, YearlyPrice,
     <PricingCard title="BILL FREQUENCY">
       <RadioGroup value={selectedPlan} 
         onChange={setSelectedPlan} 
-        aria-label="Payment Plan" className='w-full space-y-4'
+        aria-label="Payment Plan" className='w-full space-y-2'
       >
         {plans.map((plan) => { 
           const checked = selectedPlan == plan 
@@ -31,7 +31,7 @@ export const BillFrequency =({selectedPlan, setSelectedPlan, plans, YearlyPrice,
               >
                 <span className={`size-full rounded-full ${checked ? 'bg-primary-500':'bg-modal'}`} />
               </Radio>
-              <Label className={`flex items-center w-full h-12 lg:h-[52px] justify-between p-2 md:p-2.5 rounded-[10px] border ${checked ? 'border-primary-500':'border-modal'} cursor-pointer`}>
+              <Label className={`flex items-center w-full h-12 lg:h-16 justify-between p-2 md:p-3 rounded-[10px] border ${checked ? 'border-primary-500':'border-modal'} cursor-pointer`}>
                 <Label className="font-work font-medium text-base text-Neutral cursor-pointer">
                   {plan}
                 </Label>
