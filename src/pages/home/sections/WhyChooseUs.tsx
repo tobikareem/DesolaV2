@@ -1,12 +1,11 @@
 import { IoCheckmarkCircleSharp } from "react-icons/io5";
 import { Img as ReactImage } from 'react-image';
-import { useNavigate } from "react-router-dom";
 import { Btn } from "../../../components/ui/Button";
 import { Text } from "../../../components/ui/TextComp";
 import { useSmoothScroll } from "../../../hooks/useSmoothScroll";
+import authService from "../../../services/authService";
 
 export const WhyChooseUs = () => {
-    const navigate = useNavigate();
     const smoothScroll = useSmoothScroll();
     return (
         <section id="why-choose-us"
@@ -40,7 +39,7 @@ export const WhyChooseUs = () => {
                     </div>
                 </div>
                 <div className="flex flex-col lg:flex-row items-center lg:items-start gap-4.5 mt-10">
-                    <Btn onClick={() => navigate("/signup")}
+                    <Btn onClick={() => authService.signIn()}
                         className="bg-white w-full lg:max-w-[250px] text-nowrap lg:text-lg lg:px-7 lg:h-14 text-primary-500">
                         Sign Up
                     </Btn>
