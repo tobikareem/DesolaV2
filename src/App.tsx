@@ -10,7 +10,7 @@ import { AppProvider } from './providers/AppProvider';
 import authService from './services/authService';
 import { CustomStorage } from './utils/customStorage';
 import LoadingScreen from './components/layout/LoadingScreen';
-import AdminScreen from './pages/admin/AdminScreen';
+import AdminDashboardScreen from './pages/admin/AdminDashboardScreen';
 const Footer = lazy(() => import('./components/layout/Footer'));
 const ForgetPassword = lazy(() => import('./pages/auth/ForgetPassword'));
 const RedirectToLogin = lazy(() => import('./pages/auth/RedirectToLogin'));
@@ -51,7 +51,7 @@ function App() {
   ];
   const privateRoutes: RouteType[] = [
     { path: '/dashboard', element: <Dashboard />, name: 'Dashboard' },
-    { path: '/admin', element: <AdminScreen/>, name: 'Admin'}
+    { path: '/admin', element: <AdminDashboardScreen/>, name: 'Admin'}
   ];
 
 
