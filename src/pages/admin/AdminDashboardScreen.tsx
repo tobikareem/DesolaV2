@@ -1,7 +1,7 @@
-import { AdminLeftPanel } from "./LeftPanel";
-import { AdminRightPanel } from "./RightPanel";
+import { AdminLeftPanel } from "./AdminLeftPanel";
+import { AdminRightPanel } from "./AdminRightPanel";
 
-const AdminDashboard = () => {
+const AdminDashboardScreen = () => {
   return (
     <div className="bg-background flex w-full h-svh lg:h-screen">
       <section className="bg-neutral-100 absolute z-10 lg:static flex w-[80%] lg:w-[20%] border border-neutral-300 -translate-x-[100%] lg:translate-x-0">
@@ -13,4 +13,4 @@ const AdminDashboard = () => {
     </div>
   )
 }
-export default AdminDashboard;
+export default AdminDashboardScreen;
