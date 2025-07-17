@@ -1,70 +1,22 @@
-// import { useState } from "react"
-// import { CustomerSignupRequest, CustomerSignupResponse } from "../models/payment/CustomerSignupRequest"
-// import useApi from "./useApi"
-// import { useAuthInfo } from "./useAuthInfo";
-// import { ENDPOINTS_API_PATH } from "../utils/endpoints";
-// import { toast } from "react-toastify";
-// import { PaymentIntentRequest } from "../models/payment/PaymentIntentRequest";
+import { useCallback } from "react";
+import useApi from "./useApi";
+import { CreateDirectSubscriptionRequest, CreateSubscriptionResult } from "../models/payment/SubscriptionResult";
+import { ENDPOINTS_API_PATH } from "../utils/endpoints";
 
+export const usePayment = ()=> {
+  
+  const {postData} = useApi()
+  
 
-// export const usePayment =()=> {
-//   const {postData, putData} = useApi();
-//   const { accountInfo, isAuthenticated } = useAuthInfo();
+  const createPaymentIntent = useCallback(async(paymentDetails:CreateDirectSubscriptionRequest): Promise<CreateSubscriptionResult | null> => {
+    try {
+      const response = await postData<CreateDirectSubscriptionRequest, CreateSubscriptionResult>(`${ENDPOINTS_API_PATH?.stripe_createPaymentIntent}`, paymentDetails);
+      return response || null;
+    } catch (error) {
+      console.error("Error creating payment intent:", error);
+      return null;
+    }
+  },[postData])
 
-//   const customerDetails = {
-//       fullName: accountInfo?.fullName,
-//       email: accountInfo?.emailAddress,
-//       phone:'',
-//       preferredCurrency: 'USD',
-//       defaultOriginAirport: 'ATL', // the busiest airport
-//       metadata: {}
-//     } as CustomerSignupRequest
-//   const [loading, setLoading] = useState<boolean>(false);
-//   const [payResponse, setPayResponse] = useState<CustomerSignupResponse | object>({});
-
-//   const CustomerSignupPaymentRequestFn = async()=> {
-//     setLoading(true)
-//     try {
-//       if (accountInfo && isAuthenticated) {
-//         const req = await postData<CustomerSignupRequest>(`${ENDPOINTS_API_PATH?.customerSignupPaymentRequest}`, customerDetails) 
-//         setPayResponse(req as CustomerSignupResponse)
-//       }
-//     } catch (error) {
-//       console.log(error instanceof Error ? error.message : String(error))
-//     } finally {
-//       setLoading(false)
-//     }
-//   }
-
-//   const [updating, setUpdating] = useState<boolean>(false);
-
-//   const CustomerUpdatePaymentRequestFn = async(details:CustomerSignupRequest) => {
-//     setUpdating(true)
-//     try {
-//       await putData<CustomerSignupRequest>(`${ENDPOINTS_API_PATH?.customerUpdatePaymentRequest}`, details)
-      
-//     } catch (error) {
-//       console.log(error instanceof Error ? error.message : String(error))
-//     } finally {
-//       setUpdating(false)
-//     }
-//   }
-
-//   const PaymentIntentFn = async(details:PaymentIntentRequest)=> {
-
-//     try{
-//       await postData<PaymentIntentRequest>(`${ENDPOINTS_API_PATH?.paymentIntent}`, details)
-//     } catch (error) {
-//         console.log(error instanceof Error ? error.message : String(error))
-//     } finally {
-      
-//     }
-//   }
-
-//   return {CustomerSignupPaymentRequestFn,
-//     payResponse, 
-//     loading, 
-//     CustomerUpdatePaymentRequestFn,
-//     PaymentIntentFn,
-//   }
-// }
+  return{createPaymentIntent};
+}

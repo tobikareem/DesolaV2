@@ -1,11 +1,14 @@
+import { Listbox, ListboxButton, ListboxOption, ListboxOptions } from '@headlessui/react';
 import { useState } from "react";
-import { Text } from "../ui/TextComp";
+import { MdKeyboardArrowDown } from "react-icons/md";
+import { useAuthInfo } from "../../hooks/useAuthInfo";
+import useCustomerApi from "../../hooks/useCustomerApi";
 import { Airport, UserPreferences } from "../../hooks/useDashboardInfo";
+import { CustomerSignupRequest } from "../../models/payment/CustomerSignupRequest";
 import { Btn } from "../ui/Button";
 import { Input } from "../ui/InputField";
+import { Text } from "../ui/TextComp";
 import { AirportSuggestions } from "./airport-suggestions";
-import { Listbox, ListboxButton, ListboxOption, ListboxOptions } from '@headlessui/react'
-import { MdKeyboardArrowDown } from "react-icons/md";
 
 // Editable preferences section
 export const PreferencesSection = ({
@@ -23,20 +26,29 @@ export const PreferencesSection = ({
     airportSuggestions: Airport[];
     onAirportSelect: (code: string, field: string) => void;
 }) => {
+    const { customerProfile } = useAuthInfo();
+    const { updateCustomer } = useCustomerApi();
     const [activeField, setActiveField] = useState<string | null>(null);
     const [filteredSuggestions, setFilteredSuggestions] = useState<Airport[]>(airportSuggestions);
-
     const handleAirportInputChange = (value: string) => {
         const filtered = airportSuggestions.filter(
             (airport) =>
-            airport.name.toLowerCase().includes(value.toLowerCase()) ||
-            airport.city.toLowerCase().includes(value.toLowerCase()) ||
-            airport.code.toLowerCase().includes(value.toLowerCase())
+                airport.name.toLowerCase().includes(value.toLowerCase()) ||
+                airport.city.toLowerCase().includes(value.toLowerCase()) ||
+                airport.code.toLowerCase().includes(value.toLowerCase())
         );
         setFilteredSuggestions(filtered);
     };
-    
-    
+
+    const customerData: CustomerSignupRequest = {
+        fullName: customerProfile?.fullName || '',
+        email: customerProfile?.email || '',
+        phone: customerProfile?.phone || '',
+        preferredCurrency: 'USD',
+        defaultOriginAirport: preferences?.originAirport,
+        metadata: {}
+    }
+
     return (
         <div className="h-full">
             <Text as="h2" size="xl" weight="bold" className="text-primary-500 mb-3">
@@ -123,7 +135,7 @@ export const PreferencesSection = ({
                         </ListboxButton>
                         <ListboxOptions className={`absolute w-full border border-neutral-300 rounded-[10px] mt-1 bg-neutral-200 z-10 overflow-hidden`}>
                             {
-                                ['Economy','Business','First Class'].map((option) => (
+                                ['Economy', 'Business', 'First Class'].map((option) => (
 
                                     <ListboxOption value={option}
                                         key={option}
@@ -144,12 +156,12 @@ export const PreferencesSection = ({
                         Number of Stop-Overs
                     </label>
                     <Listbox
-                            name="stopOvers"
-                            value={preferences.stopOvers}
-                            onChange={(value) => {
-                                onChange({ target: { name: 'stopOvers', value } } as React.ChangeEvent<HTMLSelectElement>)
-                            }}
-                        >
+                        name="stopOvers"
+                        value={preferences.stopOvers}
+                        onChange={(value) => {
+                            onChange({ target: { name: 'stopOvers', value } } as React.ChangeEvent<HTMLSelectElement>)
+                        }}
+                    >
                         <ListboxButton className="font-work flex items-center w-full border px-4 py-2 rounded-[10px] justify-between hover:bg-neutral-300 text-Neutral font-medium">
                             <span>
                                 {preferences.stopOvers}
@@ -158,7 +170,7 @@ export const PreferencesSection = ({
                         </ListboxButton>
                         <ListboxOptions className={`absolute w-full border border-neutral-300 rounded-[10px] mt-1 bg-neutral-200 z-10 overflow-hidden`}>
                             {
-                                ['Non-Stop','1 Stop','2+ Stops'].map((option) => (
+                                ['Non-Stop', '1 Stop', '2+ Stops'].map((option) => (
 
                                     <ListboxOption value={option}
                                         key={option}
@@ -173,7 +185,7 @@ export const PreferencesSection = ({
                     </Listbox>
                 </div>
 
-                <Btn onClick={onSave} className="!hover:scale-95 w-full bg-success text-white px-6 py-2 mb-4 lg:mb-8 ">
+                <Btn onClick={() => { onSave(); updateCustomer({ ...customerData }) }} className="hover:!scale-95 w-full bg-success text-white px-6 py-2 mb-4 lg:mb-8 ">
                     Save Preferences
                 </Btn>
             </div>

@@ -15,6 +15,7 @@ const SubscriptionModal: React.FC<SubscriptionModalProps> = ({ Action, ConfirmAc
         src={Subcription}
         alt="Subscription"
         className="object-center max-w-lg"
+        loading="lazy"
       />
       <Text
         as="h3"
@@ -25,7 +26,7 @@ const SubscriptionModal: React.FC<SubscriptionModalProps> = ({ Action, ConfirmAc
         Do you want to subscribe to Desola Flight?
       </Text>
 
-      <div className="flex flex-col md:flex-row justify-center items-center mt-6 gap-6 w-full">
+      <div className="flex flex-col md:flex-row justify-center items-center mt-4 gap-6 w-full">
         <Btn
           className="px-4 py-2 bg-neutral-300 text-Neutral w-full md:w-auto max-w-md"
           onClick={Action}
@@ -39,6 +40,9 @@ const SubscriptionModal: React.FC<SubscriptionModalProps> = ({ Action, ConfirmAc
           Yes, Subscribe
         </Btn>
       </div>
+      <Text size="2xs" className="lg:!text-xs !text-neutral-500 text-center mt-4 max-w-2xl">
+        By clicking 'Subscribe', you agree to our subscription terms, including automatic renewal and payment processing. You can cancel your subscription at any time, and cancellation will take effect at the end of the current billing cycle. See our full terms and conditions for details.
+      </Text>
     </div>
   );
 };

@@ -14,7 +14,7 @@ export const PricingCard =({title,children}:PricingCardProps)=> {
   return (
     <div className="bg-white w-full p-3 rounded-2xl ">
       <PricingTitle title={title}/>
-      <div className="w-full mt-6">
+      <div className="w-full mt-4">
         {children}
       </div>
     </div>

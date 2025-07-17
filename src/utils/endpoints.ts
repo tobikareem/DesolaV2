@@ -11,12 +11,6 @@ export const ENDPOINTS_API_PATH ={
     track: 'track',
     flight_trackHistory: 'flight/trackHistory',
     desolaAI: 'api/ask/',
-    customerSignupPaymentRequest:'customer/signup',
-    customerUpdatePaymentRequest: 'customer/update',
-    paymentIntent:'payment/intent/create',
-    subscriptionCreate:'subscription/create',
-    confirmSubscription:'payment/intent/confirm',
-    cancelSubscription:'subscription/cancel',
     stripe_getCustomer: 'customer',
     stripe_createCustomer: 'customer/signup',
     stripe_updateCustomer: 'customer/update',
@@ -24,4 +18,5 @@ export const ENDPOINTS_API_PATH ={
     stripe_getPaymentIntent: 'subscription/paymentIntent',
     stripe_createSubscription: 'subscription/create-direct',
     stripe_cancelSubscription: 'subscription/cancel',
+    stripe_getCustomerSubscriptionDetails: 'customer/subscription',
 }
