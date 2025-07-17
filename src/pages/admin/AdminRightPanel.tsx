@@ -1,6 +1,12 @@
 import { GiHamburgerMenu } from "react-icons/gi"
 import { Text } from "../../components/ui/TextComp"
-export const AdminRightPanel =()=> {
+
+
+interface AdminRightPanelProps {
+  Action: ()=> void;
+}
+
+export const AdminRightPanel =({Action}:AdminRightPanelProps)=> {
   
   // const View =()=> {
   //   // switch ()
@@ -9,7 +15,7 @@ export const AdminRightPanel =()=> {
     <div className="flex flex-col w-full h-full">
       <div className="bg-neutral-100 border-b border-neutral-300 flex items-center gap-4 w-full h-20 lg:h-30 px-4 sm:px-6">
         <div className="">
-          <div 
+          <div onClick={Action}
             className={`block lg:hidden text-primary-600 text-xl`}>
             <GiHamburgerMenu />
           </div>
@@ -20,7 +26,7 @@ export const AdminRightPanel =()=> {
         </div>
       </div>
       <div className="flex-1 w-full h-full overflow-y-auto p-6 lg:pr-[5%]">
-        
+        {}
       </div>
     </div>
   )
