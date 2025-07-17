@@ -1,12 +1,12 @@
 import{ createContext} from 'react';
-import { CustomerSignupResponse } from '../models/payment/CustomerSignupResponse';
 import { CustomerSignupRequest } from '../models/payment/CustomerSignupRequest';
+import { customerSubscriptionResponse } from '../models/payment/customerSubscription';
 
 export interface SubscriptionContextType {
   isSubscribed: boolean | null;
   setIsSubscribed: (value: boolean | null) => void;
-  isCustomerCreated: CustomerSignupResponse | null;
-  setIsCustomerCreated: (value: CustomerSignupResponse | null) => void;
+  isCustomerCreated: customerSubscriptionResponse | null;
+  setIsCustomerCreated: (value: customerSubscriptionResponse | null) => void;
   customerData: CustomerSignupRequest | undefined;
   setCustomerData: (value: CustomerSignupRequest | undefined) => void;
 }

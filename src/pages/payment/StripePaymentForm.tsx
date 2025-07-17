@@ -39,7 +39,7 @@ export const StripePaymentForm = ({
     onError,
     onBack
 }: StripePaymentFormProps) => {
-    const { getCustomerByEmail } = useCustomerApi();
+    const { getCustomerSubscription } = useCustomerApi();
     const stripe = useStripe();
     const elements = useElements();
     const { getData, postData } = useApi();
@@ -82,7 +82,7 @@ export const StripePaymentForm = ({
     useEffect(() => {
         const checkSubscription = async () => {
             try {
-                const customer = await getCustomerByEmail(customerProfileInfo?.email);
+                const customer = await getCustomerSubscription(customerProfileInfo?.email);
                 setIsSubscribed(!!customer?.hasActiveSubscription);
                 setIsCustomerCreated(customer)
             } catch (error) {
@@ -90,7 +90,7 @@ export const StripePaymentForm = ({
             }
         }
         checkSubscription()
-    }, [customerProfileInfo?.email, getCustomerByEmail, setIsCustomerCreated, setIsSubscribed, paymentState.step])
+    }, [customerProfileInfo?.email, getCustomerSubscription, setIsCustomerCreated, setIsSubscribed, paymentState.step])
 
     const handleSubmit = async () => {
 

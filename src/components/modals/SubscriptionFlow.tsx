@@ -15,7 +15,7 @@ export const SubscriptionFlowModal =({Action}:{Action:()=>void})=> {
   const {stage} = useSubscription();
   const {toggleSubscriptionModal, showSubscriptionModal} = useModals();
   const storage = new CustomStorage();
-  const {getCustomerByEmail, createCustomer} = useCustomerApi();
+  const {getCustomerSubscription, createCustomer} = useCustomerApi();
   const { isSubscribed, setIsSubscribed, setIsCustomerCreated, isCustomerCreated } = useSubscription();
   const { preferences } = useDashboardInfo();
 
@@ -39,11 +39,8 @@ export const SubscriptionFlowModal =({Action}:{Action:()=>void})=> {
             createCustomer({...customerData })
           }
         }}/>
-      // case 2: 
-        // return <CardSubscriptionModal onCancel={toggleSubscriptionModal} onConfirm={()=> setStage(0)}/>
       default: return null
     }
-
   }
 
   useEffect(() => {
@@ -52,7 +49,7 @@ export const SubscriptionFlowModal =({Action}:{Action:()=>void})=> {
       if (customerProfile?.email) {
         try{
           if (!firstTimeLoad) {
-            const customer = await getCustomerByEmail(customerProfile?.email);
+            const customer = await getCustomerSubscription(customerProfile?.email);
             storage.setItem('Subscription', 'true');
             storage.setItem('customer', JSON.stringify(customer))
             setIsSubscribed(!!customer?.hasActiveSubscription);
@@ -74,8 +71,6 @@ export const SubscriptionFlowModal =({Action}:{Action:()=>void})=> {
     }
     checkSubscription()
   },[customerProfile?.email])
-
-  
 
   return(
     <>
