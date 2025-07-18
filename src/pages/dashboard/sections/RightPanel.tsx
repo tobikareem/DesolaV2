@@ -1,5 +1,5 @@
 import { Headset, House, LogOut, Trash2, User } from 'lucide-react';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState, Suspense } from 'react';
 import { PiHeadsetFill, PiRoadHorizonBold, PiRoadHorizonFill, PiTrashFill } from 'react-icons/pi';
 import { RiHome5Fill, RiRobot2Fill, RiRobot2Line, RiUserFill } from 'react-icons/ri';
 import { TbCreditCard, TbCreditCardFilled } from 'react-icons/tb';
@@ -17,14 +17,15 @@ import { NavItem } from '../../../contexts/types';
 import { UIContext } from '../../../contexts/UIContext';
 import { useAuthInfo } from '../../../hooks/useAuthInfo';
 import { CustomStorage } from '../../../utils/customStorage';
-import { DesolaAI } from './DesolaAI';
-import { HomeContent } from './HomeContent';
-import { SubscriptionContent } from './SubscriptionContent';
-import { SupportContent } from './SupportContent';
-import { TrashContent } from './TrashContent';
-import { TripHistoryContent } from './TripHistoryContent';
-import { UserContent } from './UserContent';
+import LoadingScreen from '../../../components/layout/LoadingScreen';
 
+const HomeContent = React.lazy(() => import('./HomeContent').then(module => ({ default: module.HomeContent })));
+const DesolaAI = React.lazy(() => import('./DesolaAI').then(module => ({ default: module.DesolaAI })));
+const TripHistoryContent = React.lazy(() => import('./TripHistoryContent').then(module => ({ default: module.TripHistoryContent })));
+const TrashContent = React.lazy(() => import('./TrashContent').then(module => ({ default: module.TrashContent })));
+const UserContent = React.lazy(() => import('./UserContent').then(module => ({ default: module.UserContent })));
+const SubscriptionContent = React.lazy(() => import('./SubscriptionContent').then(module => ({ default: module.SubscriptionContent })));
+const SupportContent = React.lazy(() => import('./SupportContent').then(module => ({ default: module.SupportContent })));
 
 const storageService = new CustomStorage();
 
@@ -45,7 +46,6 @@ export const RightPanel: React.FC = () => {
   const { showLogoutModal, showDeleteModal, showFlightModal, toggleModal } = useContext(UIContext);
   const { travelInfo } = useContext(ChatContext);
   const { logout } = useAuthInfo();
-
 
   const isSearchEnabled = () => {
     if (!travelInfo || typeof travelInfo !== 'object') {
@@ -138,6 +138,7 @@ export const RightPanel: React.FC = () => {
     const Component = TAB_COMPONENTS[selectedTab as 'AI' | 'road' | 'trash' | 'user' | 'subscription' | 'support'];
     return Component ? <Component departure={''} destination={''} departureDate={''} returnDate={''} travelRoute={''} flightClass={''} /> : null;
   };
+
   const isLastMessage = chatLog.length > 0 && chatLog[chatLog.length - 1].message.toLowerCase().includes('click the search button')
 
   return (
@@ -165,7 +166,9 @@ export const RightPanel: React.FC = () => {
         <div className="bg-white w-full">
           <div className="flex flex-col h-full justify-between pt-12">
             <div className="max-w-[600px] h-full lg:px-5 xl:px-8 overflow-hidden">
-              {renderContent()}
+              <Suspense fallback={<LoadingScreen message="Loading..." dimension="w-full h-full" background="bg-background" />}>
+                {renderContent()}
+              </Suspense>
             </div>
             {/* Search Button */}
             <div className="border-t items-center h-[120px] flex p-7">
