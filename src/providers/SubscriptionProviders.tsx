@@ -1,17 +1,24 @@
 
-import { useState, PropsWithChildren } from "react";
+import { PropsWithChildren, useState } from "react";
 import { SubscriptionContext } from "../contexts/subscriptionContext";
 import { CustomerSignupRequest } from "../models/payment/CustomerSignupRequest";
-import { CustomerSignupResponse } from "../models/payment/CustomerSignupResponse";
+import { CustomerSubscriptionResponse } from "../models/payment/customerSubscription";
 
 
 export const SubscriptionProvider: React.FC<PropsWithChildren> = ({ children }) => {
-    const [customerData, setCustomerData] = useState<CustomerSignupRequest | undefined>();
-    const [isSubscribed, setIsSubscribed] = useState<boolean | null>(null);
-    const [isCustomerCreated, setIsCustomerCreated] = useState<CustomerSignupResponse| null>(null);
+  const [customerFormData, setCustomerFormData] = useState<CustomerSignupRequest | undefined>();
+  const [isSubscribed, setIsSubscribed] = useState<boolean | null>(null);
+  const [customerSubscriptionData, setCustomerSubscriptionData] = useState<CustomerSubscriptionResponse | null>(null);
 
   return (
-    <SubscriptionContext.Provider value={{ customerData, setCustomerData, isSubscribed, setIsSubscribed, isCustomerCreated, setIsCustomerCreated }}>
+    <SubscriptionContext.Provider value={{
+      customerFormData,
+      setCustomerFormData,
+      isSubscribed,
+      setIsSubscribed,
+      customerSubscriptionData,
+      setCustomerSubscriptionData
+    }}>
       {children}
     </SubscriptionContext.Provider>
   );

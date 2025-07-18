@@ -24,7 +24,7 @@ const stripePromise = loadStripe(STRIPE.PUBLISHABLE_KEY);
 export const SubscriptionContent = () => {
   const { postData } = useApi();
   const { plans, selectedPlan, setSelectedPlan, monthlyPrice, yearlyPrice,
-    customerData, setCustomerData, isSubscribed, isCustomerCreated } = useSubscription();
+    customerFormData, setCustomerFormData, isSubscribed, customerSubscriptionData } = useSubscription();
   const [subscriptionStep, setSubscriptionStep] = useState<string>('subscription-management');
   const { preferences } = useDashboardInfo();
   const { customerProfile } = useAuthInfo();
@@ -34,7 +34,7 @@ export const SubscriptionContent = () => {
   const [showCancelForm, setShowCancelForm] = useState<boolean>(false)
 
   useEffect(() => {
-    setCustomerData({
+    setCustomerFormData({
       email: customerProfile?.email || '',
       fullName: customerProfile?.fullName || '',
       phone: customerProfile?.phone || 'N/A',
@@ -46,14 +46,14 @@ export const SubscriptionContent = () => {
         signupSource: 'web'
       }
     });
-  }, [customerProfile?.email, customerProfile?.fullName, customerProfile?.id, customerProfile?.phone, customerProfile?.preferences.currency, preferences.originAirport, setCustomerData]);
+  }, [customerProfile?.email, customerProfile?.fullName, customerProfile?.id, customerProfile?.phone, customerProfile?.preferences.currency, preferences.originAirport, setCustomerFormData]);
 
   const CancelDetails: CancelSubscriptionProps = {
-    stripeCustomerId: isCustomerCreated?.customer?.stripeCustomerId || '',
+    stripeCustomerId: customerSubscriptionData?.customer?.stripeCustomerId || '',
     CancelAtPeriodEnd: true,
     CancellationReason: inputValue,
-    customerId: isCustomerCreated?.customer?.customerId || '',
-    customerEmail: customerData?.email || ''
+    customerId: customerSubscriptionData?.customer?.customerId || '',
+    customerEmail: customerFormData?.email || ''
   };
 
   const CancelSubscription = async () => {
@@ -71,7 +71,7 @@ export const SubscriptionContent = () => {
   }
 
   const handlePlanSelection = () => {
-    if (selectedPlan && customerData) {
+    if (selectedPlan && customerFormData) {
       setSubscriptionStep('payment');
     }
   };
@@ -94,10 +94,10 @@ export const SubscriptionContent = () => {
               {customerProfile && (
                 <SubscriptionInfoCard
                   customerName={customerProfile?.fullName}
-                  subscriptionStatus={isCustomerCreated?.status}
-                  currentPlan={isCustomerCreated?.currentPlan}
-                  startDate={isCustomerCreated?.subscriptions[0]?.currentPeriodStart?.slice(0,10)}
-                  expirationDate={isCustomerCreated?.subscriptionExpiresAt?.slice(0, 10)}
+                  subscriptionStatus={customerSubscriptionData?.status}
+                  currentPlan={customerSubscriptionData?.currentPlan}
+                  startDate={customerSubscriptionData?.subscriptions[0]?.currentPeriodStart?.slice(0, 10)}
+                  expirationDate={customerSubscriptionData?.status === "trialing" ? customerSubscriptionData?.trialEnd?.slice(0, 10) : customerSubscriptionData?.subscriptionExpiresAt?.slice(0, 10) || 'N/A'}
                   className="mb-1"
                   gradientFrom="from-blue-50"
                   gradientTo="to-purple-50"
@@ -220,8 +220,8 @@ export const SubscriptionContent = () => {
                 <Btn
                   onClick={() => {
                     handlePlanSelection()
-                    if (selectedPlan && !isSubscribed && !isCustomerCreated && customerData) {
-                      createCustomer({ ...customerData })
+                    if (selectedPlan && !isSubscribed && !customerSubscriptionData && customerFormData) {
+                      createCustomer({ ...customerFormData })
                     }
                   }}
                   disabled={!selectedPlan}
@@ -244,7 +244,7 @@ export const SubscriptionContent = () => {
         return (
           <Elements stripe={stripePromise}>
             <StripePaymentForm
-              customerData={customerData!}
+              customerData={customerFormData!}
               selectedPlan={selectedPlan}
               onSuccess={handleSubscriptionSuccess}
               onError={handleSubscriptionError}
