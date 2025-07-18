@@ -1,6 +1,7 @@
 import { CardElement, CardElementProps, useElements, useStripe } from '@stripe/react-stripe-js';
 import { useEffect, useState } from "react";
 import { Link } from 'react-router-dom';
+import { SelectedPlanCard } from '../../components/layout/SubscriptionInfoCard';
 import { Btn } from "../../components/ui/Button";
 import { Text } from "../../components/ui/TextComp";
 import useApi from "../../hooks/useApi";
@@ -11,8 +12,6 @@ import { StripePaymentFormProps } from "../../models/payment/StripePaymentFormPr
 import { CreateDirectSubscriptionRequest, CreateSubscriptionResult } from "../../models/payment/SubscriptionResult";
 import { STRIPE } from "../../utils/constants";
 import { ENDPOINTS_API_PATH } from "../../utils/endpoints";
-import { SelectedPlanCard } from '../../components/layout/SubscriptionInfoCard';
-
 
 const cardElementOptions: CardElementProps['options'] = {
     style: {
@@ -31,7 +30,6 @@ const cardElementOptions: CardElementProps['options'] = {
     hidePostalCode: false,
 };
 
-
 export const StripePaymentForm = ({
     customerData: customerProfileInfo,
     selectedPlan,
@@ -43,7 +41,7 @@ export const StripePaymentForm = ({
     const stripe = useStripe();
     const elements = useElements();
     const { getData, postData } = useApi();
-    const { monthlyPrice, yearlyPrice, paymentState, setPaymentState, setIsSubscribed, setIsCustomerCreated } = useSubscription();
+    const { monthlyPrice, yearlyPrice, paymentState, setPaymentState, setIsSubscribed, setCustomerSubscriptionData } = useSubscription();
     const [cardRequirements, setCardRequirements] = useState<boolean>(false)
 
     useEffect(() => {
@@ -84,13 +82,13 @@ export const StripePaymentForm = ({
             try {
                 const customer = await getCustomerSubscription(customerProfileInfo?.email);
                 setIsSubscribed(!!customer?.hasActiveSubscription);
-                setIsCustomerCreated(customer)
+                setCustomerSubscriptionData(customer)
             } catch (error) {
                 throw new Error(`${error}`)
             }
         }
         checkSubscription()
-    }, [customerProfileInfo?.email, getCustomerSubscription, setIsCustomerCreated, setIsSubscribed, paymentState.step])
+    }, [customerProfileInfo?.email, getCustomerSubscription, setCustomerSubscriptionData, setIsSubscribed, paymentState.step])
 
     const handleSubmit = async () => {
 

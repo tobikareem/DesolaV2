@@ -1,4 +1,4 @@
-export interface customerSubscriptionResponse {
+export interface CustomerSubscriptionResponse {
     "customer": {
         "id": string;
         "customerId": string;

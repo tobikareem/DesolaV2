@@ -10,6 +10,7 @@ import { AppProvider } from './providers/AppProvider';
 import authService from './services/authService';
 import { CustomStorage } from './utils/customStorage';
 import LoadingScreen from './components/layout/LoadingScreen';
+import AdminDashboardScreen from './pages/admin/AdminDashboardScreen';
 const Footer = lazy(() => import('./components/layout/Footer'));
 const ForgetPassword = lazy(() => import('./pages/auth/ForgetPassword'));
 const RedirectToLogin = lazy(() => import('./pages/auth/RedirectToLogin'));
@@ -50,26 +51,14 @@ function App() {
   ];
   const privateRoutes: RouteType[] = [
     { path: '/dashboard', element: <Dashboard />, name: 'Dashboard' },
+    { path: '/admin', element: <AdminDashboardScreen/>, name: 'Admin'}
   ];
 
-  // Use mock account in development mode, otherwise use authService
-  // const MockAccount = {
-  //   username: 'mocktest ',
-  //   homeaccountId: 'Desola@example.com',
-  //   localaccountId: 'Desola',
-  // }
 
-  // const activeAccount = import.meta.env.MODE ? MockAccount : authService.getCurrentAccount();
   const activeAccount = authService.getCurrentAccount();
 
   useEffect(() => {
     const checkAuth = async () => {
-      // If we're in dev mode with mock account, skip the real auth check
-      // if (import.meta.env.MODE) {
-      //   setAuthChecking(false);
-      //   return;
-      // }
-
       try {
         await authService.getToken();
       } catch (error) {
