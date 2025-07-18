@@ -35,8 +35,6 @@ const SubscriptionContent = React.lazy(() =>
 );
 
 
-
-
 const MobileRender: React.FC = () => {
 
   const { mobileTab } = useContext(NavigationContext);
