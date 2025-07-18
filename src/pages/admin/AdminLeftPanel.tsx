@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { sidebarMenu, ViewType } from "../../AdminDatas/AdminSidebarMenu.ts";
+import { sidebarMenu, ViewType } from "../../utils/AdminSidebarMenu.ts";
 import { Logo } from "../../components/layout/Logo";
+import { Btn } from "../../components/ui/Button.tsx";
 
 export const AdminLeftPanel = () => {
   const [currentView, setCurrentView] = useState<ViewType>("dashboard");
@@ -16,22 +17,22 @@ export const AdminLeftPanel = () => {
           <Logo />
         </div>
 
-        <div className=" py-4 pl-3 space-y-2">
+        <div className=" py-4 pl-3 space-y-4">
           {topItems.map(({ label, icon: Icon, view }) => {
             const isActive = currentView === view;
             return (
-              <button
+              <Btn
                 key={view}
                 onClick={() => setCurrentView(view)}
-                className={`flex items-center gap-3 w-full px-4  rounded-tl-full rounded-bl-full py-2  transition ${
+                className={`!justify-normal gap-3 w-full !px-4 !border-none !text-left   rounded-tl-full rounded-bl-full !py-4  transition ${
                   isActive
-                    ? 'bg-blue-700 text-white'
-                    : 'text-gray-700 hover:bg-blue-100'
+                    ? 'bg-primary-500 text-white'
+                    : 'text-neutral-700 hover:bg-primary-100'
                 }`}
               >
                 <Icon className="w-5 h-5" />
                 <span className="text-sm font-medium">{label}</span>
-              </button>
+              </Btn>
             );
           })}
         </div>
@@ -42,18 +43,18 @@ export const AdminLeftPanel = () => {
         {bottomItems.map(({ label, icon: Icon, view }) => {
           const isActive = currentView === view;
           return (
-            <button
+            <Btn
               key={view}
               onClick={() => setCurrentView(view)}
-              className={`flex items-center gap-3 w-full px-4 py-2 rounded-tl-full rounded-bl-full transition ${
+              className={`!justify-normal !border-none gap-3 w-full px-4 py-4 rounded-tl-full rounded-bl-full transition ${
                 isActive
-                  ? 'bg-blue-700 text-white'
-                  : 'text-gray-700 hover:bg-blue-100'
+                  ? 'bg-Primary-500 text-white'
+                  : 'text-neutral-700 hover:bg-primary-100'
               }`}
             >
               <Icon className="w-5 h-5" />
               <span className="text-sm font-medium">{label}</span>
-            </button>
+            </Btn>
           );
         })}
       </div>

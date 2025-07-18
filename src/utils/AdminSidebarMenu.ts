@@ -1,3 +1,5 @@
+import type { LucideIcon } from 'lucide-react';
+
 import {
     LayoutDashboard,
     UserPlus,
@@ -22,7 +24,7 @@ import {
   
   export interface MenuItem {
     label: string;
-    icon: any;
+    icon: LucideIcon;
     view: ViewType;
     section: "top" | "bottom";
   }
