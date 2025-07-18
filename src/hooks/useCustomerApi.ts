@@ -3,7 +3,7 @@ import { CustomerSignupRequest } from '../models/payment/CustomerSignupRequest';
 import { CustomerSignupResponse } from '../models/payment/CustomerSignupResponse';
 import { ENDPOINTS_API_PATH } from '../utils/endpoints';
 import useApi from './useApi';
-import { customerSubscriptionResponse } from '../models/payment/customerSubscription';
+import { CustomerSubscriptionResponse } from '../models/payment/customerSubscription';
 
 
 interface UseCustomerApiResult {
@@ -13,7 +13,7 @@ interface UseCustomerApiResult {
     getCustomerByEmail: (email: string) => Promise<CustomerSignupResponse | null>;
     createCustomer: (customerData: CustomerSignupRequest) => Promise<CustomerSignupResponse | null>;
     updateCustomer: (customerData: CustomerSignupRequest) => Promise<CustomerSignupResponse | null>;
-    getCustomerSubscription: (email:string) => Promise<customerSubscriptionResponse | null>;
+    getCustomerSubscription: (email:string) => Promise<CustomerSubscriptionResponse | null>;
 
     // Utility functions
     clearError: () => void;
@@ -61,14 +61,14 @@ export const useCustomerApi = (): UseCustomerApiResult => {
         );
     }, [getData, handleApiCall]);
 
-    const getCustomerSubscription = useCallback(async (email: string): Promise<customerSubscriptionResponse | null> => {
+    const getCustomerSubscription = useCallback(async (email: string): Promise<CustomerSubscriptionResponse | null> => {
         if (!email) {
             setError('Email is required');
             return null;
         }
 
         return handleApiCall(
-            () => getData<customerSubscriptionResponse>(`${ENDPOINTS_API_PATH.stripe_getCustomerSubscriptionDetails}?email=${encodeURIComponent(email)}`),
+            () => getData<CustomerSubscriptionResponse>(`${ENDPOINTS_API_PATH.stripe_getCustomerSubscriptionDetails}?email=${encodeURIComponent(email)}`),
             'Failed to fetch customer information'
         );
     }, [getData, handleApiCall]);
