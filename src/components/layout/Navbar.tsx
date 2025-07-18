@@ -1,7 +1,6 @@
 import { LogOut } from "lucide-react";
 import React, { useContext, useEffect, useState } from "react";
 import { GiHamburgerMenu } from "react-icons/gi";
-import { ImSpinner } from "react-icons/im";
 import { NavLink, useLocation } from "react-router-dom";
 import { NavigationContext } from "../../contexts/NavigationContext";
 import { UIContext } from "../../contexts/UIContext";
@@ -105,7 +104,7 @@ export const Navbar = () => {
                         disabled={isSigningIn}
                         className={`hidden lg:flex items-center gap-2 justify-center h-12 ${isSigningIn ? 'w-[180px]' : 'w-[140px]'} bg-gradient-to-b from-[#FF9040] to-[#FF6B00] text-base text-white font-medium rounded-[48px] hover:scale-105 transition-transform duration-300 ease-in-out`}
                     >
-                        {isSigningIn ? (<><span>Signing in...</span><ImSpinner className="animate-spin duration-300 mt-1" /></>) : 'Sign In'}
+                        {isSigningIn ? (<><span>Signing in...</span><div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-4"/></>) : 'Sign In'}
                     </button>
                 )}
                 {/* Mobile Nav */}

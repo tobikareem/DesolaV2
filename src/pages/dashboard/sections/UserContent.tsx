@@ -52,12 +52,12 @@ export const UserContent: React.FC = () => {
 
 
   return (
-    <div className="w-full h-full lg:py-6 bg-white ">
-      <div className="flex flex-col gap-4 pr-2 lg:overflow-y-auto h-full">
+    <div className="flex flex-col w-full h-full lg:py-6 bg-white ">
+      <div className="flex flex-col gap-4 pr-2 h-full">
         <ProfileSection />
 
         {preferencesLoading ? (
-          <div className="py-8 flex justify-center gap-2 items-center">
+          <div className="py-8 flex flex-1 justify-center gap-2 items-center">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500"/>
             <span>Loading your preferences...</span>
           </div>

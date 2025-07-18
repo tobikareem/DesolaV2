@@ -50,8 +50,8 @@ export const PreferencesSection = ({
     }
 
     return (
-        <div className="h-full">
-            <Text as="h2" size="xl" weight="bold" className="text-primary-500 mb-3">
+        <div className="h-full lg:overflow-y-auto pr-1">
+            <Text as="h2" size="xl" weight="bold" className="text-primary-500 mb-4">
                 Travel Preferences
             </Text>
             {/* Origin Airport */}

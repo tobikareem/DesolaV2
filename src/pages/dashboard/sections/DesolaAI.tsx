@@ -28,7 +28,7 @@ export const DesolaAI = () => {
   },[AIMessageLog])
 
   return (
-    <div className="flex flex-col justify-between h-full gap-2 overflow-hidden">
+    <div className="flex flex-col justify-between h-full gap-2 overflow-hidden py-4 lg:py-0">
       <div className="relative space-y-2">
         <Text
           as="h1"
