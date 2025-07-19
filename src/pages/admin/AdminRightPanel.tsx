@@ -18,7 +18,7 @@ export const AdminRightPanel: React.FC<AdminRightPanelProps> = ({
       case 'dashboard':
         return 'Customer Support and User Management System';
       case 'profile':
-        return 'User Profile Management';
+        return 'Profile and Authentication';
       case 'subscription':
         return 'Monitor subscriptions and payments';
       case 'flight':
