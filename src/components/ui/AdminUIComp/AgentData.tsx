@@ -1,3 +1,4 @@
+import { Star } from "lucide-react";
 import { Text } from "../TextComp";
 
 interface AgentData {
@@ -28,9 +29,9 @@ const AgentCard = ({
         <Text as="h6" weight="medium" fontStyle="font-grotesk" className="">
           {name}
         </Text>
-        <p className="text-sm text-gray-500">
+        <Text as="p" size="sm" className=" text-gray-500">
           {tickets} tickets • {resolved} resolved
-        </p>
+        </Text>
       </div>
     </div>
 
@@ -49,10 +50,13 @@ const AgentCard = ({
         </Text>
       </div>
       <div className="text-right">
-        <p className="text-xs">Rating</p>
-        <p className="flex items-center gap-1 text-[#D29F07]">
-          ⭐ <span className="font-medium">{rating.toFixed(1)}</span>
-        </p>
+        <Text as="p" size="xs" className="">
+          Rating
+        </Text>
+        <Text as="p" className="flex items-center gap-1 text-[#D29F07]">
+          <Star className="w-4 h-4 text-[#D29F07]" />
+          <span className="font-medium">{rating.toFixed(1)}</span>
+        </Text>
       </div>
       <div>
         <span className="bg-[#28a74610] text-green-700 px-2 py-1 rounded-lg text-sm font-semibold">

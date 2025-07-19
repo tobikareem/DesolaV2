@@ -11,7 +11,31 @@ interface AdminRightPanelProps {
 export const AdminRightPanel: React.FC<AdminRightPanelProps> = ({
   Action,
   view,
+  
 }) => {
+  const getSubtitle = () => {
+    switch (view) {
+      case 'dashboard':
+        return 'Customer Support and User Management System';
+      case 'profile':
+        return 'User Profile Management';
+      case 'subscription':
+        return 'Monitor subscriptions and payments';
+      case 'flight':
+        return 'Monitor user flight patterns and engagement';
+      case 'tracking':
+        return 'Monitor user flight patterns and engagement';
+      case 'support':
+        return 'Monitor system performance and track technical issues';
+      case 'settings':
+        return 'Monitor system performance and track technical issues';
+      case 'logout':
+        return 'System Settings';
+      default:
+        return '';
+    }
+  };
+  
   return (
     <div className="flex flex-col w-full h-full">
       {/* Header */}
@@ -37,7 +61,7 @@ export const AdminRightPanel: React.FC<AdminRightPanelProps> = ({
             color="text-[#5c5c5c]"
             className="!text-[8px] xs:!text-xs sm:!text-sm"
           >
-            Customer Support and User Management System
+            {getSubtitle()}
           </Text>
         </div>
       </div>
