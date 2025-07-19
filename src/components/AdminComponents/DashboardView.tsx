@@ -1,15 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { DashboardStats } from '../ui/AdminUIComp/DashBoardStats';
 import { DashboardCharts } from '../ui/AdminUIComp/DashBoardCharts';
 import { TabSwitch } from '../ui/AdminUIComp/TabSwitch';
-import { IssueTable } from '../ui/AdminUIComp/TableData';
+import { IssueTable } from '../ui/AdminUIComp/IssueData';
+import { AgentPerformance } from '../ui/AdminUIComp/AgentData';
+
 
 const DashboardView = () => {
+  const [activeTab, setActiveTab] = useState<'issues' | 'agents'>('issues');
   return <div> 
   <DashboardStats />
   <DashboardCharts />
-  <TabSwitch />
-  <IssueTable />
+  <TabSwitch activeTab={activeTab} setActiveTab={setActiveTab} />
+  <div>
+  {activeTab === 'issues' ? <IssueTable /> : <AgentPerformance />}
+  </div>
   </div>;
 };
 
