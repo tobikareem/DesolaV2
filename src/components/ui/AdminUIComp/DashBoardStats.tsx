@@ -42,7 +42,7 @@ const StatCard = ({ title, value, icon: Icon, trend }: StatCardProps) => {
 
 export const DashboardStats = () => {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-4">
       <StatCard
         title="Total Users"
         value="12,847"
