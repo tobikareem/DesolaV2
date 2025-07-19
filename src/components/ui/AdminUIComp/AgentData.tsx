@@ -21,11 +21,13 @@ const AgentCard = ({
 }: AgentData) => (
   <div className="flex justify-between items-center bg-white rounded-xl border p-4 shadow-sm mb-4">
     <div className="flex items-center space-x-4">
-      <div className="w-10 h-10 rounded-full bg-blue-700 text-white flex items-center justify-center font-bold">
+      <div className="w-10 h-10 font-grotesk rounded-full bg-blue-700 text-white flex items-center justify-center font-semibold">
         {initials}
       </div>
       <div>
-        <Text as="h6" weight="medium" fontStyle="font-grotesk" className="">{name}</Text>
+        <Text as="h6" weight="medium" fontStyle="font-grotesk" className="">
+          {name}
+        </Text>
         <p className="text-sm text-gray-500">
           {tickets} tickets • {resolved} resolved
         </p>
@@ -34,17 +36,26 @@ const AgentCard = ({
 
     <div className="flex items-center space-x-6 text-sm text-gray-600">
       <div className="text-right">
-        <p className="text-xs">Avg Response</p>
-        <p className="text-blue-700 font-medium">{responseTime}</p>
+        <Text as="p" size="xs" className="">
+          Avg Response
+        </Text>
+        <Text
+          as="p"
+          size="base"
+          weight="semibold"
+          className="text-blue-600 font-medium"
+        >
+          {responseTime}
+        </Text>
       </div>
       <div className="text-right">
         <p className="text-xs">Rating</p>
-        <p className="flex items-center gap-1">
+        <p className="flex items-center gap-1 text-[#D29F07]">
           ⭐ <span className="font-medium">{rating.toFixed(1)}</span>
         </p>
       </div>
       <div>
-        <span className="bg-green-100 text-green-700 px-2 py-1 rounded-lg text-sm font-semibold">
+        <span className="bg-[#28a74610] text-green-700 px-2 py-1 rounded-lg text-sm font-semibold">
           {resolutionRate}%
         </span>
       </div>
@@ -55,8 +66,8 @@ const AgentCard = ({
 export const AgentPerformance = () => {
   const agents: AgentData[] = [
     {
-      name: 'John Doe',
-      initials: 'JD',
+      name: 'Timmy Agbabiaka',
+      initials: 'T',
       tickets: 120,
       resolved: 100,
       responseTime: '8 min',
@@ -64,8 +75,8 @@ export const AgentPerformance = () => {
       resolutionRate: 83,
     },
     {
-      name: 'Jane Smith',
-      initials: 'JS',
+      name: 'Oluwatobi Kareem',
+      initials: 'O',
       tickets: 95,
       resolved: 85,
       responseTime: '10 min',
@@ -73,8 +84,8 @@ export const AgentPerformance = () => {
       resolutionRate: 89,
     },
     {
-      name: 'Alice Johnson',
-      initials: 'AJ',
+      name: 'Feranmi Tiepo',
+      initials: 'F',
       tickets: 80,
       resolved: 70,
       responseTime: '12 min',
@@ -82,8 +93,8 @@ export const AgentPerformance = () => {
       resolutionRate: 88,
     },
     {
-      name: 'Bob Brown',
-      initials: 'BB',
+      name: 'Boluwatife Belleti',
+      initials: 'B',
       tickets: 60,
       resolved: 50,
       responseTime: '15 min',

@@ -12,9 +12,9 @@ export const IssueTable = () => {
       <table className="min-w-full">
         <thead>
           <tr className="text-left text-gray-800 font-semibold border-b">
-            <th className="pb-3">Issue Type</th>
-            <th className="pb-3 text-center">Count</th>
-            <th className="pb-3 text-right">Percentage</th>
+            <th className="pb-3 font-grotesk">Issue Type</th>
+            <th className="pb-3 text-center font-grotesk">Count</th>
+            <th className="pb-3 text-right font-grotesk" >Percentage</th>
           </tr>
         </thead>
         <tbody className="text-sm text-gray-900">
