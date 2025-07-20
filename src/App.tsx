@@ -48,6 +48,7 @@ function App() {
     { path: '/reset', element: <ForgetPassword />, name: 'Forget Password' },
     { path: '/verify', element: <Verify />, name: 'Verify' },
     { path: '/test', element: <Dashboard />, name: 'Test' },
+    { path: '/admin', element: <AdminDashboardScreen />, name: 'Admin' },
     { path: '/privacy', element: <PrivacyPolicy />, name: 'Privacy' },
     { path: '/terms', element: <TermsAndConditions />, name: 'Terms' },
     { path: '/callback', element: <Callback />, name: 'Callback' },
