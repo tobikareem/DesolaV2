@@ -70,8 +70,6 @@ class CustomerProfileService {
             this.storage.setItem(SESSION_VALUES.azure_user_name, profile.fullName);
             this.storage.setItem(SESSION_VALUES.azure_b2c_first_name, profile.firstName);
             this.storage.setItem(SESSION_VALUES.azure_b2c_last_name, profile.lastName);
-
-            console.log("Customer profile saved successfully");
         } catch (error) {
             console.error("Error saving customer profile:", error);
         }
@@ -169,7 +167,6 @@ class CustomerProfileService {
             this.storage.removeItem(this.CUSTOMER_PROFILE_KEY);
             this.storage.removeItem(this.ADDRESS_KEY);
             this.storage.removeItem(this.PREFERENCES_KEY);
-            console.log("Customer profile cleared successfully");
         } catch (error) {
             console.error("Error clearing customer profile:", error);
         }

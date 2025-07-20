@@ -17,7 +17,7 @@ const useApi = (): ApiHookResult => {
       const response = await apiClient.get<T>(link);
       return response.data;
     } catch (err) {
-      console.log('get api:', err);
+      console.error('get api:', err);
       return undefined;
     }
   }, []);
@@ -27,7 +27,7 @@ const useApi = (): ApiHookResult => {
       const response = await apiClient.post<R>(link, req);
       return response.data;
     } catch (err) {
-      console.log('post api:', err);
+      console.error('post api:', err);
       return undefined;
     }
   }, []);

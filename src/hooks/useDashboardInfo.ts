@@ -137,9 +137,6 @@ export const useUserPreferences = () => {
     }
 
     if (!isAuthenticated) {
-      if (isInitialized) {
-        console.log("Cannot load preferences: User not authenticated");
-      }
       return;
     }
 
@@ -157,20 +154,17 @@ export const useUserPreferences = () => {
 
       if (data) {
         setPreferences(data);
-      } else {
-        console.log("No preferences found for user");
-      }
+      } 
     } catch (error) {
       console.error("Error loading preferences:", error);
       toast.error(`Failed to load preferences: ${error instanceof Error ? error.message : "Unknown error"}`);
     } finally {
       setLoading(false);
     }
-  }, [accountInfo, getData, isAuthenticated, authLoading, loading, isInitialized]);
+  }, [accountInfo, getData, isAuthenticated, authLoading, loading]);
 
   useEffect(() => {
     if (isInitialized && isAuthenticated && !loadAttempted && !loading) {
-      console.log("Auth state settled, attempting to load preferences");
       loadPreferences();
     }
   }, [isInitialized, isAuthenticated, loadAttempted, loading, loadPreferences]);

@@ -16,7 +16,6 @@ const msalConfig = {
     system: {
         cachePlugin: {
             beforeCacheAccess: (context: TokenCacheContext) => {
-                console.log("beforeCacheAccess called");
 
                 try {
                     const cachedData = customStorage.getItem(SESSION_VALUES.azure_msal_token_keys) ?? "";
@@ -26,8 +25,6 @@ const msalConfig = {
                 }
             },
             afterCacheAccess: (context: TokenCacheContext) => {
-                console.log("afterCacheAccess called, cacheHasChanged:", context.cacheHasChanged);
-
                 try {
                     if (context.cacheHasChanged) {
                         const serializedCache = context.tokenCache.serialize();
