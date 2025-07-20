@@ -53,8 +53,6 @@ const FlightOffersModal: React.FC<Props> = ({ onClose }) => {
       userFriendlyName: storage.getItem(SESSION_VALUES.azure_user_name) ?? '',
     };
 
-    console.log('Book Now clicked:', offer);
-
     await trackClick(payload);
   };
 

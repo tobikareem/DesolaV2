@@ -19,7 +19,6 @@ export const CardDetails =()=> {
 
   const handleCardDeletion =()=> {
     if(selectedCardId != null) {
-      console.log('Delete:', selectedCardId);
       setShowDeleteModal(false)
     }
     
