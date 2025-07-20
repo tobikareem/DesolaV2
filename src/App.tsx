@@ -1,16 +1,17 @@
-import './App.css';
 import { AuthenticatedTemplate } from '@azure/msal-react';
-import { JSX, useEffect, useState, Suspense, lazy } from 'react';
+import { JSX, lazy, Suspense, useEffect, useState } from 'react';
 import { Route, Routes, useLocation } from 'react-router-dom';
 import { Flip, ToastContainer } from 'react-toastify';
+import './App.css';
 import AuthEventListener from './auth/auth-event-listener';
+import LoadingScreen from './components/layout/LoadingScreen';
 import { Navbar } from './components/layout/Navbar';
 import { Preloader } from './components/layout/Preloader';
+import useAuthEvents from './hooks/useAuthEvents';
+import AdminDashboardScreen from './pages/admin/AdminDashboardScreen';
 import { AppProvider } from './providers/AppProvider';
 import authService from './services/authService';
 import { CustomStorage } from './utils/customStorage';
-import LoadingScreen from './components/layout/LoadingScreen';
-import AdminDashboardScreen from './pages/admin/AdminDashboardScreen';
 const Footer = lazy(() => import('./components/layout/Footer'));
 const ForgetPassword = lazy(() => import('./pages/auth/ForgetPassword'));
 const RedirectToLogin = lazy(() => import('./pages/auth/RedirectToLogin'));
@@ -23,20 +24,24 @@ const TermsAndConditions = lazy(() => import('./pages/legal/TermsAndConditions')
 const Callback = lazy(() => import('./auth/Callback'));
 const Pricing = lazy(() => import('./pages/pricing/pricing'));
 
-
 const storage = new CustomStorage();
 
 type RouteType = {
-  path?: string;
-  element?: JSX.Element;
-  name?: string;
+  path: string;
+  element: JSX.Element;
+  name: string;
 }
 
 function App() {
   const router = useLocation();
   const [showPreloader, setShowPreloader] = useState<string>('');
   const [authChecking, setAuthChecking] = useState(true);
+  const [isProcessingAuth, setIsProcessingAuth] = useState(false);
 
+  useAuthEvents({
+    setIsProcessingAuth,
+    defaultRedirectUrl: '/dashboard'
+  });
 
   const publicRoutes: RouteType[] = [
     { path: '/', element: <HomeScreen />, name: 'Home' },
@@ -47,30 +52,29 @@ function App() {
     { path: '/privacy', element: <PrivacyPolicy />, name: 'Privacy' },
     { path: '/terms', element: <TermsAndConditions />, name: 'Terms' },
     { path: '/callback', element: <Callback />, name: 'Callback' },
-    { path: '*', element: <Error404Page />, name: 'Error404' },
-    { path: '/pricing', element: <Pricing/>}
+    { path: '/pricing', element: <Pricing />, name: 'Pricing' },
+    { path: '*', element: <Error404Page />, name: 'Error404' }
   ];
   const privateRoutes: RouteType[] = [
     { path: '/dashboard', element: <Dashboard />, name: 'Dashboard' },
-    { path: '/admin', element: <AdminDashboardScreen/>, name: 'Admin'}
+    { path: '/admin', element: <AdminDashboardScreen />, name: 'Admin' }
   ];
-
 
   const activeAccount = authService.getCurrentAccount();
 
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        await authService.getToken();
-      } catch (error) {
-        console.error("Auth check error:", error);
+        await authService.initialize();
+      } catch{
+        setIsProcessingAuth(false);
       } finally {
         setAuthChecking(false);
       }
     };
 
-    checkAuth();
-  }, []);
+    setTimeout(checkAuth, 50);
+  }, [router.pathname]);
 
   useEffect(() => {
     const handlePreloaderFn = () => setShowPreloader('hidden');
@@ -96,7 +100,7 @@ function App() {
     return () => clearTimeout(timer);
   }, [router.pathname]);
 
-  if (authChecking) {
+  if (authChecking || isProcessingAuth) {
     return <Preloader visibility="" />;
   }
 
@@ -106,18 +110,22 @@ function App() {
       <Preloader visibility={showPreloader} />
       <Navbar />
       <main>
-        <ToastContainer position='top-right' closeOnClick theme='colored' 
+        <ToastContainer position='top-right' closeOnClick theme='colored'
           pauseOnHover newestOnTop autoClose={3000} transition={Flip}
-         />
-        <Suspense fallback={<LoadingScreen message='Loading...' dimension={undefined} background={'z-[70]'}/>}>
+        />
+        <Suspense fallback={<LoadingScreen message='Loading...' dimension={undefined} background={'z-[70]'} />}>
           <Routes>
             {publicRoutes.map((route) => (
-              <Route key={route.name} path={route.path} element={route.element} />
+              <Route
+                key={route.name || route.path}
+                path={route.path}
+                element={route.element}
+              />
             ))}
 
             {privateRoutes.map((route) => (
               <Route
-                key={route.name}
+                key={route.name || route.path}
                 path={route.path}
                 element={
                   activeAccount ? (
@@ -132,7 +140,7 @@ function App() {
         </Suspense>
       </main>
       <Suspense fallback={<div> ... </div>}>
-        <Footer/>
+        <Footer />
       </Suspense>
     </AppProvider>
   );

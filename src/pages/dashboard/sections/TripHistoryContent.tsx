@@ -104,7 +104,7 @@ export const TripHistoryContent = () => {
       }
     } catch (err) {
       setError('Failed to load more results. Please try again.');
-      console.log('Error loading more click history:', err);
+      console.error('Error loading more click history:', err);
     } finally {
       setLoading(false);
     }

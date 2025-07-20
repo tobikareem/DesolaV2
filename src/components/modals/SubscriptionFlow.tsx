@@ -9,14 +9,15 @@ import { useCustomerApi } from "../../hooks/useCustomerApi";
 import { CustomerSignupRequest } from "../../models/payment/CustomerSignupRequest";
 import { useDashboardInfo } from "../../hooks/useDashboardInfo";
 
+const storage = new CustomStorage();
 
-export const SubscriptionFlowModal =({Action}:{Action:()=>void})=> {
+export const SubscriptionFlowModal = ({ Action }: { Action: () => void }) => {
   const { customerProfile } = useAuthInfo();
-  const {stage} = useSubscription();
-  const {toggleSubscriptionModal, showSubscriptionModal} = useModals();
-  const storage = new CustomStorage();
-  const {getCustomerSubscription, createCustomer} = useCustomerApi();
-  const { isSubscribed, setIsSubscribed, setIsCustomerCreated, isCustomerCreated } = useSubscription();
+  const { stage } = useSubscription();
+  const { toggleSubscriptionModal, showSubscriptionModal } = useModals();
+
+  const { getCustomerSubscription, createCustomer } = useCustomerApi();
+  const { isSubscribed, setIsSubscribed, setCustomerSubscriptionData, customerSubscriptionData } = useSubscription();
   const { preferences } = useDashboardInfo();
 
   const customerData: CustomerSignupRequest = {
@@ -24,21 +25,21 @@ export const SubscriptionFlowModal =({Action}:{Action:()=>void})=> {
     email: customerProfile?.email || '',
     phone: customerProfile?.phone || '',
     preferredCurrency: 'USD',
-    defaultOriginAirport: preferences?.originAirport || 'ATL' , // the busiest airport
+    defaultOriginAirport: preferences?.originAirport || 'ATL', // the busiest airport
     metadata: {}
   }
 
 
-  const subscriptionFlowRender =()=> {
-    switch (stage){
-      case 1: 
+  const subscriptionFlowRender = () => {
+    switch (stage) {
+      case 1:
         return <SubscriptionModal Action={toggleSubscriptionModal} ConfirmAction={() => {
           Action();
           toggleSubscriptionModal();
-          if (customerProfile && !isCustomerCreated) {
-            createCustomer({...customerData })
+          if (customerProfile && !customerSubscriptionData) {
+            createCustomer({ ...customerData })
           }
-        }}/>
+        }} />
       default: return null
     }
   }
@@ -47,14 +48,14 @@ export const SubscriptionFlowModal =({Action}:{Action:()=>void})=> {
     const firstTimeLoad = storage.getItem('Subscription') === 'true';
     async function checkSubscription() {
       if (customerProfile?.email) {
-        try{
+        try {
           if (!firstTimeLoad) {
             const customer = await getCustomerSubscription(customerProfile?.email);
             storage.setItem('Subscription', 'true');
             storage.setItem('customer', JSON.stringify(customer))
             setIsSubscribed(!!customer?.hasActiveSubscription);
-            setIsCustomerCreated(customer)
-            if(!isSubscribed){
+            setCustomerSubscriptionData(customer)
+            if (!isSubscribed) {
               toggleSubscriptionModal()
             }
           }
@@ -62,7 +63,7 @@ export const SubscriptionFlowModal =({Action}:{Action:()=>void})=> {
           if (storedCustomer) {
             const parsedCustomer = JSON.parse(storedCustomer);
             setIsSubscribed(!!parsedCustomer?.hasActiveSubscription);
-            setIsCustomerCreated(parsedCustomer);
+            setCustomerSubscriptionData(parsedCustomer);
           }
         } catch (error) {
           console.error(`Error fetching customer subscription: ${error}`);
@@ -70,11 +71,11 @@ export const SubscriptionFlowModal =({Action}:{Action:()=>void})=> {
       }
     }
     checkSubscription()
-  },[customerProfile?.email])
+  }, [customerProfile?.email])
 
-  return(
+  return (
     <>
-      { showSubscriptionModal && !isSubscribed && (
+      {showSubscriptionModal && !isSubscribed && (
         <Modal className={`backdrop-blur-sm`} display={showSubscriptionModal} close={toggleSubscriptionModal}>
           {subscriptionFlowRender()}
         </Modal>)
