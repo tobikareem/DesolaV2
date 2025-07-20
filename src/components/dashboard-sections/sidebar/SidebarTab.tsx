@@ -24,7 +24,7 @@ export const SidebarTab: React.FC<SidebarTabProps> = ({
         >
             {isActive ? activeIcon : icon}
             <span className="absolute inset-0 lg:z-[6] hidden group-hover:flex justify-center items-center 
-                px-2 py-1 bg-neutral-200 rounded-md border border-neutral-300 text-primary-600 
+                px-2 py-1 bg-neutral-300 rounded-md border border-neutral-300 text-primary-600 
                 font-bold text-xs size-fit text-nowrap left-8 "
             >
                 {label}

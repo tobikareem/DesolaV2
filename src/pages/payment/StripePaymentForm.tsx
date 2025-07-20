@@ -320,11 +320,11 @@ export const StripePaymentForm = ({
 
                         {paymentState.customerData && !paymentState.isLoadingCustomer && (
                             <div className="bg-green-50 border border-green-200 rounded-md p-3">
-                                <Text className="text-green-700 text-sm">
+                                <Text className=" text-green-700 text-sm">
                                     Customer Name: <strong>{paymentState.customerData.fullName}</strong>
                                 </Text>
                                 {paymentState.customerData.hasActiveSubscription && (
-                                    <div className="mt-2 p-2 bg-amber-100 rounded text-secondary-700 text-xs">
+                                    <div className="font-work mt-2 p-2 bg-amber-100 rounded text-secondary-700 text-xs">
                                         <strong>Note:</strong> You already have an active subscription. This will replace it.
                                     </div>
                                 )}
@@ -359,7 +359,7 @@ export const StripePaymentForm = ({
                             <Text size="base" weight="medium" className="mb-3">
                                 Payment Method
                             </Text>
-                            <div className="border border-gray-300 rounded-lg p-4 bg-white focus-within:border-primary-500 focus-within:ring-2 focus-within:ring-primary-200">
+                            <div className="border border-neutral-300 rounded-lg p-4 bg-white focus-within:border-primary-500 focus-within:ring-2 focus-within:ring-primary-200">
                                 <CardElement options={cardElementOptions} onFocus={() => setCardRequirements(true)} onBlur={() => setCardRequirements(false)} />
                             </div>
                             {cardRequirements && <Text size="2xs" className='text-notification mt-1'>All Fields are required...</Text>}
@@ -395,19 +395,19 @@ export const StripePaymentForm = ({
                             fontStyle="work"
                             radius="48px"
                             className={`w-full h-12 text-base ${paymentState.isProcessing || !stripe
-                                ? 'bg-gray-400 cursor-not-allowed text-gray-600'
+                                ? 'bg-neautral-400 cursor-not-allowed text-neutral-600'
                                 : 'bg-gradient-to-b from-[#FF9040] to-[#FF6B00] text-neutral-100'
                                 } hover:!scale-95 `}
                         >
                             {paymentState.isProcessing ? (
-                                <div className="flex items-center justify-center">
+                                <div className="font-work flex items-center justify-center">
                                     <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
                                     Creating subscription...
                                 </div>
                             ) : (`Start 7-Day Free Trial - $${planPrice}/${selectedPlan.toLowerCase()}`)}
                         </Btn>
 
-                        <div className="text-center text-xs text-gray-400 my-3 space-y-1">
+                        <div className="text-center text-xs text-neutral-400 my-3 space-y-1">
                             <div className="flex items-center justify-center">
                                 <svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
                                     <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
