@@ -124,7 +124,7 @@ export const SubscriptionContent = () => {
                     radius="48px"
                     className="w-full lg:text-sm h-12 text-base text-neutral-100 bg-neutral-500 hover:!scale-95"
                   >
-                    Cancel Subscription
+                    Cancel 
                   </Btn>
                   <Btn
                     onClick={() => setSubscriptionStep('plan-selection')}
@@ -133,7 +133,7 @@ export const SubscriptionContent = () => {
                     radius="48px"
                     className="w-full lg:text-sm h-12 text-base text-neutral-100 bg-gradient-to-b from-[#FF9040] to-[#FF6B00] hover:!scale-95"
                   >
-                    Update Subscription
+                    Update
                   </Btn>
                 </div>
               ) : (
