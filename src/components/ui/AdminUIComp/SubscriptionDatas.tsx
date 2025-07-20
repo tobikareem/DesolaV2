@@ -1,11 +1,11 @@
 
-import { Users, } from 'lucide-react';
+import { Users, CreditCard, Ticket } from 'lucide-react';
 import { StatCard } from './DashBoardStats';
 import { Text } from '../TextComp';
 
 export const SubscriptionOverview = () => {        
   return (
-    <div className=''>
+    <div className="">
       <Text
         as="h2"
         size="2xl"
@@ -23,6 +23,7 @@ export const SubscriptionOverview = () => {
           value="12,847"
           icon={Users}
           trend="+12% from last month"
+          variant="subscription"
         />
         <StatCard
           title="Pro Plan"
@@ -30,9 +31,22 @@ export const SubscriptionOverview = () => {
           value="5,847"
           icon={Users}
           trend="+12% from last month"
+         variant="subscription"
         />
-        <StatCard title="Active Promo’s" value="300" />
-        <StatCard title="Discounts Given" value="$18,450" />
+        <StatCard
+          title="Active Promo’s"
+          value="300"
+          icon={Ticket}
+          trend="+12% from last month"
+          variant="subscription"
+        />
+        <StatCard
+          title="Discounts Given"
+          value="$18,450"
+          icon={CreditCard}
+          trend="+12% from last month"
+          variant="subscription"
+        />
       </div>
     </div>
   );

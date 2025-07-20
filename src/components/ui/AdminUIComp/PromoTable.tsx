@@ -12,7 +12,7 @@ export const PromoTable: React.FC = () => {
             <GiftIcon />
           <Text
             as="h2"
-            size="xl"
+            size="2xl"
             weight="medium"
             fontStyle="font-grotesk"
             className=" text-neutral-800"
