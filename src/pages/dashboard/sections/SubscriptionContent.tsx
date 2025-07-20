@@ -116,7 +116,6 @@ export const SubscriptionContent = () => {
             <div className="space-y-4">
               {isSubscribed ? (
                 <div className="flex gap-3">
-
                   <Btn
                     onClick={() => setShowCancelForm(true)}
                     weight="semibold"
@@ -171,7 +170,7 @@ export const SubscriptionContent = () => {
                       setInputValue('')
                     }}
                     weight="medium"
-                    className="px-4 py-2 text-sm bg-gray-300 text-gray-700 rounded hover:bg-gray-400"
+                    className="px-4 py-2 text-sm bg-neutral-300 text-neutral-700 rounded hover:bg-gray-400"
                   >
                     Cancel
                   </Btn>

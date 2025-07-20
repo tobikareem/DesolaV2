@@ -22,6 +22,7 @@ import { useInput } from "../../../hooks/useInput";
 import { DateSelectArg } from "@fullcalendar/core/index.js";
 import { PenLine } from "lucide-react";
 import { useIsDesktop } from "../../../hooks/useDesktopSize";
+import { NavigationContext } from "../../../contexts/NavigationContext";
 
 const analyzeLastMessage = (message?: string) => {
   if (!message) return {
@@ -50,6 +51,7 @@ const Dashboard: React.FC = () => {
   // Context hooks
   const { chatLog, setChatLog, recentPrompts, setRecentPrompts } = useContext(ChatContext);
   const { toggleModal } = useContext(UIContext);
+  const { mobileTab} = useContext(NavigationContext);
   // Custom hooks
   const { showEditModal, setShowEditModal, showCalendar, setShowCalendar, showPopData,
      setShowPopData, setSearchParam, searchParam} = useModals();
@@ -259,7 +261,7 @@ const removeReturnDate = () => {
           <PenLine onClick={toggleEditModal} className={`${recentPrompts?.length != 0 ? '' : 'hidden'} text-primary-500 text-4xl`} />
         </div>
         <ChatHistory chatLog={chatLog} botLoader={botLoader} isLoading={chatLoading} />
-        {isLastMessage && Array.isArray(recentPrompts) && (isOneWay ? recentPrompts.length >= 5 : recentPrompts.length >= 6) && (
+        {mobileTab == '' && isLastMessage && Array.isArray(recentPrompts) && (isOneWay ? recentPrompts.length >= 5 : recentPrompts.length >= 6) && (
           <Btn onClick={() => {toggleModal('flight');}}
             className="fixed lg:hidden px-6 py-1 w-40 h-9 md:h-12 bg-secondary-500 text-neutral-100 self-end bottom-[130px] right-4"
           >

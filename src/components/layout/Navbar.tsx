@@ -170,12 +170,11 @@ export const Navbar = () => {
                                 </nav>
                                 {!isAuthenticated && router == '/' && (
                                     <Btn
-                                        onClick={(e) => {
-                                            handleDrawer(e);
+                                        onClick={() => {
                                             authService.signIn();
                                         }}
                                         className={`hover:!scale-95 flex lg:hidden items-center justify-center h-12 w-full bg-gradient-to-b from-[#FF9040] to-[#FF6B00] text-xl text-white font-medium rounded-[48px] transition-transform duration-300 ease-in-out`}>
-                                        Sign In
+                                        {isSigningIn ? (<><span>Signing in...</span><div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mx-4"/></>) : 'Sign In'}
                                     </Btn>)
                                 }
                                 {isAuthenticated && router == '/' && (

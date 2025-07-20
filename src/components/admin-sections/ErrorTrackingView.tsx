@@ -1,9 +1,10 @@
-import React from 'react'
+
+import { ErrorDataOverview } from '../ui/AdminUIComp/ErrorDatas'
 
 const ErrorTrackingView = () => {
   return (
     <div>
-      <h1>Error Tracking</h1>
+      <ErrorDataOverview/>
     </div>
   )
 }
