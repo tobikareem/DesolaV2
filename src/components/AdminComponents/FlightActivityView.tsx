@@ -1,9 +1,12 @@
 import React from 'react'
+import { FlightOverview } from '../ui/AdminUIComp/FlightDatas'
+import { FlightSearchTable } from '../ui/AdminUIComp/FlightSearchTable'
 
 const FlightActivityView = () => {
   return (
     <div>
-      <h1>Flight Activity</h1>
+     <FlightOverview />
+     <FlightSearchTable />
     </div>
   )
 }
