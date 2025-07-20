@@ -310,15 +310,6 @@ export const AuthEvents = {
     }
 };
 
-export const CustomerEvents = {
-    /**
-     * Dispatch when customer profile is updated
-     */
-    profileUpdated: (profile: CustomerProfile) => {
-        EventManager.dispatch('customer:profile-updated', profile);
-    }
-};
-
 export const AppEvents = {
     /**
      * Dispatch when app needs to redirect
