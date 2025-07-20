@@ -7,17 +7,16 @@ import { msalInstance } from './auth/msalConfig.ts'
 import './index.css'
 import authService from './services/authService.ts'
 
-async function initializeMsal() {
-  await msalInstance.initialize();
-
-  msalInstance.handleRedirectPromise().then((response) => {
-    authService.handleTokenResponse(response);
-  }).catch((error) => {
-    authService.handleTokenError(error);
-  });
+async function initializeApp() {
+  try {
+    await authService.initialize();
+  } catch (error) {
+    console.error("Application initialization failed:", error);
+    throw error;
+  }
 }
 
-initializeMsal().then(() => {
+initializeApp().then(() => {
   createRoot(document.getElementById('root')!).render(
     <MsalProvider instance={msalInstance}>
       <StrictMode>
@@ -27,6 +26,15 @@ initializeMsal().then(() => {
       </StrictMode>
     </MsalProvider>
   );
-}).catch((error) => {
-  console.error("MSAL initialization failed:", error);
+}).catch(() => {
+
+  createRoot(document.getElementById('root')!).render(
+    <div className="root-applicationFailed">
+      <h2>Application Failed to Start</h2>
+      <p>Please refresh the page or contact support if the problem persists.</p>
+      <button onClick={() => window.location.reload()} className="root-button-applicationFailed">
+        Refresh Page
+      </button>
+    </div>
+  );
 });
