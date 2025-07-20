@@ -15,7 +15,7 @@ export const AdminLeftPanel = ({
   const bottomItems = sidebarMenu.filter((item) => item.section === 'bottom');
 
   return (
-    <div className="flex flex-col size-full w-64 justify-between gap-10 overflow-hidden bg-white rounded-tl-2xl rounded-bl-2xl shadow-md">
+    <div className="flex flex-col size-full w-full justify-between gap-10 overflow-hidden bg-white rounded-tl-2xl rounded-bl-2xl shadow-md">
       {/* Navigations */}
       <div className="w-full">
         <div className="w-full h-30 flex items-center px-8">

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { DashboardStats } from '../ui/AdminUIComp/DashBoardStats';
 import { DashboardCharts } from '../ui/AdminUIComp/DashBoardCharts';
 import { TabSwitch } from '../ui/AdminUIComp/TabSwitch';
@@ -10,11 +10,11 @@ const DashboardView = () => {
   const [activeTab, setActiveTab] = useState<'issues' | 'agents'>('issues');
   return ( 
   <div> 
-  <DashboardStats />
-  <DashboardCharts />
-  <TabSwitch activeTab={activeTab} setActiveTab={setActiveTab} />
+    <DashboardStats />
+    <DashboardCharts />
+    <TabSwitch activeTab={activeTab} setActiveTab={setActiveTab} />
   <div>
-  {activeTab === 'issues' ? <IssueTable /> : <AgentPerformance />}
+    {activeTab === 'issues' ? <IssueTable /> : <AgentPerformance />}
   </div>
   </div>
   )
