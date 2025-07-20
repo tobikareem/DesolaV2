@@ -3,11 +3,13 @@ import React from 'react';
 import { UserProfileSearch } from '../ui/AdminUIComp/UserProfileSearch';
 
 const ProfileView = () => {
-  return <div>
+  return ( 
+  <div>
     <UserProfileSearch />
     {/* Searxh Resilt */}
     <div></div>
-  </div>;
+  </div>
+  )
 };
 
 export default ProfileView;

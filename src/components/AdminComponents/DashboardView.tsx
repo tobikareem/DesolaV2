@@ -8,14 +8,16 @@ import { AgentPerformance } from '../ui/AdminUIComp/AgentData';
 
 const DashboardView = () => {
   const [activeTab, setActiveTab] = useState<'issues' | 'agents'>('issues');
-  return <div> 
+  return ( 
+  <div> 
   <DashboardStats />
   <DashboardCharts />
   <TabSwitch activeTab={activeTab} setActiveTab={setActiveTab} />
   <div>
   {activeTab === 'issues' ? <IssueTable /> : <AgentPerformance />}
   </div>
-  </div>;
+  </div>
+  )
 };
 
 export default DashboardView;

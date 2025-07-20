@@ -33,7 +33,7 @@ export const DashboardCharts = () => {
   return (
     <div className="flex flex-col lg:flex-row max-w-7xl gap-6 w-full mt-8">
       {/* Bar Chart Container */}
-      <div className="flex-1 basis-2/3">
+      <div className="flex-1 basis-2/3 hover:scale-105 hover:z-20 transition-transform duration-300 ease-in-out">
         <Text
           as="h3"
           color="text-neutral-600"
@@ -55,11 +55,11 @@ export const DashboardCharts = () => {
             </select>
           </div>
           <ResponsiveContainer width="100%" height={250}>
-            <BarChart data={barData} className="text-xs" >
+            <BarChart data={barData} className="text-xs">
               <XAxis dataKey="name" />
               <YAxis />
               <Tooltip />
-              <Bar dataKey="value" >
+              <Bar dataKey="value">
                 {barData.map((_, index) => (
                   <Cell
                     key={`cell-${index}`}
@@ -69,12 +69,14 @@ export const DashboardCharts = () => {
               </Bar>
             </BarChart>
           </ResponsiveContainer>
-          <p className="text-sm mt-3 font-medium text-gray-500">Pro Yearly: 30%</p>
+          <p className="text-sm mt-3 font-medium text-gray-500">
+            Pro Yearly: 30%
+          </p>
         </div>
       </div>
 
       {/* Pie Chart Container */}
-      <div className="flex-1 basis-1/3">
+      <div className="flex-1 basis-1/3 hover:scale-105 hover:z-20 transition-transform duration-300 ease-in-out">
         <Text
           as="h4"
           color="text-neutral-600"

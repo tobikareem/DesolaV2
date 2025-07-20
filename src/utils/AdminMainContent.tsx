@@ -1,8 +1,8 @@
-// src/components/AdminMainContent.tsx
+
 import React, { Suspense, lazy } from 'react';
 import { ViewType } from './AdminSidebarMenu';
 
-// Lazy-loaded components (must be default exports)
+
 const DashboardView = lazy(() => import('../components/AdminComponents/DashboardView'));
 const ProfileView = lazy(() => import('../components/AdminComponents/ProfileView'));
 const SubscriptionView = lazy(() => import('../components/AdminComponents/SubscriptionView'));

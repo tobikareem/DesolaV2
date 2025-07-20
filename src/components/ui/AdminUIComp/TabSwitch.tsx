@@ -8,7 +8,7 @@ export const TabSwitch = ({ activeTab, setActiveTab }: TabSwitchProps) => {
     <div className="flex space-x-4 w-full max-w-7xl bg-white mt-6 justify-between px-4 py-2 rounded-lg shadow">
       <div
         onClick={() => setActiveTab('issues')}
-        className={`px-6 py-2 rounded-md w-[50%] text-center font-grotesk text-xl font-semibold cursor-pointer transition ${
+        className={`px-6 py-2 rounded-md w-[50%] text-center hover:scale-105 hover:z-20 transition-transform duration-300 ease-in-out font-grotesk text-xl font-semibold cursor-pointer transition ${
           activeTab === 'issues'
             ? 'bg-blue-100 text-black'
             : 'text-black hover:bg-gray-100'
@@ -19,7 +19,7 @@ export const TabSwitch = ({ activeTab, setActiveTab }: TabSwitchProps) => {
 
       <div
         onClick={() => setActiveTab('agents')}
-        className={`px-6 py-2 rounded-md font-semibold font-grotesk text-xl w-[50%] text-center cursor-pointer transition ${
+        className={`px-6 py-2 rounded-md font-semibold hover:scale-105 hover:z-20 transition-transform duration-300 ease-in-out font-grotesk text-xl w-[50%] text-center cursor-pointer transition ${
           activeTab === 'agents'
             ? 'bg-blue-100 text-black'
             : 'text-black hover:bg-gray-100'
