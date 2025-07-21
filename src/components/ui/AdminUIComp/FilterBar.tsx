@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { Filter } from 'lucide-react';
 
-const statusOptions = ['All Status', 'Active', 'Inactive'];
-const severityOptions = ['All Severities', 'Low', 'Medium', 'High'];
+const statusOptions = ['All Status', 'Resolved', 'Unresolved'];
+const severityOptions = ['All Severities', 'Critical', 'High', 'Medium', 'Low'];
 
 export const FilterBar = () => {
   const [status, setStatus] = useState('All Status');
