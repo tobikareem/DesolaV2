@@ -13,18 +13,9 @@ export const UserProfileSearch = () => {
   };
 
   return (
-    <div className="max-w-4xl">
-      <Text
-        as="h2"
-        size="2xl"
-        weight="semibold"
-        fontStyle="font-grotesk"
-        className=" text-neutral-500 mb-4"
-      >
-        Search for User's Profile
-      </Text>
-
-      <div className="bg-blue-100 p-4 rounded-lg flex items-center space-x-4">
+    <div className="">
+    
+      <div className="bg-gray-200 p-4 rounded-lg flex items-center space-x-4">
         <div className="flex items-center bg-white px-4 py-2 rounded-lg flex-1 shadow-sm">
           <Search className="text-gray-400 w-5 h-5 mr-2" />
           <Input
@@ -43,7 +34,7 @@ export const UserProfileSearch = () => {
           Search
         </Btn>
       </div>
-      <div className="flex items-center gap-18 mt-9">
+      {/* <div className="flex items-center gap-18 mt-9">
         <div className="text-gray-500">
           <Text as="p" size="base" >
             Last Seen
@@ -58,7 +49,7 @@ export const UserProfileSearch = () => {
             3
           </Text>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

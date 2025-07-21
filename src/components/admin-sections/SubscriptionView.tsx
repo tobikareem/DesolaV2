@@ -1,5 +1,5 @@
 import React from 'react'
-import { SubscriptionOverview } from '../ui/AdminUIComp/SubscriptionDatas'
+import { SubscriptionOverview } from '../ui/AdminUIComp/SubscriptionOverview'
 import { PromoTable } from '../ui/AdminUIComp/PromoTable'
 
 const SubscriptionView = () => {
@@ -7,9 +7,7 @@ const SubscriptionView = () => {
     <div>
       <SubscriptionOverview />
       <PromoTable />
-      {/* Additional components can be added here */}
-      {/* <UserSubscriptionDetails /> */}
-      {/* <SubscriptionHistory /> */}
+
     </div>
   )
 }
