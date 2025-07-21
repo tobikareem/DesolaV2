@@ -38,37 +38,29 @@ const SubscriptionContent = React.lazy(() =>
 const MobileRender: React.FC = () => {
 
   const { mobileTab } = useContext(NavigationContext);
-
   const RenderPage = () => {
     switch (mobileTab) {
       case 'AI' : 
         return ( <DesolaAI />)
-
       case 'road':
         return (
           <TripHistoryContent/>
         );
-
       case 'trash':
         return (
           <TrashContent />
         );
-
       case 'user':
         return (
           <UserContent />
         );
-
       case 'subscription':
         return (<SubscriptionContent />);
-
       case 'support':
         return (
           <SupportContent />
         );
-
-      default:
-        return null;
+      default: return null;
     }
   };
 
@@ -88,5 +80,4 @@ const MobileRender: React.FC = () => {
     
   )
 }
-
 export default MobileRender

@@ -3,7 +3,6 @@ import React, { Suspense, lazy } from 'react';
 import { ViewType } from '../../utils/AdminSidebarMenu';
 import LoadingScreen from '../../components/layout/LoadingScreen';
 
-
 const DashboardView = lazy(() => import('../../components/admin-sections/DashboardView'));
 const ProfileView = lazy(() => import('../../components/admin-sections/ProfileView'));
 const SubscriptionView = lazy(() => import('../../components/admin-sections/SubscriptionView'));
@@ -37,7 +36,7 @@ export const AdminMainContent: React.FC<AdminMainContentProps> = ({ view }) => {
       case 'logout':
         return <LogoutView />;
       default:
-        return <div>404: Page Not Found</div>;
+        return null    
     }
   };
 

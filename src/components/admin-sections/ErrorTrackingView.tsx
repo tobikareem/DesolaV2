@@ -4,6 +4,8 @@ import { AdminMetricsCardGrid } from '../ui/AdminUIComp/AdminMetricsCardGrid'
 import { FilterBar } from '../ui/AdminUIComp/FilterBar'
 import { ErrorLogs } from '../ui/AdminUIComp/ErrorLogs'
 
+import { ErrorDataOverview } from '../ui/AdminUIComp/ErrorDatas'
+
 const ErrorTrackingView = () => {
   return (
     <div>
@@ -11,6 +13,7 @@ const ErrorTrackingView = () => {
       <AdminMetricsCardGrid />
       <FilterBar />
       <ErrorLogs />
+      <ErrorDataOverview/>
     </div>
   )
 }

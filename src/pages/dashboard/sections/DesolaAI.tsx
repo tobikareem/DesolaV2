@@ -23,12 +23,12 @@ export const DesolaAI = () => {
 
   useEffect(()=>{
     if (chatContainerRef.current) {
-            chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+          chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
         }
   },[AIMessageLog])
 
   return (
-    <div className="flex flex-col justify-between h-full gap-2 overflow-hidden py-4 lg:py-0">
+    <div className="flex flex-col justify-between h-full gap-2 overflow-hidden pt-3 pb-6 lg:py-0">
       <div className="relative space-y-2">
         <Text
           as="h1"
@@ -44,7 +44,7 @@ export const DesolaAI = () => {
       </div>
 
       <div ref={chatContainerRef} 
-        className={`${loading ? 'border-2 border-primary-100':'border'} border-neutral-300 rounded-lg flex-1 space-y-2 overflow-y-auto py-6 px-2`}>
+        className={`${loading ? 'border-2 border-primary-100':'border'} border-neutral-300 rounded-lg flex-1 space-y-2 overflow-y-auto py-2 sm:py-2.5 md:py-4 lg:py-6 px-2`}>
         { 
           AIMessageLog?.map((message:DesolaAILog, index) => {
             const isUser = message.role == 'user'
