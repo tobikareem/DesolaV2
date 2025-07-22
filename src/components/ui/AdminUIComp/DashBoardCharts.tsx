@@ -42,7 +42,7 @@ export const DashboardCharts = () => {
           fontStyle="font-grotesk"
           className="mb-2"
         >
-          Search Analytic
+          Search Analytics
         </Text>
         <div className="bg-white p-6 rounded-2xl shadow border min-h-[300px]">
           <div className="flex justify-between items-center mb-4">
