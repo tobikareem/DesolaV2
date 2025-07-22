@@ -1,7 +1,7 @@
 import React from 'react';
 import { AdminMetricItem } from '../../../utils/AdminTechnicalTracking';
 import clsx from 'clsx';
-import { Text } from '../TextComp';
+import { Text } from '../../ui/TextComp';
 
 interface MetricCardProps {
   title: string;

@@ -1,6 +1,6 @@
 import { Eye } from "lucide-react";
 import { ErrorLog } from "../../../utils/ErrorLogs";
-import { Btn } from "../Button";
+import { Btn } from "../../ui/Button";
 import { AlertTriangle, Info, XCircle} from "lucide-react";
 
 interface Props {
@@ -8,7 +8,7 @@ interface Props {
 }
 
 import type { LucideIcon } from "lucide-react";
-import { Text } from "../TextComp";
+import { Text } from "../../ui/TextComp";
 
 const IconsType: Record<ErrorLog["type"], LucideIcon> = {
   critical: XCircle,

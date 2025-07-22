@@ -1,7 +1,7 @@
 import { MapPin, Upload } from 'lucide-react';
-import { Btn } from '../Button';
+import { Btn } from '../../ui/Button';
 import { recentSearches } from '../../../utils/AdminFlightData';
-import { Text } from '../TextComp';
+import { Text } from '../../ui/TextComp';
 
 export const FlightSearchTable = () => {
   return (

@@ -1,10 +1,10 @@
 import { Listbox, ListboxButton, ListboxOption, ListboxOptions } from "@headlessui/react"
-import { TicketChatBox, TicketChatProps } from "../ui/AdminUIComp/TicketChatBox"
+import { TicketChatBox, TicketChatProps } from "./AdminUIComp/TicketChatBox"
 import { Btn } from "../ui/Button"
 import { Text } from "../ui/TextComp"
 import { MdKeyboardArrowDown } from "react-icons/md"
 import { useState } from "react"
-import { AdminTicketsCard } from "../ui/AdminUIComp/AdminTicketsCard"
+import { AdminTicketsCard } from "./AdminUIComp/AdminTicketsCard"
 
 const ChatSupportView = () => {
   const [selectedTicket, setSelectedTicket] = useState<TicketChatProps | null>(null);

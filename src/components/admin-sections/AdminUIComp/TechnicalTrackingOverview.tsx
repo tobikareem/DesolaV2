@@ -1,7 +1,7 @@
 
 import {  CheckCheck, TriangleAlert, Clock, MessageSquareWarning } from 'lucide-react';
 import { StatCard } from './DashBoardStats';
-import { Text } from '../TextComp';
+import { Text } from '../../ui/TextComp';
 
 export const TechnicalTrackingOverview = () => {        
   return (

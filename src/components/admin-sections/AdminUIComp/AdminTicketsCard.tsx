@@ -1,5 +1,5 @@
 import { ArrowUp, CircleCheckBig, Clock } from "lucide-react";
-import { Text } from "../TextComp";
+import { Text } from "../../ui/TextComp";
 
 interface TicketsCardProp {
   user: string

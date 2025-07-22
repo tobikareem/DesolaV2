@@ -1,12 +1,12 @@
 import React, { useEffect, useRef, useState } from "react"
-import { Text } from "../TextComp"
+import { Text } from "../../ui/TextComp"
 import { supportChatMessage, useSupport } from "../../../hooks/useSupport";
 import { EllipsisVertical,Send, User } from "lucide-react";
-import { Btn } from "../Button";
+import { Btn } from "../../ui/Button";
 import { useIsDesktop } from "../../../hooks/useDesktopSize";
-import { Close } from "../Close";
+import { Close } from "../../ui/Close";
 import { AiOutlinePaperClip } from "react-icons/ai";
-import { TextArea } from "../TextAreaField";
+import { TextArea } from "../../ui/TextAreaField";
 
 export interface TicketChatProps {
   subject: string | undefined;

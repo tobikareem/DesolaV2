@@ -1,9 +1,7 @@
-
-import { TechnicalTrackingOverview } from '../ui/AdminUIComp/TechnicalTrackingData'
-import { AdminMetricsCardGrid } from '../ui/AdminUIComp/AdminMetricsCardGrid'
-import { FilterBar } from '../ui/AdminUIComp/FilterBar'
-import { ErrorLogs } from '../ui/AdminUIComp/ErrorLogs'
-
+import { AdminMetricsCardGrid } from "./AdminUIComp/AdminMetricsCardGrid"
+import { ErrorLogs } from "./AdminUIComp/ErrorLogs"
+import { FilterBar } from "./AdminUIComp/FilterBar"
+import { TechnicalTrackingOverview } from "./AdminUIComp/TechnicalTrackingOverview"
 
 const ErrorTrackingView = () => {
   return (

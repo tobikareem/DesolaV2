@@ -1,5 +1,5 @@
 import { errorLogs } from '../../../utils/ErrorLogs';
-import { Text } from '../TextComp';
+import { Text } from '../../ui/TextComp';
 import { ErrorLogCard } from './ErrorLogCard';
 
 export const ErrorLogs = () => {

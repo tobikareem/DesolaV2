@@ -1,7 +1,7 @@
 
 import { Plane, Ticket, TrendingUp } from 'lucide-react';
 import { StatCard } from './DashBoardStats';
-import { Text } from '../TextComp';
+import { Text } from '../../ui/TextComp';
 
 export const FlightOverview = () => {        
   return (

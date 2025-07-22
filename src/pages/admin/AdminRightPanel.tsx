@@ -29,8 +29,6 @@ export const AdminRightPanel: React.FC<AdminRightPanelProps> = ({
         return 'Monitor user tickets and chat support';
       case 'settings':
         return 'General overview and system settings';
-      case 'logout':
-        return null;
       default:
         return null;
     }

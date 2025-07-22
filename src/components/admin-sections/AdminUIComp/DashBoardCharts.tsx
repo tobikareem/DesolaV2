@@ -10,7 +10,7 @@ import {
   Cell,
   ResponsiveContainer,
 } from 'recharts';
-import { Text } from '../TextComp';
+import { Text } from '../../ui/TextComp';
 
 const COLORS = ['#003B85', '#CC5500', '#FFC107'];
 
