@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { DashboardStats } from '../ui/AdminUIComp/DashBoardStats';
 import { DashboardCharts } from '../ui/AdminUIComp/DashBoardCharts';
 import { TabSwitch } from '../ui/AdminUIComp/TabSwitch';
-import { IssueTable } from '../ui/AdminUIComp/IssueData';
+import { IssueTable } from '../ui/AdminUIComp/IssueTable';
 import { AgentPerformance } from '../ui/AdminUIComp/AgentData';
 
 
