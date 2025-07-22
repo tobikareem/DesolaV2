@@ -1,7 +1,7 @@
 
 import { Users, CreditCard, Ticket } from 'lucide-react';
 import { StatCard } from './DashBoardStats';
-import { Text } from '../TextComp';
+import { Text } from '../../ui/TextComp';
 
 export const SubscriptionOverview = () => {        
   return (

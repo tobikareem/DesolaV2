@@ -1,5 +1,5 @@
 import { Star } from "lucide-react";
-import { Text } from "../TextComp";
+import { Text } from "../../ui/TextComp";
 
 interface AgentData {
   name: string;

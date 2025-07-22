@@ -1,6 +1,6 @@
 
-import { FlightOverview } from '../ui/AdminUIComp/FlightDatas'
-import { FlightSearchTable } from '../ui/AdminUIComp/FlightSearchTable'
+import { FlightOverview } from './AdminUIComp/FlightOverview'
+import { FlightSearchTable } from './AdminUIComp/FlightSearchTable'
 
 const FlightActivityView = () => {
   return (

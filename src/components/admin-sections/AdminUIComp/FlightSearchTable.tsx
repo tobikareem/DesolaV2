@@ -1,24 +1,25 @@
-import { MapPin } from 'lucide-react';
-import { Btn } from '../Button';
+import { MapPin, Upload } from 'lucide-react';
+import { Btn } from '../../ui/Button';
 import { recentSearches } from '../../../utils/AdminFlightData';
-import { Text } from '../TextComp';
+import { Text } from '../../ui/TextComp';
 
 export const FlightSearchTable = () => {
   return (
     <div className="bg-white rounded-xl shadow-sm border p-5 mt-6">
       <div className="flex justify-between items-center mb-4">
-       <Text
-                  as="h2"
-                  size="2xl"
-                  weight="medium"
-                  fontStyle="font-grotesk"
-                  className=" text-neutral-800"
-                >
-                  Recent Search History
-                </Text>
+        <Text
+          as="h2"
+          size="2xl"
+          weight="medium"
+          fontStyle="font-grotesk"
+          className=" text-neutral-800"
+        >
+          Recent Search History
+        </Text>
         <Btn className="bg-primary-600 text-white px-4 py-2 rounded-md hover:bg-primary-700 transition-all text-sm">
-                  + Export Data
-                </Btn>
+          <Upload className='mr-2' size={20}/>
+          Export Data
+        </Btn>
       </div>
 
       <div className="overflow-x-auto">

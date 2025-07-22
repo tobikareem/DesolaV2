@@ -10,7 +10,6 @@ const FlightActivityView = lazy(() => import('../../components/admin-sections/Fl
 const ErrorTrackingView = lazy(() => import('../../components/admin-sections/ErrorTrackingView'));
 const ChatSupportView = lazy(() => import('../../components/admin-sections/ChatSupportView'));
 const SettingsView = lazy(() => import('../../components/admin-sections/SettingsView'));
-const LogoutView = lazy(() => import('../../components/admin-sections/LogoutView'));
 
 interface AdminMainContentProps {
   view: ViewType;
@@ -33,15 +32,13 @@ export const AdminMainContent: React.FC<AdminMainContentProps> = ({ view }) => {
         return <ChatSupportView />;
       case 'settings':
         return <SettingsView />;
-      case 'logout':
-        return <LogoutView />;
       default:
         return null    
     }
   };
 
   return (
-    <Suspense fallback={<div className="flex-1"><LoadingScreen dimension='w-full h-full' message='Loading...' background={undefined}/></div>}>
+    <Suspense fallback={<div className="flex w-full h-full flex-1"><LoadingScreen dimension='w-full h-full' message='Loading...' background={undefined}/></div>}>
       {renderView()}
     </Suspense>
   );

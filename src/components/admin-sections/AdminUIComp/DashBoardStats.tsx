@@ -1,6 +1,6 @@
 import type { LucideIcon } from 'lucide-react';
 import { Users, CreditCard, Ticket, Plane, TrendingUp } from 'lucide-react';
-import { Text } from '../TextComp';
+import { Text } from '../../ui/TextComp';
 
 type StatCardVariant = 'dashboard' | 'subscription';
 

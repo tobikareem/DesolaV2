@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { DashboardStats } from '../ui/AdminUIComp/DashBoardStats';
-import { DashboardCharts } from '../ui/AdminUIComp/DashBoardCharts';
-import { TabSwitch } from '../ui/AdminUIComp/TabSwitch';
-import { IssueTable } from '../ui/AdminUIComp/IssueData';
-import { AgentPerformance } from '../ui/AdminUIComp/AgentData';
+import { DashboardStats } from './AdminUIComp/DashBoardStats';
+import { DashboardCharts } from './AdminUIComp/DashBoardCharts';
+import { TabSwitch } from './AdminUIComp/TabSwitch';
+import { IssueTable } from './AdminUIComp/IssueTable';
+import { AgentPerformance } from './AdminUIComp/AgentData';
 
 
 const DashboardView = () => {
