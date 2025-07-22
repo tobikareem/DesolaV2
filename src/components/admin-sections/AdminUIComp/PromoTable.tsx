@@ -1,8 +1,8 @@
 import React from 'react';
 import { Trash2, Calendar, GiftIcon } from 'lucide-react';
 import { PromoCode, promoCodes } from '../../../utils/AdminPromoData';
-import { Btn } from '../Button';
-import { Text } from '../TextComp';
+import { Btn } from '../../ui/Button';
+import { Text } from '../../ui/TextComp';
 
 export const PromoTable: React.FC = () => {
   return (

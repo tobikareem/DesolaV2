@@ -24,15 +24,13 @@ export const AdminRightPanel: React.FC<AdminRightPanelProps> = ({
       case 'flight':
         return 'Monitor user flight patterns and engagement';
       case 'tracking':
-        return 'Monitor user flight patterns and engagement';
+        return 'Monitor system performance and track technical issues';
       case 'support':
-        return 'Monitor system performance and track technical issues';
+        return 'Monitor user tickets and chat support';
       case 'settings':
-        return 'Monitor system performance and track technical issues';
-      case 'logout':
-        return 'System Settings';
+        return 'General overview and system settings';
       default:
-        return '';
+        return null;
     }
   };
   

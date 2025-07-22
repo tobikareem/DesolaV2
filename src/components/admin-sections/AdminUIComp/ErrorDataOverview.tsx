@@ -1,4 +1,4 @@
-import { Text } from "../TextComp"
+import { Text } from "../../ui/TextComp"
 import { StatCard } from "./DashBoardStats"
 import { BatteryWarningIcon, CheckCheck, Clock3Icon, TriangleAlert } from "lucide-react"
 

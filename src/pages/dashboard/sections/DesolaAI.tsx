@@ -46,13 +46,13 @@ export const DesolaAI = () => {
       <div ref={chatContainerRef} 
         className={`${loading ? 'border-2 border-primary-100':'border'} border-neutral-300 rounded-lg flex-1 space-y-2 overflow-y-auto py-2 sm:py-2.5 md:py-4 lg:py-6 px-2`}>
         { 
-          AIMessageLog?.map((message:DesolaAILog, index) => {
-            const isUser = message.role == 'user'
+          AIMessageLog?.map((item:DesolaAILog, index) => {
+            const isUser = item?.role == 'user'
           return(
-              <div className={`flex flex-col ${isUser ? 'pl-[20%] items-end' : 'pr-[10%] items-start'} w-full h-fit`} key={index}>
-                <div className={`${!isUser ? 'bg-primary-300/95' : 'bg-secondary-200/95'} w-fit rounded-lg p-2 space-y-1.5`}>
+              <div className={`flex flex-col ${isUser ? 'pl-[20%] items-end' : 'pr-[20%] items-start'} w-full h-fit`} key={index}>
+                <div className={`${!isUser ? 'bg-primary-300/95' : 'bg-secondary-200/80'} w-fit rounded-lg p-2 space-y-1.5`}>
                   <Text size="sm" color={``} className={``} >
-                    <ReactMarkdown>{message.message}</ReactMarkdown>
+                    <ReactMarkdown>{item.message}</ReactMarkdown>
                   </Text>
                   <div className={`float-right text-[10px]`}>
                     {!isUser ? <MdOutlineAutoAwesome /> : <BiUserCheck />}
