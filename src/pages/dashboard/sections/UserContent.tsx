@@ -4,6 +4,7 @@ import { ProfileSection } from "../../../components/dashboard-sections/profile";
 import { useDashboardInfo } from "../../../hooks/useDashboardInfo";
 import authService from "../../../services/authService";
 import { useAuthInfo } from "../../../hooks/useAuthInfo";
+import { Text } from "../../../components/ui/TextComp";
 
 export const UserContent: React.FC = () => {
   const { isAuthenticated, isLoading: authLoading } = useAuthInfo();
@@ -52,25 +53,29 @@ export const UserContent: React.FC = () => {
 
 
   return (
-    <div className="flex flex-col w-full h-full lg:py-6 bg-white ">
-      <div className="flex flex-col gap-4 pr-2 h-full">
-        <ProfileSection />
-
-        {preferencesLoading ? (
-          <div className="py-8 flex flex-1 justify-center gap-2 items-center">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500"/>
-            <span>Loading your preferences...</span>
-          </div>
-        ) : (
-          <PreferencesSection
-            preferences={preferences}
-            onChange={handlePreferenceChange}
-            onSave={savePreferences}
-            onAirportInputChange={fetchAirports}
-            airportSuggestions={airportSuggestions}
-            onAirportSelect={handleAirportSelect}
-          />
-        )}
+    <div className="flex flex-col w-full h-full bg-white ">
+      <div className="space-y-5 h-full">
+        <Text as="h1" size="2xl" weight="bold" className="text-primary-500">
+          Profile
+        </Text>
+        <div className="flex flex-col gap-4 pr-2 h-full lg:overflow-y-auto py-2">
+          <ProfileSection />
+          {preferencesLoading ? (
+            <div className="py-8 flex flex-1 justify-center gap-2 items-center">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500"/>
+              <span>Loading your preferences...</span>
+            </div>
+          ) : (
+            <PreferencesSection
+              preferences={preferences}
+              onChange={handlePreferenceChange}
+              onSave={savePreferences}
+              onAirportInputChange={fetchAirports}
+              airportSuggestions={airportSuggestions}
+              onAirportSelect={handleAirportSelect}
+            />
+          )}
+        </div>
       </div>
     </div>
   );

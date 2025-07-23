@@ -50,7 +50,7 @@ export const PreferencesSection = ({
     }
 
     return (
-        <div className="h-full lg:overflow-y-auto pr-1">
+        <div className="h-fit">
             <Text as="h2" size="xl" weight="bold" className="text-primary-500 mb-4">
                 Travel Preferences
             </Text>
@@ -185,7 +185,7 @@ export const PreferencesSection = ({
                     </Listbox>
                 </div>
 
-                <Btn onClick={() => { onSave(); updateCustomer({ ...customerData }) }} className="hover:!scale-95 w-full bg-success text-white px-6 py-2 mb-4 lg:mb-8 ">
+                <Btn onClick={() => { onSave(); updateCustomer({ ...customerData }) }} className="hover:!scale-95 w-full bg-success text-white px-6 py-2 mb-20">
                     Save Preferences
                 </Btn>
             </div>

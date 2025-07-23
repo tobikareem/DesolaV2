@@ -6,13 +6,13 @@ import { Text } from '../../ui/TextComp';
 export const FlightSearchTable = () => {
   return (
     <div className="bg-white rounded-xl shadow-sm border p-5 mt-6">
-      <div className="flex justify-between items-center mb-4">
+      <div className="flex flex-col md:flex-row gap-2 justify-between md:items-center mb-4">
         <Text
           as="h2"
-          size="2xl"
+          size="xl"
           weight="medium"
           fontStyle="font-grotesk"
-          className=" text-neutral-800"
+          className="text-center md:text-left md:text-2xl text-neutral-800"
         >
           Recent Search History
         </Text>

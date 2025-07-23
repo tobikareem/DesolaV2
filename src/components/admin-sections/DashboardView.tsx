@@ -13,9 +13,9 @@ const DashboardView = () => {
     <DashboardStats />
     <DashboardCharts />
     <TabSwitch activeTab={activeTab} setActiveTab={setActiveTab} />
-  <div>
-    {activeTab === 'issues' ? <IssueTable /> : <AgentPerformance />}
-  </div>
+    <div>
+      {activeTab === 'issues' ? <IssueTable /> : <AgentPerformance />}
+    </div>
   </div>
   )
 };
