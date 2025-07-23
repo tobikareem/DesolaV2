@@ -42,10 +42,10 @@ export const StatCard = ({
           <Text
             as="h3"
             color="text-primary-600"
-            size="base"
+            size="xl"
             weight="medium"
             fontStyle="font-grotesk"
-            className="xs:!text-xl sm:!text-3xl"
+            className="sm:!text-3xl lg:!text-2xl xl:!text-3xl"
           >
             {value}
           </Text>

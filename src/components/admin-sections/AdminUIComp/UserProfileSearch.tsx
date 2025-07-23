@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { Search } from 'lucide-react';
-import { Text } from '../../ui/TextComp';
 import { Input } from '../../ui/InputField';
 import { Btn } from '../../ui/Button';
 
@@ -29,7 +28,7 @@ export const UserProfileSearch = () => {
 
         <Btn
           onClick={handleSearch}
-          className="bg-blue-600 text-white px-5 py-2 rounded-md hover:bg-blue-600 transition"
+          className="bg-primary-500 text-white px-3 py-1 md:px-5 md:py-2 rounded-md hover:bg-primary-600 transition"
         >
           Search
         </Btn>

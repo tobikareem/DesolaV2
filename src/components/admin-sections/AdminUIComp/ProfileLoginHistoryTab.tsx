@@ -1,8 +1,7 @@
-import React from 'react';
+
 import { CheckCircle, Shield, XCircle } from 'lucide-react';
 import { Text } from '../../ui/TextComp';
 import { Btn } from '../../ui/Button';
-import ActivityHistoryTabs from './ActivityHistoryTab';
 
 const activityLogs = [
   {
@@ -47,11 +46,11 @@ const activityLogs = [
 const ProfileLoginHistoryTab = () => {
   return (
     <div className="bg-white p-6 rounded-xl shadow space-y-6">
-      <div className="flex items-center gap-2">
-        <Shield />
+      <div className="flex lg:items-center gap-2">
+        <Shield size={28}/>
         <Text
           as="h2"
-          size="2xl"
+          size="xl"
           weight="medium"
           fontStyle="font-grotesk"
           className=" text-neutral-800"
@@ -60,13 +59,13 @@ const ProfileLoginHistoryTab = () => {
         </Text>
       </div>
 
-      <div className="space-y-4">
+      <div className="space-y-4 w-full">
         {activityLogs.map((log, index) => (
           <div
             key={index}
-            className="flex justify-between items-center border p-4 rounded-lg"
+            className="flex flex-col md:flex-row justify-between items-center border p-2 md:p-4 rounded-lg"
           >
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-4 mb-2">
               <div className="text-green-600">
                 {log.status === 'success' ? (
                   <CheckCircle className="w-5 h-5 text-green-600" />
@@ -85,7 +84,7 @@ const ProfileLoginHistoryTab = () => {
               </div>
             </div>
 
-            <div className="flex items-center justify-between gap-8 text-sm text-gray-700">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-2  md:gap-8 text-sm text-gray-700">
               <div>
                 <Text as="p" size="sm" weight="medium">
                   {log.device}

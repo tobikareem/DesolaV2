@@ -16,7 +16,7 @@ export const TabComponent = ({ tabs }: { tabs: Tab[] }) => {
           <button
             key={tab.label}
             onClick={() => setActiveTab(tab.label)}
-            className={`px-8 border-0 py-2 text-sm font-medium rounded-lg ${
+            className={`px-2 py-1 md:px-8 border-0 md:py-2 text-[8px] xs:text-[10px] md:text-sm font-medium rounded-lg ${
               activeTab === tab.label
                 ? 'bg-white text-black'
                 : 'border-transparent text-gray-500'
