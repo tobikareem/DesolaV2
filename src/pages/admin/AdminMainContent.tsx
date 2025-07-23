@@ -38,7 +38,7 @@ export const AdminMainContent: React.FC<AdminMainContentProps> = ({ view }) => {
   };
 
   return (
-    <Suspense fallback={<div className="flex w-full h-full flex-1"><LoadingScreen dimension='w-full h-full' message='Loading...' background={undefined}/></div>}>
+    <Suspense fallback={<div className="flex w-full h-full flex-1"><LoadingScreen dimension='w-full h-full' message='Loading...' background={'bg-tranparent'}/></div>}>
       {renderView()}
     </Suspense>
   );

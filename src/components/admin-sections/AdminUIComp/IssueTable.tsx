@@ -8,21 +8,29 @@ const issueData = [
 
 export const IssueTable = () => {
   return (
-    <div className="bg-white rounded-2xl shadow border p-6 w-full mt-6 overflow-x-auto">
-      <table className="min-w-full">
-        <thead>
-          <tr className="text-left text-gray-800 font-semibold border-b">
-            <th className="pb-3 font-grotesk">Issue Type</th>
-            <th className="pb-3 text-center font-grotesk">Count</th>
-            <th className="pb-3 text-right font-grotesk" >Percentage</th>
+    <div className="bg-white rounded-2xl shadow border px-4 lg:p-6 w-full mt-6 overflow-x-auto">
+      <table className="w-full table-auto">
+        <thead className="w-full">
+          <tr className="w-full text-left text-sm lg:text-base text-gray-800 font-semibold border-b">
+            {['Issue Type', 'Count', 'Percentage'].map((item, index) => {
+              const alignment = index === 0 ? 'text-left' : index === 1 ? 'text-center' : 'text-right';
+              return (
+                <th
+                  key={item}
+                  className={`w-1/3 py-2 px-1 font-grotesk ${alignment}`}
+                >
+                  {item}
+                </th>
+              );
+            })}
           </tr>
         </thead>
         <tbody className="text-sm text-gray-900">
           {issueData.map((issue, index) => (
             <tr key={index} className="h-16">
-              <td>{issue.type}</td>
-              <td className="text-center">{issue.count}</td>
-              <td className="text-right">
+              <td className="text-left w-1/3">{issue.type}</td>
+              <td className="text-center w-1/3">{issue.count}</td>
+              <td className="text-right w-1/3">
                 <div className="flex items-center justify-end gap-2">
                   {/* Progress bar */}
                   <div className="w-24 h-2 rounded-full bg-gray-200 relative">

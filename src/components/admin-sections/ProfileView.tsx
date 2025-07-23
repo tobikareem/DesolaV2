@@ -1,5 +1,4 @@
 // src/views/DashboardView.tsx
-import React, { useState } from 'react';
 import UserProfileOverview from './AdminUIComp/UserProfileOverview';
 import { Text } from '../ui/TextComp';
 import ActivityHistoryTabs from './AdminUIComp/ActivityHistoryTab';
@@ -10,10 +9,10 @@ const ProfileView = () => {
     <div>
       <Text
         as="h2"
-        size="2xl"
+        size="xl"
         weight="semibold"
         fontStyle="font-grotesk"
-        className="mb-4"
+        className="mb-4 text-2xl"
       >
         Search for Users Profile
       </Text>

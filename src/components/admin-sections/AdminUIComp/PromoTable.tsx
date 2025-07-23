@@ -7,21 +7,21 @@ import { Text } from '../../ui/TextComp';
 export const PromoTable: React.FC = () => {
   return (
     <div className="bg-white rounded-xl shadow-sm border p-5 mt-6">
-      <div className="flex justify-between items-center mb-4">
-        <div className='flex items-center gap-2'>
-            <GiftIcon />
+      <div className="flex flex-col md:flex-row gap-2 justify-between items-center mb-4">
+        <div className='flex md:items-center gap-2'>
+          <GiftIcon size={28}/>
           <Text
             as="h2"
-            size="2xl"
+            size="xl"
             weight="medium"
             fontStyle="font-grotesk"
-            className=" text-neutral-800"
+            className="text-center md:text-left md:text-2xl text-neutral-800"
           >
             Promo & Discount Codes
           </Text>
         </div>
 
-        <Btn className="bg-primary-600 text-white px-4 py-2 rounded-md hover:bg-primary-700 transition-all text-sm">
+        <Btn className="bg-primary-600 text-white px-4 py-2 rounded-md hover:bg-primary-700 transition-all text-xs md:text-sm">
           + Create a Promo Code
         </Btn>
       </div>

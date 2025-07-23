@@ -7,7 +7,6 @@ const SubscriptionView = () => {
     <div>
       <SubscriptionOverview />
       <PromoTable />
-
     </div>
   )
 }

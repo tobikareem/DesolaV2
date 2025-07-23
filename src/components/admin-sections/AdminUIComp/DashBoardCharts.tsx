@@ -31,7 +31,7 @@ const pieData = [
 
 export const DashboardCharts = () => {
   return (
-    <div className="flex flex-col lg:flex-row max-w-7xl gap-6 w-full mt-8">
+    <div className="flex flex-col lg:flex-row max-w-full gap-6 w-full mt-8">
       {/* Bar Chart Container */}
       <div className="flex-1 basis-2/3 hover:scale-105 hover:z-20 transition-transform duration-300 ease-in-out">
         <Text

@@ -20,40 +20,40 @@ const AgentCard = ({
   rating,
   resolutionRate,
 }: AgentData) => (
-  <div className="flex justify-between items-center bg-white rounded-xl border p-4 shadow-sm mb-4">
-    <div className="flex items-center space-x-4">
-      <div className="w-10 h-10 font-grotesk rounded-full bg-blue-700 text-white flex items-center justify-center font-semibold">
+  <div className="flex flex-col xs:flex-row w-full justify-between gap-2 xs:items-center bg-white rounded-xl border p-2 sm:p-4 shadow-sm mb-4">
+    <div className="flex items-center space-x-1 sm:space-x-4">
+      <div className="w-10 h-10 font-grotesk rounded-full bg-primary-500 text-white flex items-center justify-center font-semibold">
         {initials}
       </div>
       <div>
-        <Text as="h6" weight="medium" fontStyle="font-grotesk" className="">
+        <Text as="h6" size="xs" weight="medium" fontStyle="font-grotesk" className="sm:text-base">
           {name}
         </Text>
-        <Text as="p" size="sm" className=" text-gray-500">
+        <Text as="p" size="2xs" className="text-gray-500 sm:text-sm">
           {tickets} tickets • {resolved} resolved
         </Text>
       </div>
     </div>
 
-    <div className="flex items-center space-x-6 text-sm text-gray-600">
-      <div className="text-right">
-        <Text as="p" size="xs" className="">
+    <div className="flex items-center justify-end space-x-3 xs:space-x-1.5 sm:space-x-3 md:space-x-6 text-sm text-gray-600">
+      <div className="sm:text-right">
+        <Text as="p" size="2xs" className="sm:text-xs">
           Avg Response
         </Text>
         <Text
           as="p"
-          size="base"
+          size="xs"
           weight="semibold"
-          className="text-blue-600 font-medium"
+          className="text-blue-600 font-medium sm:text-base"
         >
           {responseTime}
         </Text>
       </div>
       <div className="text-right">
-        <Text as="p" size="xs" className="">
+        <Text as="p" size="2xs" className="sm:text-xs">
           Rating
         </Text>
-        <Text as="p" className="flex items-center gap-1 text-[#D29F07]">
+        <Text as="p" size="sm" className="flex items-center gap-1 text-[#D29F07] sm:text-base">
           <Star className="w-4 h-4 text-[#D29F07]" />
           <span className="font-medium">{rating.toFixed(1)}</span>
         </Text>
@@ -108,22 +108,22 @@ export const AgentPerformance = () => {
   ];
 
   return (
-    <div className="max-w-7xl mx-auto p-6 mt-6">
+    <div className="w-full p-2 sm:p-6 mt-6">
       <Text
         as="h3"
-        size="2xl"
+        size="xl"
         weight="medium"
         fontStyle="font-grotesk"
-        className=" mb-2"
+        className=" mb-2 lg:text-2xl"
       >
         Agent Performance
       </Text>
       <Text
         as="p"
-        size="sm"
+        size="xs"
         weight="medium"
         fontStyle="font-grotesk"
-        className="font-grotesk mb-6"
+        className="font-grotesk mb-6 lg:text-sm"
       >
         Individual agent statistics rankings
       </Text>

@@ -29,6 +29,7 @@ export const AdminRightPanel: React.FC<AdminRightPanelProps> = ({
         return 'Monitor user tickets and chat support';
       case 'settings':
         return 'General overview and system settings';
+      case 'logout': return null
       default:
         return null;
     }
@@ -36,10 +37,10 @@ export const AdminRightPanel: React.FC<AdminRightPanelProps> = ({
   
   return (
     <div className="flex flex-col w-full h-full">
-      <div className="bg-neutral-100 border-b border-neutral-300 flex items-center gap-4 w-full h-20 lg:h-30 px-4 sm:px-6">
+      <div className="bg-neutral-100 border-b border-neutral-300 flex md:items-center gap-4 w-full h-20 lg:h-30 px-4 py-2 sm:px-6">
         <div
           onClick={Action}
-          className="block lg:hidden text-primary-600 text-xl cursor-pointer"
+          className="block lg:hidden text-primary-600 text-2xl cursor-pointer mt-2"
         >
           <GiHamburgerMenu />
         </div>
@@ -62,7 +63,7 @@ export const AdminRightPanel: React.FC<AdminRightPanelProps> = ({
           </Text>
         </div>
       </div>
-      <div className="flex-1 w-full h-full overflow-y-auto p-6 lg:pr-[5%]">
+      <div className="flex-1 w-full h-full overflow-y-auto p-6 lg:pr-[10%]">
         <AdminMainContent view={view} />
       </div>
     </div>
