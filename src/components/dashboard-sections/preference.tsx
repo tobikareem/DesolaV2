@@ -31,6 +31,10 @@ export const PreferencesSection = ({
     const [activeField, setActiveField] = useState<string | null>(null);
     const [filteredSuggestions, setFilteredSuggestions] = useState<Airport[]>(airportSuggestions || []);
 
+    // Sync filteredSuggestions with airportSuggestions when it changes
+    useEffect(() => {
+        setFilteredSuggestions(airportSuggestions || []);
+    }, [airportSuggestions]);
     const safePreferences = preferences || {
         originAirport: "",
         destinationAirport: "",
