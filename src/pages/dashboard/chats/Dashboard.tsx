@@ -1,4 +1,6 @@
 
+import { DateSelectArg } from "@fullcalendar/core/index.js";
+import { PenLine } from "lucide-react";
 import { ChangeEvent, KeyboardEvent, useContext, useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import MobileRender from "../../../components/dashboard-sections/mobileRender";
@@ -7,22 +9,20 @@ import EditModal from "../../../components/modals/EditModal";
 import { Modal } from "../../../components/modals/Modal";
 import { Btn } from "../../../components/ui/Button";
 import { ChatContext } from "../../../contexts/ChatContext";
+import { NavigationContext } from "../../../contexts/NavigationContext";
 import { UIContext } from "../../../contexts/UIContext";
 import { useAuthInfo } from "../../../hooks/useAuthInfo";
-import { useAirports, useDashboardInfo} from "../../../hooks/useDashboardInfo";
+import { useDashboardInfo } from "../../../hooks/useDashboardInfo";
 import { useDebounce } from "../../../hooks/useDebounce";
+import { useIsDesktop } from "../../../hooks/useDesktopSize";
+import { useInput } from "../../../hooks/useInput";
+import { useModals } from "../../../hooks/useModals";
 import { ChatBotResponseHandler, resetChatBot } from "../../../utils/ChatBotHandler";
 import { RightPanel } from "../sections/RightPanel";
 import ChatHistory from "./ChatHistory";
 import ChatInput from "./ChatInput";
 import RecentPromptsBar from "./RecentPromptsBar";
 import SuggestionPanel from "./SuggestionPanel";
-import { useModals } from "../../../hooks/useModals";
-import { useInput } from "../../../hooks/useInput";
-import { DateSelectArg } from "@fullcalendar/core/index.js";
-import { PenLine } from "lucide-react";
-import { useIsDesktop } from "../../../hooks/useDesktopSize";
-import { NavigationContext } from "../../../contexts/NavigationContext";
 
 const analyzeLastMessage = (message?: string) => {
   if (!message) return {
@@ -48,24 +48,44 @@ const analyzeLastMessage = (message?: string) => {
 };
 
 const Dashboard: React.FC = () => {
-  // Context hooks
-  const { chatLog, setChatLog, recentPrompts, setRecentPrompts } = useContext(ChatContext);
-  const { toggleModal } = useContext(UIContext);
-  const { mobileTab} = useContext(NavigationContext);
-  // Custom hooks
-  const { showEditModal, setShowEditModal, showCalendar, setShowCalendar, showPopData,
-     setShowPopData, setSearchParam, searchParam} = useModals();
-  const { inputValue, setInputValue, dateSelect, setDateSelect, setDate, date } = useInput();
-  const { fetchAirports, airportSuggestions } = useAirports();
-  const { loadPreferences, preferences } = useDashboardInfo();
   // Utility hooks
   const isDesktop = useIsDesktop();
   const debounce = useDebounce();
+
   // Local UI state
   const [botLoader, setBotLoader] = useState(false);
   const [chatLoading] = useState(false);
   const { isAuthenticated } = useAuthInfo();
   const loadedRef = useRef(false);
+
+  // Context hooks
+  const { toggleModal } = useContext(UIContext);
+  const { mobileTab } = useContext(NavigationContext);
+  const { chatLog, setChatLog, recentPrompts, setRecentPrompts } = useContext(ChatContext);
+  const { inputValue, setInputValue, dateSelect, setDateSelect, setDate, date } = useInput();
+
+  // Custom hooks
+  const {
+    showEditModal,
+    setShowEditModal,
+    showCalendar,
+    setShowCalendar,
+    showPopData,
+    setShowPopData,
+    setSearchParam,
+    searchParam
+  } = useModals();
+
+  const {
+    loadPreferences,
+    preferences,
+    fetchAirports,
+    airportSuggestions,
+    preferencesLoading,
+    handlePreferenceChange,
+    handleAirportSelect,
+    savePreferences
+  } = useDashboardInfo();
 
   useEffect(() => {
     fetchAirports();
@@ -176,8 +196,8 @@ const Dashboard: React.FC = () => {
   const handleCloseCalendar = () => setShowCalendar(false);
 
   const handleDateSelect = (arg: DateSelectArg) => {
-    const formattedDate =arg.start ? `${arg.start.getFullYear()}-${String(arg.start.getMonth() + 1).padStart(2, '0')}-${String(arg.start.getDate()).padStart(2, '0')}`
-    : '';
+    const formattedDate = arg.start ? `${arg.start.getFullYear()}-${String(arg.start.getMonth() + 1).padStart(2, '0')}-${String(arg.start.getDate()).padStart(2, '0')}`
+      : '';
     if (!arg.start) return;
     setInputValue(formattedDate || '');
     setDate(arg.start);
@@ -237,20 +257,20 @@ const Dashboard: React.FC = () => {
   const isOneWay = chatLog.some(msg => msg.message.toLowerCase().includes('one way'));
   const isLastMessage = chatLog.length > 0 && chatLog[chatLog.length - 1].message.toLowerCase().includes('click the search button')
 
-const removeReturnDate = () => {
-  // Only remove return date if the route is now one way and there are at least two dates
-  const isNowOneWay = chatLog.some(msg => msg.message.toLowerCase().includes('one way'));
-  setRecentPrompts(prev => {
-    const newPrompts = [...prev];
-    const dateIndices = newPrompts
-      .map((item, idx) => ({ item, idx }))
-      .filter(({ item }) => /^\d{4}-\d{2}-\d{2}$/.test(item));
-    if (isNowOneWay && dateIndices.length >= 2) {
-      newPrompts.splice(dateIndices[1].idx, 1);
-    }
-    return newPrompts;
-  });
-};
+  const removeReturnDate = () => {
+    // Only remove return date if the route is now one way and there are at least two dates
+    const isNowOneWay = chatLog.some(msg => msg.message.toLowerCase().includes('one way'));
+    setRecentPrompts(prev => {
+      const newPrompts = [...prev];
+      const dateIndices = newPrompts
+        .map((item, idx) => ({ item, idx }))
+        .filter(({ item }) => /^\d{4}-\d{2}-\d{2}$/.test(item));
+      if (isNowOneWay && dateIndices.length >= 2) {
+        newPrompts.splice(dateIndices[1].idx, 1);
+      }
+      return newPrompts;
+    });
+  };
 
 
   return (
@@ -262,7 +282,7 @@ const removeReturnDate = () => {
         </div>
         <ChatHistory chatLog={chatLog} botLoader={botLoader} isLoading={chatLoading} />
         {mobileTab == '' && isLastMessage && Array.isArray(recentPrompts) && (isOneWay ? recentPrompts.length >= 5 : recentPrompts.length >= 6) && (
-          <Btn onClick={() => {toggleModal('flight');}}
+          <Btn onClick={() => { toggleModal('flight'); }}
             className="fixed lg:hidden px-6 py-1 w-40 h-9 md:h-12 bg-secondary-500 text-neutral-100 self-end bottom-[130px] right-4"
           >
             Search
@@ -278,7 +298,7 @@ const removeReturnDate = () => {
           suggestionsVisible={showPopData}
           setSuggestionsVisible={setShowPopData}
         />
-        { showPopData &&
+        {showPopData &&
           <SuggestionPanel
             visible={showPopData}
             position="bottom-30 left-4 lg:left-[12%]"
@@ -288,10 +308,10 @@ const removeReturnDate = () => {
             onSelect={handleSelectSuggestion}
           />
         }
-        { showEditModal &&
+        {showEditModal &&
           <Modal close={toggleEditModal} display={showEditModal}>
-            <EditModal prompts={recentPrompts} 
-              close={toggleEditModal} 
+            <EditModal prompts={recentPrompts}
+              close={toggleEditModal}
               onUpdatePrompt={handleUpdatePrompt}
               onUpdateReturnDate={(date) => setRecentPrompts(prev => {
                 const newPrompts = [...prev];
@@ -322,7 +342,15 @@ const removeReturnDate = () => {
         </Modal>
         {!isDesktop && <MobileRender />}
       </div>
-      <RightPanel/>
+      <RightPanel
+        preferences={preferences}
+        airportSuggestions={airportSuggestions}
+        preferencesLoading={preferencesLoading}
+        handlePreferenceChange={handlePreferenceChange}
+        handleAirportSelect={handleAirportSelect}
+        savePreferences={savePreferences}
+        fetchAirports={fetchAirports}
+      />
     </div>
   );
 };

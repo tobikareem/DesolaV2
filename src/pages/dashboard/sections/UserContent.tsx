@@ -1,36 +1,30 @@
-import { useEffect, useRef } from "react";
 import { PreferencesSection } from "../../../components/dashboard-sections/preference";
 import { ProfileSection } from "../../../components/dashboard-sections/profile";
-import { useDashboardInfo } from "../../../hooks/useDashboardInfo";
-import authService from "../../../services/authService";
-import { useAuthInfo } from "../../../hooks/useAuthInfo";
 import { Text } from "../../../components/ui/TextComp";
+import { useAuthInfo } from "../../../hooks/useAuthInfo";
+import { Airport, UserPreferences } from "../../../hooks/useDashboardInfo";
+import authService from "../../../services/authService";
 
-export const UserContent: React.FC = () => {
+interface UserContentProps {
+  preferences?: UserPreferences;
+  airportSuggestions?: Airport[];
+  preferencesLoading?: boolean;
+  handlePreferenceChange?: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
+  handleAirportSelect?: (airportCode: string, field: string) => void;
+  savePreferences?: () => Promise<void>;
+  fetchAirports?: () => Promise<void>;
+}
+
+export const UserContent: React.FC<UserContentProps> = ({
+  preferences,
+  airportSuggestions,
+  preferencesLoading,
+  handlePreferenceChange,
+  handleAirportSelect,
+  savePreferences,
+  fetchAirports
+}) => {
   const { isAuthenticated, isLoading: authLoading } = useAuthInfo();
-  const loadedRef = useRef(false);
-  const {
-    airportSuggestions,
-    fetchAirports,
-    preferences,
-    preferencesLoading,
-    handlePreferenceChange,
-    handleAirportSelect,
-    savePreferences,
-    loadPreferences
-  } = useDashboardInfo();
-
-  useEffect(() => {
-    if (isAuthenticated && !loadedRef.current) {
-      loadPreferences();
-      loadedRef.current = true;
-    }
-
-    if (!isAuthenticated) {
-      loadedRef.current = false;
-    }
-
-  }, [isAuthenticated, loadPreferences]);
 
   if (authLoading) {
     return <div className="flex justify-center items-center h-64">
@@ -62,7 +56,7 @@ export const UserContent: React.FC = () => {
           <ProfileSection />
           {preferencesLoading ? (
             <div className="py-8 flex flex-1 justify-center gap-2 items-center">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500"/>
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500" />
               <span>Loading your preferences...</span>
             </div>
           ) : (
