@@ -112,7 +112,7 @@ export const Navbar = () => {
                                 <Close Action={handleDrawer} />
                             </div>
 
-                            {isSigningIn && <LoadingScreen dimension={undefined} background={undefined} message={"Signing In..."} />}
+                            {isSigningIn && <LoadingScreen dimension={undefined} background={undefined} message={"Redirecting..."} />}
 
                             <div id="drawer"
                                 className={`flex flex-col justify-between items-center px-4 py-10  w-full h-full `}>
@@ -174,7 +174,7 @@ export const Navbar = () => {
                                             authService.signIn();
                                         }}
                                         className={`hover:!scale-95 flex lg:hidden items-center justify-center h-12 w-full bg-gradient-to-b from-[#FF9040] to-[#FF6B00] text-xl text-white font-medium rounded-[48px] transition-transform duration-300 ease-in-out`}>
-                                        {isSigningIn ? (<><span>Signing in...</span><div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mx-4"/></>) : 'Sign In'}
+                                        {isSigningIn ? (<><span>Redirecting...</span><div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mx-4"/></>) : 'Sign In'}
                                     </Btn>)
                                 }
                                 {isAuthenticated && router == '/' && (

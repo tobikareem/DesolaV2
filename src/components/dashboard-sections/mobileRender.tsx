@@ -2,6 +2,7 @@
 import React, { Suspense, useContext } from "react";
 import { NavigationContext } from "../../contexts/NavigationContext";
 import LoadingScreen from "../layout/LoadingScreen";
+import { MdKeyboardBackspace } from "react-icons/md";
 
 const TripHistoryContent = React.lazy(() =>
   import("../../pages/dashboard/sections/TripHistoryContent").then(module => ({
@@ -37,7 +38,7 @@ const SubscriptionContent = React.lazy(() =>
 
 const MobileRender: React.FC = () => {
 
-  const { mobileTab } = useContext(NavigationContext);
+  const { mobileTab, setMobileTab } = useContext(NavigationContext);
   const RenderPage = () => {
     switch (mobileTab) {
       case 'AI' : 
@@ -71,6 +72,12 @@ const MobileRender: React.FC = () => {
           <div className="w-screen h-full pt-10 px-4 md:px-6">
             <Suspense fallback={<LoadingScreen message={"Loading..."} dimension="w-full h-full" background="bg-background"/>}>
               {RenderPage()}
+              {mobileTab !== '' && 
+                <div onClick={()=> setMobileTab('')}
+                  className="fixed z-[4] bottom-8 shadow-md rounded-full font-semibold font-work  right-5 flex items-center justify-center py-2 px-2 bg-primary-700 text-white">
+                  <MdKeyboardBackspace size={24} /> Back
+                </div>
+              }
             </Suspense>
           </div>
         </div>

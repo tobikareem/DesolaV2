@@ -1,7 +1,7 @@
 import { Headset, House, LogOut, Trash2, User } from 'lucide-react';
 import React, { useContext, useEffect, useState, Suspense } from 'react';
 import { PiHeadsetFill, PiRoadHorizonBold, PiRoadHorizonFill, PiTrashFill } from 'react-icons/pi';
-import { RiHome5Fill, RiRobot2Fill, RiRobot2Line, RiUserFill } from 'react-icons/ri';
+import { RiHome5Fill, RiRobot2Fill, RiRobot2Line, RiUser3Fill } from 'react-icons/ri';
 import { TbCreditCard, TbCreditCardFilled } from 'react-icons/tb';
 import { SidebarLogout } from '../../../components/dashboard-sections/sidebar/SidebarLogout';
 import { SidebarTab } from '../../../components/dashboard-sections/sidebar/SidebarTab';
@@ -18,6 +18,8 @@ import { UIContext } from '../../../contexts/UIContext';
 import { useAuthInfo } from '../../../hooks/useAuthInfo';
 import { CustomStorage } from '../../../utils/customStorage';
 import LoadingScreen from '../../../components/layout/LoadingScreen';
+import { useIsDesktop } from '../../../hooks/useDesktopSize';
+import { BsChatLeftText, BsChatLeftTextFill } from 'react-icons/bs';
 
 const HomeContent = React.lazy(() => import('./HomeContent').then(module => ({ default: module.HomeContent })));
 const DesolaAI = React.lazy(() => import('./DesolaAI').then(module => ({ default: module.DesolaAI })));
@@ -46,6 +48,7 @@ export const RightPanel: React.FC = () => {
   const { showLogoutModal, showDeleteModal, showFlightModal, toggleModal } = useContext(UIContext);
   const { travelInfo } = useContext(ChatContext);
   const { logout } = useAuthInfo();
+  const isDesktop = useIsDesktop();
 
   const isSearchEnabled = () => {
     if (!travelInfo || typeof travelInfo !== 'object') {
@@ -60,14 +63,16 @@ export const RightPanel: React.FC = () => {
     });
   };
 
+  const Home = !isDesktop ? 'Chat' : 'Home'
+
   const sidebarOptions: NavItem[] = [
-    { id: 'home', icon: <House size={24} />, icon2: <RiHome5Fill />, label: 'Home' },
+    { id: 'home', icon: isDesktop ? <House size={24}/> : <BsChatLeftText size={24}/>, icon2: isDesktop ? <RiHome5Fill size={24}/> : <BsChatLeftTextFill size={24}/>, label: Home },
     { id: 'AI', icon: <RiRobot2Line size={24} />, icon2: <RiRobot2Fill size={24} />, label: 'AI Assistant' },
-    { id: 'road', icon: <PiRoadHorizonBold size={24} />, icon2: <PiRoadHorizonFill />, label: 'Trips' },
-    { id: 'trash', icon: <Trash2 size={24} />, icon2: <PiTrashFill />, label: 'Clear Chat' },
-    { id: 'user', icon: <User size={24} />, icon2: <RiUserFill />, label: 'Profile' },
-    { id: 'subscription', icon: <TbCreditCard />, icon2: <TbCreditCardFilled />, label: 'Subscription' },
-    { id: 'support', icon: <Headset size={24} />, icon2: <PiHeadsetFill />, label: 'Support' },
+    { id: 'road', icon: <PiRoadHorizonBold size={24} />, icon2: <PiRoadHorizonFill size={24}/>, label: 'Trips' },
+    { id: 'trash', icon: <Trash2 size={24} />, icon2: <PiTrashFill size={24}/>, label: 'Clear Chat' },
+    { id: 'user', icon: <User size={24} />, icon2: <RiUser3Fill size={24}/>, label: 'Profile' },
+    { id: 'subscription', icon: <TbCreditCard size={24}/>, icon2: <TbCreditCardFilled size={24}/>, label: 'Subscription' },
+    { id: 'support', icon: <Headset size={24} />, icon2: <PiHeadsetFill size={24}/>, label: 'Support' },
   ];
 
   useEffect(() => {
