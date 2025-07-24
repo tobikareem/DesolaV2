@@ -169,7 +169,7 @@ export const RightPanel: React.FC<RightPanelProps> = ({
     }
 
     // For components that don't need props
-    const Component = TAB_COMPONENTS[selectedTab as 'AI' | 'road' | 'trash' | 'user' | 'subscription' | 'support'];
+    const Component = TAB_COMPONENTS[selectedTab as 'AI' | 'road' | 'trash' | 'subscription' | 'support'];
     return Component ? <Component departure={''} destination={''} departureDate={''} returnDate={''} travelRoute={''} flightClass={''} /> : null;
   };
 
