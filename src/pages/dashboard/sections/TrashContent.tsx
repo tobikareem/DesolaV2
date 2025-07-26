@@ -1,18 +1,13 @@
 import { EmptyState } from "../../../components/layout/EmptyState"
-import { Text } from "../../../components/ui/TextComp"
+import { Title } from "../../../components/layout/Title"
 
 
 export const TrashContent: React.FC = () => {
   return(
     <div className="flex-1 overflow-y-auto">
-      <Text
-        as="h1"
-        size="2xl"
-        weight="bold"
-        className="font-grotesk text-primary-500 mb-5"
-      >
-        Great Deals for Your Trip!
-      </Text>
+      <Title>
+        Clear your chat
+      </Title>
       <EmptyState position={"center"} content={null}/>
     </div>
   )

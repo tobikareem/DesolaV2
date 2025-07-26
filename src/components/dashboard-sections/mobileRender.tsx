@@ -37,7 +37,7 @@ const SubscriptionContent = React.lazy(() =>
 
 const MobileRender: React.FC = () => {
 
-  const { mobileTab } = useContext(NavigationContext);
+  const { mobileTab} = useContext(NavigationContext);
   const RenderPage = () => {
     switch (mobileTab) {
       case 'AI' : 

@@ -1,9 +1,11 @@
 import { PreferencesSection } from "../../../components/dashboard-sections/preference";
 import { ProfileSection } from "../../../components/dashboard-sections/profile";
-import { Text } from "../../../components/ui/TextComp";
 import { useAuthInfo } from "../../../hooks/useAuthInfo";
+import { Title } from "../../../components/layout/Title";
 import { Airport, UserPreferences } from "../../../hooks/useDashboardInfo";
 import authService from "../../../services/authService";
+
+
 
 interface UserContentProps {
   preferences?: UserPreferences;
@@ -49,9 +51,9 @@ export const UserContent: React.FC<UserContentProps> = ({
   return (
     <div className="flex flex-col w-full h-full bg-white ">
       <div className="space-y-5 h-full">
-        <Text as="h1" size="2xl" weight="bold" className="text-primary-500">
+        <Title>
           Profile
-        </Text>
+        </Title>
         <div className="flex flex-col gap-4 pr-2 h-full lg:overflow-y-auto py-2">
           <ProfileSection />
           {preferencesLoading ? (
