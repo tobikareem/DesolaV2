@@ -23,7 +23,7 @@ export const AirportSuggestions = ({
     
 
     return (
-        <div className="absolute z-10 bg-neutral-200 border shadow-lg rounded-lg w-full overflow-hidden mt-1">
+        <div className="absolute z-10 bg-neutral-300 border shadow-lg rounded-lg w-full overflow-hidden mt-1">
             <Listbox
                 name="airportSuggestions"
                 onChange={(value) => onSelect(value)}
