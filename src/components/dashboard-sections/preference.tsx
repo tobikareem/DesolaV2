@@ -147,7 +147,7 @@ export const PreferencesSection = ({
                             </span>
                             <MdKeyboardArrowDown />
                         </ListboxButton>
-                        <ListboxOptions className={`absolute w-full border border-neutral-300 rounded-[10px] mt-1 bg-neutral-200 z-10 overflow-hidden`}>
+                        <ListboxOptions className={`absolute w-full border border-neutral-300 rounded-[10px] mt-1 bg-neutral-300 z-10 overflow-hidden`}>
                             {
                                 ['Economy', 'Business', 'First Class'].map((option) => (
 
@@ -182,7 +182,7 @@ export const PreferencesSection = ({
                             </span>
                             <MdKeyboardArrowDown />
                         </ListboxButton>
-                        <ListboxOptions className={`absolute w-full border border-neutral-300 rounded-[10px] mt-1 bg-neutral-200 z-10 overflow-hidden`}>
+                        <ListboxOptions className={`absolute w-full border border-neutral-300 rounded-[10px] mt-1 bg-neutral-300 z-10 overflow-hidden`}>
                             {
                                 ['Non-Stop', '1 Stop', '2+ Stops'].map((option) => (
 
