@@ -5,6 +5,7 @@ import { Btn } from '../../../components/ui/Button';
 import { Text } from '../../../components/ui/TextComp';
 import { toast } from 'react-toastify';
 import { UseValidate } from '../../../hooks/useValidation';
+import { Title } from '../../../components/layout/Title';
 
 export const SupportContent: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -45,14 +46,9 @@ export const SupportContent: React.FC = () => {
 
   return (
     <div className="flex-1 h-full">
-      <Text
-        as="h1"
-        size="2xl"
-        weight="bold"
-        className="font-grotesk text-primary-500 mb-5"
-      >
+      <Title>
         Support
-      </Text>
+      </Title>
       <div className="mt-7 w-full h-full overflow-y-auto">
         <Text as="h5" size="sm" weight="bold" className="font-grotesk mb-1">
           Lets chat, reach out to us

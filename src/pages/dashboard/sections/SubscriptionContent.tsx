@@ -18,6 +18,7 @@ import { STRIPE } from "../../../utils/constants"
 import { ENDPOINTS_API_PATH } from '../../../utils/endpoints'
 import { StripePaymentForm } from "../../payment/StripePaymentForm"
 import { BillFrequency } from "../../pricing/BillFrequency"
+import { Title } from '../../../components/layout/Title'
 
 const stripePromise = loadStripe(STRIPE.PUBLISHABLE_KEY);
 
@@ -281,9 +282,9 @@ export const SubscriptionContent = () => {
   return (
     <div className="flex flex-col h-full relative">
       <div className="relative space-y-2 mb-5">
-        <Text as="h1" size="2xl" weight="bold" className="font-grotesk text-primary-500">
+        <Title>
           Subscription Management
-        </Text>
+        </Title>
         <Text size="2xs" className="lg:!text-xs !text-neutral-500 pl-0.5">
           Manage your subscription to Desola Flights Premium. Choose a plan that suits you and enjoy exclusive benefits.
         </Text>
