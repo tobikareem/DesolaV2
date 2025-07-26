@@ -1,5 +1,5 @@
 import { Listbox, ListboxButton, ListboxOption, ListboxOptions } from '@headlessui/react';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { useAuthInfo } from "../../hooks/useAuthInfo";
 import useCustomerApi from "../../hooks/useCustomerApi";
@@ -19,19 +19,33 @@ export const PreferencesSection = ({
     airportSuggestions,
     onAirportSelect
 }: {
-    preferences: UserPreferences;
-    onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
-    onSave: () => void;
-    onAirportInputChange: (value: string) => void;
-    airportSuggestions: Airport[];
-    onAirportSelect: (code: string, field: string) => void;
+    preferences?: UserPreferences;
+    onChange?: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
+    onSave?: () => void;
+    onAirportInputChange?: (value: string) => void;
+    airportSuggestions?: Airport[];
+    onAirportSelect?: (code: string, field: string) => void;
 }) => {
     const { customerProfile } = useAuthInfo();
     const { updateCustomer } = useCustomerApi();
     const [activeField, setActiveField] = useState<string | null>(null);
-    const [filteredSuggestions, setFilteredSuggestions] = useState<Airport[]>(airportSuggestions);
+    const [filteredSuggestions, setFilteredSuggestions] = useState<Airport[]>(airportSuggestions || []);
+
+    // Sync filteredSuggestions with airportSuggestions when it changes
+    useEffect(() => {
+        setFilteredSuggestions(airportSuggestions || []);
+    }, [airportSuggestions]);
+    const safePreferences = preferences || {
+        originAirport: "",
+        destinationAirport: "",
+        travelClass: "Economy",
+        stopOvers: "Non-Stop",
+        userId: "",
+    };
+
     const handleAirportInputChange = (value: string) => {
-        const filtered = airportSuggestions.filter(
+        const suggestions = airportSuggestions || [];
+        const filtered = suggestions.filter(
             (airport) =>
                 airport.name.toLowerCase().includes(value.toLowerCase()) ||
                 airport.city.toLowerCase().includes(value.toLowerCase()) ||
@@ -65,10 +79,10 @@ export const PreferencesSection = ({
                             id="originAirportInput"
                             type="text"
                             name="originAirport"
-                            value={preferences.originAirport}
+                            value={safePreferences.originAirport}
                             onChange={(e) => {
-                                onChange(e);
-                                onAirportInputChange(e.target.value);
+                                onChange?.(e);
+                                onAirportInputChange?.(e.target.value);
                                 setActiveField("originAirport");
                                 handleAirportInputChange(e.target.value);
                             }}
@@ -79,7 +93,7 @@ export const PreferencesSection = ({
                         <AirportSuggestions
                             id="origin-airport-suggestions"
                             suggestions={filteredSuggestions}
-                            onSelect={(code) => onAirportSelect(code, "originAirport")}
+                            onSelect={(code) => onAirportSelect?.(code, "originAirport")}
                             isVisible={activeField === "originAirport"}
                         />
                     </div>
@@ -95,10 +109,10 @@ export const PreferencesSection = ({
                             id="destinationAirportInput"
                             type="text"
                             name="destinationAirport"
-                            value={preferences.destinationAirport}
+                            value={safePreferences.destinationAirport}
                             onChange={(e) => {
-                                onChange(e);
-                                onAirportInputChange(e.target.value);
+                                onChange?.(e);
+                                onAirportInputChange?.(e.target.value);
                                 setActiveField("destinationAirport");
                                 handleAirportInputChange(e.target.value);
                             }}
@@ -109,7 +123,7 @@ export const PreferencesSection = ({
                         <AirportSuggestions
                             id="destination-airport-suggestions"
                             suggestions={filteredSuggestions}
-                            onSelect={(code) => onAirportSelect(code, "destinationAirport")}
+                            onSelect={(code) => onAirportSelect?.(code, "destinationAirport")}
                             isVisible={activeField === "destinationAirport"}
                         />
                     </div>
@@ -122,14 +136,14 @@ export const PreferencesSection = ({
                     </label>
                     <Listbox
                         name="travelClass"
-                        value={preferences.travelClass}
+                        value={safePreferences.travelClass}
                         onChange={(value) => {
-                            onChange({ target: { name: 'travelClass', value } } as React.ChangeEvent<HTMLSelectElement>)
+                            onChange?.({target:{ name: 'travelClass', value }} as React.ChangeEvent<HTMLSelectElement>)
                         }}
                     >
                         <ListboxButton className="font-work flex items-center w-full border px-4 py-2 rounded-[10px] justify-between hover:bg-neutral-300 text-Neutral font-medium">
                             <span>
-                                {preferences.travelClass}
+                                {safePreferences.travelClass}
                             </span>
                             <MdKeyboardArrowDown />
                         </ListboxButton>
@@ -157,14 +171,14 @@ export const PreferencesSection = ({
                     </label>
                     <Listbox
                         name="stopOvers"
-                        value={preferences.stopOvers}
+                        value={safePreferences.stopOvers}
                         onChange={(value) => {
-                            onChange({ target: { name: 'stopOvers', value } } as React.ChangeEvent<HTMLSelectElement>)
+                            onChange?.({ target: { name: 'stopOvers', value } } as React.ChangeEvent<HTMLSelectElement>)
                         }}
                     >
                         <ListboxButton className="font-work flex items-center w-full border px-4 py-2 rounded-[10px] justify-between hover:bg-neutral-300 text-Neutral font-medium">
                             <span>
-                                {preferences.stopOvers}
+                                {safePreferences.stopOvers}
                             </span>
                             <MdKeyboardArrowDown />
                         </ListboxButton>
@@ -185,7 +199,7 @@ export const PreferencesSection = ({
                     </Listbox>
                 </div>
 
-                <Btn onClick={() => { onSave(); updateCustomer({ ...customerData }) }} className="hover:!scale-95 w-full bg-success text-white px-6 py-2 mb-20">
+                <Btn onClick={() => { onSave?.(); updateCustomer({ ...customerData }) }} className="hover:!scale-95 w-full bg-success text-white px-6 py-2 mb-20">
                     Save Preferences
                 </Btn>
             </div>

@@ -1,5 +1,5 @@
 import { Headset, House, LogOut, Trash2, User } from 'lucide-react';
-import React, { useContext, useEffect, useState, Suspense } from 'react';
+import React, { Suspense, useContext, useEffect, useState } from 'react';
 import { PiHeadsetFill, PiRoadHorizonBold, PiRoadHorizonFill, PiTrashFill } from 'react-icons/pi';
 import { RiHome5Fill, RiRobot2Fill, RiRobot2Line, RiUser3Fill } from 'react-icons/ri';
 import { TbCreditCard, TbCreditCardFilled } from 'react-icons/tb';
@@ -16,6 +16,7 @@ import { NavigationContext } from '../../../contexts/NavigationContext';
 import { NavItem } from '../../../contexts/types';
 import { UIContext } from '../../../contexts/UIContext';
 import { useAuthInfo } from '../../../hooks/useAuthInfo';
+import { Airport, UserPreferences } from '../../../hooks/useDashboardInfo';
 import { CustomStorage } from '../../../utils/customStorage';
 import LoadingScreen from '../../../components/layout/LoadingScreen';
 import { useIsDesktop } from '../../../hooks/useDesktopSize';
@@ -31,6 +32,16 @@ const SupportContent = React.lazy(() => import('./SupportContent').then(module =
 
 const storageService = new CustomStorage();
 
+interface RightPanelProps {
+  preferences: UserPreferences;
+  airportSuggestions: Airport[];
+  preferencesLoading: boolean;
+  handlePreferenceChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
+  handleAirportSelect: (airportCode: string, field: string) => void;
+  savePreferences: () => Promise<void>;
+  fetchAirports: () => Promise<void>;
+}
+
 export const GetRequiredFields = (route: string) => {
   const isOneWay = route?.toLowerCase().startsWith('one way');
   const requiredFields = ['departure', 'destination', 'departureDate', 'flightClass'];
@@ -40,7 +51,15 @@ export const GetRequiredFields = (route: string) => {
   return requiredFields;
 };
 
-export const RightPanel: React.FC = () => {
+export const RightPanel: React.FC<RightPanelProps> = ({
+  preferences,
+  airportSuggestions,
+  preferencesLoading,
+  handlePreferenceChange,
+  handleAirportSelect,
+  savePreferences,
+  fetchAirports
+}) => {
 
   const { chatLog } = useContext(ChatContext);
   const [selectedTab, setSelectedTab] = useState<string>('home');
@@ -139,8 +158,23 @@ export const RightPanel: React.FC = () => {
       const Component = TAB_COMPONENTS[selectedTab as 'home'];
       return <Component {...travelInfo} />;
     }
+
+    if (selectedTab === 'user') {
+      return (
+        <UserContent
+          preferences={preferences}
+          airportSuggestions={airportSuggestions}
+          preferencesLoading={preferencesLoading}
+          handlePreferenceChange={handlePreferenceChange}
+          handleAirportSelect={handleAirportSelect}
+          savePreferences={savePreferences}
+          fetchAirports={fetchAirports}
+        />
+      );
+    }
+
     // For components that don't need props
-    const Component = TAB_COMPONENTS[selectedTab as 'AI' | 'road' | 'trash' | 'user' | 'subscription' | 'support'];
+    const Component = TAB_COMPONENTS[selectedTab as 'AI' | 'road' | 'trash' | 'subscription' | 'support'];
     return Component ? <Component departure={''} destination={''} departureDate={''} returnDate={''} travelRoute={''} flightClass={''} /> : null;
   };
 

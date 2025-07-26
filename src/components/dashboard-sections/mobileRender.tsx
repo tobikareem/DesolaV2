@@ -2,7 +2,6 @@
 import React, { Suspense, useContext } from "react";
 import { NavigationContext } from "../../contexts/NavigationContext";
 import LoadingScreen from "../layout/LoadingScreen";
-import { MdKeyboardBackspace } from "react-icons/md";
 
 const TripHistoryContent = React.lazy(() =>
   import("../../pages/dashboard/sections/TripHistoryContent").then(module => ({
@@ -38,7 +37,7 @@ const SubscriptionContent = React.lazy(() =>
 
 const MobileRender: React.FC = () => {
 
-  const { mobileTab, setMobileTab } = useContext(NavigationContext);
+  const { mobileTab} = useContext(NavigationContext);
   const RenderPage = () => {
     switch (mobileTab) {
       case 'AI' : 
