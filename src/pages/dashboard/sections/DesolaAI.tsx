@@ -6,6 +6,7 @@ import { TextArea } from "../../../components/ui/TextAreaField";
 import { BiUserCheck } from "react-icons/bi";
 import { useEffect, useRef, useState } from "react";
 import ReactMarkdown from 'react-markdown';
+import { Title } from "../../../components/layout/Title";
 
 export const DesolaAI = () => {
   const [inputValue, setInputValue] = useState<string>('');
@@ -30,14 +31,9 @@ export const DesolaAI = () => {
   return (
     <div className="flex flex-col justify-between h-full gap-2 overflow-hidden pt-3 pb-6 lg:py-0">
       <div className="relative space-y-2">
-        <Text
-          as="h1"
-          size="2xl"
-          weight="bold"
-          className="font-grotesk text-primary-500 inline-flex"
-        >
+        <Title>
           Desola AI <span><MdOutlineAutoAwesome className={`text-lg ${loading ? 'animate-bounce mt-1' : ''}`} /></span>
-        </Text>
+        </Title>
         <Text size="2xs" className="lg:!text-xs !text-neutral-500 pl-0.5">
           Ask Desola AI anything about your travel plans, distance, tourist attractions and general travel information...
         </Text>

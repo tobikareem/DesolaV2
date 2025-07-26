@@ -1,5 +1,5 @@
 import { Listbox, ListboxButton, ListboxOption, ListboxOptions } from '@headlessui/react';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { useAuthInfo } from "../../hooks/useAuthInfo";
 import useCustomerApi from "../../hooks/useCustomerApi";
@@ -138,7 +138,7 @@ export const PreferencesSection = ({
                         name="travelClass"
                         value={safePreferences.travelClass}
                         onChange={(value) => {
-                            onChange?.({ target: { name: 'travelClass', value } } as React.ChangeEvent<HTMLSelectElement>)
+                            onChange?.({target:{ name: 'travelClass', value }} as React.ChangeEvent<HTMLSelectElement>)
                         }}
                     >
                         <ListboxButton className="font-work flex items-center w-full border px-4 py-2 rounded-[10px] justify-between hover:bg-neutral-300 text-Neutral font-medium">

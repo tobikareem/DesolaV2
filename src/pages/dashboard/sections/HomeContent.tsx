@@ -1,3 +1,4 @@
+import { Title } from "../../../components/layout/Title";
 import { Text } from "../../../components/ui/TextComp";
 import {
   Route,
@@ -29,15 +30,10 @@ export const HomeContent: React.FC<homeProps> = ({
 
   return (
     <div className="flex-1 overflow-hidden">
-      <Text
-        as="h1"
-        size="2xl"
-        weight="bold"
-        className="font-grotesk text-primary-500 mb-5"
-      >
-        Great Deals for Your Trip!
-      </Text>
-      <div className="space-y-4">
+      <Title>
+        Great deals for your trip!
+      </Title>
+      <div className="space-y-4 mt-5">
         <div className="space-y-2">
           <div className="flex items-center space-x-2 ">
             <PlaneTakeoff

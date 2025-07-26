@@ -10,6 +10,7 @@ import { Input } from "../../../components/ui/InputField";
 import { ImSpinner } from "react-icons/im";
 import { debounce } from "lodash";
 import { useHybridCache } from '../../../hooks/useHybridCache';
+import { Title } from "../../../components/layout/Title";
 
 const storage = new CustomStorage();
 
@@ -139,15 +140,10 @@ export const TripHistoryContent = () => {
     <div className="h-full overflow-hidden">
       <div className=''>
         <div className="relative bg-white">
-          <Text
-            as="h1"
-            size="2xl"
-            weight="bold"
-            className="font-grotesk text-primary-500 mb-5"
-          >
+          <Title>
             My Trips
-          </Text>
-          <div className="flex flex-wrap items-center h-['100px'] mb-2 pb-4 gap-3 bg-white w-full border-b border-neutral-300">
+          </Title>
+          <div className="flex flex-wrap items-center h-['100px'] my-2 pb-4 gap-3 bg-white w-full border-b border-neutral-300">
             {['Today', 'Yesterday', 'Last Week', 'Last Month', 'Filter'].map((period) => (
               <Btn
                 key={period}
