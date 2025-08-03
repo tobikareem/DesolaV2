@@ -7,11 +7,11 @@ import {
     PopupRequest,
     RedirectRequest
 } from "@azure/msal-browser";
-import { toast } from "react-toastify";
 import { msalInstance } from "../auth/msalConfig";
 import { AZURE_B2C, SESSION_VALUES } from "../utils/constants";
 import { CustomStorage } from "../utils/customStorage";
 import { AuthEvents, AppEvents } from "../utils/EventManager";
+import { toastManager } from "../utils/toastUtils";
 
 const storage = new CustomStorage();
 
@@ -250,7 +250,7 @@ export class MSALAuthManager {
     async signIn(): Promise<void> {
         try {
             if (this.getCurrentAccount()) {
-                toast.info("User already signed in");
+                toastManager.show("account-info","User already signed in", "info");
                 return;
             }
 
@@ -470,7 +470,7 @@ export class MSALAuthManager {
             // Handle B2C password reset flow
             if (errorMessage.includes("AADB2C90118")) {
                 console.warn("Password reset flow detected");
-                toast.info("Redirecting to password reset...");
+                toastManager.show("auth-err","Redirecting to password reset...","error");
                 this.handlePasswordReset().catch(err => {
                     console.error("Password reset redirect failed:", err);
                     AppEvents.error("Password reset failed", err.message);
@@ -489,25 +489,25 @@ export class MSALAuthManager {
             // Handle B2C policy mismatch
             if (errorMessage.includes("AADB2C90091")) {
                 console.warn("B2C policy mismatch detected");
-                toast.warn("Please complete the authentication process");
+                toastManager.show("B2C","Please complete the authentication process","warn");
                 return;
             }
 
             // Handle user cancellation
             if (errorMessage.includes("user_cancelled") || errorMessage.includes("access_denied")) {
-                toast.info("Authentication was cancelled");
+                toastManager.show("cancel-auth","Authentication was cancelled", "info");
                 return;
             }
 
             // Generic error handling
             console.error("Unhandled authentication error:", errorMessage);
             AppEvents.error("Authentication error", errorMessage);
-            toast.error(`Authentication error: ${errorMessage}`);
+            toastManager.show("unhandled-error",`Authentication error: ${errorMessage}`, "error");
 
         } catch (handlingError) {
             console.error("Error in authentication error handler:", handlingError);
             AppEvents.error("Authentication system error", "Error in error handler");
-            toast.error("Authentication system error");
+            toastManager.show("system-error","Authentication system error", "error");
         }
     }
 
