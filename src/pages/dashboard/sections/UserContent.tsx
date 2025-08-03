@@ -2,31 +2,21 @@ import { PreferencesSection } from "../../../components/dashboard-sections/prefe
 import { ProfileSection } from "../../../components/dashboard-sections/profile";
 import { useAuthInfo } from "../../../hooks/useAuthInfo";
 import { Title } from "../../../components/layout/Title";
-import { Airport, UserPreferences } from "../../../hooks/useDashboardInfo";
+import { useDashboardInfo} from "../../../hooks/useDashboardInfo";
 import authService from "../../../services/authService";
 
 
-
-interface UserContentProps {
-  preferences?: UserPreferences;
-  airportSuggestions?: Airport[];
-  preferencesLoading?: boolean;
-  handlePreferenceChange?: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
-  handleAirportSelect?: (airportCode: string, field: string) => void;
-  savePreferences?: () => Promise<void>;
-  fetchAirports?: () => Promise<void>;
-}
-
-export const UserContent: React.FC<UserContentProps> = ({
-  preferences,
-  airportSuggestions,
-  preferencesLoading,
-  handlePreferenceChange,
-  handleAirportSelect,
-  savePreferences,
-  fetchAirports
-}) => {
+export const UserContent = () => {
   const { isAuthenticated, isLoading: authLoading } = useAuthInfo();
+  const {
+      preferences,
+      fetchAirports,
+      airportSuggestions,
+      preferencesLoading,
+      handlePreferenceChange,
+      handleAirportSelect,
+      savePreferences
+  } = useDashboardInfo();
 
   if (authLoading) {
     return <div className="flex justify-center items-center h-64">

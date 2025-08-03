@@ -1,10 +1,11 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
-import { toast } from "react-toastify";
+import { toastManager } from "../utils/toastUtils"; 
 import { SESSION_VALUES, VITE_API_BASE_URL, VITE_API_TOKEN } from "../utils/constants";
 import { CustomStorage } from "../utils/customStorage";
 import authService from "./authService";
 
 const storage = new CustomStorage();
+
 
 let isShowingAuthError = false;
 
@@ -58,7 +59,7 @@ apiClient.interceptors.response.use(
 
             if (!isShowingAuthError) {
                 isShowingAuthError = true;
-                toast.warn("Authentication required. Please log in again.");
+                toastManager.show("auth-error","Authentication required. Please log in again.","warn");
                 setTimeout(() => { isShowingAuthError = false; }, 3000);
 
                 window.dispatchEvent(new CustomEvent('auth:interactive-required'));
@@ -72,16 +73,17 @@ apiClient.interceptors.response.use(
                     // toast.warn("Resource not found");
                     break;
                 case 500:
-                    toast.error("Internal server error. Please contact support");
+                    toastManager.show("server-error","Internal server error. Please contact support","error");
                     break;
                 default:
                     if (status !== 401 && status !== 403) {
-                        toast.error(`Unexpected error occurred (Code: ${status})`);
+                        toastManager.show(`error-${status}`, `Unexpected error occurred (Code: ${status})`, "error");
                     }
+
             }
         } else if (error.request) {
             // Network error
-            toast.error("Network error. Please check your connection");
+            toastManager.show("network-error", "Network error. Please check your connection", "error");
         }
 
         return Promise.reject(error);

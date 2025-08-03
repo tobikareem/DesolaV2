@@ -53,11 +53,11 @@ function App() {
     { path: '/terms', element: <TermsAndConditions />, name: 'Terms' },
     { path: '/callback', element: <Callback />, name: 'Callback' },
     { path: '/pricing', element: <Pricing />, name: 'Pricing' },
-    { path: '*', element: <Error404Page />, name: 'Error404' }
+    { path: '*', element: <Error404Page />, name: 'Error404' },
   ];
   const privateRoutes: RouteType[] = [
     { path: '/dashboard', element: <Dashboard />, name: 'Dashboard' },
-    { path: '/admin', element: <AdminDashboardScreen />, name: 'Admin' }
+    { path: '/admin', element: <AdminDashboardScreen />, name: 'Admin' },
   ];
 
   const activeAccount = authService.getCurrentAccount();

@@ -67,7 +67,7 @@ const MobileRender: React.FC = () => {
   return (
     <>
       { mobileTab !== '' ? 
-        <div className={`absolute block bg-white lg:hidden w-screen h-screen py-8`}>
+        <div className={`absolute z-10 block bg-white lg:hidden w-screen h-svh py-8`}>
           <div className="w-screen h-full pt-10 px-4 md:px-6">
             <Suspense fallback={<LoadingScreen message={"Loading..."} dimension="w-full h-full" background="bg-background"/>}>
               {RenderPage()}

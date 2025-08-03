@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import { EventManager } from '../utils/EventManager';
 import { CustomStorage } from '../utils/customStorage';
 import { SESSION_VALUES } from '../utils/constants';
 import authService from '../services/authService';
+import { toastManager } from '../utils/toastUtils';
 
 const storage = new CustomStorage();
 
@@ -39,17 +39,17 @@ export const useAuthEvents = (options: UseAuthEventsOptions = {}) => {
 
             if (redirectUrl && redirectUrl !== location.pathname) {
                 storage.removeItem(SESSION_VALUES.postLoginRedirectUrl);
-                toast.success("Successfully signed in!");
+                toastManager.show("sign-in","Successfully signed in!","success");
                 navigate(redirectUrl);
             } else {
-                toast.success("Welcome to your dashboard!");
+                toastManager.show("welcome", "Welcome to your dashboard!", "success")
                 navigate(defaultRedirectUrl);
             }
         };
 
         const handleLoginFailure = () => {
             setIsProcessingAuth?.(false);
-            toast.error("Authentication failed. Please try again.");
+            toastManager.show("Login-failure","Authentication failed. Please try again.", "error");
             storage.removeItem(SESSION_VALUES.postLoginRedirectUrl);
 
             if (location.pathname !== '/') {
