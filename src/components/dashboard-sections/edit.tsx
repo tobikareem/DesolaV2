@@ -1,7 +1,7 @@
 
 import { useEffect, useState } from "react";
 import { BsStars } from "react-icons/bs";
-import { toast } from "react-toastify";
+import { toastManager } from "../../utils/toastUtils";
 
 type EditProps = {
   message?: string | null;
@@ -14,7 +14,7 @@ export const EditData =({message, field}:EditProps)=> {
   useEffect(() => {
     if (field?.toLowerCase() === 'multi-city' || field?.toLowerCase() === 'round trip') {
       setExtraMessage('Select your return date...');
-      toast.warning('Select your return date...');
+      toastManager.show('select-date','Select your return date...','warn');
     } else {
       setExtraMessage(null);
     }

@@ -2,7 +2,6 @@
 import { DateSelectArg } from "@fullcalendar/core/index.js";
 import { PenLine } from "lucide-react";
 import { ChangeEvent, KeyboardEvent, useContext, useEffect, useRef, useState } from "react";
-import { toast } from "react-toastify";
 import MobileRender from "../../../components/dashboard-sections/mobileRender";
 import Calendar from '../../../components/modals/Calendar';
 import EditModal from "../../../components/modals/EditModal";
@@ -23,6 +22,7 @@ import ChatHistory from "./ChatHistory";
 import ChatInput from "./ChatInput";
 import RecentPromptsBar from "./RecentPromptsBar";
 import SuggestionPanel from "./SuggestionPanel";
+import { toastManager } from "../../../utils/toastUtils";
 
 const analyzeLastMessage = (message?: string) => {
   if (!message) return {
@@ -63,8 +63,6 @@ const Dashboard: React.FC = () => {
   const { mobileTab } = useContext(NavigationContext);
   const { chatLog, setChatLog, recentPrompts, setRecentPrompts } = useContext(ChatContext);
   const { inputValue, setInputValue, dateSelect, setDateSelect, setDate, date } = useInput();
-
-  // Custom hooks
   const {
     showEditModal,
     setShowEditModal,
@@ -81,10 +79,6 @@ const Dashboard: React.FC = () => {
     preferences,
     fetchAirports,
     airportSuggestions,
-    preferencesLoading,
-    handlePreferenceChange,
-    handleAirportSelect,
-    savePreferences
   } = useDashboardInfo();
 
   useEffect(() => {
@@ -213,7 +207,7 @@ const Dashboard: React.FC = () => {
       updateDateSelect();
       handleCloseCalendar();
     } else {
-      toast.error('Pick a date');
+      toastManager.show('date-error','Pick a date','error');
     }
   };
 
@@ -241,6 +235,7 @@ const Dashboard: React.FC = () => {
     }
 
   };
+  
 
   const handleUpdatePrompt = (index: number, newValue: string) => {
     const updatedPrompts = [...recentPrompts];
@@ -342,15 +337,7 @@ const Dashboard: React.FC = () => {
         </Modal>
         {!isDesktop && <MobileRender />}
       </div>
-      <RightPanel
-        preferences={preferences}
-        airportSuggestions={airportSuggestions}
-        preferencesLoading={preferencesLoading}
-        handlePreferenceChange={handlePreferenceChange}
-        handleAirportSelect={handleAirportSelect}
-        savePreferences={savePreferences}
-        fetchAirports={fetchAirports}
-      />
+      <RightPanel/>
     </div>
   );
 };

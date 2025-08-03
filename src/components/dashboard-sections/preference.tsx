@@ -31,11 +31,10 @@ export const PreferencesSection = ({
     const [activeField, setActiveField] = useState<string | null>(null);
     const [filteredSuggestions, setFilteredSuggestions] = useState<Airport[]>(airportSuggestions || []);
 
-    // Sync filteredSuggestions with airportSuggestions when it changes
     useEffect(() => {
         setFilteredSuggestions(airportSuggestions || []);
     }, [airportSuggestions]);
-    const safePreferences = preferences || {
+    const savePreferences = preferences || {
         originAirport: "",
         destinationAirport: "",
         travelClass: "Economy",
@@ -79,7 +78,7 @@ export const PreferencesSection = ({
                             id="originAirportInput"
                             type="text"
                             name="originAirport"
-                            value={safePreferences.originAirport}
+                            value={savePreferences.originAirport}
                             onChange={(e) => {
                                 onChange?.(e);
                                 onAirportInputChange?.(e.target.value);
@@ -109,7 +108,7 @@ export const PreferencesSection = ({
                             id="destinationAirportInput"
                             type="text"
                             name="destinationAirport"
-                            value={safePreferences.destinationAirport}
+                            value={savePreferences.destinationAirport}
                             onChange={(e) => {
                                 onChange?.(e);
                                 onAirportInputChange?.(e.target.value);
@@ -136,14 +135,14 @@ export const PreferencesSection = ({
                     </label>
                     <Listbox
                         name="travelClass"
-                        value={safePreferences.travelClass}
+                        value={savePreferences.travelClass}
                         onChange={(value) => {
                             onChange?.({target:{ name: 'travelClass', value }} as React.ChangeEvent<HTMLSelectElement>)
                         }}
                     >
                         <ListboxButton className="font-work flex items-center w-full border px-4 py-2 rounded-[10px] justify-between hover:bg-neutral-300 text-Neutral font-medium">
                             <span>
-                                {safePreferences.travelClass}
+                                {savePreferences.travelClass}
                             </span>
                             <MdKeyboardArrowDown />
                         </ListboxButton>
@@ -171,14 +170,14 @@ export const PreferencesSection = ({
                     </label>
                     <Listbox
                         name="stopOvers"
-                        value={safePreferences.stopOvers}
+                        value={savePreferences.stopOvers}
                         onChange={(value) => {
                             onChange?.({ target: { name: 'stopOvers', value } } as React.ChangeEvent<HTMLSelectElement>)
                         }}
                     >
                         <ListboxButton className="font-work flex items-center w-full border px-4 py-2 rounded-[10px] justify-between hover:bg-neutral-300 text-Neutral font-medium">
                             <span>
-                                {safePreferences.stopOvers}
+                                {savePreferences.stopOvers}
                             </span>
                             <MdKeyboardArrowDown />
                         </ListboxButton>

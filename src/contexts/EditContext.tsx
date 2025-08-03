@@ -25,6 +25,3 @@ export const EditContext = createContext<EditContextType>({
   multiLegValue: '',
   setMultiLegValue: () => { },
 });
-
-
-

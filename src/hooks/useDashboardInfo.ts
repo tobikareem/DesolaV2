@@ -1,5 +1,4 @@
 import { useCallback, useContext, useEffect, useState } from "react";
-import { toast } from 'react-toastify';
 import { ChatContext } from "../contexts/ChatContext";
 import { FlightSearchResponse, transformApiToUiResponse } from "../models/FlightSearchResponse";
 import { LOCAL_STORAGE_VALUES } from "../utils/constants";
@@ -7,6 +6,7 @@ import { ENDPOINTS_API_PATH } from "../utils/endpoints";
 import { ApiFlightSearchResponse } from './../models/ApiFlightSearchResponse';
 import useApi from "./useApi";
 import { useAuthInfo } from "./useAuthInfo";
+import { toastManager } from "../utils/toastUtils";
 
 export interface Airport {
   name: string;
@@ -27,7 +27,7 @@ export const useAirports = () => {
   const [airportSuggestions, setAirportSuggestions] = useState<Airport[]>([]);
   const [loading, setLoading] = useState(false);
   const { getData } = useApi();
-  const cacheExpiryTime = 5 * 24 * 60 * 60 * 1000;
+  const cacheExpiryTime = 40 * 24 * 60 * 60 * 1000;
 
 
   const fetchAirports = useCallback(async () => {
@@ -67,7 +67,7 @@ export const useAirports = () => {
       }
     } catch (error) {
       console.error("Error fetching airports:", error);
-      toast.error(`Error fetching airports: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      toastManager.show("fetch-airport", `Error fetching airports: ${error instanceof Error ? error.message : 'Unknown error'}`, "error");
     } finally {
       setLoading(false);
     }
@@ -130,6 +130,8 @@ export const useUserPreferences = () => {
   });
   const [loading, setLoading] = useState(false);
   const [loadAttempted, setLoadAttempted] = useState(false);
+  const getUserId = ()=> accountInfo?.objectId ?? accountInfo?.subject ?? "";
+
 
   const loadPreferences = useCallback(async () => {
     if (authLoading || loading) {
@@ -140,7 +142,7 @@ export const useUserPreferences = () => {
       return;
     }
 
-    const userId = accountInfo?.objectId ?? accountInfo?.subject ?? "";
+    const userId = getUserId();
     if (!userId) {
       console.warn("Cannot load preferences: No user ID available");
       return;
@@ -150,14 +152,25 @@ export const useUserPreferences = () => {
     setLoadAttempted(true);
 
     try {
-      const data = await getData<UserPreferences>(`${ENDPOINTS_API_PATH.user_preferences}/${userId}`);
-
-      if (data) {
-        setPreferences(data);
-      } 
+      const cachedPreferenceString = localStorage.getItem('userPreference')
+      if (cachedPreferenceString) {
+        try {
+          const cachedPreference = JSON.parse(cachedPreferenceString);
+          setPreferences({ ...cachedPreference, userId }); 
+        } catch {
+          console.warn("Invalid cached user preferences. Clearing cache.");
+          localStorage.removeItem("userPreference");
+        }
+      } else {
+        const data = await getData<UserPreferences>(`${ENDPOINTS_API_PATH.user_preferences}/${userId}`);
+        if (data) {
+          setPreferences(data);
+          localStorage.setItem('userPreference', JSON.stringify(data))
+        } 
+      }
     } catch (error) {
       console.error("Error loading preferences:", error);
-      toast.error(`Failed to load preferences: ${error instanceof Error ? error.message : "Unknown error"}`);
+      toastManager.show("load-preference",`Failed to load preferences: ${error instanceof Error ? error.message : "Unknown error"}`,"error");
     } finally {
       setLoading(false);
     }
@@ -185,14 +198,14 @@ export const useUserPreferences = () => {
 
   const validatePreferences = (prefsToValidate: UserPreferences) => {
     if (!prefsToValidate.userId) {
-      toast.error("User ID is required.");
+      toastManager.show("user-id","User ID is required.","error");
       throw new Error("User ID is required.");
     }
   };
 
   const savePreferences = useCallback(async () => {
     if (!isAuthenticated) {
-      toast.error("You must be logged in to save preferences");
+      toastManager.show("authentication","You must be logged in to save preferences", "error");
       return;
     }
 
@@ -210,11 +223,12 @@ export const useUserPreferences = () => {
         updatedPreferences
       );
 
-      toast.success("Preferences saved successfully!");
+      toastManager.show("preference-success","Preferences saved successfully!", "success");
+      localStorage.setItem('userPreference', JSON.stringify(updatedPreferences))
 
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : "Unknown error";
-      toast.error(`Failed to save preferences. ${errorMessage}`);
+      toastManager.show("failed-preference",`Failed to save preferences. ${errorMessage}`, "error");
     } finally {
       setLoading(false);
     }
@@ -245,7 +259,6 @@ export const useDashboardInfo = () => {
   return {
     airportSuggestions,
     fetchAirports,
-
     // Preference functionality
     preferences,
     preferencesLoading,
