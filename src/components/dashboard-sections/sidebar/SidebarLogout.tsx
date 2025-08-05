@@ -16,7 +16,7 @@ export const SidebarLogout: React.FC<SidebarLogoutProps> = ({ icon, onClick }) =
                 {icon}
             </Btn>
             <span className='absolute top-3 left-14 z-5 hidden group-hover:flex justify-center items-center 
-          px-2 py-1 bg-neutral-200 rounded-md border border-neutral-300 text-primary-600 font-bold text-xs size-fit
+          px-2 py-1 bg-neutral-300 rounded-md border border-neutral-300 text-primary-600 font-bold text-xs size-fit
           text-nowrap'
             >
                 Log out
